@@ -29,26 +29,3 @@ export function makeRequest(url) {
 export function getCatalog() {
   return makeRequest(DCS_API + CATALOG_PATH);
 }
-
-/**
- * @param {Object} resource - The metadata of the resource being requested
- * @return {string} - The usfm3 content given from the specified resouce
- */
-export function downloadResource(resource) {
-  const resourcePath = resource.some_attribute;
-  return makeRequest(DCS_API + resourcePath);
-}
-
-/**
- * @param {Array} resourceList - Array of resources to retrieve from the API
- * @return {Array} - Array of objects of the downloaded resources unformatted
- */
-export function downloadResources(resourceList) {
-  const content = [];
-  // Loop through each resource and download the data
-  resourceList.forEach(async resource => {
-    const resourceData = await downloadResource(resource);
-    content.push(resourceData);
-  });
-  return content;
-}
