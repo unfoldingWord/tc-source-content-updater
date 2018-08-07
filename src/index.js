@@ -1,5 +1,6 @@
 import * as apiHelpers from './helpers/apiHelpers';
 import * as parseHelpers from './helpers/parseHelpers';
+import * as moveResourcesHelpers from './helpers/moveResourcesHelpers';
 
 /**
  * Updater constructor
@@ -37,6 +38,18 @@ Updater.prototype.getLatestsResourceDates = async function(update = false) {
 Updater.prototype.downloadResources = async function(resourceList) {
   const content = await apiHelpers.downloadResources(resourceList);
   return await parseHelpers.formatResources(content);
+};
+
+/**
+ * @param {String} resourceSourcePath - Location of selected downloaded resources
+ * @param {String} resourceTargetPath - Location of resources destination
+ *
+ * @return {Array} - Array of objects of the downloaded resources
+ */
+Updater.prototype.moveResources = async function(
+  resourceSourcePath, resourceTargetPath) {
+  const content = await moveResourcesHelpers.move(resourceSourcePath, resourceTargetPath);
+  return;
 };
 
 export default Updater;
