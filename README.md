@@ -3,6 +3,15 @@ Resource Updating Module For tC
 
 # Development
 
+Use the separate helper files (as best you can) for each story.
+
+Some functionality will most likely have to change in the main index as well, but try to keep as much logic as possible in individual helpers.
+
+Parsers can expect the catalog to be fetched before method is called. It will be under 
+the **catalog** property of the Updater object
+
+`Check __tests__/fixtures/catalog.json
+for example metadata return from DCS`
 
 # Usage
 To use this module you must first create a new instance of the object.
