@@ -48,7 +48,8 @@ Updater instance. This function has no return value
 
 **`downloadResources(resourceList)`**:
 - **description** - Method to manually fetch the latest catalog for the current
-Updater instance. This function has no return value
+Updater instance.
+
 - @param {Array} **resourceList** - list of resources that you would like to download
 - @return {Promise} Array of updated content from the specified resource list
 
