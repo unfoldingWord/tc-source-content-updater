@@ -49,5 +49,7 @@
     "babel-runtime": "^6.26.0",
     "rimraf": "^2.6.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "request": "^2.87.0"
+  }
 }
