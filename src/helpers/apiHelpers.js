@@ -1,7 +1,6 @@
 var request = require('request');
 const DCS_API = 'https://api.door43.org';
 const CATALOG_PATH = '/v3/catalog.json';
-
 /**
  * @param {string} url - Url of the get request to make
  * @return {Promise} - parsed body from the response

@@ -42,14 +42,15 @@ Updater.prototype.downloadResources = async function(resourceList) {
 
 /**
  * @param {String} resourceSourcePath - Location of selected downloaded resources
- * @param {String} resourceTargetPath - Location of resources destination
+ * @param {String} languageCode - Location of resources destination
  *
  * @return {Array} - Array of objects of the downloaded resources
  */
 Updater.prototype.moveResources = async function(
-  resourceSourcePath, resourceTargetPath) {
-  const content = await moveResourcesHelpers.move(resourceSourcePath, resourceTargetPath);
-  return;
+  resourceSourcePath, languageCode) {
+  const result = await moveResourcesHelpers.moveResources(
+      resourceSourcePath, languageCode);
+  return result;
 };
 
 export default Updater;
