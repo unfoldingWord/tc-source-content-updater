@@ -31,7 +31,7 @@ Note: In order to limit the amount of API calls the door43 repo, the Updater obj
 3. Download the resources that are not updated
 
 ## Updater Object
-**`getLatestsResourceDates(update, resourceList)`**: 
+**`getLatestResources(update, resourceList)`**: 
 - **description** -
 Used to initiate a load of the latests resource so that the user can then select which ones
 they would like to update. This function only returns the resources that already up to date on the user machine

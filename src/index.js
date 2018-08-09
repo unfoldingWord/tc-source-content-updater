@@ -19,26 +19,26 @@ Updater.prototype.updateCatalog = async function() {
 };
 
 /**
- * Used to initiate a load of the latests resource so that the user can then select which ones
+ * Used to initiate a load of the latest resource so that the user can then select which ones
  * they would like to update.
- * Note: This function only returns the resources that already up to date on the user machine
+ * Note: This function only returns the resources that are not up to date on the user machine
  * @param {boolean} update - indicates whether the latest catalog should be updated
  * before the request
- * @param {Array} resourceList - list of resources that are on the users local machine already
- * @return {Array} - Array of resources and their corresponding time stamps
+ * @param {Array} resourceList - list of resources that are on the users local machine already {lang_code, modified_time}
+ * @return {Array} list of resources and their corresponding time stamps {lang_code, local_modified_time, remote_modified_time, download_url, version, catalog_entry: {lang_resource, book_resource, format} }
  */
-Updater.prototype.getLatestsResourceDates = async function(update = false,
-  resourceList) {
+Updater.prototype.getLatestResources = async function(update = false,
+                                                      resourceList) {
   if (update || !this.catalog) {
     // Can force update before request or will automatically if
     // the resources are not already populated
     await this.updateCatalog();
   }
-  return parseHelpers.getLatestsResourceDates(this.catalog, resourceList);
+  return parseHelpers.getLatestResources(this.catalog, resourceList);
 };
 
 /**
- * Downloads the resorces from the specified list using the DCS API
+ * Downloads the resources from the specified list using the DCS API
  *
  * @param {Array} resourceList - Array of resources to retrieve from the API
  */
