@@ -32,26 +32,27 @@ export function getLatestResources(catalog, resourceList) {
  * filters the catalog and returns valid tCore resources
  *
  * @param {Object} catalog - to parse
- * @return {Array} list of tCore resources {lang_code, bible_id, remote_modified_time, download_url, version, catalog_entry: {lang_resource, book_resource, format} }
+ * @return {Object} set of tCore resources {lang_code, bible_id, remote_modified_time, download_url, version, catalog_entry: {lang_resource, book_resource, format} }
  */
 export function getTcoreResources(catalog) {
-  const catalogResources = [];
+  const catalogResources = { };
   if (catalog && catalog.languages) {
     for (let language of catalog.languages) {
+      const languageResources = {};
+      const isGreekOL = (language.identifier === "el-x-koine");
+      const lang_code = isGreekOL ? 'grc' : language.identifier; // we use grc internally for Greek Original language
       const resources = language.resources || [];
       for (let resource of resources) {
+        const isCheckingLevel2 = resource.checking.checking_level >= 2;
+        const bible_id = resource.identifier;
+        const version = resource.version;
         const formats = resource.formats || [];
         for (let format of formats) {
           try {
             const isZipFormat = format.format.indexOf("application/zip;") >= 0;
             const isUSFM3Content = format.format.indexOf("text/usfm3") >= 0;
-            const isCheckingLevel2 = resource.checking.checking_level >= 2;
             const download_url = format.url;
             const remote_modified_time = format.modified;
-            const isGreekOL = (language.identifier === "el-x-koine");
-            const lang_code = isGreekOL ? 'grc' : language.identifier; // we use grc internally for Greek Original language
-            const bible_id = resource.identifier;
-            const version = resource.version;
             if (isZipFormat && isUSFM3Content && isCheckingLevel2 &&
                   download_url && remote_modified_time && lang_code &&
                   version) {
@@ -67,12 +68,15 @@ export function getTcoreResources(catalog) {
                   format
                 }
               };
-              catalogResources.push(foundResource);
+              languageResources[bible_id] = foundResource;
             }
           } catch (e) {
             // recover if required fields are missing
           }
         }
+      }
+      if (Object.keys(languageResources).length) { // if we found any resources
+        catalogResources[lang_code] = languageResources;
       }
     }
   }
