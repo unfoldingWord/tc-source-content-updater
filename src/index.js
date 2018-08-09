@@ -24,8 +24,8 @@ Updater.prototype.updateCatalog = async function() {
  * Note: This function only returns the resources that are not up to date on the user machine
  * @param {boolean} update - indicates whether the latest catalog should be updated
  * before the request
- * @param {Array} resourceList - list of resources that are on the users local machine already {lang_code, modified_time}
- * @return {Array} list of resources and their corresponding time stamps {lang_code, local_modified_time, remote_modified_time, download_url, version, catalog_entry: {lang_resource, book_resource, format} }
+ * @param {Array} resourceList - list of resources that are on the users local machine already {lang_code, bible_id, modified_time}
+ * @return {Array} list of updated resources {lang_code, bible_id, local_modified_time, remote_modified_time, download_url, version, catalog_entry: {lang_resource, book_resource, format} }
  */
 Updater.prototype.getLatestResources = async function(update = false,
                                                       resourceList) {
