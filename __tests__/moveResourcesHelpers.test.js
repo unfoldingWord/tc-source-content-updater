@@ -1,93 +1,60 @@
-'use strict';
-/*import fs from 'fs-extra';*/
+// 'use strict';
+
+import fs from 'fs-extra';
 import path from 'path-extra';
+import ospath from 'ospath';
 import * as moveResourcesHelpers from '../src/helpers/moveResourcesHelpers';
 
 jest.mock('fs-extra');
 
 describe('moveResourcesHelpers', () => {
+  let sourceFolder;
+  let initialFolder;
+  let fromFolder;
+  let toFolder;
+
   beforeEach(() => {
-    const sourceFolder =  path.join(ospath.home(), 'translationCore', 'resources');
-    fs.__resetMockFS({
-      [sourceFolder]: 
-    })
+    // simulate download into sourceFolder
+    sourceFolder = path.join(__dirname, 'fixtures', 'resources', 'bs');
+    // simulate converting into initial folder
+    initialFolder = path.join(ospath.home(), 'resources');
+    fs.__resetMockFS();
+    fs.__loadDirIntoMockFs(sourceFolder, initialFolder);
+    fromFolder = initialFolder;
+    toFolder = path.join(__dirname, 'translationCore', 'resources', 'bs');
   });
 
-  test('moveResources', () => {
-    const resource = {
-      translationCore: {
-        resources: {
-          bs: {
-            bibles:{
-              ulb: {
-                v0: {
-                  mat:{
-                    '1.json': 'now is the time',
-                    '2.json': 'for all good men'
-                  },
-                  'index.json': '',
-                  'manifest.json':''
-                }
-              }
-            },
-            lexicons:{
-              ugl: {
-                v1: {
-                  content: {
-                    'beauty.json': 'a rose by any other name'
-                  }
-                }
-              },
-              uhl: {
-                v5: {
-                  content: {
-                    'aleph.json': 'first letter of hebrew alphabet'
-                  }
-                }
-              }
-            },
-            translationHelps: {
-              translationAcademy: {
-                v2: {
-                  checking: {
-                    'beauty.md': 'have you seen a rose' 
-                  },
-                  intro: {},
-                  process: {},
-                  translate: {}
-                }
-              },
-              translationNotes: {
-                v3: {
-                  groups: {
-                    mat: {
-                      'category-topic.json': '',
-                      'index.json': ''
-                    }
-                  }
-                }
-              },
-              translationWords: {
-                v4: {
-                  kt: {
-                    articles: {
-                      'beauty.md': '',
-                      'index.json': ''
-                    }
-                  },
-                  names: {},
-                  other: {}
-                }
-              }
-            }
-          }
-        }
-      }
-    };
-    const fromFolder = path.join('file');
-    const languageCode = 'bs';
-    moveResourcesHelpers.moveResources(fromFolder, languageCode);
+  test('moveResources: copy bible books', () => {
+    moveResourcesHelpers.moveResources(fromFolder, toFolder);
+    const deepFolder = fs.__catMockFS(path.join(
+        toFolder, 'bibles', 'v1', 'mat'));
+    const chapter1 = JSON.stringify([
+      "1.json"
+    ], null, 2);
+
+    expect(deepFolder).toEqual(chapter1);
+  });
+
+  test('moveResources: copy lexicons', () => {
+    moveResourcesHelpers.moveResources(fromFolder, toFolder);
+    const deepFolder = fs.__catMockFS(path.join(
+        toFolder, 'lexicons', 'ugl', 'v1', 'content'));
+    const aWord = JSON.stringify([
+      "beauty.json"
+    ], null, 2);
+
+    expect(deepFolder).toEqual(aWord);
+  });
+
+  test('moveResources: copy translation helps', () => {
+    moveResourcesHelpers.moveResources(fromFolder, toFolder);
+    const deepFolder = fs.__catMockFS(path.join(
+        toFolder, 'translationHelps', 'translationAcademy', 'v9', 'process'));
+    const share = JSON.stringify([
+      "share-content.md"
+    ], null, 2);
+
+    expect(deepFolder).toEqual(share);
   });
 });
-
 

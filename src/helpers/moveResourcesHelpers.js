@@ -1,17 +1,12 @@
 import fs from 'fs-extra';
-import path from 'path-extra';
-import ospath from 'ospath';
-
-// constants
-const RESOURCES_PATH = path.join(ospath.home(), 'translationCore', 'resources');
 
 /**
- *
- * @param {string} resourceSourcePath - current position of resources
- * @param {string} languageCode - foleder where resources are moved
+ * @description transfer an entire resource from source to target directory
+ * @param {string} resourceSourcePath - current position of resource
+ * @param {string} resourceTargetPath - folder where resources are moved
  */
-export function moveResources(resourceSourcePath, languageCode) {
-  var resourceTargetPath = path.join(RESOURCES_PATH, languageCode);
+export function moveResources(resourceSourcePath, resourceTargetPath) {
+  fs.ensureDirSync(resourceTargetPath);
   fs.copySync(resourceSourcePath, resourceTargetPath);
   fs.remove(resourceSourcePath);
 }

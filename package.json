@@ -50,6 +50,9 @@
     "rimraf": "^2.6.2"
   },
   "dependencies": {
+    "fs-extra": "^7.0.0",
+    "ospath": "^1.2.2",
+    "path-extra": "^4.2.1",
     "request": "^2.87.0"
   }
 }
