@@ -50,6 +50,9 @@
     "rimraf": "^2.6.2"
   },
   "dependencies": {
-    "request": "^2.87.0"
+    "fs-extra": "^7.0.0",
+    "path-extra": "^4.2.1",
+    "request": "^2.87.0",
+    "yamljs": "^0.3.0"
   }
 }
