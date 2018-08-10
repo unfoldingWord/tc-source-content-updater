@@ -56,5 +56,15 @@ describe('moveResourcesHelpers', () => {
 
     expect(deepFolder).toEqual(share);
   });
+
+  test('moveResources: missing first arg', () => {
+    const res = moveResourcesHelpers.moveResources(null, toFolder);
+    expect(res).toEqual(false);
+  });
+
+  test('moveResources: missing second arg', () => {
+    const res = moveResourcesHelpers.moveResources(fromFolder);
+    expect(res).toEqual(false);
+  });
 });
 
