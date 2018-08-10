@@ -25,12 +25,37 @@ export const parseUsfmOfBook = (usfmPath, outputPath) => {
 
 /**
  * parses manifest.yaml data to create manifest.json
- * @param {string} extractedFilePath - path containing manifest.yaml
+ * @param {String} extractedFilePath - path containing manifest.yaml
  * @param {string} outputPath - path to place manifest.json
+ * @return {Object} new manifest data
  */
 export function parseManifestYaml(extractedFilePath, outputPath) {
   let oldManifest = getResourceManifestFromYaml(extractedFilePath);
-  generateBibleManifest(oldManifest, outputPath);
+  return generateBibleManifest(oldManifest, outputPath);
+}
+
+/**
+ * Parse the bible package to generate json bible contents, manifest, and index
+ * @param {String} packagePath - path to downloaded package
+ * @param {String} resultsPath - path to store processed bible
+ * @return {Boolean} true if success
+ */
+export function parseBiblePackage(packagePath, resultsPath) {
+  try {
+    const manifest = parseManifestYaml(packagePath,
+      resultsPath);
+    const projects = manifest.projects || [];
+    for (let project of projects) {
+      if (project.identifier && project.path) {
+        parseUsfmOfBook(path.join(packagePath, project.path),
+          path.join(resultsPath, project.identifier));
+      }
+    }
+    // TODO: make index
+  } catch (error) {
+    return false;
+  }
+  return true;
 }
 
 /**

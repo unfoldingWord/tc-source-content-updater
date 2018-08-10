@@ -20,11 +20,12 @@ export function getResourceManifestFromYaml(extractedFilePath) {
 
 /**
  * generate manifest.json
- * @param {object} oldManifest - old manifest data
+ * @param {Object} oldManifest - old manifest data
  * @param {String} RESOURCE_OUTPUT_PATH - folder to store manifest.json
+ * @return {Object} new manifest data
  */
 export function generateBibleManifest(oldManifest, RESOURCE_OUTPUT_PATH) {
-  let newManifest = {};
+  const newManifest = {};
   newManifest.dublin_core = oldManifest.dublin_core; // preserve original manifest data
   newManifest.checking = oldManifest.checking;
   newManifest.projects = oldManifest.projects;
@@ -45,4 +46,5 @@ export function generateBibleManifest(oldManifest, RESOURCE_OUTPUT_PATH) {
 
   let savePath = path.join(RESOURCE_OUTPUT_PATH, 'manifest.json');
   fs.outputJsonSync(savePath, newManifest);
+  return newManifest;
 }

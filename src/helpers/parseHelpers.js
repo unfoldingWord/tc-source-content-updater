@@ -11,7 +11,7 @@ export function getLatestsResourceDates(catalog, resourceList) {
 
 /**
  * Formats the given content in an importable form for tC
- * @param {Object} content - The unparsed conent from DCS
+ * @param {Object} content - The unparsed content from DCS
  */
 export function formatResources(content) {
   //
