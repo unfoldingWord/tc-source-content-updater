@@ -1,5 +1,6 @@
 import * as apiHelpers from './helpers/apiHelpers';
 import * as parseHelpers from './helpers/parseHelpers';
+import * as packageParseHelpers from "./helpers/packageParseHelpers";
 
 /**
  * Updater constructor
@@ -43,6 +44,16 @@ Updater.prototype.getLatestsResourceDates = async function(update = false,
  * @param {Array} resourceList - Array of resources to retrieve from the API
  */
 Updater.prototype.downloadResources = async function(resourceList) {
+};
+
+/**
+ * Parse the bible package to generate json bible contents, manifest, and index
+ * @param {String} packagePath - path to downloaded (unzipped) package
+ * @param {String} resultsPath - path to store processed bible
+ * @return {Boolean} true if success
+ */
+Updater.prototype.parseBiblePackage = function(packagePath, resultsPath) {
+  return packageParseHelpers.parseBiblePackage(packagePath, resultsPath);
 };
 
 export default Updater;

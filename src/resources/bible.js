@@ -1,3 +1,4 @@
+/* eslint-disable quote-props */
 export const BIBLE_LIST_NT = ["41-MAT", "42-MRK", "43-LUK", "44-JHN", "45-ACT", "46-ROM", "47-1CO", "48-2CO", "49-GAL", "50-EPH",
   "51-PHP", "52-COL", "53-1TH", "54-2TH", "55-1TI", "56-2TI", "57-TIT", "58-PHM", "59-HEB", "60-JAS",
   "61-1PE", "62-2PE", "63-1JN", "64-2JN", "65-3JN", "66-JUD", "67-REV"];
