@@ -1,5 +1,9 @@
+import path from 'path';
+import ospath from 'ospath';
+
 import * as apiHelpers from './helpers/apiHelpers';
 import * as parseHelpers from './helpers/parseHelpers';
+import * as moveResourcesHelpers from './helpers/moveResourcesHelpers';
 
 /**
  * Updater constructor
@@ -43,6 +47,19 @@ Updater.prototype.getLatestsResourceDates = async function(update = false,
  * @param {Array} resourceList - Array of resources to retrieve from the API
  */
 Updater.prototype.downloadResources = async function(resourceList) {
+};
+
+/**
+ * @description move the converted resource to user's resource folder
+ * @param {String} resourceSourcePath - Location of selected downloaded resources
+ * @param {String} languageCode - language of resource like en or hi
+ */
+Updater.prototype.moveResources = async function(
+    resourceSourcePath, languageCode) {
+  const resourceTargetPath = path.join(
+      ospath.home(), 'translationCore', 'resources', languageCode);
+  await moveResourcesHelpers.move(resourceSourcePath, resourceTargetPath);
+  return;
 };
 
 export default Updater;
