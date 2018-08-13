@@ -1,6 +1,6 @@
 import fs from 'fs-extra';
 import path from 'path-extra';
-  // helpers
+// helpers
 import * as taArticleHelpers from '../src/helpers/translationHelps/taArticleHelpers';
 
 jest.mock('fs-extra');

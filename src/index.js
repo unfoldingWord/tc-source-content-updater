@@ -8,6 +8,7 @@ import * as packageParseHelpers from "./helpers/packageParseHelpers";
 import * as taArticleHelpers from "./helpers/translationHelps/taArticleHelpers";
 import * as twArticleHelpers from "./helpers/translationHelps/twArticleHelpers";
 import * as twGroupDataHelpers from "./helpers/translationHelps/twGroupDataHelpers";
+import * as resourcesDownloadHelpers from "./helpers/resourcesDownloadHelpers";
 
 /**
  * Updater constructor
@@ -46,11 +47,11 @@ Updater.prototype.getLatestsResourceDates = async function(update = false,
 };
 
 /**
- * Downloads the resorces from the specified list using the DCS API
- *
+ * @description Downloads the resorces from the specified list using the DCS API
  * @param {Array} resourceList - Array of resources to retrieve from the API
  */
 Updater.prototype.downloadResources = async function(resourceList) {
+  await resourcesDownloadHelpers.downloadResources(resourceList);
 };
 
 /**
