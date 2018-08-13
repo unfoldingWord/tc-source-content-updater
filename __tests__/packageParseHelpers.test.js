@@ -9,30 +9,40 @@ import * as bible from '../src/resources/bible';
 
 const BOOKS_OF_THE_BIBLE = Object.keys(bible.BOOK_CHAPTER_VERSES);
 
-describe('packageParseHelpers: ', () => {
+describe('parseBiblePackage()', () => {
+  const NT_BOOKS = bible.BIBLE_LIST_NT.map(bookName => getBookCode(bookName));
 
-  describe('parseBiblePackage()', () => {
+  beforeEach(() => {
+    // reset mock filesystem data
+    fs.__resetMockFS();
+  });
 
-    beforeEach(() => {
-      // reset mock filesystem data
-      fs.__resetMockFS();
-    });
+  afterEach(() => {
+    fs.__resetMockFS();
+  });
 
-    afterEach(() => {
-      fs.__resetMockFS();
-    });
+  it('en_ult should pass', () => {
+    const sourceBible = 'en_ult';
+    const PROJECTS_PATH = path.join(ospath.home(), 'resources/import');
+    const resultsPath = path.join(ospath.home(), 'resources/results');
+    fs.__loadFilesIntoMockFs([sourceBible], './__tests__/fixtures', PROJECTS_PATH);
+    let packagePath = path.join(PROJECTS_PATH, sourceBible);
+    const results = packageParseHelpers.parseBiblePackage(packagePath,
+      resultsPath);
+    expect(results).toBeTruthy();
+    verifyBibleResults(resultsPath, BOOKS_OF_THE_BIBLE);
+  });
 
-    it('should pass', () => {
-      const sourceBible = 'en_ult';
-      const PROJECTS_PATH = path.join(ospath.home(), 'resources/import');
-      const resultsPath = path.join(ospath.home(), 'resources/results');
-      fs.__loadFilesIntoMockFs([sourceBible], './__tests__/fixtures', PROJECTS_PATH);
-      let packagePath = path.join(PROJECTS_PATH, sourceBible);
-      const results = packageParseHelpers.parseBiblePackage(packagePath,
-        resultsPath);
-      expect(results).toBeTruthy();
-      verifyBibleResults(resultsPath);
-    });
+  it('el-x-koine_ugnt should pass', () => {
+    const sourceBible = 'el-x-koine_ugnt';
+    const PROJECTS_PATH = path.join(ospath.home(), 'resources/import');
+    const resultsPath = path.join(ospath.home(), 'resources/results');
+    fs.__loadFilesIntoMockFs([sourceBible], './__tests__/fixtures', PROJECTS_PATH);
+    let packagePath = path.join(PROJECTS_PATH, sourceBible);
+    const results = packageParseHelpers.parseBiblePackage(packagePath,
+      resultsPath);
+    expect(results).toBeTruthy();
+    verifyBibleResults(resultsPath, NT_BOOKS);
   });
 });
 
@@ -48,8 +58,8 @@ function getChapterCount(bookID) {
   return 0;
 }
 
-function verifyBibleResults(resultsPath) {
-  for (let bookId of BOOKS_OF_THE_BIBLE) {
+function verifyBibleResults(resultsPath, verifyBooks) {
+  for (let bookId of verifyBooks) {
     const bookPath = path.join(resultsPath, bookId);
     console.log("Testing Book " + bookId);
     expect(fs.pathExistsSync(bookPath)).toBeTruthy();
@@ -61,6 +71,15 @@ function verifyBibleResults(resultsPath) {
     const manifest = fs.readJSONSync(path.join(resultsPath, 'manifest.json'));
     expect(Object.keys(manifest).length).toBeGreaterThan(10);
     const index = fs.readJSONSync(path.join(resultsPath, 'index.json'));
-    expect(Object.keys(index).length).toEqual(66);
+    expect(Object.keys(index).length).toEqual(verifyBooks.length);
   }
+}
+
+/**
+ * @description - split book code out of book name, for example 'mat' from '41-MAT'
+ * @param {string} bookName book in format '41-MAT'
+ * @return {string} book ID
+ */
+function getBookCode(bookName) {
+  return bookName.split('-')[1].toLowerCase();
 }
