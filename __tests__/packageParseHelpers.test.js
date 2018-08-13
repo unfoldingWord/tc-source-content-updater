@@ -61,7 +61,6 @@ function getChapterCount(bookID) {
 function verifyBibleResults(resultsPath, verifyBooks) {
   for (let bookId of verifyBooks) {
     const bookPath = path.join(resultsPath, bookId);
-    console.log("Testing Book " + bookId);
     expect(fs.pathExistsSync(bookPath)).toBeTruthy();
     let chapterCount = getChapterCount(bookId);
     for (let chapter = 1; chapter <= chapterCount; chapter++) {
