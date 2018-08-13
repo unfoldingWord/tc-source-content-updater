@@ -15,7 +15,7 @@ describe('moveResourcesHelpers', () => {
   let res;
   beforeEach(() => {
     // simulate download into sourceFolder
-    sourceFolder = './__tests__/fixtures/resources/bs';
+    sourceFolder = path.join('__tests__', 'fixtures', 'resources', 'bs');
     // simulate converting into initial folder
     initialFolder = path.join(ospath.home(), 'resources');
     fs.__resetMockFS();
