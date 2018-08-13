@@ -1,9 +1,10 @@
 import path from 'path';
 import ospath from 'ospath';
-
+// helpers
 import * as apiHelpers from './helpers/apiHelpers';
 import * as parseHelpers from './helpers/parseHelpers';
 import * as moveResourcesHelpers from './helpers/moveResourcesHelpers';
+import * as packageParseHelpers from "./helpers/packageParseHelpers";
 
 /**
  * Updater constructor
@@ -60,6 +61,16 @@ Updater.prototype.moveResources = async function(
       ospath.home(), 'translationCore', 'resources', languageCode);
   await moveResourcesHelpers.move(resourceSourcePath, resourceTargetPath);
   return;
+};
+
+/**
+ * Parse the bible package to generate json bible contents, manifest, and index
+ * @param {String} packagePath - path to downloaded (unzipped) package
+ * @param {String} resultsPath - path to store processed bible
+ * @return {Boolean} true if success
+ */
+Updater.prototype.parseBiblePackage = function(packagePath, resultsPath) {
+  return packageParseHelpers.parseBiblePackage(packagePath, resultsPath);
 };
 
 export default Updater;
