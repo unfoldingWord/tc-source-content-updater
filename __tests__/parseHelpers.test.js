@@ -2,7 +2,7 @@
 /* eslint-disable camelcase,no-empty */
 import * as parseHelpers from '../src/helpers/parseHelpers'
 
-const catalog = require('./fixtures/catalog');
+const catalog = require('./fixtures/catalogPivoted');
 
 describe('getTcoreResources()', () => {
   it('should find Bibles', () => {
