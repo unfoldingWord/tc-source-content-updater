@@ -5,20 +5,20 @@ import * as bible from '../../resources/bible';
 import * as ResourcesHelpers from '../ResourcesHelpers';
 
 /**
- * @description - generates the tW files from the given bible
- * @param {string} biblePath - Path to the Bible with aligned data
- * @param {string} outputPath - Path where the translationWords group data is to be placed WITHOUT version
+ * @description Generates the tW Group Data files from the given aligned Bible
+ * @param {string} biblePath Path to the Bible with aligned data
+ * @param {string} outputPath Path where the translationWords group data is to be placed WITHOUT version
  * @return {string} Path where tW was generated with version
  */
 export const generateTwGroupDataFromAlignedBible = (biblePath, outputPath) => {
-  if (! fs.pathExistsSync(biblePath)) {
+  if (!fs.pathExistsSync(biblePath)) {
     return null;
   }
   const version = ResourcesHelpers.getVersionFromManifest(biblePath);
   if (!version) {
     return null;
   }
-  const twOutputPath = path.join(outputPath, 'v'+version);
+  const twOutputPath = path.join(outputPath, 'v' + version);
   let books = bible.BIBLE_LIST_NT.slice(0);
   books.forEach(bookName => {
     convertBookVerseObjectsToTwData(biblePath, twOutputPath, bookName);
@@ -27,10 +27,10 @@ export const generateTwGroupDataFromAlignedBible = (biblePath, outputPath) => {
 };
 
 /**
- * @description - gets verseObjects of a book and converts to a tW data object to save to file
- * @param {string} biblePath - Usually path to the UGNT
- * @param {string} twPath - The output path for tW files
- * @param {string} bookName - Book in format, e.g. '41-MAT'
+ * @description Gets verseObjects of a book and converts to a tW data object to save to file
+ * @param {string} biblePath Usually path to the UGNT
+ * @param {string} twPath The output path for tW files
+ * @param {string} bookName Book in format, e.g. '41-MAT'
  */
 function convertBookVerseObjectsToTwData(biblePath, twPath, bookName) {
   const bookId = getbookId(bookName);
@@ -62,17 +62,17 @@ function convertBookVerseObjectsToTwData(biblePath, twPath, bookName) {
 
 /**
  * @description Populates the groupData array with this verseObject and returns its own groupData for milestones
- * @param {object} groupData
- * @param {object} verseObject
- * @param {bool} isMilestone - if true, all word objects will be added to the group data
- * @return {object}
+ * @param {object} groupData Group Data object
+ * @param {object} verseObject Verse object
+ * @param {bool} isMilestone If true, all word objects will be added to the group data
+ * @return {object} Returns group data for this verse object
  */
 function populateGroupDataFromVerseObject(groupData, verseObject, isMilestone = false) {
   var myGroupData = {
     quote: [],
     strong: []
   };
-  if (verseObject.type === 'milestone' || (verseObject.type == 'word' && (verseObject.tw || isMilestone))) {
+  if (verseObject.type === 'milestone' || (verseObject.type === 'word' && (verseObject.tw || isMilestone))) {
     if (verseObject.type === 'milestone') {
       if (verseObject.text) {
         myGroupData.text.push(verseObject.text);
@@ -111,11 +111,11 @@ function populateGroupDataFromVerseObject(groupData, verseObject, isMilestone = 
 
 /**
  * @description Takes what is in the groupData array and populates the tWData
- * @param {object} twData
- * @param {object} groupData
- * @param {string} bookId
- * @param {int} chatper
- * @param {int} verse
+ * @param {Object} twData Data to be collected for tw
+ * @param {Object} groupData Group data object
+ * @param {String} bookId Three character code for the book
+ * @param {int} chapter Number of the chapter
+ * @param {int} verse Number of the verse
  */
 function populateTwDataFromGroupData(twData, groupData, bookId, chapter, verse) {
   for (let category in groupData) {
@@ -156,9 +156,9 @@ function populateTwDataFromGroupData(twData, groupData, bookId, chapter, verse) 
 }
 
 /**
- * @description - split book code out of book name, for example 'mat' from '41-MAT'
- * @param {string} bookName - book in format '41-MAT'
- * @return {string}
+ * @description Splits book code out of book name, for example 'mat' from '41-MAT'
+ * @param {string} bookName Book in format '41-MAT'
+ * @return {string} The book ID, e.g. 'mat'
  */
 function getbookId(bookName) {
   return bookName.split('-')[1].toLowerCase();

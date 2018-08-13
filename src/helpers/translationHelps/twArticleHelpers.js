@@ -4,16 +4,17 @@ import path from 'path-extra';
 import * as ResourcesHelpers from '../ResourcesHelpers';
 
 /**
- * @description - Processes the translationWords article files for a given language from the extracted files from the catalog
- * @param {String} extractedFilePath - Path to the extracted files that came from the zip file from the catalog
+ * @description Processes the extracted files for translationWord to cerate the folder
+ * structure and produce the index.js file for the language with the title of each article.
+ * @param {String} extractedFilesPath - Path to the extracted files that came from the zip file from the catalog
  * @param {String} outputPath - Path to place the processed resource files WIHTOUT the version in the path
  * @return {String} Path to the processed translationWords files with version
  */
-export function processTranslationWords(extractedFilePath, outputPath) {
-  if (!fs.pathExistsSync(extractedFilePath)) {
+export function processTranslationWords(extractedFilesPath, outputPath) {
+  if (!fs.pathExistsSync(extractedFilesPath)) {
     return null;
   }
-  const version = ResourcesHelpers.getVersionFromManifest(extractedFilePath);
+  const version = ResourcesHelpers.getVersionFromManifest(extractedFilesPath);
   if (version === null) {
     return null;
   }
@@ -21,7 +22,7 @@ export function processTranslationWords(extractedFilePath, outputPath) {
   if (fs.pathExistsSync(twOutputPath)) {
     fs.removeSync(twOutputPath);
   }
-  const typesPath = path.join(extractedFilePath, 'bible');
+  const typesPath = path.join(extractedFilesPath, 'bible');
   const isDirectory = item => fs.lstatSync(path.join(typesPath, item)).isDirectory();
   const typeDirs = fs.readdirSync(typesPath).filter(isDirectory);
   typeDirs.forEach(typeDir => {

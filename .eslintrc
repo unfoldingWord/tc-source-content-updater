@@ -8,32 +8,13 @@
   ],
   "settings": {},
   "rules": {
-    "no-duplicate-imports": [
-      "error",
-      {
-        "includeExports": false
-      }
-    ],
-    "no-throw-literal": "off",
-    "semi": [
-      "error",
-      "always",
-      {
-        "omitLastInOneLineBlock": true
-      }
-    ],
+    "no-undef": "warn",
+    "semi": ["error", "always", {"omitLastInOneLineBlock": true}],
+    "guard-for-in": "off",
+    "max-len": "off",
     "no-console": "off",
-    "no-warning-comments": "warn",
-    "quote-props": "warn",
-    "padded-blocks": "warn",
-    "max-len": [
-      "error",
-      {
-        "ignoreStrings": true,
-        "ignoreComments": true,
-        "ignoreTemplateLiterals": true
-      }
-    ]
+    "no-unused-vars": "warn",
+    "radix": "off"
   },
   "parser": "babel-eslint",
   "parserOptions": {
@@ -48,3 +29,4 @@
     "jest/globals": true
   }
 }
+

@@ -4,26 +4,27 @@ import path from 'path-extra';
 import * as ResourcesHelpers from '../ResourcesHelpers';
 
 /**
- * @description - Processes the translationAcademy article files for a given language from the extracted files from the catalog
- * @param {String} extractedFilePath - Path to the extracted files that came from the zip file in the catalog
+ * @description Processes the extracted files for translationAcademy to create a single file for each
+ * article
+ * @param {String} extractedFilesPath - Path to the extracted files that came from the zip file in the catalog
  * @param {String} outputPath - Path to place the processed files WITHOUT version in the path
  * @return {String} The path to the processed translationAcademy files with version
  */
-export function processTranslationAcademy(extractedFilePath, outputPath) {
-  if (!fs.pathExistsSync(extractedFilePath)) {
+export function processTranslationAcademy(extractedFilesPath, outputPath) {
+  if (!fs.pathExistsSync(extractedFilesPath)) {
     return null;
   }
-  const resourceManifest = ResourcesHelpers.getResourceManifest(extractedFilePath);
-  const version = ResourcesHelpers.getVersionFromManifest(extractedFilePath);
+  const resourceManifest = ResourcesHelpers.getResourceManifest(extractedFilesPath);
+  const version = ResourcesHelpers.getVersionFromManifest(extractedFilesPath);
   if (version === null) {
     return null;
   }
-  const taOutputPath = path.join(outputPath, 'v'+version);
+  const taOutputPath = path.join(outputPath, 'v' + version);
   if (fs.pathExistsSync(taOutputPath)) {
     fs.removeSync(taOutputPath);
   }
   resourceManifest.projects.forEach(project => {
-    const folderPath = path.join(extractedFilePath, project.path);
+    const folderPath = path.join(extractedFilesPath, project.path);
     const isDirectory = item => fs.lstatSync(path.join(folderPath, item)).isDirectory();
     const articleDirs = fs.readdirSync(folderPath).filter(isDirectory);
     articleDirs.forEach(articleDir => {
