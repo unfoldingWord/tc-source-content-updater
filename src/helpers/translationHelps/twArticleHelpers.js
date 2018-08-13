@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 import path from 'path-extra';
 // heleprs
-import * as ResourcesHelpers from '../ResourcesHelpers';
+import * as resourcesHelpers from '../resourcesHelpers';
 
 /**
  * @description Processes the extracted files for translationWord to cerate the folder
@@ -14,7 +14,7 @@ export function processTranslationWords(extractedFilesPath, outputPath) {
   if (!fs.pathExistsSync(extractedFilesPath)) {
     return null;
   }
-  const version = ResourcesHelpers.getVersionFromManifest(extractedFilesPath);
+  const version = resourcesHelpers.getVersionFromManifest(extractedFilesPath);
   if (version === null) {
     return null;
   }

@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 import path from 'path-extra';
 // heleprs
-import * as ResourcesHelpers from '../ResourcesHelpers';
+import * as resourcesHelpers from '../resourcesHelpers';
 
 /**
  * @description Processes the extracted files for translationAcademy to create a single file for each
@@ -14,8 +14,8 @@ export function processTranslationAcademy(extractedFilesPath, outputPath) {
   if (!fs.pathExistsSync(extractedFilesPath)) {
     return null;
   }
-  const resourceManifest = ResourcesHelpers.getResourceManifest(extractedFilesPath);
-  const version = ResourcesHelpers.getVersionFromManifest(extractedFilesPath);
+  const resourceManifest = resourcesHelpers.getResourceManifest(extractedFilesPath);
+  const version = resourcesHelpers.getVersionFromManifest(extractedFilesPath);
   if (version === null) {
     return null;
   }

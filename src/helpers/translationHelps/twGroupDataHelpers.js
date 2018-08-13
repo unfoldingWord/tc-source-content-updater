@@ -2,7 +2,7 @@ import fs from 'fs-extra';
 import path from 'path-extra';
 import * as bible from '../../resources/bible';
 // helpers
-import * as ResourcesHelpers from '../ResourcesHelpers';
+import * as resourcesHelpers from '../resourcesHelpers';
 
 /**
  * @description Generates the tW Group Data files from the given aligned Bible
@@ -14,7 +14,7 @@ export const generateTwGroupDataFromAlignedBible = (biblePath, outputPath) => {
   if (!fs.pathExistsSync(biblePath)) {
     return null;
   }
-  const version = ResourcesHelpers.getVersionFromManifest(biblePath);
+  const version = resourcesHelpers.getVersionFromManifest(biblePath);
   if (!version) {
     return null;
   }

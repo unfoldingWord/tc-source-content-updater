@@ -8,7 +8,7 @@ import usfm from 'usfm-js';
 import * as bible from '../resources/bible';
 import assert from 'assert';
 import {generateBibleManifest} from "./biblesHelpers";
-import {getResourceManifest} from "./ResourcesHelpers";
+import {getResourceManifest} from "./resourcesHelpers";
 
 /**
  * @description - This function outputs chapter files from an input usfm file
