@@ -7,7 +7,8 @@ import path from 'path-extra';
 import usfm from 'usfm-js';
 import * as bible from '../resources/bible';
 import assert from 'assert';
-import {getResourceManifestFromYaml, generateBibleManifest} from "./biblesHelpers";
+import {generateBibleManifest} from "./biblesHelpers";
+import {getResourceManifest} from "./ResourcesHelpers";
 
 /**
  * @description - This function outputs chapter files from an input usfm file
@@ -29,8 +30,8 @@ export const parseUsfmOfBook = (usfmPath, outputPath) => {
  * @param {string} outputPath - path to place manifest.json
  * @return {Object} new manifest data
  */
-export function parseManifestYaml(extractedFilePath, outputPath) {
-  let oldManifest = getResourceManifestFromYaml(extractedFilePath);
+export function parseManifest(extractedFilePath, outputPath) {
+  let oldManifest = getResourceManifest(extractedFilePath);
   return generateBibleManifest(oldManifest, outputPath);
 }
 
@@ -43,7 +44,7 @@ export function parseManifestYaml(extractedFilePath, outputPath) {
 export function parseBiblePackage(packagePath, resultsPath) {
   const index = {};
   try {
-    const manifest = parseManifestYaml(packagePath,
+    const manifest = parseManifest(packagePath,
       resultsPath);
     const projects = manifest.projects || [];
     for (let project of projects) {

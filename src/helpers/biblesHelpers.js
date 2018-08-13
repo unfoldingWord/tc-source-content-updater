@@ -1,22 +1,6 @@
 /* eslint-disable camelcase */
 import fs from 'fs-extra';
 import path from 'path-extra';
-import yaml from 'yamljs';
-
-/**
- * parse the manifest.yaml file into an object
- * @param {String} extractedFilePath - path with manifest.yaml
- * @return {Object} manifest data
- */
-export function getResourceManifestFromYaml(extractedFilePath) {
-  try {
-    const filePath = path.join(extractedFilePath, 'manifest.yaml');
-    const yamlManifest = fs.readFileSync(filePath, 'utf8');
-    return yaml.parse(yamlManifest);
-  } catch (error) {
-    console.error(error);
-  }
-}
 
 /**
  * generate manifest.json
