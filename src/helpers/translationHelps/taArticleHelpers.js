@@ -7,7 +7,7 @@ import * as ResourcesHelpers from '../ResourcesHelpers';
  * @description - Processes the translationAcademy article files for a given language from the extracted files from the catalog
  * @param {String} extractedFilePath - Path to the extracted files that came from the zip file in the catalog
  * @param {String} outputPath - Path to place the processed files WITHOUT version in the path
- * @returns {String} The path to the processed translationAcademy files with version
+ * @return {String} The path to the processed translationAcademy files with version
  */
 export function processTranslationAcademy(extractedFilePath, outputPath) {
   if (!fs.pathExistsSync(extractedFilePath)) {

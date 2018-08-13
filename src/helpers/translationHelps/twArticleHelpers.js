@@ -7,17 +7,17 @@ import * as ResourcesHelpers from '../ResourcesHelpers';
  * @description - Processes the translationWords article files for a given language from the extracted files from the catalog
  * @param {String} extractedFilePath - Path to the extracted files that came from the zip file from the catalog
  * @param {String} outputPath - Path to place the processed resource files WIHTOUT the version in the path
- * @returns {String} Path to the processed translationWords files with version
+ * @return {String} Path to the processed translationWords files with version
  */
 export function processTranslationWords(extractedFilePath, outputPath) {
-  if (! fs.pathExistsSync(extractedFilePath)) {
+  if (!fs.pathExistsSync(extractedFilePath)) {
     return null;
   }
   const version = ResourcesHelpers.getVersionFromManifest(extractedFilePath);
   if (version === null) {
     return null;
   }
-  const twOutputPath = path.join(outputPath, 'v'+version);
+  const twOutputPath = path.join(outputPath, 'v' + version);
   if (fs.pathExistsSync(twOutputPath)) {
     fs.removeSync(twOutputPath);
   }
@@ -26,7 +26,7 @@ export function processTranslationWords(extractedFilePath, outputPath) {
   const typeDirs = fs.readdirSync(typesPath).filter(isDirectory);
   typeDirs.forEach(typeDir => {
     const typePath = path.join(typesPath, typeDir);
-    const files = fs.readdirSync(typePath).filter(filename=>path.extname(filename)==='.md');
+    const files = fs.readdirSync(typePath).filter(filename => path.extname(filename) === '.md');
     generateGroupsIndex(typePath, twOutputPath, typeDir);
     files.forEach(fileName => {
       const sourcePath = path.join(typePath, fileName);
@@ -51,7 +51,7 @@ export function processTranslationWords(extractedFilePath, outputPath) {
 function generateGroupsIndex(filesPath, twOutputPath, folderName) {
   let groupsIndex = [];
   let groupIds = fs.readdirSync(filesPath).filter(filename => {
-    return filename.split('.').pop() == 'md';
+    return filename.split('.').pop() === 'md';
   });
   groupIds.forEach(fileName => {
     let groupObject = {};
@@ -71,26 +71,27 @@ function generateGroupsIndex(filesPath, twOutputPath, folderName) {
     'index.json',
   );
 
-  fs.outputJsonSync(groupsIndexOutputPath, groupsIndex, {spaces:2});
+  fs.outputJsonSync(groupsIndexOutputPath, groupsIndex, {spaces: 2});
 }
 
 /**
  * Splits the string into words delimited by commas and compares the first unique word
- * @param {String} a
- * @param {String} b
+ * @param {String} a first string to be compared
+ * @param {String} b second string to be compared
+ * @return {int} comparison result
  */
 function compareByFirstUniqueWord(a, b) {
   let aWords = a.name.toUpperCase().split(',');
   let bWords = b.name.toUpperCase().split(',');
   while (aWords.length || bWords.length) {
-    if (! aWords.length)
+    if (!aWords.length)
       return -1;
-    if (! bWords.length)
+    if (!bWords.length)
       return 1;
     let aWord = aWords.shift().trim();
     let bWord = bWords.shift().trim();
-    if (aWord != bWord)
-      return (aWord<bWord?-1:1);
+    if (aWord !== bWord)
+      return (aWord < bWord ? -1 : 1);
   }
   return 0; // both lists are the same
 }

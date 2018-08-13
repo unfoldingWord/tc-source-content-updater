@@ -1,12 +1,12 @@
-/* eslint-disable no-console */
+/* eslint-disable no-console,max-len */
 import fs from 'fs-extra';
 import path from 'path-extra';
 import yaml from 'yamljs';
 
 /**
  * @description - Gets the version from the manifest
- * @param {String} resourcePath 
- * @return {String}
+ * @param {String} resourcePath - folder for manifest.json or yaml
+ * @return {String} version
  */
 export function getVersionFromManifest(resourcePath) {
   const manifest = getResourceManifest(resourcePath);
@@ -20,7 +20,7 @@ export function getVersionFromManifest(resourcePath) {
  * @description Helper function to get manifest file from the resources folder. First
  * it will try manifest.json, then manifest.yaml.
  * @param {String} resourcePath - path to a resource folder which contains the manifest file in its root.
- * @return {Object}
+ * @return {Object} manifest
  */
 export function getResourceManifest(resourcePath) {
   const manifest = getResourceManifestFromJson(resourcePath);
@@ -32,8 +32,8 @@ export function getResourceManifest(resourcePath) {
 
 /**
  * @description - Turns a manifest.json file into an object and returns it, null if doesn't exist
- * @param {String} resourcePath
- * @return {Object}
+ * @param {String} resourcePath - folder for manifest.json
+ * @return {Object} manifest
  */
 export function getResourceManifestFromJson(resourcePath) {
   const fileName = 'manifest.json';
@@ -47,8 +47,8 @@ export function getResourceManifestFromJson(resourcePath) {
 
 /**
  * @description - Turns a manifest.yaml file into an object and returns it, null if doesn't exist
- * @param {String} resourcePath
- * @return {Object}
+ * @param {String} resourcePath - folder for manifest.yaml
+ * @return {Object} manifest
  */
 export function getResourceManifestFromYaml(resourcePath) {
   const fileName = 'manifest.yaml';
