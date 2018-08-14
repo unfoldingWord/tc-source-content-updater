@@ -49,6 +49,7 @@ Updater.prototype.getLatestsResourceDates = async function(update = false,
 /**
  * @description Downloads the resorces from the specified list using the DCS API
  * @param {Array} resourceList - Array of resources to retrieve from the API
+ * @return {Promise} Promise that resolves to success or rejects if a resource failed to download
  */
 Updater.prototype.downloadResources = async function(resourceList) {
   return await resourcesDownloadHelpers.downloadResources(resourceList);
