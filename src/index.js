@@ -76,10 +76,11 @@ export function getResourcesForLanguage(languageId) {
  * Downloads the resources from the specified list using the DCS API
  *
  * @param {Array.<String>} languageList - Array of language codes to retrieve from the API
+ * @return {Promise} Promise that resolves to success or rejects if a resource failed to download
  */
 Updater.prototype.downloadResources = async function(languageList) {
   // call this.getResourcesForLanguage(lang) for each language in list to get all resources to update
-  await resourcesDownloadHelpers.downloadResources(languageList);
+  return await resourcesDownloadHelpers.downloadResources(languageList);
 };
 
 /**
