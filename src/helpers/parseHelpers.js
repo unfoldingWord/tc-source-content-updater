@@ -72,7 +72,7 @@ export function getUpdatedLanguageList(updatedRemoteResources) {
       }
     }
   } catch (error) {
-    return throw new Error(error);
+    throw new Error(error);
   }
   return updatedLanguages.sort((a, b) =>
     ((a.languageId > b.languageId) ? 1 : -1));
@@ -121,7 +121,7 @@ export function getLatestResources(catalog, localResourceList) {
       }
     }
   } catch (error) {
-    return throw new Error(error);
+    throw new Error(error);
   }
   return tCoreResources; // resources that are already up to date have been removed
 }
@@ -185,7 +185,7 @@ export function parseCatalogResources(catalog, subjectFilters = null) {
       }
     }
   } catch (error) {
-    return throw new Error(error);
+    throw new Error(error);
   }
 
   return catalogResources;
