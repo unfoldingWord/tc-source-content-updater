@@ -57,7 +57,7 @@ export function getResourcesForLanguage(resources, languageId) {
  */
 export function getUpdatedLanguageList(updatedRemoteResources) {
   if (!Array.isArray(updatedRemoteResources)) {
-    return null;
+    throw new Error('updatedRemoteResources is not an array');
   }
   const updatedLanguages = [];
   try {
@@ -76,7 +76,7 @@ export function getUpdatedLanguageList(updatedRemoteResources) {
       }
     }
   } catch (error) {
-    throw error;
+    throw new Error(error);
   }
   return updatedLanguages.sort((a, b) =>
     ((a.languageId > b.languageId) ? 1 : -1));
