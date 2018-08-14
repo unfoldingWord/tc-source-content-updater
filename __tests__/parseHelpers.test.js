@@ -79,7 +79,7 @@ describe('getLatestResources()', () => {
   });
 
   it('should return null for invalid catalog object', () => {
-    const results = parseHelpers.getLatestResources({ }, []);
+    const results = parseHelpers.getLatestResources(null, []);
     expect(results).toBeNull();
   });
 });

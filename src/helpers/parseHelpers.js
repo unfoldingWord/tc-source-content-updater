@@ -26,9 +26,10 @@
  */
 export function getResourcesForLanguage(resources, languageId) {
   try {
+    if (!Array.isArray(resources)) return null;
     return resources.filter(resource => (resource.languageId === languageId));
   } catch (error) {
-    throw new Error(error);
+    throw error;
   }
 }
 
@@ -55,6 +56,9 @@ export function getResourcesForLanguage(resources, languageId) {
  *         }|null} - list of languages that have updates in catalog (returns null on error)
  */
 export function getUpdatedLanguageList(updatedRemoteResources) {
+  if (!Array.isArray(updatedRemoteResources)) {
+    return null;
+  }
   const updatedLanguages = [];
   try {
     for (let resource of updatedRemoteResources) {
@@ -72,7 +76,7 @@ export function getUpdatedLanguageList(updatedRemoteResources) {
       }
     }
   } catch (error) {
-    throw new Error(error);
+    throw error;
   }
   return updatedLanguages.sort((a, b) =>
     ((a.languageId > b.languageId) ? 1 : -1));
@@ -100,6 +104,9 @@ export function getUpdatedLanguageList(updatedRemoteResources) {
  *                 }>|null} updated resources (returns null on error)
  */
 export function getLatestResources(catalog, localResourceList) {
+  if (!catalog || !Array.isArray(localResourceList)) {
+    return null;
+  }
   const tCoreResources = parseCatalogResources(catalog);
   try {
     // remove resources that are already up to date
@@ -142,6 +149,9 @@ export function getLatestResources(catalog, localResourceList) {
  *                 }>|null} list of updated resources (returns null on error)
  */
 export function parseCatalogResources(catalog, subjectFilters = null) {
+  if (!catalog || !Array.isArray(catalog.subjects)) {
+    return null;
+  }
   const catalogResources = [];
   try {
     if (catalog && catalog.subjects) {
