@@ -28,7 +28,7 @@ export function getResourcesForLanguage(resources, languageId) {
   try {
     return resources.filter(resource => (resource.languageId === languageId));
   } catch (error) {
-    return throw new Error(error);
+    throw new Error(error);
   }
 }
 
