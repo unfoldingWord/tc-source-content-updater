@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 import path from 'path-extra';
 // heleprs
-import * as resourcesHelpers from '../ResourcesHelpers';
+import * as resourcesHelpers from '../resourcesHelpers';
 
 /**
  * @description Processes the extracted files for translationAcademy to create a single file for each

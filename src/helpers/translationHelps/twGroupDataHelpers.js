@@ -2,7 +2,7 @@ import fs from 'fs-extra';
 import path from 'path-extra';
 import * as bible from '../../resources/bible';
 // helpers
-import * as resourcesHelpers from '../ResourcesHelpers';
+import * as resourcesHelpers from '../resourcesHelpers';
 
 /**
  * @description Generates the tW Group Data files from the given aligned Bible
