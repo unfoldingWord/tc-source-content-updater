@@ -11,7 +11,7 @@
  *                   version: String,
  *                   subject: String,
  *                   catalogEntry: {langResource, bookResource, format}
- *                 }>} updatedRemoteResources - resources that have been updated in remote catalog
+ *                 }>} resources - resources to filter
  * @param {String} languageId - language to search for
  * @return {Array.<{
  *                   languageId: String,
@@ -22,10 +22,13 @@
  *                   version: String,
  *                   subject: String,
  *                   catalogEntry: {langResource, bookResource, format}
- *                 }>} - all updated resources for language
+ *                 }>|null} - filtered resources for language (returns null on error)
  */
-export function getResourcesForLanguage(updatedRemoteResources, languageId) {
-  return updatedRemoteResources.filter(resource =>
+export function getResourcesForLanguage(resources, languageId) {
+  if (!Array.isArray(resources)) {
+    return null;
+  }
+  return resources.filter(resource =>
     (resource.languageId === languageId));
 }
 
@@ -49,12 +52,15 @@ export function getResourcesForLanguage(updatedRemoteResources, languageId) {
  *                   localModifiedTime: String,
  *                   remoteModifiedTime: String
  *                 }>
- *         }} - list of languages that have updates in catalog
+ *         }|null} - list of languages that have updates in catalog (returns null on error)
  */
 export function getUpdatedLanguageList(updatedRemoteResources) {
+  if (!Array.isArray(updatedRemoteResources)) {
+    return null;
+  }
   const updatedLanguages = [];
   for (let resource of updatedRemoteResources) {
-    const languageId = resource.langId;
+    const languageId = resource.languageId;
     const updatedBible = {
       languageId,
       localModifiedTime: resource.localModifiedTime || '',
@@ -67,16 +73,15 @@ export function getUpdatedLanguageList(updatedRemoteResources) {
       updatedLanguages.push(updatedBible); // add if language not present
     }
   }
-  const languages = updatedLanguages.sort((a, b) =>
+  return updatedLanguages.sort((a, b) =>
     ((a.languageId > b.languageId) ? 1 : -1));
-  return languages;
 }
 
 /**
  * Gets the list of all new resources in remoteCatalog, except for
  * the ones already up to date in the given list
  *
- * @param {{languages: Array.<Object>}} catalog - to parse
+ * @param {{subjects: Array.<Object>}} catalog - to parse
  * @param {Array.<{
  *                  languageId: String,
  *                  resourceId: String,
@@ -91,10 +96,13 @@ export function getUpdatedLanguageList(updatedRemoteResources) {
  *                   version: String,
  *                   subject: String,
  *                   catalogEntry: {subject, resource, format}
- *                 }>} updated resources
+ *                 }>|null} updated resources (returns null on error)
  */
 export function getLatestResources(catalog, localResourceList) {
-  const tCoreResources = getTcoreResources(catalog);
+  if (!catalog || !Array.isArray(localResourceList)) {
+    return null;
+  }
+  const tCoreResources = parseCatalogResources(catalog);
   // remove resources that are already up to date
   for (let localResource of localResourceList) {
     if (localResource.languageId && localResource.resourceId) {
@@ -117,9 +125,9 @@ export function getLatestResources(catalog, localResourceList) {
 }
 
 /**
- * filters the remoteCatalog and returns valid tCore resources
+ * parses the remoteCatalog and returns list of catalog resources
  *
- * @param {{languages: Array.<Object>}} catalog - to parse
+ * @param {{subjects: Array.<Object>}} catalog - to parse
  * @param {Array.<String>} subjectFilters - optional array of subjects to include
  * @return {Array.<{
  *                   languageId: String,
@@ -129,9 +137,12 @@ export function getLatestResources(catalog, localResourceList) {
  *                   version: String,
  *                   subject: String,
  *                   catalogEntry: {subject, resource, format}
- *                 }>} list of updated resources
+ *                 }>|null} list of updated resources (returns null on error)
  */
-export function getTcoreResources(catalog, subjectFilters = null) {
+export function parseCatalogResources(catalog, subjectFilters = null) {
+  if (!catalog || !Array.isArray(catalog.subjects)) {
+    return null;
+  }
   const catalogResources = [];
   if (catalog && catalog.subjects) {
     for (let catSubject of catalog.subjects) {
