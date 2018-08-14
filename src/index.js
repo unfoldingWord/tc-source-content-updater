@@ -51,7 +51,7 @@ Updater.prototype.getLatestsResourceDates = async function(update = false,
  * @param {Array} resourceList - Array of resources to retrieve from the API
  */
 Updater.prototype.downloadResources = async function(resourceList) {
-  await resourcesDownloadHelpers.downloadResources(resourceList);
+  return await resourcesDownloadHelpers.downloadResources(resourceList);
 };
 
 /**
