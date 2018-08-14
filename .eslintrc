@@ -14,7 +14,8 @@
     "max-len": "off",
     "no-console": "off",
     "no-unused-vars": "warn",
-    "radix": "off"
+    "radix": "off",
+    "indent": "off"
   },
   "parser": "babel-eslint",
   "parserOptions": {
