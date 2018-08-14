@@ -44,6 +44,45 @@ describe('parseBiblePackage()', () => {
     expect(results).toBeTruthy();
     verifyBibleResults(resultsPath, NT_BOOKS);
   });
+
+  it('should fail if manifest not found', () => {
+    const sourceBible = 'el-x-koine_ugnt';
+    const PROJECTS_PATH = path.join(ospath.home(), 'resources/import');
+    const resultsPath = path.join(ospath.home(), 'resources/results');
+    fs.__loadFilesIntoMockFs([sourceBible], './__tests__/fixtures', PROJECTS_PATH);
+    let packagePath = path.join(PROJECTS_PATH, sourceBible);
+    fs.removeSync(path.join(packagePath, "manifest.yaml"));
+    const results = packageParseHelpers.parseBiblePackage(packagePath,
+      resultsPath);
+    expect(results).not.toBeTruthy();
+  });
+
+  it('should fail if packagePath is not present', () => {
+    const sourceBible = 'en_ult';
+    const PROJECTS_PATH = path.join(ospath.home(), 'resources/import');
+    let packagePath = path.join(PROJECTS_PATH, sourceBible);
+    const resultsPath = path.join(ospath.home(), 'resources/results');
+    const results = packageParseHelpers.parseBiblePackage(packagePath,
+      resultsPath);
+    expect(results).not.toBeTruthy();
+  });
+
+  it('null packagePath should fail', () => {
+    const resultsPath = path.join(ospath.home(), 'resources/results');
+    const results = packageParseHelpers.parseBiblePackage(null,
+      resultsPath);
+    expect(results).not.toBeTruthy();
+  });
+
+  it('null resultsPath should fail', () => {
+    const sourceBible = 'el-x-koine_ugnt';
+    const PROJECTS_PATH = path.join(ospath.home(), 'resources/import');
+    fs.__loadFilesIntoMockFs([sourceBible], './__tests__/fixtures', PROJECTS_PATH);
+    let packagePath = path.join(PROJECTS_PATH, sourceBible);
+    const results = packageParseHelpers.parseBiblePackage(packagePath,
+      null);
+    expect(results).not.toBeTruthy();
+  });
 });
 
 //
