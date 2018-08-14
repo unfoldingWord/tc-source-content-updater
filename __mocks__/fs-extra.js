@@ -70,6 +70,11 @@ function __dumpMockFS() {
   console.log("mock FS:\n" + fsList);
 }
 
+function __listMockFS() {
+  const fsList = JSON.stringify(Object.keys(mockFS), null, 2);
+  console.log("mock FS ls:\n" + fsList);
+}
+
 function __catMockFS(folder) {
   return JSON.stringify(mockFS[folder], null, 2);
   // return JSON.stringify(mockFS, null, 2);
@@ -275,6 +280,7 @@ fs.__files = () => {
   return mockFS;
 };
 fs.__dumpMockFS = __dumpMockFS;
+fs.__listMockFS = __listMockFS;
 fs.__catMockFS = __catMockFS;
 fs.__setMockDirectories = __setMockDirectories;
 fs.__setMockFS = __setMockFS;

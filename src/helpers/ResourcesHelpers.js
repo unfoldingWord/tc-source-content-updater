@@ -6,7 +6,7 @@ import yaml from 'yamljs';
 /**
  * @description - Gets the version from the manifest
  * @param {String} resourcePath - folder for manifest.json or yaml
- * @return {String} manifest
+ * @return {String} version
  */
 export function getVersionFromManifest(resourcePath) {
   const manifest = getResourceManifest(resourcePath);

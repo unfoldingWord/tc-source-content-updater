@@ -5,6 +5,10 @@ import * as apiHelpers from './helpers/apiHelpers';
 import * as parseHelpers from './helpers/parseHelpers';
 import * as moveResourcesHelpers from './helpers/moveResourcesHelpers';
 import * as packageParseHelpers from "./helpers/packageParseHelpers";
+import * as taArticleHelpers from "./helpers/translationHelps/taArticleHelpers";
+import * as twArticleHelpers from "./helpers/translationHelps/twArticleHelpers";
+import * as twGroupDataHelpers from "./helpers/translationHelps/twGroupDataHelpers";
+import * as resourcesDownloadHelpers from "./helpers/resourcesDownloadHelpers";
 
 /**
  * Updater constructor
@@ -75,9 +79,7 @@ export function getResourcesForLanguage(languageId) {
  */
 Updater.prototype.downloadResources = async function(languageList) {
   // call this.getResourcesForLanguage(lang) for each language in list to get all resources to update
-  // download each resource
-    // parse
-    // move
+  await resourcesDownloadHelpers.downloadResources(languageList);
 };
 
 /**
@@ -94,13 +96,45 @@ Updater.prototype.moveResources = async function(
 };
 
 /**
- * Parse the bible package to generate json bible contents, manifest, and index
+ * @description Parses the bible package to generate json bible contents, manifest, and index
  * @param {String} packagePath - path to downloaded (unzipped) package
  * @param {String} resultsPath - path to store processed bible
  * @return {Boolean} true if success
  */
 Updater.prototype.parseBiblePackage = function(packagePath, resultsPath) {
   return packageParseHelpers.parseBiblePackage(packagePath, resultsPath);
+};
+
+/**
+ * @description Processes the extracted files for translationAcademy to create a single file for each
+ * article
+ * @param {String} extractedFilesPath - Path to the extracted files that came from the zip file in the catalog
+ * @param {String} outputPath - Path to place the processed files WITHOUT version in the path
+ * @return {String} The path to the processed translationAcademy files with version
+ */
+Updater.prototype.processTranslationAcademy = function(extractedFilesPath, outputPath) {
+  return taArticleHelpers.processTranslationAcademy(extractedFilesPath, outputPath);
+};
+
+/**
+ * @description Processes the extracted files for translationWord to cerate the folder
+ * structure and produce the index.js file for the language with the title of each article.
+ * @param {String} extractedFilesPath - Path to the extracted files that came from the zip file from the catalog
+ * @param {String} outputPath - Path to place the processed resource files WIHTOUT the version in the path
+ * @return {String} Path to the processed translationWords files with version
+ */
+Updater.prototype.processTranslationWords = function(extractedFilesPath, outputPath) {
+  return twArticleHelpers.processTranslationWords(extractedFilesPath, outputPath);
+};
+
+/**
+ * @description Generates the tW Group Data files from the given aligned Bible
+ * @param {string} biblePath Path to the Bible with aligned data
+ * @param {string} outputPath Path where the translationWords group data is to be placed WITHOUT version
+ * @return {string} Path where tW was generated with version
+ */
+Updater.prototype.generateTwGroupDataFromAlignedBible = function(biblePath, outputPath) {
+  return twGroupDataHelpers.generateTwGroupDataFromAlignedBible(biblePath, outputPath);
 };
 
 export default Updater;
