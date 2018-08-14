@@ -50,11 +50,16 @@
     "transform-runtime": "0.0.0"
   },
   "dependencies": {
-    "request": "^2.87.0",
+    "adm-zip": "^0.4.11",
+    "agentkeepalive": "3.3.0",
+    "follow-redirects": "^1.5.5",
     "fs-extra": "^3.0.1",
+    "ospath": "1.2.2",
     "path-extra": "3.0.0",
+    "request": "^2.87.0",
+    "tmp": "0.0.33",
+    "url": "^0.11.0",
     "usfm-js": "1.0.0-beta.30",
-    "yamljs": "^0.3.0",
-    "ospath": "1.2.2"
+    "yamljs": "^0.3.0"
   }
 }

@@ -73,14 +73,22 @@ export function getResourcesForLanguage(languageId) {
 }
 
 /**
- * Downloads the resources from the specified list using the DCS API
- *
- * @param {Array.<String>} languageList - Array of language codes to retrieve from the API
+ * @description Downloads the resources that need to be updated for the given languages using the DCS API
+ * @param {Array.<String>} languageList - Array of language codes to download the resources fsor
+ * @param {String} resourcesPath - Path to the resources directory where each resource will be placed
+ * @param {Array.<Object>} resources - Array of resources that are newer than previously downloaded resources;
+ * defaults to this.updatedCatalogResources which was set by previously calling getLatestResources();
+ * If getLatestResources() was never called or resources = null, function will get all resources for the given language(s)
+ * (the latter is useful for getting all resources for a set of languages, such as including all resources of
+ * 'en' and 'hi' in a build)
  * @return {Promise} Promise that resolves to success or rejects if a resource failed to download
  */
-Updater.prototype.downloadResources = async function(languageList) {
+Updater.prototype.downloadResources = async function(languageList, resourcesPath, resources = this.updatedCatalogResources) {
   // call this.getResourcesForLanguage(lang) for each language in list to get all resources to update
-  return await resourcesDownloadHelpers.downloadResources(languageList);
+  if (!resources) {
+    resources = this.remoteCatalog; // will download all resources for the given language(s)
+  }
+  return await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources);
 };
 
 /**

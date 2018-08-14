@@ -2,6 +2,9 @@
 import fs from 'fs-extra';
 import path from 'path-extra';
 import yaml from 'yamljs';
+import tmp from 'tmp';
+// helpers
+import * as zipFileHelpers from './zipFileHelpers';
 
 /**
  * @description - Gets the version from the manifest
@@ -108,4 +111,59 @@ export function getLatestVersionInPath(resourcePath) {
     return path.join(resourcePath, versions[versions.length - 1]);
   }
   return null; // return illegal path
+}
+
+/**
+ * @description Unzips a resource's zip file to an imports directory for processing
+ * @param {Object} resource Resource object containing resourceId and languageId
+ * @param {String} zipFile Path to the zip file
+ * @param {string} resourcesPath Path to the resources directory
+ * @return {String} Path to the resource's import directory
+ */
+export function unzipResource(resource, zipFile, resourcesPath) {
+  const importsPath = path.join(resourcesPath, 'imports');
+  fs.mkdirpSync(importsPath);
+  const importPathObj = tmp.dirSync({
+    dir: importsPath,
+    prefix: resource.languageId + '_' + resource.resourceId + '_',
+    keep: true
+  });
+  zipFileHelpers.extractZipFile(zipFile, importPathObj.name);
+  return importPathObj.name;
+}
+
+/**
+ * @description Processes a resource in the imports directory as needed
+ * @param {Object} resource Resource object
+ * @param {String} importPath Path the the import directory of this resource
+ */
+export function processResource(resource, importPath) {
+  return true;
+}
+
+/**
+ * @description Gets the actual path to a resource based on the resource object
+ * @param {Object} resource The resource object
+ * @param {String} resourcesPath The path to the resources directory
+ * @return {String} The resource path
+ */
+export function getActualResourcePath(resource, resourcesPath) {
+  return path.join(resourcesPath, resource.languageId, resource.subject, resource.resourceId);
+}
+
+/**
+ * @description transfer an entire resource from source to target directory
+ * @param {string} resourceSourcePath - current position of resource
+ * @param {string} resourceTargetPath - folder where resources are moved
+ * @return {boolean} true on success
+ */
+export function moveResource(resourceSourcePath, resourceTargetPath) {
+  if (resourceSourcePath && resourceSourcePath.length &&
+    resourceTargetPath && resourceTargetPath.length) {
+    fs.ensureDirSync(resourceTargetPath);
+    fs.copySync(resourceSourcePath, resourceTargetPath);
+    fs.remove(resourceSourcePath);
+  } else {
+    throw Error('Invalid parameters to moveResource');
+  }
 }
