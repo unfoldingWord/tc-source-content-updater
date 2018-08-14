@@ -142,8 +142,8 @@ export function getLatestResources(catalog, localResourceList) {
  *                 }>|null} list of updated resources (returns null on error)
  */
 export function parseCatalogResources(catalog, subjectFilters = null) {
+  const catalogResources = [];
   try {
-    const catalogResources = [];
     if (catalog && catalog.subjects) {
       for (let catSubject of catalog.subjects) {
         const subject = catSubject.identifier;
