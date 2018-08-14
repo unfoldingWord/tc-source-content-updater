@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 import path from 'path-extra';
 // heleprs
-import * as resourcesHelpers from '../resourcesHelpers';
+import * as resourcesHelpers from '../ResourcesHelpers';
 
 /**
  * @description Processes the extracted files for translationWord to cerate the folder
