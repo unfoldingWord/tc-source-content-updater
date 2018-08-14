@@ -79,7 +79,7 @@ describe('getLatestResources()', () => {
   });
 
   it('should return null for invalid catalog object', () => {
-    const results = parseHelpers.getLatestResources({ }, []);
+    const results = parseHelpers.getLatestResources(null, []);
     expect(results).toBeNull();
   });
 });
@@ -93,8 +93,7 @@ describe('getUpdatedLanguageList()', () => {
   });
 
   it('should return null on null resources', () => {
-    const languages = parseHelpers.getUpdatedLanguageList(null);
-    expect(languages).toBeNull();
+    expect(() => parseHelpers.getUpdatedLanguageList(null)).toThrow('updatedRemoteResources is not an array');
   });
 });
 

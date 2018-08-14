@@ -25,11 +25,12 @@
  *                 }>|null} - filtered resources for language (returns null on error)
  */
 export function getResourcesForLanguage(resources, languageId) {
-  if (!Array.isArray(resources)) {
-    return null;
+  try {
+    if (!Array.isArray(resources)) return null;
+    return resources.filter(resource => (resource.languageId === languageId));
+  } catch (error) {
+    throw error;
   }
-  return resources.filter(resource =>
-    (resource.languageId === languageId));
 }
 
 /**
@@ -56,22 +57,26 @@ export function getResourcesForLanguage(resources, languageId) {
  */
 export function getUpdatedLanguageList(updatedRemoteResources) {
   if (!Array.isArray(updatedRemoteResources)) {
-    return null;
+    throw new Error('updatedRemoteResources is not an array');
   }
   const updatedLanguages = [];
-  for (let resource of updatedRemoteResources) {
-    const languageId = resource.languageId;
-    const updatedBible = {
-      languageId,
-      localModifiedTime: resource.localModifiedTime || '',
-      remoteModifiedTime: resource.remoteModifiedTime
-    };
-    const dup = updatedLanguages.findIndex(item =>
-      (item.languageId === languageId)
-    );
-    if (dup < 0) {
-      updatedLanguages.push(updatedBible); // add if language not present
+  try {
+    for (let resource of updatedRemoteResources) {
+      const languageId = resource.languageId;
+      const updatedBible = {
+        languageId,
+        localModifiedTime: resource.localModifiedTime || '',
+        remoteModifiedTime: resource.remoteModifiedTime
+      };
+      const dup = updatedLanguages.findIndex(item =>
+        (item.languageId === languageId)
+      );
+      if (dup < 0) {
+        updatedLanguages.push(updatedBible); // add if language not present
+      }
     }
+  } catch (error) {
+    throw new Error(error);
   }
   return updatedLanguages.sort((a, b) =>
     ((a.languageId > b.languageId) ? 1 : -1));
@@ -103,23 +108,27 @@ export function getLatestResources(catalog, localResourceList) {
     return null;
   }
   const tCoreResources = parseCatalogResources(catalog);
-  // remove resources that are already up to date
-  for (let localResource of localResourceList) {
-    if (localResource.languageId && localResource.resourceId) {
-      const index = tCoreResources.findIndex(remoteResource =>
-        ((localResource.languageId === remoteResource.languageId) &&
-          (remoteResource.resourceId === localResource.resourceId)));
-      if (index >= 0) {
-        const catalogResource = tCoreResources[index];
-        const isNewer = !localResource.modifiedTime ||
-          (catalogResource.remoteModifiedTime > localResource.modifiedTime);
-        if (!isNewer) { // if resource up to date, remove it from resource list
-          tCoreResources.splice(index, 1);
-        } else {
-          catalogResource.localModifiedTime = localResource.modifiedTime;
+  try {
+    // remove resources that are already up to date
+    for (let localResource of localResourceList) {
+      if (localResource.languageId && localResource.resourceId) {
+        const index = tCoreResources.findIndex(remoteResource =>
+          ((localResource.languageId === remoteResource.languageId) &&
+            (remoteResource.resourceId === localResource.resourceId)));
+        if (index >= 0) {
+          const catalogResource = tCoreResources[index];
+          const isNewer = !localResource.modifiedTime ||
+            (catalogResource.remoteModifiedTime > localResource.modifiedTime);
+          if (!isNewer) { // if resource up to date, remove it from resource list
+            tCoreResources.splice(index, 1);
+          } else {
+            catalogResource.localModifiedTime = localResource.modifiedTime;
+          }
         }
       }
     }
+  } catch (error) {
+    throw new Error(error);
   }
   return tCoreResources; // resources that are already up to date have been removed
 }
@@ -144,46 +153,51 @@ export function parseCatalogResources(catalog, subjectFilters = null) {
     return null;
   }
   const catalogResources = [];
-  if (catalog && catalog.subjects) {
-    for (let catSubject of catalog.subjects) {
-      const subject = catSubject.identifier;
-      const isGreekOL = (catSubject.language === "el-x-koine");
-      const languageId = isGreekOL ? 'grc' : catSubject.language; // we use grc internally for Greek Original language
-      const resource = catSubject.resources || [];
-      const isCheckingLevel2 = resource.checking.checking_level >= 2;
-      const resourceId = resource.identifier;
-      const version = resource.version;
-      const formats = resource.formats || [];
-      for (let format of formats) {
-        try {
-          const isZipFormat = format.format.indexOf("application/zip;") >= 0;
-          const downloadUrl = format.url;
-          const remoteModifiedTime = format.modified;
-          const isDesiredSubject = !subjectFilters ||
-            subjectFilters.includes(subject);
-          if (isDesiredSubject && isZipFormat && isCheckingLevel2 &&
-              downloadUrl && remoteModifiedTime && languageId && version) {
-            const foundResource = {
-              languageId,
-              resourceId,
-              remoteModifiedTime,
-              downloadUrl,
-              version,
-              subject,
-              catalogEntry: {
+  try {
+    if (catalog && catalog.subjects) {
+      for (let catSubject of catalog.subjects) {
+        const subject = catSubject.identifier;
+        const isGreekOL = (catSubject.language === "el-x-koine");
+        const languageId = isGreekOL ? 'grc' : catSubject.language; // we use grc internally for Greek Original language
+        const resource = catSubject.resources || [];
+        const isCheckingLevel2 = resource.checking.checking_level >= 2;
+        const resourceId = resource.identifier;
+        const version = resource.version;
+        const formats = resource.formats || [];
+        for (let format of formats) {
+          try {
+            const isZipFormat = format.format.indexOf("application/zip;") >= 0;
+            const downloadUrl = format.url;
+            const remoteModifiedTime = format.modified;
+            const isDesiredSubject = !subjectFilters ||
+              subjectFilters.includes(subject);
+            if (isDesiredSubject && isZipFormat && isCheckingLevel2 &&
+                downloadUrl && remoteModifiedTime && languageId && version) {
+              const foundResource = {
+                languageId,
+                resourceId,
+                remoteModifiedTime,
+                downloadUrl,
+                version,
                 subject,
-                resource,
-                format
-              }
-            };
-            catalogResources.push(foundResource);
+                catalogEntry: {
+                  subject,
+                  resource,
+                  format
+                }
+              };
+              catalogResources.push(foundResource);
+            }
+          } catch (e) {
+            // recover if required fields are missing
           }
-        } catch (e) {
-          // recover if required fields are missing
         }
       }
     }
+  } catch (error) {
+    throw new Error(error);
   }
+
   return catalogResources;
 }
 
