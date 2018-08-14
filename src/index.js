@@ -14,44 +14,72 @@ import * as resourcesDownloadHelpers from "./helpers/resourcesDownloadHelpers";
  * Updater constructor
  */
 function Updater() {
-  this.catalog = null;
+  this.remoteCatalog = null;
+  this.updatedCatalogResources = null;
 }
 
 Updater.prototype = {};
 
 /**
- * Method to manually fetch the latest catalog for the current
+ * Method to manually fetch the latest remoteCatalog for the current
  * Updater instance. This function has no return value
  */
 Updater.prototype.updateCatalog = async function() {
-  this.catalog = await apiHelpers.getCatalog();
+  this.remoteCatalog = await apiHelpers.getCatalog();
 };
 
 /**
- * Used to initiate a load of the latests resource so that the user can then select which ones
+ * Used to initiate a load of the latest resource so that the user can then select which ones
  * they would like to update.
- * Note: This function only returns the resources that already up to date on the user machine
- * @param {boolean} update - indicates whether the latest catalog should be updated
+ * Note: This function only returns the resources that are not up to date on the user machine
  * before the request
- * @param {Array} resourceList - list of resources that are on the users local machine already
- * @return {Array} - Array of resources and their corresponding time stamps
+ * @param {Array.<{
+ *                  languageId: String,
+ *                  resourceId: String,
+ *                  modifiedTime: String,
+ *                  }>} localResourceList - list of resources that are on the users local machine already {}
+ * @return {
+ *          Array.<{
+ *                   languageId: String,
+ *                   localModifiedTime: String,
+ *                   remoteModifiedTime: String
+ *                 }>
+ *         }} - list of languages that have updates in catalog
  */
-Updater.prototype.getLatestsResourceDates = async function(update = false,
-  resourceList) {
-  if (update || !this.catalog) {
-    // Can force update before request or will automatically if
-    // the resources are not already populated
-    await this.updateCatalog();
-  }
-  return parseHelpers.getLatestsResourceDates(this.catalog, resourceList);
+Updater.prototype.getLatestResources = async function(localResourceList) {
+  await this.updateCatalog();
+  this.updatedCatalogResources =
+      parseHelpers.getLatestResources(this.remoteCatalog, localResourceList);
+  return parseHelpers.getUpdatedLanguageList(this.updatedCatalogResources);
 };
 
 /**
- * @description Downloads the resorces from the specified list using the DCS API
- * @param {Array} resourceList - Array of resources to retrieve from the API
+ * get all resources to update for language
+ * @param {String} languageId - language to search for
+ * @return {Array.<{
+ *                   languageId: String,
+ *                   resourceId: String,
+ *                   localModifiedTime: String,
+ *                   remoteModifiedTime: String,
+ *                   downloadUrl: String,
+ *                   version: String,
+ *                   subject: String,
+ *                   catalogEntry: {langResource, bookResource, format}
+ *                 }>} - all updated resources for language
  */
-Updater.prototype.downloadResources = async function(resourceList) {
-  await resourcesDownloadHelpers.downloadResources(resourceList);
+export function getResourcesForLanguage(languageId) {
+  return parseHelpers.getResourcesForLanguage(this.updatedCatalogResources,
+    languageId);
+}
+
+/**
+ * Downloads the resources from the specified list using the DCS API
+ *
+ * @param {Array.<String>} languageList - Array of language codes to retrieve from the API
+ */
+Updater.prototype.downloadResources = async function(languageList) {
+  // call this.getResourcesForLanguage(lang) for each language in list to get all resources to update
+  await resourcesDownloadHelpers.downloadResources(languageList);
 };
 
 /**
