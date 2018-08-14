@@ -25,11 +25,11 @@
  *                 }>|null} - filtered resources for language (returns null on error)
  */
 export function getResourcesForLanguage(resources, languageId) {
-  if (!Array.isArray(resources)) {
-    return null;
+  try {
+    return resources.filter(resource => (resource.languageId === languageId));
+  } catch (error) {
+    return throw new Error(error);
   }
-  return resources.filter(resource =>
-    (resource.languageId === languageId));
 }
 
 /**
@@ -55,23 +55,24 @@ export function getResourcesForLanguage(resources, languageId) {
  *         }|null} - list of languages that have updates in catalog (returns null on error)
  */
 export function getUpdatedLanguageList(updatedRemoteResources) {
-  if (!Array.isArray(updatedRemoteResources)) {
-    return null;
-  }
-  const updatedLanguages = [];
-  for (let resource of updatedRemoteResources) {
-    const languageId = resource.languageId;
-    const updatedBible = {
-      languageId,
-      localModifiedTime: resource.localModifiedTime || '',
-      remoteModifiedTime: resource.remoteModifiedTime
-    };
-    const dup = updatedLanguages.findIndex(item =>
-      (item.languageId === languageId)
-    );
-    if (dup < 0) {
-      updatedLanguages.push(updatedBible); // add if language not present
+  try {
+    const updatedLanguages = [];
+    for (let resource of updatedRemoteResources) {
+      const languageId = resource.languageId;
+      const updatedBible = {
+        languageId,
+        localModifiedTime: resource.localModifiedTime || '',
+        remoteModifiedTime: resource.remoteModifiedTime
+      };
+      const dup = updatedLanguages.findIndex(item =>
+        (item.languageId === languageId)
+      );
+      if (dup < 0) {
+        updatedLanguages.push(updatedBible); // add if language not present
+      }
     }
+  } catch (error) {
+    return throw new Error(error);
   }
   return updatedLanguages.sort((a, b) =>
     ((a.languageId > b.languageId) ? 1 : -1));
@@ -100,9 +101,6 @@ export function getUpdatedLanguageList(updatedRemoteResources) {
  */
 export function getLatestResources(catalog, localResourceList) {
   try {
-    if (!catalog || !Array.isArray(localResourceList)) {
-      return null;
-    }
     const tCoreResources = parseCatalogResources(catalog);
     // remove resources that are already up to date
     for (let localResource of localResourceList) {
@@ -144,50 +142,52 @@ export function getLatestResources(catalog, localResourceList) {
  *                 }>|null} list of updated resources (returns null on error)
  */
 export function parseCatalogResources(catalog, subjectFilters = null) {
-  if (!catalog || !Array.isArray(catalog.subjects)) {
-    return null;
-  }
-  const catalogResources = [];
-  if (catalog && catalog.subjects) {
-    for (let catSubject of catalog.subjects) {
-      const subject = catSubject.identifier;
-      const isGreekOL = (catSubject.language === "el-x-koine");
-      const languageId = isGreekOL ? 'grc' : catSubject.language; // we use grc internally for Greek Original language
-      const resource = catSubject.resources || [];
-      const isCheckingLevel2 = resource.checking.checking_level >= 2;
-      const resourceId = resource.identifier;
-      const version = resource.version;
-      const formats = resource.formats || [];
-      for (let format of formats) {
-        try {
-          const isZipFormat = format.format.indexOf("application/zip;") >= 0;
-          const downloadUrl = format.url;
-          const remoteModifiedTime = format.modified;
-          const isDesiredSubject = !subjectFilters ||
-            subjectFilters.includes(subject);
-          if (isDesiredSubject && isZipFormat && isCheckingLevel2 &&
-              downloadUrl && remoteModifiedTime && languageId && version) {
-            const foundResource = {
-              languageId,
-              resourceId,
-              remoteModifiedTime,
-              downloadUrl,
-              version,
-              subject,
-              catalogEntry: {
+  try {
+    const catalogResources = [];
+    if (catalog && catalog.subjects) {
+      for (let catSubject of catalog.subjects) {
+        const subject = catSubject.identifier;
+        const isGreekOL = (catSubject.language === "el-x-koine");
+        const languageId = isGreekOL ? 'grc' : catSubject.language; // we use grc internally for Greek Original language
+        const resource = catSubject.resources || [];
+        const isCheckingLevel2 = resource.checking.checking_level >= 2;
+        const resourceId = resource.identifier;
+        const version = resource.version;
+        const formats = resource.formats || [];
+        for (let format of formats) {
+          try {
+            const isZipFormat = format.format.indexOf("application/zip;") >= 0;
+            const downloadUrl = format.url;
+            const remoteModifiedTime = format.modified;
+            const isDesiredSubject = !subjectFilters ||
+              subjectFilters.includes(subject);
+            if (isDesiredSubject && isZipFormat && isCheckingLevel2 &&
+                downloadUrl && remoteModifiedTime && languageId && version) {
+              const foundResource = {
+                languageId,
+                resourceId,
+                remoteModifiedTime,
+                downloadUrl,
+                version,
                 subject,
-                resource,
-                format
-              }
-            };
-            catalogResources.push(foundResource);
+                catalogEntry: {
+                  subject,
+                  resource,
+                  format
+                }
+              };
+              catalogResources.push(foundResource);
+            }
+          } catch (e) {
+            // recover if required fields are missing
           }
-        } catch (e) {
-          // recover if required fields are missing
         }
       }
     }
+  } catch (error) {
+    return throw new Error(error);
   }
+
   return catalogResources;
 }
 
