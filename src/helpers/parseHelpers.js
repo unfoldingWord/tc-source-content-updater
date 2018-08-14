@@ -49,10 +49,10 @@ export function getUpdatedLanguageList(updatedRemoteResources) {
  *
  * @param {{languages: Array.<Object>}} catalog - to parse
  * @param {Array.<{
- *                  langId: String,
- *                  bibleId: String,
- *                  modifiedTime: String
- *                  }>} resourceList - list of resources that are on the users local machine already {}
+ *                  languageId: String,
+ *                  resourceId: String,
+ *                  modifiedTime: String,
+ *                  }>} localResourceList - list of resources that are on the users local machine already {}
  * @return {Array.<{
  *                   languageId: String,
  *                   resourceId: String,
@@ -61,19 +61,17 @@ export function getUpdatedLanguageList(updatedRemoteResources) {
  *                   downloadUrl: String,
  *                   version: String,
  *                   subject: String,
- *                   catalogEntry: {langResource, bookResource, format}
+ *                   catalogEntry: {subject, resource, format}
  *                 }>} updated resources
  */
-export function getLatestResources(catalog, resourceList) {
-  const bibleSubjects = ['Bible', 'Greek New Testament'];
-  const includeSubjects = ['Translation Notes', 'Translation Words', 'Translation Academy'].concat(bibleSubjects);
-  const tCoreResources = getTcoreResources(catalog, includeSubjects);
+export function getLatestResources(catalog, localResourceList) {
+  const tCoreResources = getTcoreResources(catalog);
   // remove resources that are already up to date
-  for (let localResource of resourceList) {
-    if (localResource.langId && localResource.bibleId) {
+  for (let localResource of localResourceList) {
+    if (localResource.languageId && localResource.resourceId) {
       const index = tCoreResources.findIndex(remoteResource =>
-        ((localResource.langId === remoteResource.langId) &&
-          (remoteResource.bibleId === localResource.bibleId)));
+        ((localResource.languageId === remoteResource.languageId) &&
+          (remoteResource.resourceId === localResource.resourceId)));
       if (index >= 0) {
         const catalogResource = tCoreResources[index];
         const isNewer = !localResource.modifiedTime ||
@@ -93,57 +91,55 @@ export function getLatestResources(catalog, resourceList) {
  * filters the remoteCatalog and returns valid tCore resources
  *
  * @param {{languages: Array.<Object>}} catalog - to parse
- * @param {Array.<String>} subjects - arrays of subjects to include
+ * @param {Array.<String>} subjectFilters - optional array of subjects to include
  * @return {Array.<{
- *                   langId: String,
- *                   bibleId: String,
- *                   localModifiedTime: String,
+ *                   languageId: String,
+ *                   resourceId: String,
  *                   remoteModifiedTime: String,
  *                   downloadUrl: String,
  *                   version: String,
  *                   subject: String,
- *                   catalogEntry: {langResource, bookResource, format}
+ *                   catalogEntry: {subject, resource, format}
  *                 }>} list of updated resources
  */
-export function getTcoreResources(catalog, subjects) {
+export function getTcoreResources(catalog, subjectFilters = null) {
   const catalogResources = [];
-  if (catalog && catalog.languages) {
-    for (let language of catalog.subjects) {
-      const isGreekOL = (language.identifier === "el-x-koine");
-      const langId = isGreekOL ? 'grc' : language.identifier; // we use grc internally for Greek Original language
-      const resources = language.resources || [];
-      for (let resource of resources) {
-        const isCheckingLevel2 = resource.checking.checking_level >= 2;
-        const bibleId = resource.identifier;
-        const version = resource.version;
-        const subject = resource.subject;
-        const formats = resource.formats || [];
-        for (let format of formats) {
-          try {
-            const isZipFormat = format.format.indexOf("application/zip;") >= 0;
-            const downloadUrl = format.url;
-            const remoteModifiedTime = format.modified;
-            const isBibleOrBibleHelps = subjects.includes(subject);
-            if (isBibleOrBibleHelps && isZipFormat && isCheckingLevel2 &&
-                downloadUrl && remoteModifiedTime && langId && version) {
-              const foundResource = {
-                langId,
-                bibleId,
-                remoteModifiedTime,
-                downloadUrl,
-                version,
+  if (catalog && catalog.subjects) {
+    for (let catSubject of catalog.subjects) {
+      const subject = catSubject.identifier;
+      const isGreekOL = (catSubject.language === "el-x-koine");
+      const languageId = isGreekOL ? 'grc' : catSubject.language; // we use grc internally for Greek Original language
+      const resource = catSubject.resources || [];
+      const isCheckingLevel2 = resource.checking.checking_level >= 2;
+      const resourceId = resource.identifier;
+      const version = resource.version;
+      const formats = resource.formats || [];
+      for (let format of formats) {
+        try {
+          const isZipFormat = format.format.indexOf("application/zip;") >= 0;
+          const downloadUrl = format.url;
+          const remoteModifiedTime = format.modified;
+          const isDesiredSubject = !subjectFilters ||
+            subjectFilters.includes(subject);
+          if (isDesiredSubject && isZipFormat && isCheckingLevel2 &&
+              downloadUrl && remoteModifiedTime && languageId && version) {
+            const foundResource = {
+              languageId,
+              resourceId,
+              remoteModifiedTime,
+              downloadUrl,
+              version,
+              subject,
+              catalogEntry: {
                 subject,
-                catalogEntry: {
-                  langResource: language,
-                  bookResource: resource,
-                  format
-                }
-              };
-              catalogResources.push(foundResource);
-            }
-          } catch (e) {
-            // recover if required fields are missing
+                resource,
+                format
+              }
+            };
+            catalogResources.push(foundResource);
           }
+        } catch (e) {
+          // recover if required fields are missing
         }
       }
     }

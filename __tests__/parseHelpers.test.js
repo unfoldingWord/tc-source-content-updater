@@ -10,22 +10,21 @@ describe('getTcoreResources()', () => {
     expect(results.length).toEqual(38);
   });
   it('should find Greek OL', () => {
-    const results = parseHelpers.getTcoreResources(catalog, ['Greek New Testament']);
+    const results = parseHelpers.getTcoreResources(catalog, ['Greek_New_Testament']);
     expect(results.length).toEqual(1);
-    expect(results[0].lang_code).toEqual('grc');
+    expect(results[0].languageId).toEqual('grc');
   });
 });
 
 describe('getLatestResources()', () => {
   it('should succeed', () => {
     const resourceList = [
-      {lang_code: 'fr', bible_id: 'f10', modified_time: '2101-04-27T18:51:27+00:00'}
+      {languageId: 'fr', resourceId: 'f10', modifiedTime: '2101-04-27T18:51:27+00:00'}
     ];
     const results = parseHelpers.getLatestResources(catalog, resourceList);
-    expect(results.languages.length).toEqual(30);
-    expect(results.resources.length).toEqual(38);
+    expect(results.length).toEqual(70);
 
-    const greekIndex = results.languages.findIndex(lang => (lang.lang_code === 'grc'));
+    const greekIndex = results.findIndex(lang => (lang.languageId === 'grc'));
     expect(greekIndex).toBeGreaterThanOrEqual(0);
   });
 });
