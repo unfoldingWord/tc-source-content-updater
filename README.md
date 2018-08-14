@@ -21,7 +21,7 @@ for example metadata return from DCS`
 To use this module you must first create a new instance of the object.
 i.e.
 ```
-import updater from 'source-content-updater';
+import updater from 'tc-source-content-updater';
 const Updater = new updater();
 ```
 
