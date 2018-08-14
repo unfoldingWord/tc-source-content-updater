@@ -1,6 +1,35 @@
 /* eslint-disable camelcase,no-empty,no-negated-condition */
 
 /**
+ * get all resources to update for language
+ * @param {Array.<{
+ *                   languageId: String,
+ *                   resourceId: String,
+ *                   localModifiedTime: String,
+ *                   remoteModifiedTime: String,
+ *                   downloadUrl: String,
+ *                   version: String,
+ *                   subject: String,
+ *                   catalogEntry: {langResource, bookResource, format}
+ *                 }>} updatedRemoteResources - resources that have been updated in remote catalog
+ * @param {String} languageId - language to search for
+ * @return {Array.<{
+ *                   languageId: String,
+ *                   resourceId: String,
+ *                   localModifiedTime: String,
+ *                   remoteModifiedTime: String,
+ *                   downloadUrl: String,
+ *                   version: String,
+ *                   subject: String,
+ *                   catalogEntry: {langResource, bookResource, format}
+ *                 }>} - all updated resources for language
+ */
+export function getResourcesForLanguage(updatedRemoteResources, languageId) {
+  return updatedRemoteResources.filter(resource =>
+    (resource.languageId === languageId));
+}
+
+/**
  * extract list of languages that need to be updated from resources
  *  that need to be updated
  *
@@ -13,7 +42,7 @@
  *                   version: String,
  *                   subject: String,
  *                   catalogEntry: {langResource, bookResource, format}
- *                 }>} updatedRemoteResources - resources that have been update in remote catalog
+ *                 }>} updatedRemoteResources - resources that have been updated in remote catalog
  * @return {
  *          Array.<{
  *                   languageId: String,

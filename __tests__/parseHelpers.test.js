@@ -24,7 +24,7 @@ describe('getLatestResources()', () => {
     const results = parseHelpers.getLatestResources(catalog, resourceList);
     expect(results.length).toEqual(70);
 
-    const greekIndex = results.findIndex(lang => (lang.languageId === 'grc'));
-    expect(greekIndex).toBeGreaterThanOrEqual(0);
+    const greekResources = parseHelpers.getResourcesForLanguage(results, 'grc');
+    expect(greekResources.length).toEqual(1);
   });
 });

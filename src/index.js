@@ -50,11 +50,31 @@ Updater.prototype.getLatestResources = async function(localResourceList) {
 };
 
 /**
+ * get all resources to update for language
+ * @param {String} languageId - language to search for
+ * @return {Array.<{
+ *                   languageId: String,
+ *                   resourceId: String,
+ *                   localModifiedTime: String,
+ *                   remoteModifiedTime: String,
+ *                   downloadUrl: String,
+ *                   version: String,
+ *                   subject: String,
+ *                   catalogEntry: {langResource, bookResource, format}
+ *                 }>} - all updated resources for language
+ */
+export function getResourcesForLanguage(languageId) {
+  return parseHelpers.getResourcesForLanguage(this.updatedCatalogResources,
+    languageId);
+}
+
+/**
  * Downloads the resources from the specified list using the DCS API
  *
  * @param {Array.<String>} languageList - Array of language codes to retrieve from the API
  */
 Updater.prototype.downloadResources = async function(languageList) {
+  // call this.getResourcesForLanguage(lang) for each language in list to get all resources to update
   // download each resource
     // parse
     // move
