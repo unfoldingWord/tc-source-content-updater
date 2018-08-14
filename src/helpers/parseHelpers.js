@@ -99,27 +99,31 @@ export function getUpdatedLanguageList(updatedRemoteResources) {
  *                 }>|null} updated resources (returns null on error)
  */
 export function getLatestResources(catalog, localResourceList) {
-  if (!catalog || !Array.isArray(localResourceList)) {
-    return null;
-  }
-  const tCoreResources = parseCatalogResources(catalog);
-  // remove resources that are already up to date
-  for (let localResource of localResourceList) {
-    if (localResource.languageId && localResource.resourceId) {
-      const index = tCoreResources.findIndex(remoteResource =>
-        ((localResource.languageId === remoteResource.languageId) &&
-          (remoteResource.resourceId === localResource.resourceId)));
-      if (index >= 0) {
-        const catalogResource = tCoreResources[index];
-        const isNewer = !localResource.modifiedTime ||
-          (catalogResource.remoteModifiedTime > localResource.modifiedTime);
-        if (!isNewer) { // if resource up to date, remove it from resource list
-          tCoreResources.splice(index, 1);
-        } else {
-          catalogResource.localModifiedTime = localResource.modifiedTime;
+  try {
+    if (!catalog || !Array.isArray(localResourceList)) {
+      return null;
+    }
+    const tCoreResources = parseCatalogResources(catalog);
+    // remove resources that are already up to date
+    for (let localResource of localResourceList) {
+      if (localResource.languageId && localResource.resourceId) {
+        const index = tCoreResources.findIndex(remoteResource =>
+          ((localResource.languageId === remoteResource.languageId) &&
+            (remoteResource.resourceId === localResource.resourceId)));
+        if (index >= 0) {
+          const catalogResource = tCoreResources[index];
+          const isNewer = !localResource.modifiedTime ||
+            (catalogResource.remoteModifiedTime > localResource.modifiedTime);
+          if (!isNewer) { // if resource up to date, remove it from resource list
+            tCoreResources.splice(index, 1);
+          } else {
+            catalogResource.localModifiedTime = localResource.modifiedTime;
+          }
         }
       }
     }
+  } catch (error) {
+    return throw new Error(error);
   }
   return tCoreResources; // resources that are already up to date have been removed
 }
