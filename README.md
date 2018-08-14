@@ -1,4 +1,4 @@
-[![Build Status](https://api.travis-ci.org/translationCoreApps/source-content-updater.svg?branch=master)](https://travis-ci.org/translationCoreApps/source-content-updater) ![npm](https://img.shields.io/npm/dt/tc-source-content-updater.svg)
+[![Build Status](https://api.travis-ci.org/translationCoreApps/tc-source-content-updater.svg?branch=master)](https://travis-ci.org/translationCoreApps/tc-source-content-updater) ![npm](https://img.shields.io/npm/dt/tc-source-content-updater.svg)
 
 # source-content-updater
 Module that updates source content for the desktop application translationCore.
