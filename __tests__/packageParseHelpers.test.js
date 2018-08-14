@@ -89,6 +89,11 @@ describe('parseBiblePackage()', () => {
 // helpers
 //
 
+/**
+ * lookup number of chapters in book
+ * @param {String} bookID - book to look up
+ * @return {number} chapter count
+ */
 function getChapterCount(bookID) {
   const bookObj = bible.BOOK_CHAPTER_VERSES[bookID];
   if (bookObj) {
