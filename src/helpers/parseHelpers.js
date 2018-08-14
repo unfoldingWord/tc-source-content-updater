@@ -55,8 +55,8 @@ export function getResourcesForLanguage(resources, languageId) {
  *         }|null} - list of languages that have updates in catalog (returns null on error)
  */
 export function getUpdatedLanguageList(updatedRemoteResources) {
+  const updatedLanguages = [];
   try {
-    const updatedLanguages = [];
     for (let resource of updatedRemoteResources) {
       const languageId = resource.languageId;
       const updatedBible = {
@@ -100,8 +100,8 @@ export function getUpdatedLanguageList(updatedRemoteResources) {
  *                 }>|null} updated resources (returns null on error)
  */
 export function getLatestResources(catalog, localResourceList) {
+  const tCoreResources = parseCatalogResources(catalog);
   try {
-    const tCoreResources = parseCatalogResources(catalog);
     // remove resources that are already up to date
     for (let localResource of localResourceList) {
       if (localResource.languageId && localResource.resourceId) {
