@@ -40,6 +40,7 @@ describe('Tests for resourcesDownloadHelpers', function() {
   it('Test resourcesDownloadHelpers.processTranslationAcademy() for populated language should download zip files', async () => {
     const languageList = ['hi'];
     const expectedResourcesDownloaded = 4;
+    console.log(catalog);
     await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath.name, resources)
       .then(resourcesDownloaded => {
         console.log(resourcesDownloaded);

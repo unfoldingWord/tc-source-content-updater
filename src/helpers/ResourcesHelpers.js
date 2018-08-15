@@ -7,11 +7,11 @@ import tmp from 'tmp';
 import * as zipFileHelpers from './zipFileHelpers';
 
 const translationHelps = {
-  'ta': 'translationAcademy',
-  'tn': 'translationNotes',
-  'tw': 'translationWords',
-  'tq': 'translationQuestions'
-}
+  ta: 'translationAcademy',
+  tn: 'translationNotes',
+  tw: 'translationWords',
+  tq: 'translationQuestions'
+};
 
 /**
  * @description - Gets the version from the manifest
@@ -143,6 +143,7 @@ export function unzipResource(resource, zipFile, resourcesPath) {
  * @description Processes a resource in the imports directory as needed
  * @param {Object} resource Resource object
  * @param {String} importPath Path the the import directory of this resource
+ * @return {Boolean} True if sucess
  */
 export function processResource(resource, importPath) {
   return true;
@@ -167,13 +168,12 @@ export function getActualResourcePath(resource, resourcesPath) {
 
 /**
  * @description transfer an entire resource from source to target directory
- * @param {string} resourceSourcePath - current position of resource
- * @param {string} resourceTargetPath - folder where resources are moved
- * @return {boolean} true on success
+ * @param {String} resourceSourcePath Current position of resource
+ * @param {String} resourceTargetPath Folder where resources are moved
+ * @param {Boolean} remove If true, removes the source path. Defaults to true
  */
-export function moveResource(resourceSourcePath, resourceTargetPath, remove=true) {
-  if (resourceSourcePath && resourceSourcePath.length &&
-    resourceTargetPath && resourceTargetPath.length) {
+export function moveResource(resourceSourcePath, resourceTargetPath, remove = true) {
+  if (resourceSourcePath && resourceSourcePath.length && resourceTargetPath && resourceTargetPath.length) {
     fs.ensureDirSync(resourceTargetPath);
     fs.copySync(resourceSourcePath, resourceTargetPath);
     if (remove)

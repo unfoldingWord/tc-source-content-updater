@@ -8,13 +8,24 @@
   ],
   "settings": {},
   "rules": {
-    "no-undef": "warn",
-    "semi": ["error", "always", {"omitLastInOneLineBlock": true}],
     "guard-for-in": "off",
-    "max-len": "off",
+    "linebreak-style": "off",
+    "max-len": "off", 
     "no-console": "off",
+    "no-duplicate-imports": [
+      "error",
+      {
+        "includeExports": false
+      }
+    ],
+    "no-throw-literal": "off",
+    "no-undef": "warn",
     "no-unused-vars": "warn",
-    "radix": "off"
+    "no-warning-comments": "warn",
+    "quote-props": "warn",
+    "padded-blocks": "warn",
+    "radix": "off",
+    "semi": ["error", "always", {"omitLastInOneLineBlock": true}]
   },
   "parser": "babel-eslint",
   "parserOptions": {

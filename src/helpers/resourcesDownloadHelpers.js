@@ -1,9 +1,8 @@
 import async from 'async';
-import request from 'request';
 import fs from 'fs-extra';
 import path from 'path-extra';
 import tmp from 'tmp';
-//helpers
+// helpers
 import * as resourcesHelpers from './resourcesHelpers';
 import * as parseHelpers from './parseHelpers';
 import * as downloadHelpers from './downloadHelpers';
@@ -29,14 +28,24 @@ export function downloadResources(languageList, resourcesPath, resources) {
   return new Promise((resolve, reject) => {
     if (!languageList || !languageList.length) {
       reject('Language list is empty');
+      return;
     }
     let downloadableResources = [];
     languageList.forEach(languageId => {
       downloadableResources = downloadableResources.concat(parseHelpers.getResourcesForLanguage(resources, languageId));
     });
 
+    if (!downloadableResources || !downloadableResources.length) {
+      resolve([]);
+      return;
+    }
+
     let resourcesDownloaded = [];
+    console.log(downloadableResources);
     async.eachOfLimit(downloadableResources, 10, async (resource, key, errCallback) => {
+      if (!resource) {
+        return;
+      }
       let zipPath = null;
       let importPath = null;
       console.log("trying", resource.languageId, resource.resourceId);
