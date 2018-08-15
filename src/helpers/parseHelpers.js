@@ -125,6 +125,40 @@ export function getLatestResources(catalog, localResourceList) {
 }
 
 /**
+ * if Array is not valid, return empty array
+ * @param {Array} array - array to validate
+ * @return {Array} array if valid, or empty array
+ */
+export function getValidArray(array) {
+  if (Array.isArray(array)) {
+    return array;
+  }
+  return [];
+}
+
+/**
+ * gets an array of the formats.  Most are in resources.formats, but tWords are in resources.projects.formats
+ * @param {Object} resource object
+ * @return {Array} array if valid, or empty array
+ */
+export function getFormatsForResource(resource) {
+  if (Array.isArray(resource.formats)) {
+    return resource.formats;
+  }
+
+  if (Array.isArray(resource.projects)) {
+    const formats = [];
+    for (let project of resource.projects) {
+      const projectFormats = getFormatsForResource(project);
+      formats.push.apply(formats, projectFormats);
+    }
+    return formats;
+  }
+
+  return [];
+}
+
+/**
  * parses the remoteCatalog and returns list of catalog resources
  *
  * @param {{subjects: Array.<Object>}} catalog - to parse
@@ -149,37 +183,39 @@ export function parseCatalogResources(catalog, subjectFilters = null) {
       const subject = catSubject.identifier;
       const isGreekOL = (catSubject.language === "el-x-koine");
       const languageId = isGreekOL ? 'grc' : catSubject.language; // we use grc internally for Greek Original language
-      const resource = catSubject.resources || [];
-      const isCheckingLevel2 = resource.checking.checking_level >= 2;
-      const resourceId = resource.identifier;
-      const version = resource.version;
-      const formats = resource.formats || [];
-      for (let format of formats) {
-        try {
-          const isZipFormat = format.format.indexOf("application/zip;") >= 0;
-          const downloadUrl = format.url;
-          const remoteModifiedTime = format.modified;
-          const isDesiredSubject = !subjectFilters ||
-            subjectFilters.includes(subject);
-          if (isDesiredSubject && isZipFormat && isCheckingLevel2 &&
+      const resources = getValidArray(catSubject.resources);
+      for (let resource of resources) {
+        const isCheckingLevel2 = resource.checking.checking_level >= 2;
+        const resourceId = resource.identifier;
+        const version = resource.version;
+        const formats = getFormatsForResource(resource);
+        for (let format of formats) {
+          try {
+            const isZipFormat = format.format.indexOf("application/zip;") >= 0;
+            const downloadUrl = format.url;
+            const remoteModifiedTime = format.modified;
+            const isDesiredSubject = !subjectFilters ||
+              subjectFilters.includes(subject);
+            if (isDesiredSubject && isZipFormat && isCheckingLevel2 &&
               downloadUrl && remoteModifiedTime && languageId && version) {
-            const foundResource = {
-              languageId,
-              resourceId,
-              remoteModifiedTime,
-              downloadUrl,
-              version,
-              subject,
-              catalogEntry: {
+              const foundResource = {
+                languageId,
+                resourceId,
+                remoteModifiedTime,
+                downloadUrl,
+                version,
                 subject,
-                resource,
-                format
-              }
-            };
-            catalogResources.push(foundResource);
+                catalogEntry: {
+                  subject,
+                  resource,
+                  format
+                }
+              };
+              catalogResources.push(foundResource);
+            }
+          } catch (e) {
+            // recover if required fields are missing
           }
-        } catch (e) {
-          // recover if required fields are missing
         }
       }
     }
