@@ -1,5 +1,7 @@
 /* eslint-disable camelcase,no-empty,no-negated-condition */
 
+export const TC_RESOURCES = ['Bible', 'Greek_New_Testament', 'Translator_Notes', 'Bible_translation_comprehension_questions', 'Translation_Words', 'Translation_Academy'];
+
 /**
  * get all resources to update for language
  * @param {Array.<{
@@ -102,7 +104,10 @@ export function getLatestResources(catalog, localResourceList) {
   if (!catalog || !Array.isArray(localResourceList)) {
     return null;
   }
-  const tCoreResources = parseCatalogResources(catalog);
+  const tCoreResources = parseCatalogResources(catalog, true, TC_RESOURCES);
+  if (!tCoreResources) {
+    return null;
+  }
   // remove resources that are already up to date
   for (let localResource of localResourceList) {
     if (localResource.languageId && localResource.resourceId) {
@@ -121,7 +126,8 @@ export function getLatestResources(catalog, localResourceList) {
       }
     }
   }
-  return tCoreResources; // resources that are already up to date have been removed
+  return tCoreResources.sort((a, b) =>
+    ((a.languageId > b.languageId) ? 1 : -1)); // resources that are already up to date have been removed, sort by language
 }
 
 /**
@@ -162,7 +168,8 @@ export function getFormatsForResource(resource) {
  * parses the remoteCatalog and returns list of catalog resources
  *
  * @param {{subjects: Array.<Object>}} catalog - to parse
- * @param {Array.<String>} subjectFilters - optional array of subjects to include
+ * @param {boolean} ignoreObsResources - if true then reject obs resources
+ * @param {Array.<String>} subjectFilters - optional array of subjects to include.  If null then every subject is returned
  * @return {Array.<{
  *                   languageId: String,
  *                   resourceId: String,
@@ -173,7 +180,7 @@ export function getFormatsForResource(resource) {
  *                   catalogEntry: {subject, resource, format}
  *                 }>|null} list of updated resources (returns null on error)
  */
-export function parseCatalogResources(catalog, subjectFilters = null) {
+export function parseCatalogResources(catalog, ignoreObsResources = true, subjectFilters = null) {
   if (!catalog || !Array.isArray(catalog.subjects)) {
     return null;
   }
@@ -187,6 +194,9 @@ export function parseCatalogResources(catalog, subjectFilters = null) {
       for (let resource of resources) {
         const isCheckingLevel2 = resource.checking.checking_level >= 2;
         const resourceId = resource.identifier;
+        if (ignoreObsResources && (resourceId.indexOf('obs') >= 0)) { // see if we should skip obs resources
+          continue;
+        }
         const version = resource.version;
         const formats = getFormatsForResource(resource);
         for (let format of formats) {
