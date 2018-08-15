@@ -28,7 +28,7 @@ import * as downloadHelpers from './downloadHelpers';
 export function downloadResources(languageList, resourcesPath, resources) {
   return new Promise((resolve, reject) => {
     if (!languageList || !languageList.length) {
-      throw new Error('Language list is empty');
+      reject('Language list is empty');
     }
     let downloadableResources = [];
     languageList.forEach(languageId => {
@@ -44,18 +44,20 @@ export function downloadResources(languageList, resourcesPath, resources) {
         zipPath = result.dest;
         importPath = resourcesHelpers.unzipResource(resource, zipPath, resourcesPath);
         const processResult = resourcesHelpers.processResource(resource, importPath);
-        const resourcePath = resourcesHelpers.getActualResourcePath(resource, resourcesPath);
-        resourcesHelpers.moveResource(importPath, resourcePath);
-        // resourcesPaths[resource.languageId][resource.resourceId] = resourcePath;
-        resource.resourcePath = resourcePath;
-        resourcesDownloaded.push(resource);
-        fs.unlink(zipPath);
-        fs.remove(importPath);
+        if (processResult) {
+          const resourcePath = resourcesHelpers.getActualResourcePath(resource, resourcesPath);
+          resourcesHelpers.moveResource(importPath, resourcePath, false);
+          resource.resourcePath = resourcePath;
+          resourcesDownloaded.push(resource);
+        } else {
+          errCallback('Failed to process resource "' + resource.resourceId + '" for language "' + resource.languageId + '"');
+        }
+        console.log("DONE WITH " + resource.resourceId);
       })
       .catch(errCallback)
       .finally(() => {
-        fs.unlink(zipPath);
-        fs.remove(importPath);
+        // fs.unlink(zipPath);
+        // fs.remove(importPath);
       });
     }, err => {
       console.log("END", err);

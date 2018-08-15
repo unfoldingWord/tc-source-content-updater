@@ -6,6 +6,13 @@ import tmp from 'tmp';
 // helpers
 import * as zipFileHelpers from './zipFileHelpers';
 
+const translationHelps = {
+  'ta': 'translationAcademy',
+  'tn': 'translationNotes',
+  'tw': 'translationWords',
+  'tq': 'translationQuestions'
+}
+
 /**
  * @description - Gets the version from the manifest
  * @param {String} resourcePath - folder for manifest.json or yaml
@@ -148,7 +155,14 @@ export function processResource(resource, importPath) {
  * @return {String} The resource path
  */
 export function getActualResourcePath(resource, resourcesPath) {
-  return path.join(resourcesPath, resource.languageId, resource.subject, resource.resourceId);
+  const languageId = resource.languageId;
+  let resourceName = resource.resourceId;
+  let type = 'bible';
+  if (translationHelps[resourceName]) {
+    resourceName = translationHelps[resourceName];
+    type = 'translationHelps';
+  }
+  return path.join(resourcesPath, languageId, type, resourceName);
 }
 
 /**
@@ -157,12 +171,13 @@ export function getActualResourcePath(resource, resourcesPath) {
  * @param {string} resourceTargetPath - folder where resources are moved
  * @return {boolean} true on success
  */
-export function moveResource(resourceSourcePath, resourceTargetPath) {
+export function moveResource(resourceSourcePath, resourceTargetPath, remove=true) {
   if (resourceSourcePath && resourceSourcePath.length &&
     resourceTargetPath && resourceTargetPath.length) {
     fs.ensureDirSync(resourceTargetPath);
     fs.copySync(resourceSourcePath, resourceTargetPath);
-    fs.remove(resourceSourcePath);
+    if (remove)
+      fs.remove(resourceSourcePath);
   } else {
     throw Error('Invalid parameters to moveResource');
   }
