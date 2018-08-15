@@ -44,8 +44,20 @@ export function parseManifest(extractedFilePath, outputPath) {
 export function parseBiblePackage(packagePath, resultsPath) {
   const index = {};
   try {
+    if (!fs.pathExistsSync(packagePath)) {
+      console.log("Source folder does not exist: " + packagePath);
+      return false;
+    }
+    if (!resultsPath) {
+      console.log("resultsPath missing");
+      return false;
+    }
     const manifest = parseManifest(packagePath,
       resultsPath);
+    if (!manifest.projects) {
+      console.log("Manifest does not contain index to books");
+      return false;
+    }
     const projects = manifest.projects || [];
     for (let project of projects) {
       if (project.identifier && project.path) {

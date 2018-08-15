@@ -1,4 +1,4 @@
-[![Build Status](https://api.travis-ci.org/translationCoreApps/source-content-updater.svg?branch=master)](https://travis-ci.org/translationCoreApps/source-content-updater) ![npm](https://img.shields.io/npm/dt/source-content-updater.svg)
+[![Build Status](https://api.travis-ci.org/translationCoreApps/tc-source-content-updater.svg?branch=master)](https://travis-ci.org/translationCoreApps/tc-source-content-updater) ![npm](https://img.shields.io/npm/dt/tc-source-content-updater.svg)
 
 # source-content-updater
 Module that updates source content for the desktop application translationCore.
@@ -21,7 +21,7 @@ for example metadata return from DCS`
 To use this module you must first create a new instance of the object.
 i.e.
 ```
-import updater from 'source-content-updater';
+import updater from 'tc-source-content-updater';
 const Updater = new updater();
 ```
 
