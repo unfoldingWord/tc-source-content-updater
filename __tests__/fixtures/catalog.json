@@ -1300,6 +1300,15 @@
         ],
         "creator": "BCS",
         "description": "A basic Bible lexicon that provides translators with clear, concise definitions and translation suggestions for every important word in the Bible. It provides translators and checkers with essential lexical information to help them make the best possible translation decisions.",
+        "formats": [
+          {
+            "format": "application/zip; type=dict content=text/markdown conformsto=rc0.2",
+            "modified": "2018-06-08T19:49:08+00:00",
+            "signature": "https://cdn.door43.org/hi/tw/v8.1/bible.zip.sig",
+            "size": 1196446,
+            "url": "https://cdn.door43.org/hi/tw/v8.1/bible.zip"
+          }
+        ],
         "identifier": "tw",
         "issued": "2018-02-23T00:00:00+00:00",
         "modified": "2018-06-08T00:00:00+00:00",

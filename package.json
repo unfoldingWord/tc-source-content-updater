@@ -46,6 +46,7 @@
     "eslint-config-google": "^0.6.0",
     "eslint-plugin-jest": "^21.21.0",
     "jest": "^22.4.0",
+    "nock": "^9.6.1",
     "rimraf": "^2.6.2",
     "transform-runtime": "0.0.0"
   },

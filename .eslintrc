@@ -19,6 +19,8 @@
         "includeExports": false
       }
     ],
+    "no-negated-condition" : "off",
+    "no-nested-ternary": "off",
     "no-throw-literal": "off",
     "no-undef": "warn",
     "no-unused-vars": "warn",

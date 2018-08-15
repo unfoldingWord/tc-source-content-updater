@@ -3,7 +3,7 @@ import ospath from 'ospath';
 // helpers
 import * as apiHelpers from './helpers/apiHelpers';
 import * as parseHelpers from './helpers/parseHelpers';
-import * as moveResourcesHelpers from './helpers/moveResourcesHelpers';
+import * as resourcesHelpers from './helpers/resourcesHelpers';
 import * as packageParseHelpers from "./helpers/packageParseHelpers";
 import * as taArticleHelpers from "./helpers/translationHelps/taArticleHelpers";
 import * as twArticleHelpers from "./helpers/translationHelps/twArticleHelpers";
@@ -48,8 +48,7 @@ Updater.prototype.updateCatalog = async function() {
  */
 Updater.prototype.getLatestResources = async function(localResourceList) {
   await this.updateCatalog();
-  this.updatedCatalogResources =
-      parseHelpers.getLatestResources(this.remoteCatalog, localResourceList);
+  this.updatedCatalogResources = parseHelpers.getLatestResources(this.remoteCatalog, localResourceList);
   return parseHelpers.getUpdatedLanguageList(this.updatedCatalogResources);
 };
 
@@ -86,9 +85,10 @@ export function getResourcesForLanguage(languageId) {
 Updater.prototype.downloadResources = async function(languageList, resourcesPath, resources = this.updatedCatalogResources) {
   // call this.getResourcesForLanguage(lang) for each language in list to get all resources to update
   if (!resources) {
-    resources = this.remoteCatalog; // will download all resources for the given language(s)
+    await this.getLatestResources([]);
+    resources = this.updatedCatalogResources;
   }
-  return await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources);
+  return resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources);
 };
 
 /**
@@ -96,11 +96,9 @@ Updater.prototype.downloadResources = async function(languageList, resourcesPath
  * @param {String} resourceSourcePath - Location of selected downloaded resources
  * @param {String} languageCode - language of resource like en or hi
  */
-Updater.prototype.moveResources = async function(
-    resourceSourcePath, languageCode) {
-  const resourceTargetPath = path.join(
-      ospath.home(), 'translationCore', 'resources', languageCode);
-  await moveResourcesHelpers.move(resourceSourcePath, resourceTargetPath);
+Updater.prototype.moveResource = async function(resourceSourcePath, languageCode) {
+  const resourceTargetPath = path.join(ospath.home(), 'translationCore', 'resources', languageCode);
+  await resourcesHelpers.moveResource(resourceSourcePath, resourceTargetPath);
   return;
 };
 

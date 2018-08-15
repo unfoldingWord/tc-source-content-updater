@@ -40,42 +40,41 @@ export function downloadResources(languageList, resourcesPath, resources) {
       return;
     }
 
-    let resourcesDownloaded = [];
-    console.log(downloadableResources);
-    async.eachOfLimit(downloadableResources, 10, async (resource, key, errCallback) => {
+    const promises = [];
+    downloadableResources.forEach(resource => {
       if (!resource) {
         return;
       }
-      let zipPath = null;
-      let importPath = null;
-      console.log("trying", resource.languageId, resource.resourceId);
-      await downloadResource(resource, resourcesPath).then(async result => {
-        zipPath = result.dest;
-        importPath = resourcesHelpers.unzipResource(resource, zipPath, resourcesPath);
-        const processResult = resourcesHelpers.processResource(resource, importPath);
-        if (processResult) {
-          const resourcePath = resourcesHelpers.getActualResourcePath(resource, resourcesPath);
-          resourcesHelpers.moveResource(importPath, resourcePath, false);
-          resource.resourcePath = resourcePath;
-          resourcesDownloaded.push(resource);
-        } else {
-          errCallback('Failed to process resource "' + resource.resourceId + '" for language "' + resource.languageId + '"');
-        }
-        console.log("DONE WITH " + resource.resourceId);
-      })
-      .catch(errCallback)
-      .finally(() => {
-        // fs.unlink(zipPath);
-        // fs.remove(importPath);
+      const promise = new Promise((resolve, reject) => {
+        let zipPath = null;
+        let importPath = null;
+        downloadResource(resource, resourcesPath)
+        .then(result => {
+          zipPath = result.dest;
+          importPath = resourcesHelpers.unzipResource(resource, zipPath, resourcesPath);
+          let importSubdirPath = importPath;
+          const importSubdirs = fs.readdirSync(importPath);
+          if (importSubdirs.length === 1 && fs.lstatSync(path.join(importPath, importSubdirs[0])).isDirectory()) {
+            importSubdirPath = path.join(importPath, importSubdirs[0]);
+          }
+          const processResult = resourcesHelpers.processResource(resource, importSubdirPath);
+          if (processResult) {
+            const resourcePath = resourcesHelpers.getActualResourcePath(resource, resourcesPath);
+            resourcesHelpers.moveResource(importSubdirPath, resourcePath, false);
+            resource.resourcePath = resourcePath;
+          } else {
+            reject('Failed to process resource "' + resource.resourceId + '" for language "' + resource.languageId + '"');
+          }
+          console.log("DONE WITH ", resource);
+          resolve(resource);
+        })
+        .catch(reject);
       });
-    }, err => {
-      console.log("END", err);
-      if (err) {
-        reject(err);
-      } else {
-        resolve(resourcesDownloaded);
-      }
+      promises.push(promise);
     });
+
+    console.log("PS", promises);
+    Promise.all(promises).then(resolve);
   });
 }
 
@@ -99,11 +98,11 @@ export function downloadResources(languageList, resourcesPath, resources) {
 export function downloadResource(resource, resourcesPath) {
   const importsPath = path.join(resourcesPath, 'imports');
   fs.mkdirpSync(importsPath);
-  const zipPath = tmp.fileSync({
+  const zipPathObj = tmp.fileSync({
     dir: importsPath,
     prefix: resource.languageId + '_' + resource.resourceId + '_',
     postfix: '.zip',
     keep: true
-  }).name;
-  return downloadHelpers.download(resource.downloadUrl, zipPath);
+  });
+  return downloadHelpers.download(resource.downloadUrl, zipPathObj.name);
 }

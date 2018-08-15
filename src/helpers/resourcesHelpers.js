@@ -170,14 +170,11 @@ export function getActualResourcePath(resource, resourcesPath) {
  * @description transfer an entire resource from source to target directory
  * @param {String} resourceSourcePath Current position of resource
  * @param {String} resourceTargetPath Folder where resources are moved
- * @param {Boolean} remove If true, removes the source path. Defaults to true
  */
-export function moveResource(resourceSourcePath, resourceTargetPath, remove = true) {
+export function moveResource(resourceSourcePath, resourceTargetPath) {
   if (resourceSourcePath && resourceSourcePath.length && resourceTargetPath && resourceTargetPath.length) {
-    fs.ensureDirSync(resourceTargetPath);
-    fs.copySync(resourceSourcePath, resourceTargetPath);
-    if (remove)
-      fs.remove(resourceSourcePath);
+    fs.ensureDirSync(path.dirname(resourceTargetPath));
+    fs.moveSync(resourceSourcePath, resourceTargetPath);
   } else {
     throw Error('Invalid parameters to moveResource');
   }
