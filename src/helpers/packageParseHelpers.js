@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /**
  * packageParseHelpers.js - methods for processing manifest and USFM files to verseObjects
  */
