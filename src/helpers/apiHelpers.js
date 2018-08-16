@@ -1,6 +1,6 @@
 var request = require('request');
 const DCS_API = 'https://api.door43.org';
-const CATALOG_PATH = '/v3/catalog.json';
+const PIVOTED_CATALOG_PATH = '/v3/subjects/pivoted.json';
 /**
  * Performs a get request on the specified url.
  * This function trys to parse the body but if it fails
@@ -32,5 +32,5 @@ export function makeRequest(url) {
  * @return {Object} - Catalog from the DCS API
  */
 export function getCatalog() {
-  return makeRequest(DCS_API + CATALOG_PATH);
+  return makeRequest(DCS_API + PIVOTED_CATALOG_PATH);
 }
