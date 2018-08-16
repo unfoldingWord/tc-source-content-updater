@@ -24,7 +24,7 @@ describe('Tests for taArticleHelpers', function() {
     const expectedTranslateArticleListLength = 4;
 
     // when
-    const taOutputPath = taArticleHelpers.processTranslationAcademy(path.join(mockedExtractedPath, lang+'_ta'), outputPath);
+    const taOutputPath = taArticleHelpers.processTranslationAcademy(path.join(mockedExtractedPath, lang + '_ta'), outputPath);
     const projectList = fs.readdirSync(taOutputPath);
     const checkingArticleList = fs.readdirSync(path.join(taOutputPath, 'checking'));
     const translateArticleList = fs.readdirSync(path.join(taOutputPath, 'translate'));
