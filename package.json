@@ -15,7 +15,10 @@
       "!**/node_modules/**"
     ],
     "coverageDirectory": "coverage",
-    "testURL": "http://localhost"
+    "testURL": "http://localhost",
+    "setupFiles": [
+      "./__mocks__/mockApiRequests.js"
+    ]
   },
   "repository": {
     "type": "git",

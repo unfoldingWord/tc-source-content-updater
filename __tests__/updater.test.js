@@ -1,14 +1,8 @@
 jest.unmock('fs-extra');
 import Updater from '../src';
-import nock from 'nock';
 import tmp from 'tmp';
+import fs from 'fs-extra';
 import rimraf from 'rimraf';
-
-const catalog = require('./fixtures/catalog');
-
-nock('https://api.door43.org:443', {"encodedQueryParams":true})
-  .get('/v3/catalog.json')
-  .reply(200, JSON.stringify(catalog));
 
 describe('Updater.downloadResources', () => {
   let resourcesPath = null;
@@ -18,21 +12,29 @@ describe('Updater.downloadResources', () => {
   });
 
   afterEach(() => {
-    rimraf(resourcesPath.name, () => {
-      console.log('done');
-    });
+    console.log(resourcesPath.name);
+    rimraf(resourcesPath.name, fs, () => {});
   });
 
   it('should resolve', async () => {
     const updater = new Updater();
-    const res = await updater.downloadResources(['grc'], resourcesPath.name);
-    expect(res.length).toEqual(1);
+    await updater.downloadResources(['grc'], resourcesPath.name)
+    .then(resources => {
+      expect(resources.length).toEqual(1);
+    })
+    .catch(err => {
+      expect(err).not.toBeTruthy(); // should never get here
+    });
   });
 
   it('should fail', async () => {
     const updater = new Updater();
-    return await updater.downloadResources().catch(e => {
-      expect(e.message).toBe('Resource list is empty');
+    await updater.downloadResources()
+    .then(res => {
+      expect(res).toEqual('we should not be here'); // should never get here
+    })
+    .catch(err => {
+      expect(err).toEqual('Language list is empty');
     });
   });
 });

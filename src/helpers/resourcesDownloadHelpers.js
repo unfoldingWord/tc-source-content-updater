@@ -65,15 +65,13 @@ export function downloadResources(languageList, resourcesPath, resources) {
           } else {
             reject('Failed to process resource "' + resource.resourceId + '" for language "' + resource.languageId + '"');
           }
-          console.log("DONE WITH ", resource);
+          console.log("DONE WITH ", resource.languageId, " ", resource.resourceId);
           resolve(resource);
         })
         .catch(reject);
       });
       promises.push(promise);
     });
-
-    console.log("PS", promises);
     Promise.all(promises).then(resolve);
   });
 }
