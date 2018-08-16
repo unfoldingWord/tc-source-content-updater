@@ -72,6 +72,11 @@ export function parseBiblePackage(resourceEntry, extractedFilesPath, resultsPath
       console.log("Manifest does not contain index to books");
       return false;
     }
+
+    manifest.catalog_modified_time = resourceEntry.remoteModifiedTime;
+    let savePath = path.join(extractedFilesPath, 'manifest.json');
+    fs.outputJsonSync(savePath, manifest);
+
     const projects = manifest.projects || [];
     for (let project of projects) {
       if (project.identifier && project.path) {
