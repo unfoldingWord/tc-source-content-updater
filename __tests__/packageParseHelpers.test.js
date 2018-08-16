@@ -66,10 +66,12 @@ describe('parseBiblePackage()', () => {
     const resultsPath = path.join(ospath.home(), 'resources/results');
     fs.__loadFilesIntoMockFs([sourceBible], './__tests__/fixtures', PROJECTS_PATH);
     let packagePath = path.join(PROJECTS_PATH, sourceBible);
-    const results = packageParseHelpers.parseBiblePackage(enUltResource, packagePath,
+    const resource = enUltResource;
+    const results = packageParseHelpers.parseBiblePackage(resource, packagePath,
       resultsPath);
     expect(results).toBeTruthy();
     verifyBibleResults(resultsPath, BOOKS_OF_THE_BIBLE);
+    verifyCatalogModifiedTimeInManifest(resultsPath, resource);
   });
 
   it('el-x-koine_ugnt should pass', () => {
@@ -78,10 +80,12 @@ describe('parseBiblePackage()', () => {
     const resultsPath = path.join(ospath.home(), 'resources/results');
     fs.__loadFilesIntoMockFs([sourceBible], './__tests__/fixtures', PROJECTS_PATH);
     let packagePath = path.join(PROJECTS_PATH, sourceBible);
-    const results = packageParseHelpers.parseBiblePackage(grcUntResource, packagePath,
+    const resource = grcUntResource;
+    const results = packageParseHelpers.parseBiblePackage(resource, packagePath,
       resultsPath);
     expect(results).toBeTruthy();
     verifyBibleResults(resultsPath, NT_BOOKS);
+    verifyCatalogModifiedTimeInManifest(resultsPath, resource);
   });
 
   it('should fail if manifest not found', () => {
@@ -175,4 +179,10 @@ function verifyBibleResults(resultsPath, verifyBooks) {
  */
 function getBookCode(bookName) {
   return bookName.split('-')[1].toLowerCase();
+}
+
+function verifyCatalogModifiedTimeInManifest(resultsPath, resource) {
+  let manifestPath = path.join(resultsPath, 'manifest.json');
+  const manifest = fs.readJSONSync(manifestPath);
+  expect(manifest.catalog_modified_time).toEqual(resource.remoteModifiedTime);
 }
