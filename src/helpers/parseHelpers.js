@@ -156,7 +156,7 @@ export function getFormatsForResource(resource) {
     const formats = [];
     for (let project of resource.projects) {
       const projectFormats = getFormatsForResource(project);
-      formats.push.apply(formats, projectFormats);
+      formats.push(...projectFormats);
     }
     return formats;
   }
