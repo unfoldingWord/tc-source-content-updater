@@ -216,7 +216,7 @@ export function parseCatalogResources(catalog, ignoreObsResources = true, subjec
                 version,
                 subject,
                 catalogEntry: {
-                  subject,
+                  subject: catSubject,
                   resource,
                   format
                 }
