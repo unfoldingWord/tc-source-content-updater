@@ -98,12 +98,12 @@ Updater.prototype.moveResources = async function(
 
 /**
  * @description Parses the bible package to generate json bible contents, manifest, and index
- * @param {String} packagePath - path to downloaded (unzipped) package
+ * @param {String} extractedFilesPath - path to unzipped files from bible package
  * @param {String} resultsPath - path to store processed bible
  * @return {Boolean} true if success
  */
-Updater.prototype.parseBiblePackage = function(packagePath, resultsPath) {
-  return packageParseHelpers.parseBiblePackage(packagePath, resultsPath);
+Updater.prototype.parseBiblePackage = function(extractedFilesPath, resultsPath) {
+  return packageParseHelpers.parseBiblePackage(extractedFilesPath, resultsPath);
 };
 
 /**
