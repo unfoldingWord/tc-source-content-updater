@@ -13,7 +13,7 @@ let httpsAgent = new HttpsAgent();
  * @param {String} uri the url to read
  * @return {Promise.<string>} the url contents
  */
-module.exports.read = uri => {
+export function read(uri) {
   let parsedUrl = url.parse(uri, false, true);
   let makeRequest = parsedUrl.protocol === 'https:' ? https.request.bind(https) : http.request.bind(http);
   let serverPort = parsedUrl.port ? parsedUrl.port : parsedUrl.protocol === 'https:' ? 443 : 80;
@@ -48,7 +48,7 @@ module.exports.read = uri => {
     req.on('error', reject);
     req.end();
   });
-};
+}
 
 /**
  * @description Downloads a url to a file.
@@ -57,7 +57,7 @@ module.exports.read = uri => {
  * @param {Function} progressCallback receives progress updates
  * @return {Promise.<{}|Error>} the status code or an error
  */
-module.exports.download = (uri, dest, progressCallback) => {
+export function download(uri, dest, progressCallback) {
   progressCallback = progressCallback || function() {};
   let parsedUrl = url.parse(uri, false, true);
   let makeRequest = parsedUrl.protocol === 'https:' ? https.request.bind(https) : http.request.bind(http);
@@ -102,4 +102,4 @@ module.exports.download = (uri, dest, progressCallback) => {
 
     req.end();
   });
-};
+}

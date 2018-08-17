@@ -15,10 +15,7 @@
       "!**/node_modules/**"
     ],
     "coverageDirectory": "coverage",
-    "testURL": "http://localhost",
-    "setupFiles": [
-      "./__mocks__/mockApiRequests.js"
-    ]
+    "testURL": "http://localhost"
   },
   "repository": {
     "type": "git",
@@ -51,6 +48,7 @@
     "jest": "^22.4.0",
     "nock": "^9.6.1",
     "rimraf": "^2.6.2",
+    "tmp": "0.0.33",
     "transform-runtime": "0.0.0"
   },
   "dependencies": {
@@ -61,7 +59,6 @@
     "ospath": "^1.2.2",
     "path-extra": "^3.0.0",
     "request": "^2.87.0",
-    "tmp": "0.0.33",
     "url": "^0.11.0",
     "usfm-js": "1.0.0-beta.30",
     "yamljs": "^0.3.0"

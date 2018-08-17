@@ -1,28 +1,35 @@
-jest.unmock('fs-extra');
 import Updater from '../src';
-import tmp from 'tmp';
 import fs from 'fs-extra';
-import rimraf from 'rimraf';
+import nock from 'nock';
+
+jest.mock('../src/helpers/downloadHelpers');
+jest.mock('../src/helpers/zipFileHelpers');
+
+const catalog = require('../__tests__/fixtures/catalog.json');
+nock('https://api.door43.org:443')
+  .persist()
+  .get('/v3/subjects/pivoted.json')
+  .reply(200, JSON.stringify(catalog));
 
 describe('Updater.downloadResources', () => {
-  let resourcesPath = null;
+  const resourcesPath = '/tmp/resources';
 
   beforeEach(() => {
-    resourcesPath = tmp.dirSync({prefix: 'resources_'});
+    fs.__resetMockFS();
   });
 
   afterEach(() => {
-    console.log(resourcesPath.name);
-    rimraf(resourcesPath.name, fs, () => {});
+    fs.__resetMockFS();
   });
 
   it('should resolve', async () => {
     const updater = new Updater();
-    await updater.downloadResources(['grc'], resourcesPath.name)
+    await updater.downloadResources(['grc'], resourcesPath)
     .then(resources => {
       expect(resources.length).toEqual(1);
     })
     .catch(err => {
+      console.log(err);
       expect(err).not.toBeTruthy(); // should never get here
     });
   });

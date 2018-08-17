@@ -2,7 +2,6 @@
 import fs from 'fs-extra';
 import path from 'path-extra';
 import yaml from 'yamljs';
-import tmp from 'tmp';
 // helpers
 import * as zipFileHelpers from './zipFileHelpers';
 
@@ -129,14 +128,10 @@ export function getLatestVersionInPath(resourcePath) {
  */
 export function unzipResource(resource, zipFile, resourcesPath) {
   const importsPath = path.join(resourcesPath, 'imports');
-  fs.mkdirpSync(importsPath);
-  const importPathObj = tmp.dirSync({
-    dir: importsPath,
-    prefix: resource.languageId + '_' + resource.resourceId + '_',
-    keep: true
-  });
-  zipFileHelpers.extractZipFile(zipFile, importPathObj.name);
-  return importPathObj.name;
+  fs.ensureDirSync(importsPath);
+  const importPath = path.basename(zipFile).split('.')[0];
+  zipFileHelpers.extractZipFile(zipFile, importPath);
+  return importPath;
 }
 
 /**
@@ -163,7 +158,9 @@ export function getActualResourcePath(resource, resourcesPath) {
     resourceName = translationHelps[resourceName];
     type = 'translationHelps';
   }
-  return path.join(resourcesPath, languageId, type, resourceName);
+  const actualResourcePath = path.join(resourcesPath, languageId, type, resourceName);
+  fs.ensureDirSync(actualResourcePath);
+  return actualResourcePath;
 }
 
 /**

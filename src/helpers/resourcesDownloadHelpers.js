@@ -1,6 +1,5 @@
 import fs from 'fs-extra';
 import path from 'path-extra';
-import tmp from 'tmp';
 // helpers
 import * as resourcesHelpers from './resourcesHelpers';
 import * as parseHelpers from './parseHelpers';
@@ -94,12 +93,8 @@ export function downloadResources(languageList, resourcesPath, resources) {
  */
 export function downloadResource(resource, resourcesPath) {
   const importsPath = path.join(resourcesPath, 'imports');
-  fs.mkdirpSync(importsPath);
-  const zipPathObj = tmp.fileSync({
-    dir: importsPath,
-    prefix: resource.languageId + '_' + resource.resourceId + '_',
-    postfix: '.zip',
-    keep: true
-  });
-  return downloadHelpers.download(resource.downloadUrl, zipPathObj.name);
+  fs.ensureDirSync(importsPath);
+  const zipFileName = resource.languageId + '_' + resource.resourceId + '_v' + resource.version + '.zip';
+  const zipFilePath = path.join(importsPath, zipFileName);
+  return downloadHelpers.download(resource.downloadUrl, zipFilePath);
 }

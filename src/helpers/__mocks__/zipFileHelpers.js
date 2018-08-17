@@ -9,7 +9,7 @@ import fs from 'fs-extra';
  * @param {String} dest Destination path
  */
 export const extractZipFile = (zipFilePath, dest) => {
-  const zip = new AdmZip(Buffer.from(fs.mockFS[zipFilePath], 'utf8'));
+  const zip = new AdmZip(Buffer.from(fs.readFileSync(zipFilePath), 'utf8'));
   const tmpDirObj = tmp.dirSync();
   zip.extractAllTo(tmpDirObj.name);
   fs.__loadDirIntoMockFs(tmpDirObj.name, dest);

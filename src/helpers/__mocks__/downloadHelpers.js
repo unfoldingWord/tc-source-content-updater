@@ -1,4 +1,3 @@
-jest.mock('fs-extra');
 import url from 'url';
 import fs from 'fs-extra';
 import path from 'path-extra';
@@ -8,17 +7,17 @@ import path from 'path-extra';
  * @param {String} uri the url to read
  * @return {Promise.<string>} the url contents
  */
-module.exports.read = uri => {
+export function read(uri) {
   let parsedUrl = url.parse(uri, false, true);
 
   return new Promise((resolve, reject) => {
-    const filePath = path.join(__dirname, '../__tests__/fixtures', parsedUrl.host, parsedUrl.path);
+    const filePath = path.join(__dirname, '../../../__tests__/fixtures', parsedUrl.host, parsedUrl.path);
     resolve({
       status: 200,
-      data: fs.fsActual.readFileSync(filePath)
+      data: fs.__actual.readFileSync(filePath)
     });
   });
-};
+}
 
 /**
  * @description Downloads a url to a file.
@@ -27,17 +26,17 @@ module.exports.read = uri => {
  * @param {Function} progressCallback receives progress updates
  * @return {Promise.<{}|Error>} the status code or an error
  */
-module.exports.download = (uri, dest, progressCallback) => {
+export function download(uri, dest, progressCallback) {
   progressCallback = progressCallback || function() {};
   let parsedUrl = url.parse(uri, false, true);
 
   return new Promise((resolve, reject) => {
-    const filePath = path.join(__dirname, '../__tests__/fixtures', parsedUrl.host, parsedUrl.path);
-    fs.writeFileSync(dest, fs.fsActual.readFileSync(filePath));
+    const filePath = path.join(__dirname, '../../../__tests__/fixtures', parsedUrl.host, parsedUrl.path);
+    fs.writeFileSync(dest, fs.__actual.readFileSync(filePath));
     resolve({
       uri,
       dest,
       status: 200
     });
   });
-};
+}
