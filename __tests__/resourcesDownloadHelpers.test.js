@@ -39,7 +39,6 @@ describe('Tests for resourcesDownloadHelpers', function() {
     const expectedResourcesDownloaded = 5;
     await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources)
       .then(resourcesDownloaded => {
-        console.log(resourcesDownloaded);
         expect(resourcesDownloaded.length).toEqual(expectedResourcesDownloaded);
       })
       .catch(err => {

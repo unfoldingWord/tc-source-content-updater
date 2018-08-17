@@ -3,7 +3,7 @@ import ospath from 'ospath';
 // helpers
 import * as apiHelpers from './helpers/apiHelpers';
 import * as parseHelpers from './helpers/parseHelpers';
-import * as resourcesHelpers from './helpers/resourcesHelpers';
+import * as moveResourcesHelpers from './helpers/moveResourcesHelpers';
 import * as packageParseHelpers from "./helpers/packageParseHelpers";
 import * as taArticleHelpers from "./helpers/translationHelps/taArticleHelpers";
 import * as twArticleHelpers from "./helpers/translationHelps/twArticleHelpers";
@@ -96,9 +96,11 @@ Updater.prototype.downloadResources = async function(languageList, resourcesPath
  * @param {String} resourceSourcePath - Location of selected downloaded resources
  * @param {String} languageCode - language of resource like en or hi
  */
-Updater.prototype.moveResource = async function(resourceSourcePath, languageCode) {
-  const resourceTargetPath = path.join(ospath.home(), 'translationCore', 'resources', languageCode);
-  await resourcesHelpers.moveResource(resourceSourcePath, resourceTargetPath);
+Updater.prototype.moveResources = async function(
+  resourceSourcePath, languageCode) {
+  const resourceTargetPath = path.join(
+    ospath.home(), 'translationCore', 'resources', languageCode);
+  await moveResourcesHelpers.move(resourceSourcePath, resourceTargetPath);
   return;
 };
 

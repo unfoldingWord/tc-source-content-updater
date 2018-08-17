@@ -1,11 +1,8 @@
 // 'use strict';
-
 import fs from 'fs-extra';
 import path from 'path-extra';
 import ospath from 'ospath';
 import * as moveResourcesHelpers from '../src/helpers/moveResourcesHelpers';
-
-jest.mock('fs-extra');
 
 describe('moveResourcesHelpers', () => {
   let sourceFolder;

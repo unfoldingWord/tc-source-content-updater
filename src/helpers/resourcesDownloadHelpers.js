@@ -40,16 +40,17 @@ export function downloadResources(languageList, resourcesPath, resources) {
 
     const promises = [];
     downloadableResources.forEach(resource => {
-      if (!resource) {
+      if (!resource)
         return;
-      }
       const promise = new Promise((resolve, reject) => {
-        let zipPath = null;
+        console.log("tryping "+resource.languageId+"-"+resource.resourceId);
+        let zipFilePath = null;
         let importPath = null;
         downloadResource(resource, resourcesPath)
         .then(result => {
-          zipPath = result.dest;
-          importPath = resourcesHelpers.unzipResource(resource, zipPath, resourcesPath);
+          zipFilePath = result.dest;
+          console.log("STARTING WITH ZIP ", zipFilePath);
+          importPath = resourcesHelpers.unzipResource(resource, zipFilePath, resourcesPath);
           let importSubdirPath = importPath;
           const importSubdirs = fs.readdirSync(importPath);
           if (importSubdirs.length === 1 && fs.lstatSync(path.join(importPath, importSubdirs[0])).isDirectory()) {
@@ -68,8 +69,7 @@ export function downloadResources(languageList, resourcesPath, resources) {
         })
         .catch(reject)
         .finally(() => {
-          console.log("FINALLY", zipPath, importPath);
-          fs.unlink(zipPath);
+          fs.unlink(zipFilePath);
           fs.remove(importPath);
         });
       });

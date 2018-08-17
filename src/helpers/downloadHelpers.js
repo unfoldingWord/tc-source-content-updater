@@ -64,7 +64,6 @@ export function download(uri, dest, progressCallback) {
   let serverPort = parsedUrl.port ? parsedUrl.port : parsedUrl.protocol === 'https:' ? 443 : 80;
   let agent = parsedUrl.protocol === 'https:' ? httpsAgent : httpAgent;
   let file = fs.createWriteStream(dest);
-  console.log("dest", dest);
 
   let options = {
     host: parsedUrl.host,
