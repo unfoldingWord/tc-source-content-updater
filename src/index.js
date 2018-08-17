@@ -104,12 +104,22 @@ Updater.prototype.moveResource = async function(resourceSourcePath, languageCode
 
 /**
  * @description Parses the bible package to generate json bible contents, manifest, and index
- * @param {String} packagePath - path to downloaded (unzipped) package
+ * @param {{
+ *                   languageId: String,
+ *                   resourceId: String,
+ *                   localModifiedTime: String,
+ *                   remoteModifiedTime: String,
+ *                   downloadUrl: String,
+ *                   version: String,
+ *                   subject: String,
+ *                   catalogEntry: {langResource, bookResource, format}
+ *                 }} resourceEntry - resource entry for download
+ * @param {String} extractedFilesPath - path to unzipped files from bible package
  * @param {String} resultsPath - path to store processed bible
  * @return {Boolean} true if success
  */
-Updater.prototype.parseBiblePackage = function(packagePath, resultsPath) {
-  return packageParseHelpers.parseBiblePackage(packagePath, resultsPath);
+Updater.prototype.parseBiblePackage = function(resourceEntry, extractedFilesPath, resultsPath) {
+  return packageParseHelpers.parseBiblePackage(resourceEntry, extractedFilesPath, resultsPath);
 };
 
 /**

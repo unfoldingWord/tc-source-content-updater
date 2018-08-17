@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /**
  * packageParseHelpers.js - methods for processing manifest and USFM files to verseObjects
  */
@@ -37,32 +38,51 @@ export function parseManifest(extractedFilePath, outputPath) {
 
 /**
  * Parse the bible package to generate json bible contents, manifest, and index
- * @param {String} packagePath - path to downloaded (unzipped) package
+ * @param {{
+ *                   languageId: String,
+ *                   resourceId: String,
+ *                   localModifiedTime: String,
+ *                   remoteModifiedTime: String,
+ *                   downloadUrl: String,
+ *                   version: String,
+ *                   subject: String,
+ *                   catalogEntry: {langResource, bookResource, format}
+ *                 }} resourceEntry - resource entry for download
+ * @param {String} extractedFilesPath - path to unzipped files from bible package
  * @param {String} resultsPath - path to store processed bible
  * @return {Boolean} true if success
  */
-export function parseBiblePackage(packagePath, resultsPath) {
+export function parseBiblePackage(resourceEntry, extractedFilesPath, resultsPath) {
   const index = {};
   try {
-    if (!fs.pathExistsSync(packagePath)) {
-      console.log("Source folder does not exist: " + packagePath);
+    if (!resourceEntry) {
+      console.log("resourceEntry missing");
+      return false;
+    }
+    if (!fs.pathExistsSync(extractedFilesPath)) {
+      console.log("Source folder does not exist: " + extractedFilesPath);
       return false;
     }
     if (!resultsPath) {
       console.log("resultsPath missing");
       return false;
     }
-    const manifest = parseManifest(packagePath,
+    const manifest = parseManifest(extractedFilesPath,
       resultsPath);
     if (!manifest.projects) {
       console.log("Manifest does not contain index to books");
       return false;
     }
+
+    manifest.catalog_modified_time = resourceEntry.remoteModifiedTime;
+    let savePath = path.join(extractedFilesPath, 'manifest.json');
+    fs.outputJsonSync(savePath, manifest);
+
     const projects = manifest.projects || [];
     for (let project of projects) {
       if (project.identifier && project.path) {
         let bookPath = path.join(resultsPath, project.identifier);
-        parseUsfmOfBook(path.join(packagePath, project.path), bookPath);
+        parseUsfmOfBook(path.join(extractedFilesPath, project.path), bookPath);
         indexBook(bookPath, index, project.identifier);
       }
     }
