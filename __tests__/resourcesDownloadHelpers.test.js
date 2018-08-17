@@ -1,22 +1,19 @@
-jest.unmock('fs-extra');
-import tmp from 'tmp';
+import fs from 'fs-extra';
 // helpers
 import * as resourcesDownloadHelpers from '../src/helpers/resourcesDownloadHelpers';
 import * as parseHelpers from '../src/helpers/parseHelpers';
 
-const catalog = require('./fixtures/catalog');
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 100000;
+jest.mock('../src/helpers/downloadHelpers');
+jest.mock('../src/helpers/zipFileHelpers');
+
+const catalog = require('../__tests__/fixtures/catalog.json');
 
 describe('Tests for resourcesDownloadHelpers', function() {
   const resources = parseHelpers.getLatestResources(catalog, []);
-  let resourcesPath = null;
+  const resourcesPath = '/tmp/resources'; // a mocked resources directory
 
   beforeEach(() => {
-    resourcesPath = tmp.dirSync({prefix: 'resources_'});
-  });
-
-  afterEach(() => {
-    // resourcesPath.removeCallback();
+    fs.__resetMockFS();
   });
 
   it('Test resourcesDownloadHelpers.processTranslationAcademy() for null', async () => {
@@ -40,7 +37,7 @@ describe('Tests for resourcesDownloadHelpers', function() {
   it('Test resourcesDownloadHelpers.processTranslationAcademy() for populated language should download zip files', async () => {
     const languageList = ['hi'];
     const expectedResourcesDownloaded = 5;
-    await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath.name, resources)
+    await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources)
       .then(resourcesDownloaded => {
         console.log(resourcesDownloaded);
         expect(resourcesDownloaded.length).toEqual(expectedResourcesDownloaded);
@@ -57,6 +54,6 @@ describe('Tests for resourcesDownloadHelpers', function() {
     const expectedResolve = [];
 
     // then
-    await expect(resourcesDownloadHelpers.downloadResources(languageList, resourcesPath.name, resources)).resolves.toEqual(expectedResolve);
+    await expect(resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources)).resolves.toEqual(expectedResolve);
   });
 });

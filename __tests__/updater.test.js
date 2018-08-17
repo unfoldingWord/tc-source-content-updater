@@ -12,7 +12,7 @@ nock('https://api.door43.org:443')
   .reply(200, JSON.stringify(catalog));
 
 describe('Updater.downloadResources', () => {
-  const resourcesPath = '/tmp/resources';
+  const resourcesPath = '/tmp/resources'; // a mocked resources directory
 
   beforeEach(() => {
     fs.__resetMockFS();

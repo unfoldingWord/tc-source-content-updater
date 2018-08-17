@@ -66,7 +66,12 @@ export function downloadResources(languageList, resourcesPath, resources) {
           console.log("DONE WITH ", resource.languageId, " ", resource.resourceId);
           resolve(resource);
         })
-        .catch(reject);
+        .catch(reject)
+        .finally(() => {
+          console.log("FINALLY", zipPath, importPath);
+          fs.unlink(zipPath);
+          fs.remove(importPath);
+        });
       });
       promises.push(promise);
     });

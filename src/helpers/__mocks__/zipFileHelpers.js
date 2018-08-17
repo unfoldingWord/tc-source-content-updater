@@ -2,6 +2,7 @@ jest.mock('fs-extra');
 import AdmZip from 'adm-zip';
 import tmp from 'tmp';
 import fs from 'fs-extra';
+import rimraf from 'rimraf';
 
 /**
  * @description unzips a zip file into the destination path in the mockFS
@@ -13,4 +14,6 @@ export const extractZipFile = (zipFilePath, dest) => {
   const tmpDirObj = tmp.dirSync();
   zip.extractAllTo(tmpDirObj.name);
   fs.__loadDirIntoMockFs(tmpDirObj.name, dest);
+  rimraf.sync(tmpDirObj.name);
+  console.log("tmpDirObj", tmpDirObj.name);
 };
