@@ -147,16 +147,21 @@ export function unzipResource(resource, zipFilePath, resourcesPath) {
 export function processResource(resource, extractedFilesPath) {
   const processedFilesPath = extractedFilesPath + '_processed';
   fs.ensureDirSync(processedFilesPath);
-  if (resource.resourceId === 'tw') {
-    twArticleHelpers.processTranslationWords(extractedFilesPath, processedFilesPath);
-  } else if (resource.resourceId === 'ta') {
-    taArticleHelpers.processTranslationAcademy(extractedFilesPath, processedFilesPath);
-  } else if (resource.resourceId === 'tq') {
-    fs.copySync(extractedFilesPath, processedFilesPath);
-  } else if (resource.resourceId === 'tn') {
-    fs.copySync(extractedFilesPath, processedFilesPath);
-  } else {
-    packageParseHelpers.parseBiblePackage(resource, extractedFilesPath, processedFilesPath);
+  console.log(resource);
+  switch (resource.subject) {
+    case 'Translation_Words':
+      twArticleHelpers.processTranslationWords(extractedFilesPath, processedFilesPath);
+      break;
+    case 'Translation_Academy':
+      taArticleHelpers.processTranslationAcademy(extractedFilesPath, processedFilesPath);
+      break;
+    case 'Bible':
+    case 'Aligned_Bible':
+    case 'Greek_New_Testament':
+      packageParseHelpers.parseBiblePackage(resource, extractedFilesPath, processedFilesPath);
+      break;
+    default:
+      fs.copySync(extractedFilesPath, processedFilesPath);
   }
   return processedFilesPath;
 }

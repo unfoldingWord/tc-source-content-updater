@@ -7,8 +7,7 @@ import * as parseHelpers from '../src/helpers/parseHelpers';
 jest.mock('../src/helpers/downloadHelpers');
 jest.mock('../src/helpers/zipFileHelpers');
 
-const catalog = require('../__tests__/fixtures/catalog.json');
-
+const catalog = require('../__tests__/fixtures/api.door43.org/v3/subjects/pivoted.json');
 describe('Tests for resourcesDownloadHelpers', function() {
   const resources = parseHelpers.getLatestResources(catalog, []);
   const resourcesPath = '/tmp/resources'; // a mocked resources directory
