@@ -12,8 +12,8 @@ import rimraf from 'rimraf';
 export const extractZipFile = (zipFilePath, dest) => {
   const zip = new AdmZip(Buffer.from(fs.readFileSync(zipFilePath), 'utf8'));
   const tmpDirObj = tmp.dirSync();
-  zip.extractAllTo(tmpDirObj.name);
+  zip.extractAllTo(tmpDirObj.name); // Extracts mockFS zip file to a physical directory
   fs.ensureDirSync(dest);
-  fs.__loadDirIntoMockFs(tmpDirObj.name, dest);
+  fs.__loadDirIntoMockFs(tmpDirObj.name, dest); // Loads physical directory of zip content into mockFS
   rimraf.sync(tmpDirObj.name);
 };
