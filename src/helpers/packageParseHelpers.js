@@ -32,8 +32,6 @@ export const parseUsfmOfBook = (usfmPath, outputPath) => {
  * @return {Object} new manifest data
  */
 export function parseManifest(extractedFilePath, outputPath) {
-  fs.__listMockFS();
-  console.log(extractedFilePath);
   let oldManifest = getResourceManifest(extractedFilePath);
   return generateBibleManifest(oldManifest, outputPath);
 }

@@ -54,7 +54,6 @@ export const downloadResources = (languageList, resourcesPath, resources) => {
           importPath = resourcesHelpers.unzipResource(resource, zipFilePath, resourcesPath);
           let importSubdirPath = importPath;
           const importSubdirs = fs.readdirSync(importPath);
-          console.log(importPath, importSubdirs);
           if (importSubdirs.length === 1 && fs.lstatSync(path.join(importPath, importSubdirs[0])).isDirectory()) {
             importSubdirPath = path.join(importPath, importSubdirs[0]);
           }
