@@ -1,4 +1,5 @@
 import fs from 'fs-extra';
+import rimraf from 'rimraf';
 // helpers
 import * as resourcesDownloadHelpers from '../src/helpers/resourcesDownloadHelpers';
 import * as parseHelpers from '../src/helpers/parseHelpers';
@@ -16,7 +17,7 @@ describe('Tests for resourcesDownloadHelpers', function() {
     fs.__resetMockFS();
   });
 
-  it('Test resourcesDownloadHelpers.processTranslationAcademy() for null', async () => {
+  it('Test resourcesDownloadHelpers.downloadResources() for null', async () => {
     // given
     const languageList = null;
     const expectedError = 'Language list is empty';
@@ -25,13 +26,37 @@ describe('Tests for resourcesDownloadHelpers', function() {
     await expect(resourcesDownloadHelpers.downloadResources(languageList)).rejects.toEqual(expectedError);
   });
 
-  it('Test resourcesDownloadHelpers.processTranslationAcademy() for empty list', async () => {
+  it('Test resourcesDownloadHelpers.downloadResources() for empty list', async () => {
     // given
     const languageList = [];
     const expectedError = 'Language list is empty';
 
     // then
     await expect(resourcesDownloadHelpers.downloadResources(languageList)).rejects.toEqual(expectedError);
+  });
+
+  it('Test resourcesDownloadHelpers.downloadResources() for "hi" should download, process and deploy all resources', async () => {
+    const languageList = ['hi'];
+    const expectedResourcesDownloaded = 5;
+    await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources)
+      .then(resourcesDownloaded => {
+        expect(resourcesDownloaded.length).toEqual(expectedResourcesDownloaded);
+      })
+      .catch(err => {
+        expect(err).not.toBeTruthy(); // shouldn't get here
+      });
+  });
+
+  it('Test resourcesDownloadHelpers.downloadResources() for "grc" should download, process and deploy the Bible and the tW Group Data', async () => {
+    const languageList = ['grc'];
+    const expectedResourcesDownloaded = 1;
+    await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources)
+      .then(resourcesDownloaded => {
+        expect(resourcesDownloaded.length).toEqual(expectedResourcesDownloaded);
+      })
+      .catch(err => {
+        expect(err).not.toBeTruthy(); // shouldn't get here
+      });
   });
 
   it('Test resourcesDownloadHelpers.processTranslationAcademy() for populated language should download zip files', async () => {

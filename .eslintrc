@@ -28,7 +28,8 @@
     "quote-props": "warn",
     "padded-blocks": "warn",
     "radix": "off",
-    "semi": ["error", "always", {"omitLastInOneLineBlock": true}]
+    "semi": ["error", "always", {"omitLastInOneLineBlock": true}],
+    "space-before-function-paren": "off"
   },
   "parser": "babel-eslint",
   "parserOptions": {

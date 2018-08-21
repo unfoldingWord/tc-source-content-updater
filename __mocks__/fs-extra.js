@@ -41,7 +41,8 @@ function __setMockDirectories(newMockFiles) {
 /**
  * A custom version of `readdirSync` that reads from the special mocked out
  * file list set via __setMockDirectories
- * @param {String} directoryPath
+ * @param {String} directoryPath Directory path
+ * @return {Array} Contents of the given path
  */
 function readdirSync(directoryPath) {
   if (statSync(directoryPath).isDirectory()) {
@@ -70,9 +71,12 @@ function __dumpMockFS() {
   console.log("mock FS:\n" + fsList);
 }
 
-function __listMockFS() {
-  const fsList = JSON.stringify(Object.keys(mockFS), null, 2);
-  console.log("mock FS ls:\n" + fsList);
+function __listMockFS(folder) {
+  if (!folder) {
+    console.log("mock FS ls:\n", JSON.stringify(Object.keys(mockFS).sort(), null, 2));
+  } else {
+    console.log("mock FS ls of " + folder + ":\n", JSON.stringify(mockFS[folder].sort(), null, 2));
+  }
 }
 
 function __catMockFS(folder) {

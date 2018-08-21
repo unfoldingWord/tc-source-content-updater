@@ -13,7 +13,7 @@ export const extractZipFile = (zipFilePath, dest) => {
   const zip = new AdmZip(Buffer.from(fs.readFileSync(zipFilePath), 'utf8'));
   const tmpDirObj = tmp.dirSync();
   zip.extractAllTo(tmpDirObj.name);
+  fs.ensureDirSync(dest);
   fs.__loadDirIntoMockFs(tmpDirObj.name, dest);
-  rimraf.sync(tmpDirObj.name);
-  console.log("tmpDirObj", tmpDirObj.name);
+  // rimraf.sync(tmpDirObj.name);
 };

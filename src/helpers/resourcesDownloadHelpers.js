@@ -4,6 +4,7 @@ import path from 'path-extra';
 import * as resourcesHelpers from './resourcesHelpers';
 import * as parseHelpers from './parseHelpers';
 import * as downloadHelpers from './downloadHelpers';
+import * as moveResourcesHelpers from './moveResourcesHelpers';
 
 /**
  * @description Downloads the resources that need to be updated for the given languages using the DCS API
@@ -22,7 +23,7 @@ import * as downloadHelpers from './downloadHelpers';
  * @return {Promise} Promise that resolves to success if all resources downloaded and processed, rejects if
  * any fail
  */
-export function downloadResources(languageList, resourcesPath, resources) {
+export const downloadResources = (languageList, resourcesPath, resources) => {
   return new Promise((resolve, reject) => {
     if (!languageList || !languageList.length) {
       reject('Language list is empty');
@@ -43,41 +44,53 @@ export function downloadResources(languageList, resourcesPath, resources) {
       if (!resource)
         return;
       const promise = new Promise((resolve, reject) => {
-        console.log("tryping "+resource.languageId+"-"+resource.resourceId);
         let zipFilePath = null;
         let importPath = null;
+        let processedFilesPath = null;
+        let twGroupDataPath = null;
         downloadResource(resource, resourcesPath)
-        .then(result => {
+        .then(async result => {
           zipFilePath = result.dest;
-          console.log("STARTING WITH ZIP ", zipFilePath);
           importPath = resourcesHelpers.unzipResource(resource, zipFilePath, resourcesPath);
           let importSubdirPath = importPath;
           const importSubdirs = fs.readdirSync(importPath);
+          console.log(importPath, importSubdirs);
           if (importSubdirs.length === 1 && fs.lstatSync(path.join(importPath, importSubdirs[0])).isDirectory()) {
             importSubdirPath = path.join(importPath, importSubdirs[0]);
           }
-          const processResult = resourcesHelpers.processResource(resource, importSubdirPath);
-          if (processResult) {
+          processedFilesPath = resourcesHelpers.processResource(resource, importSubdirPath);
+          if (processedFilesPath) {
             const resourcePath = resourcesHelpers.getActualResourcePath(resource, resourcesPath);
-            resourcesHelpers.moveResource(importSubdirPath, resourcePath, false);
+            moveResourcesHelpers.moveResources(importSubdirPath, resourcePath);
             resource.resourcePath = resourcePath;
+            // Extra step if the resource is the Greek UGNT or Hebrew UHB 
+            if ((resource.languageId === 'grc' && resource.resourceId === 'ugnt') ||
+                (resource.languageId === 'hbo' && resource.resourceId === 'uhb')) {
+              twGroupDataPath = resourcesHelpers.makeTwGroupDataResource(resource, processedFilesPath);
+              const twGroupDataResourcesPath = path.join(resourcesPath, resource.languageId, 'translationHelps', 'translationWords');
+              moveResourcesHelpers.moveResources(twGroupDataPath, twGroupDataResourcesPath);
+            }
           } else {
             reject('Failed to process resource "' + resource.resourceId + '" for language "' + resource.languageId + '"');
+            return;
           }
-          console.log("DONE WITH ", resource.languageId, " ", resource.resourceId);
-          resolve(resource);
+          resolve(resource.resourceId);
         })
         .catch(reject)
         .finally(() => {
-          fs.unlink(zipFilePath);
-          fs.remove(importPath);
+          // fs.unlink(zipFilePath);
+          // fs.remove(importPath);
+          // if (processedFilesPath)
+          //   fs.remove(processedFilesPath);
+          // if (twGroupDataPath)
+          //   fs.remove(twGroupDataPath);
         });
       });
       promises.push(promise);
     });
-    Promise.all(promises).then(resolve);
+    Promise.all(promises).then(resolve, reject);
   });
-}
+};
 
 /**
  * @description Downloads the resources that need to be updated for a given language using the DCS API

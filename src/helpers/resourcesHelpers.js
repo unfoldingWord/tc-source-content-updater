@@ -4,6 +4,10 @@ import path from 'path-extra';
 import yaml from 'yamljs';
 // helpers
 import * as zipFileHelpers from './zipFileHelpers';
+import * as twArticleHelpers from './translationHelps/twArticleHelpers';
+import * as taArticleHelpers from './translationHelps/taArticleHelpers';
+import * as twGroupDataHelpers from './translationHelps/twGroupDataHelpers';
+import * as packageParseHelpers from './packageParseHelpers';
 
 const translationHelps = {
   ta: 'translationAcademy',
@@ -122,26 +126,39 @@ export function getLatestVersionInPath(resourcePath) {
 /**
  * @description Unzips a resource's zip file to an imports directory for processing
  * @param {Object} resource Resource object containing resourceId and languageId
- * @param {String} zipFile Path to the zip file
+ * @param {String} zipFilePath Path to the zip file
  * @param {string} resourcesPath Path to the resources directory
  * @return {String} Path to the resource's import directory
  */
-export function unzipResource(resource, zipFile, resourcesPath) {
+export function unzipResource(resource, zipFilePath, resourcesPath) {
   const importsPath = path.join(resourcesPath, 'imports');
   fs.ensureDirSync(importsPath);
-  const importPath = path.basename(zipFile).split('.')[0];
-  zipFileHelpers.extractZipFile(zipFile, importPath);
+  const importPath = zipFilePath.split('.').slice(0, -1).join('.');
+  zipFileHelpers.extractZipFile(zipFilePath, importPath);
   return importPath;
 }
 
 /**
  * @description Processes a resource in the imports directory as needed
  * @param {Object} resource Resource object
- * @param {String} importPath Path the the import directory of this resource
- * @return {Boolean} True if sucess
+ * @param {String} extractedFilesPath Path the the import directory of this resource
+ * @return {String} Path to the directory of the processed files
  */
-export function processResource(resource, importPath) {
-  return true;
+export function processResource(resource, extractedFilesPath) {
+  const processedFilesPath = extractedFilesPath + '_processed';
+  fs.ensureDirSync(processedFilesPath);
+  if (resource.resourceId === 'tw') {
+    twArticleHelpers.processTranslationWords(extractedFilesPath, processedFilesPath);
+  } else if (resource.resourceId === 'ta') {
+    taArticleHelpers.processTranslationAcademy(extractedFilesPath, processedFilesPath);
+  } else if (resource.resourceId === 'tq') {
+    fs.copySync(extractedFilesPath, processedFilesPath);
+  } else if (resource.resourceId === 'tn') {
+    fs.copySync(extractedFilesPath, processedFilesPath);
+  } else {
+    packageParseHelpers.parseBiblePackage(resource, extractedFilesPath, processedFilesPath);
+  }
+  return processedFilesPath;
 }
 
 /**
@@ -158,21 +175,31 @@ export function getActualResourcePath(resource, resourcesPath) {
     resourceName = translationHelps[resourceName];
     type = 'translationHelps';
   }
-  const actualResourcePath = path.join(resourcesPath, languageId, type, resourceName);
+  const actualResourcePath = path.join(resourcesPath, languageId, type, resourceName, 'v' + resource.version);
   fs.ensureDirSync(actualResourcePath);
   return actualResourcePath;
 }
 
 /**
- * @description transfer an entire resource from source to target directory
- * @param {String} resourceSourcePath Current position of resource
- * @param {String} resourceTargetPath Folder where resources are moved
+ * @description Downloads the resources that need to be updated for a given language using the DCS API
+ * @param {Object.<{
+ *             languageId: String,
+ *             resourceId: String,
+ *             localModifiedTime: String,
+ *             remoteModifiedTime: String,
+ *             downloadUrl: String,
+ *             version: String,
+ *             subject: String,
+ *             catalogEntry: {langResource, bookResource, format}
+ *           }>} resource - resource to download
+ * @param {String} bibleFilesPath Path to the Bible directory
+ * @return {String} Path to the tW Group Data files
  */
-export function moveResource(resourceSourcePath, resourceTargetPath) {
-  if (resourceSourcePath && resourceSourcePath.length && resourceTargetPath && resourceTargetPath.length) {
-    fs.ensureDirSync(path.dirname(resourceTargetPath));
-    fs.moveSync(resourceSourcePath, resourceTargetPath);
-  } else {
-    throw Error('Invalid parameters to moveResource');
+export function makeTwGroupDataResource(resource, bibleFilesPath) {
+  if ((resource.languageId === 'grc' && resource.resourceId === 'ugnt') ||
+      (resource.languageId === 'hbo' && resource.resourceId === 'uhb')) {
+    const twGroupDataPath = path.join(bibleFilesPath + '_tw_group_data_grc_v' + resource.version);
+    twGroupDataHelpers.generateTwGroupDataFromAlignedBible(bibleFilesPath, twGroupDataPath);
+    return twGroupDataPath;
   }
 }
