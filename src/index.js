@@ -80,7 +80,7 @@ export function getResourcesForLanguage(languageId) {
  * If getLatestResources() was never called or resources = null, function will get all resources for the given language(s)
  * (the latter is useful for getting all resources for a set of languages, such as including all resources of
  * 'en' and 'hi' in a build)
- * @return {Promise} Promise that resolves to success or rejects if a resource failed to download
+ * @return {Promise} Promise that resolves to return all the resources updated or rejects if a resource failed to download
  */
 Updater.prototype.downloadResources = async function(languageList, resourcesPath, resources = this.updatedCatalogResources) {
   // call this.getResourcesForLanguage(lang) for each language in list to get all resources to update
