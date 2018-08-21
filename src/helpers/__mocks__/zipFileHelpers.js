@@ -15,5 +15,5 @@ export const extractZipFile = (zipFilePath, dest) => {
   zip.extractAllTo(tmpDirObj.name);
   fs.ensureDirSync(dest);
   fs.__loadDirIntoMockFs(tmpDirObj.name, dest);
-  // rimraf.sync(tmpDirObj.name);
+  rimraf.sync(tmpDirObj.name);
 };
