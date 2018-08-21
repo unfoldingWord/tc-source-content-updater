@@ -78,12 +78,12 @@ export const downloadResources = (languageList, resourcesPath, resources) => {
         })
         .catch(reject)
         .finally(() => {
-          // fs.unlink(zipFilePath);
-          // fs.remove(importPath);
-          // if (processedFilesPath)
-          //   fs.remove(processedFilesPath);
-          // if (twGroupDataPath)
-          //   fs.remove(twGroupDataPath);
+          fs.unlink(zipFilePath);
+          fs.remove(importPath);
+          if (processedFilesPath)
+            fs.remove(processedFilesPath);
+          if (twGroupDataPath)
+            fs.remove(twGroupDataPath);
         });
       });
       promises.push(promise);
