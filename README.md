@@ -26,7 +26,7 @@ import updater from 'tc-source-content-updater';
 const Updater = new updater();
 
 //commonjs
-const updater =require('tc-source-content-updater').default;
+const updater = require('tc-source-content-updater').default;
 const Updater = new updater();
 ```
 
