@@ -4,16 +4,21 @@ import rimraf from 'rimraf';
 import * as resourcesDownloadHelpers from '../src/helpers/resourcesDownloadHelpers';
 import * as parseHelpers from '../src/helpers/parseHelpers';
 
-jest.mock('../src/helpers/downloadHelpers');
-jest.mock('../src/helpers/zipFileHelpers');
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+
+jest.unmock('fs-extra');
+// jest.mock('../src/helpers/downloadHelpers');
+// jest.mock('../src/helpers/zipFileHelpers');
 
 const catalog = require('../__tests__/fixtures/api.door43.org/v3/subjects/pivoted.json');
+
 describe('Tests for resourcesDownloadHelpers', function() {
   const resources = parseHelpers.getLatestResources(catalog, []);
   const resourcesPath = '/tmp/resources'; // a mocked resources directory
 
   beforeEach(() => {
-    fs.__resetMockFS();
+    fs.ensureDirSync(resourcesPath);
+    // fs.__resetMockFS();
   });
 
   it('Test resourcesDownloadHelpers.downloadResources() for null', async () => {
@@ -36,7 +41,7 @@ describe('Tests for resourcesDownloadHelpers', function() {
 
   it('Test resourcesDownloadHelpers.downloadResources() for "hi" should download, process and deploy all resources', async () => {
     const languageList = ['hi'];
-    const expectedResourcesDownloaded = 5;
+    const expectedResourcesDownloaded = 3;
     await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources)
       .then(resourcesDownloaded => {
         expect(resourcesDownloaded.length).toEqual(expectedResourcesDownloaded);

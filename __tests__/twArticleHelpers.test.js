@@ -17,7 +17,7 @@ describe('Tests for twArticleHelpers', function() {
     const actualExtractedPath = path.join(__dirname, 'fixtures/translationHelps/twExtractedFromCDN');
     const mockedExtractedPath = '/tmp/extracted';
     fs.__loadDirIntoMockFs(actualExtractedPath, mockedExtractedPath);
-    const outputPath = path.join('/resources', lang, 'translationHelps/translationWords');
+    const outputPath = path.join('/resources', lang, 'translationHelps/translationWords', version);
     const expectedTwOutputPath = path.join(outputPath, version);
     const expectedTypeList = ['kt', 'names', 'other'];
     const expectedKtArticleListLength = 3;
@@ -25,17 +25,17 @@ describe('Tests for twArticleHelpers', function() {
     const expectedIndexJson = [{"id": "apostle", "name": "apostle, apostles, apostleship"}, {"id": "god", "name": "God"}, {"id": "sanctify", "name": "sanctify, sanctifies, sanctification"}]    ;
 
     // when
-    const twOutputPath = twArticleHelpers.processTranslationWords(path.join(mockedExtractedPath, lang+'_tw'), outputPath);
-    const indexFile = path.join(twOutputPath, 'kt', 'index.json');
+    const result = twArticleHelpers.processTranslationWords(path.join(mockedExtractedPath, lang+'_tw'), outputPath);
+    const indexFile = path.join(outputPath, 'kt', 'index.json');
     const indexJson = fs.readJsonSync(indexFile);
-    const typeList = fs.readdirSync(twOutputPath);
-    const ktArticleList = fs.readdirSync(path.join(twOutputPath, 'kt', 'articles'));
-    const namesArticleList = fs.readdirSync(path.join(twOutputPath, 'names', 'articles'));
-    const godFile = path.join(twOutputPath, 'kt', 'articles', 'god.md');
+    const typeList = fs.readdirSync(outputPath);
+    const ktArticleList = fs.readdirSync(path.join(outputPath, 'kt', 'articles'));
+    const namesArticleList = fs.readdirSync(path.join(outputPath, 'names', 'articles'));
+    const godFile = path.join(outputPath, 'kt', 'articles', 'god.md');
     const godArticle = fs.readFileSync(godFile, 'utf8');
 
     // then
-    expect(twOutputPath).toEqual(expectedTwOutputPath);
+    expect(result).toBeTruthy();
     expect(fs.existsSync(indexFile)).toBeTruthy();
     expect(indexJson).toEqual(expectedIndexJson);
     expect(fs.existsSync(godFile)).toBeTruthy();

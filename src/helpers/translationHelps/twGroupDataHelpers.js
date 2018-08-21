@@ -8,22 +8,21 @@ import * as resourcesHelpers from '../resourcesHelpers';
  * @description Generates the tW Group Data files from the given aligned Bible
  * @param {String} biblePath Path to the Bible with aligned data
  * @param {String} outputPath Path where the translationWords group data is to be placed WITHOUT version
- * @return {String} Path where tW was generated with version
+ * @return {Boolean} true if success
  */
 export const generateTwGroupDataFromAlignedBible = (biblePath, outputPath) => {
   if (!fs.pathExistsSync(biblePath)) {
-    return null;
+    return false;
   }
   const version = resourcesHelpers.getVersionFromManifest(biblePath);
   if (!version) {
-    return null;
+    return false;
   }
-  const twOutputPath = path.join(outputPath, 'v' + version);
   let books = bible.BIBLE_LIST_NT.slice(0);
   books.forEach(bookName => {
-    convertBookVerseObjectsToTwData(biblePath, twOutputPath, bookName);
+    convertBookVerseObjectsToTwData(biblePath, outputPath, bookName);
   });
-  return twOutputPath;
+  return true;
 };
 
 /**

@@ -71,11 +71,25 @@ function __dumpMockFS() {
   console.log("mock FS:\n" + fsList);
 }
 
-function __listMockFS(folder) {
-  if (!folder) {
-    console.log("mock FS ls:\n", JSON.stringify(Object.keys(mockFS).sort(), null, 2));
+function __listMockFS(directoryPath) {
+  if (!directoryPath) {
+    console.log("mockFS ls:\n", JSON.stringify(Object.keys(mockFS).sort(), null, 2));
+  } else if (mockFS[directoryPath] === undefined) {
+    console.log("mockFS - No directory: " + directoryPath);
+  } else if (statSync(directoryPath).isFile()) {
+    console.log("mockFS ls:\n", directoryPath);
   } else {
-    console.log("mock FS ls of " + folder + ":\n", JSON.stringify(mockFS[folder].sort(), null, 2));
+    let log = "mockFS ls of " + directoryPath + ":\n";
+    const content = mockFS[directoryPath].sort();
+    content.forEach(item => {
+      const fullPath = path.join(directoryPath, item);
+      if (statSync(path.join(fullPath)).isDirectory()) {
+        item += '/';
+      }
+      item += "\t" + mockFS[fullPath].length;
+      log += "\t" + item + "\n";
+    });
+    console.log(log);
   }
 }
 

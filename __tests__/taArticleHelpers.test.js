@@ -17,22 +17,21 @@ describe('Tests for taArticleHelpers', function() {
     const actualExtractedPath = path.join(__dirname, 'fixtures/translationHelps/taExtractedFromCDN');
     const mockedExtractedPath = '/tmp/extracted';
     fs.__loadDirIntoMockFs(actualExtractedPath, mockedExtractedPath);
-    const outputPath = path.join('/resources', lang, 'translationHelps/translationAcademy');
-    const expectedTaOutputPath = path.join(outputPath, version);
+    const outputPath = path.join('/resources', lang, 'translationHelps/translationAcademy', version);
     const expectedProjectList = ['checking', 'translate'];
     const expectedCheckingArticleListLength = 6;
     const expectedTranslateArticleListLength = 4;
 
     // when
-    const taOutputPath = taArticleHelpers.processTranslationAcademy(path.join(mockedExtractedPath, lang + '_ta'), outputPath);
-    const projectList = fs.readdirSync(taOutputPath);
-    const checkingArticleList = fs.readdirSync(path.join(taOutputPath, 'checking'));
-    const translateArticleList = fs.readdirSync(path.join(taOutputPath, 'translate'));
-    const whatisFile = path.join(taOutputPath, 'translate', 'translate-whatis.md');
+    const result = taArticleHelpers.processTranslationAcademy(path.join(mockedExtractedPath, lang + '_ta'), outputPath);
+    const projectList = fs.readdirSync(outputPath);
+    const checkingArticleList = fs.readdirSync(path.join(outputPath, 'checking'));
+    const translateArticleList = fs.readdirSync(path.join(outputPath, 'translate'));
+    const whatisFile = path.join(outputPath, 'translate', 'translate-whatis.md');
     const whatisArticle = fs.readFileSync(whatisFile, 'utf8');
 
     // then
-    expect(taOutputPath).toEqual(expectedTaOutputPath);
+    expect(result).toBeTruthy();
     expect(fs.existsSync(whatisFile)).toBeTruthy();
     expect(projectList.sort()).toEqual(expectedProjectList);
     expect(checkingArticleList.length).toEqual(expectedCheckingArticleListLength);
