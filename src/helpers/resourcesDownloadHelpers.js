@@ -20,7 +20,7 @@ import * as moveResourcesHelpers from './moveResourcesHelpers';
  *                   subject: String,
  *                   catalogEntry: {langResource, bookResource, format}
  *                 }>} resources - resources that will be downloaded if the lanugage IDs match
- * @return {Promise} Promise that resolves to success if all resources downloaded and processed, rejects if
+ * @return {Promise} Promise that returns a list of all the resources updated, rejects if
  * any fail
  */
 export const downloadResources = (languageList, resourcesPath, resources) => {
@@ -77,7 +77,7 @@ export const downloadResources = (languageList, resourcesPath, resources) => {
             reject('Failed to process resource "' + resource.resourceId + '" for language "' + resource.languageId + '"');
             return;
           }
-          resolve(resource.resourceId);
+          resolve(resource);
         })
         .catch(reject)
         .finally(() => {
