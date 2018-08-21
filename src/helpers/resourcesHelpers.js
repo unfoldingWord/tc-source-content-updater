@@ -198,7 +198,7 @@ export function getActualResourcePath(resource, resourcesPath) {
 export function makeTwGroupDataResource(resource, bibleFilesPath) {
   if ((resource.languageId === 'grc' && resource.resourceId === 'ugnt') ||
       (resource.languageId === 'hbo' && resource.resourceId === 'uhb')) {
-    const twGroupDataPath = path.join(bibleFilesPath + '_tw_group_data_grc_v' + resource.version);
+    const twGroupDataPath = path.join(bibleFilesPath + '_tw_group_data_' + resource.languageId + '_v' + resource.version);
     twGroupDataHelpers.generateTwGroupDataFromAlignedBible(bibleFilesPath, twGroupDataPath);
     return twGroupDataPath;
   }
