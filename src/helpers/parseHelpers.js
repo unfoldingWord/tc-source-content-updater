@@ -1,4 +1,5 @@
 /* eslint-disable camelcase,no-empty,no-negated-condition */
+import * as ERROR from '../resources/errors';
 
 export const TC_RESOURCES = ['Bible', 'Greek_New_Testament', 'Translator_Notes', 'Bible_translation_comprehension_questions', 'Translation_Words', 'Translation_Academy'];
 
@@ -98,16 +99,13 @@ export function getUpdatedLanguageList(updatedRemoteResources) {
  *                   version: String,
  *                   subject: String,
  *                   catalogEntry: {subject, resource, format}
- *                 }>|null} updated resources (returns null on error)
+ *                 }>} updated resources  (throws exception on error)
  */
 export function getLatestResources(catalog, localResourceList) {
   if (!catalog || !Array.isArray(localResourceList)) {
-    return null;
+    throw new Error(ERROR.PARAMETER_ERROR);
   }
   const tCoreResources = parseCatalogResources(catalog, true, TC_RESOURCES);
-  if (!tCoreResources) {
-    return null;
-  }
   // remove resources that are already up to date
   for (let localResource of localResourceList) {
     if (localResource.languageId && localResource.resourceId) {
@@ -182,7 +180,7 @@ export function getFormatsForResource(resource) {
  */
 export function parseCatalogResources(catalog, ignoreObsResources = true, subjectFilters = null) {
   if (!catalog || !Array.isArray(catalog.subjects)) {
-    return null;
+    throw new Error(ERROR.CATALOG_CONTENT_ERROR);
   }
   const catalogResources = [];
   if (catalog && catalog.subjects) {
