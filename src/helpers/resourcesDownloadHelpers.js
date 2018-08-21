@@ -55,7 +55,7 @@ export const downloadResources = (languageList, resourcesPath, resources) => {
           const importSubdirPath = resourcesHelpers.getSubdirOfUnzippedResource(importPath);
           processedFilesPath = resourcesHelpers.processResource(resource, importSubdirPath);
           if (processedFilesPath) {
-            // Extra step if the resource is the Greek UGNT or Hebrew UHB 
+            // Extra step if the resource is the Greek UGNT or Hebrew UHB
             if ((resource.languageId === 'grc' && resource.resourceId === 'ugnt') ||
                 (resource.languageId === 'hbo' && resource.resourceId === 'uhb')) {
               twGroupDataPath = resourcesHelpers.makeTwGroupDataResource(resource, processedFilesPath);
