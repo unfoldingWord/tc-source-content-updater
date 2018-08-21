@@ -87,7 +87,7 @@ export function getVersionsInPath(resourcePath) {
     const fullPath = path.join(resourcePath, name);
     return fs.lstatSync(fullPath).isDirectory() && name.match(/^v\d/i);
   };
-  return fs.readdirSync(resourcePath).filter(isVersionDirectory);
+  return sortVersions(fs.readdirSync(resourcePath).filter(isVersionDirectory));
 }
 
 /**
@@ -136,6 +136,19 @@ export function unzipResource(resource, zipFilePath, resourcesPath) {
   const importPath = zipFilePath.split('.').slice(0, -1).join('.');
   zipFileHelpers.extractZipFile(zipFilePath, importPath);
   return importPath;
+}
+
+/**
+ * Gets the single subdirector of an extracted zip file path
+ * @param {String} extractedFilesPath Extracted files path
+ * @return {String} The subdir in the extracted path
+ */
+export function getSubdirOfUnzippedResource(extractedFilesPath) {
+  const subdirs = fs.readdirSync(extractedFilesPath);
+  if (subdirs.length === 1 && fs.lstatSync(path.join(extractedFilesPath, subdirs[0])).isDirectory()) {
+    return path.join(extractedFilesPath, subdirs[0]);
+  }
+  return extractedFilesPath;
 }
 
 /**
@@ -197,13 +210,34 @@ export function getActualResourcePath(resource, resourcesPath) {
  *             catalogEntry: {langResource, bookResource, format}
  *           }>} resource - resource to download
  * @param {String} bibleFilesPath Path to the Bible directory
- * @return {String} Path to the tW Group Data files
+ * @return {String} Path to the processed tw Group Data files
  */
 export function makeTwGroupDataResource(resource, bibleFilesPath) {
   if ((resource.languageId === 'grc' && resource.resourceId === 'ugnt') ||
       (resource.languageId === 'hbo' && resource.resourceId === 'uhb')) {
     const twGroupDataPath = path.join(bibleFilesPath + '_tw_group_data_' + resource.languageId + '_v' + resource.version);
-    twGroupDataHelpers.generateTwGroupDataFromAlignedBible(bibleFilesPath, twGroupDataPath);
-    return twGroupDataPath;
+    const result = twGroupDataHelpers.generateTwGroupDataFromAlignedBible(bibleFilesPath, twGroupDataPath);
+    if (result)
+      return twGroupDataPath;
   }
+}
+
+/**
+ * Removes all version directories except the latest
+ * @param {String} resourcePath Path to the reosurce dirctory that has subdirs of versions
+ * @return {Boolean} True if versions were deleted, false if nothing was touched
+ */
+export function removeAllButLatestVersion(resourcePath) {
+  // Remove the previoius verison(s)
+  const versionDirs = getVersionsInPath(resourcePath);
+  if (versionDirs && versionDirs.length > 1) {
+    const lastVersion = versionDirs[versionDirs.length - 1];
+    versionDirs.forEach(versionDir => {
+      if (versionDir !== lastVersion) {
+        fs.removeSync(path.join(path.dirname(resourcePath), versionDir));
+      }
+    });
+    return true;
+  }
+  return false;
 }

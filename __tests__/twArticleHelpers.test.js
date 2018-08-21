@@ -18,7 +18,6 @@ describe('Tests for twArticleHelpers', function() {
     const mockedExtractedPath = '/tmp/extracted';
     fs.__loadDirIntoMockFs(actualExtractedPath, mockedExtractedPath);
     const outputPath = path.join('/resources', lang, 'translationHelps/translationWords', version);
-    const expectedTwOutputPath = path.join(outputPath, version);
     const expectedTypeList = ['kt', 'names', 'other'];
     const expectedKtArticleListLength = 3;
     const expectedNamesArticleListLength = 2;
@@ -51,12 +50,11 @@ describe('Tests for twArticleHelpers', function() {
     // given
     const extractedPath = '/bad/dir';
     const lang = 'en';
-    const expectedTwOutputPath = null;
 
     // when
     const twOutputPath = twArticleHelpers.processTranslationWords(extractedPath, lang);
 
     // then
-    expect(twOutputPath).toEqual(expectedTwOutputPath);
+    expect(twOutputPath).not.toBeTruthy();
   });
 });

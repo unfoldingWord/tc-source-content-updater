@@ -5,7 +5,7 @@ import nock from 'nock';
 jest.mock('../src/helpers/downloadHelpers');
 jest.mock('../src/helpers/zipFileHelpers');
 
-const catalog = require('../__tests__/api.door43.org/v3/subjects/pivoted.json');
+const catalog = require('./fixtures/api.door43.org/v3/subjects/pivoted.json');
 nock('https://api.door43.org:443')
   .persist()
   .get('/v3/subjects/pivoted.json')
@@ -15,10 +15,6 @@ describe('Updater.downloadResources', () => {
   const resourcesPath = '/tmp/resources'; // a mocked resources directory
 
   beforeEach(() => {
-    fs.__resetMockFS();
-  });
-
-  afterEach(() => {
     fs.__resetMockFS();
   });
 

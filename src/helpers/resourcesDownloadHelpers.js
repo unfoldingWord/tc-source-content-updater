@@ -52,11 +52,7 @@ export const downloadResources = (languageList, resourcesPath, resources) => {
         .then(async result => {
           zipFilePath = result.dest;
           importPath = resourcesHelpers.unzipResource(resource, zipFilePath, resourcesPath);
-          let importSubdirPath = importPath;
-          const importSubdirs = fs.readdirSync(importPath);
-          if (importSubdirs.length === 1 && fs.lstatSync(path.join(importPath, importSubdirs[0])).isDirectory()) {
-            importSubdirPath = path.join(importPath, importSubdirs[0]);
-          }
+          const importSubdirPath = resourcesHelpers.getSubdirOfUnzippedResource(importPath);
           processedFilesPath = resourcesHelpers.processResource(resource, importSubdirPath);
           if (processedFilesPath) {
             // Extra step if the resource is the Greek UGNT or Hebrew UHB 
@@ -76,14 +72,7 @@ export const downloadResources = (languageList, resourcesPath, resources) => {
               reject('Unable to copy resource into the resources directory');
               return;
             }
-            // Remove the previoius verison(s)
-            const versionDirs = resourcesHelpers.getVersionsInPath(path.dirname(resourcePath));
-            const latestVersion = path.basename(resourcePath);
-            versionDirs.forEach(versionDir => {
-              if (versionDir !== latestVersion) {
-                fs.removeSync(path.join(path.dirname(resourcePath), versionDir));
-              }
-            });
+            resourcesHelpers.removeAllButLatestVersion(path.dirname(resourcePath));
           } else {
             reject('Failed to process resource "' + resource.resourceId + '" for language "' + resource.languageId + '"');
             return;
