@@ -147,7 +147,6 @@ export function unzipResource(resource, zipFilePath, resourcesPath) {
 export function processResource(resource, extractedFilesPath) {
   const processedFilesPath = extractedFilesPath + '_processed';
   fs.ensureDirSync(processedFilesPath);
-  console.log(resource);
   switch (resource.subject) {
     case 'Translation_Words':
       twArticleHelpers.processTranslationWords(extractedFilesPath, processedFilesPath);
