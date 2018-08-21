@@ -60,16 +60,31 @@ export const downloadResources = (languageList, resourcesPath, resources) => {
           }
           processedFilesPath = resourcesHelpers.processResource(resource, importSubdirPath);
           if (processedFilesPath) {
-            const resourcePath = resourcesHelpers.getActualResourcePath(resource, resourcesPath);
-            moveResourcesHelpers.moveResources(importSubdirPath, resourcePath);
-            resource.resourcePath = resourcePath;
             // Extra step if the resource is the Greek UGNT or Hebrew UHB 
             if ((resource.languageId === 'grc' && resource.resourceId === 'ugnt') ||
                 (resource.languageId === 'hbo' && resource.resourceId === 'uhb')) {
               twGroupDataPath = resourcesHelpers.makeTwGroupDataResource(resource, processedFilesPath);
               const twGroupDataResourcesPath = path.join(resourcesPath, resource.languageId, 'translationHelps', 'translationWords');
-              moveResourcesHelpers.moveResources(twGroupDataPath, twGroupDataResourcesPath);
+              const moveSuccess = moveResourcesHelpers.moveResources(twGroupDataPath, twGroupDataResourcesPath);
+              if (!moveSuccess) {
+                reject('Unable to create tW Group Data from ' + resource.resourceId + ' Bible');
+                return;
+              }
             }
+            const resourcePath = resourcesHelpers.getActualResourcePath(resource, resourcesPath);
+            const moveSuccess = moveResourcesHelpers.moveResources(processedFilesPath, resourcePath);
+            if (!moveSuccess) {
+              reject('Unable to copy resource into the resources directory');
+              return;
+            }
+            // Remove the previoius verison(s)
+            const versionDirs = resourcesHelpers.getVersionsInPath(path.dirname(resourcePath));
+            const latestVersion = path.basename(resourcePath);
+            versionDirs.forEach(versionDir => {
+              if (versionDir !== latestVersion) {
+                fs.removeSync(path.join(path.dirname(resourcePath), versionDir));
+              }
+            });
           } else {
             reject('Failed to process resource "' + resource.resourceId + '" for language "' + resource.languageId + '"');
             return;
