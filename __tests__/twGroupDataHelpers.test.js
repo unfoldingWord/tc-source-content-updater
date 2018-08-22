@@ -1,4 +1,3 @@
-jest.mock('fs-extra');
 import fs from 'fs-extra';
 import path from 'path-extra';
 // helpers
@@ -10,7 +9,7 @@ describe('Test twGroupDataHelpers.generateTwGroupDataFromAlignedBible()', functi
   const version = 'v0.2';
   const bibleRealPath = path.join(__dirname, 'fixtures/resources', lang, 'bibles', bible, version);
   const bibleMockPath = path.join('/resources', lang, 'bibles', bible, version);
-  const outputPath = path.join('/resources', lang, 'translationHelps/translationWords');
+  const outputPath = path.join('/resources', lang, 'translationHelps/translationWords', version);
 
   beforeEach(() => {
     fs.__resetMockFS();
@@ -22,15 +21,12 @@ describe('Test twGroupDataHelpers.generateTwGroupDataFromAlignedBible()', functi
   });
 
   it('Test that milestones are properly constructed using inchrist for phm', () => {
-    // given
-    const expectedTwPath = path.join(outputPath, version);
-
     // when
-    const generatedTwPath = twGroupDataHelpers.generateTwGroupDataFromAlignedBible(bibleMockPath, outputPath);
-    const jsonFile = path.join(generatedTwPath, 'kt', 'groups', 'phm', 'inchrist.json');
+    const result = twGroupDataHelpers.generateTwGroupDataFromAlignedBible(bibleMockPath, outputPath);
+    const jsonFile = path.join(outputPath, 'kt', 'groups', 'phm', 'inchrist.json');
 
     // then
-    expect(generatedTwPath).toEqual(expectedTwPath);
+    expect(result).toBeTruthy();
     expect(fs.existsSync(jsonFile)).toBeTruthy();
     const data = JSON.parse(fs.readFileSync(jsonFile));
     expect(data).toMatchSnapshot();
@@ -39,15 +35,12 @@ describe('Test twGroupDataHelpers.generateTwGroupDataFromAlignedBible()', functi
   });
 
   it('Test that occurrence of God is correct in Titus 1:1', () => {
-    // given
-    const expectedTwPath = path.join(outputPath, version);
-
     // when
-    const generatedTwPath = twGroupDataHelpers.generateTwGroupDataFromAlignedBible(bibleMockPath, outputPath);
+    const result = twGroupDataHelpers.generateTwGroupDataFromAlignedBible(bibleMockPath, outputPath);
 
     // then
-    expect(generatedTwPath).toEqual(expectedTwPath);
-    const jsonFile = path.join(generatedTwPath, 'kt', 'groups', 'tit', 'god.json');
+    expect(result).toBeTruthy();
+    const jsonFile = path.join(outputPath, 'kt', 'groups', 'tit', 'god.json');
     expect(fs.existsSync(jsonFile)).toBeTruthy();
     const data = JSON.parse(fs.readFileSync(jsonFile));
     const expectedOccurrence = 2;
@@ -57,12 +50,11 @@ describe('Test twGroupDataHelpers.generateTwGroupDataFromAlignedBible()', functi
   it('Test twGroupDataHelpers.generateTwGroupDataFromAlignedBible() for invalid biblePath', () => {
     // given
     const biblePath = '/bad/path';
-    const expectedGeneratedPath = null;
 
     // when
-    const generatedTwPath = twGroupDataHelpers.generateTwGroupDataFromAlignedBible(biblePath, outputPath);
+    const result = twGroupDataHelpers.generateTwGroupDataFromAlignedBible(biblePath, outputPath);
 
     // then
-    expect(generatedTwPath).toEqual(expectedGeneratedPath);
+    expect(result).not.toBeTruthy();
   });
 });

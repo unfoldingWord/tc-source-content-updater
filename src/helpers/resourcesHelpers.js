@@ -2,6 +2,19 @@
 import fs from 'fs-extra';
 import path from 'path-extra';
 import yaml from 'yamljs';
+// helpers
+import * as zipFileHelpers from './zipFileHelpers';
+import * as twArticleHelpers from './translationHelps/twArticleHelpers';
+import * as taArticleHelpers from './translationHelps/taArticleHelpers';
+import * as twGroupDataHelpers from './translationHelps/twGroupDataHelpers';
+import * as packageParseHelpers from './packageParseHelpers';
+
+const translationHelps = {
+  ta: 'translationAcademy',
+  tn: 'translationNotes',
+  tw: 'translationWords',
+  tq: 'translationQuestions'
+};
 
 /**
  * @description - Gets the version from the manifest
@@ -74,7 +87,7 @@ export function getVersionsInPath(resourcePath) {
     const fullPath = path.join(resourcePath, name);
     return fs.lstatSync(fullPath).isDirectory() && name.match(/^v\d/i);
   };
-  return fs.readdirSync(resourcePath).filter(isVersionDirectory);
+  return sortVersions(fs.readdirSync(resourcePath).filter(isVersionDirectory));
 }
 
 /**
@@ -108,4 +121,123 @@ export function getLatestVersionInPath(resourcePath) {
     return path.join(resourcePath, versions[versions.length - 1]);
   }
   return null; // return illegal path
+}
+
+/**
+ * @description Unzips a resource's zip file to an imports directory for processing
+ * @param {Object} resource Resource object containing resourceId and languageId
+ * @param {String} zipFilePath Path to the zip file
+ * @param {string} resourcesPath Path to the resources directory
+ * @return {String} Path to the resource's import directory
+ */
+export const unzipResource = async (resource, zipFilePath, resourcesPath) => {
+  const importsPath = path.join(resourcesPath, 'imports');
+  fs.ensureDirSync(importsPath);
+  const importPath = zipFilePath.split('.').slice(0, -1).join('.');
+  await zipFileHelpers.extractZipFile(zipFilePath, importPath);
+  return importPath;
+};
+
+/**
+ * Gets the single subdirector of an extracted zip file path
+ * @param {String} extractedFilesPath Extracted files path
+ * @return {String} The subdir in the extracted path
+ */
+export function getSubdirOfUnzippedResource(extractedFilesPath) {
+  const subdirs = fs.readdirSync(extractedFilesPath);
+  if (subdirs.length === 1 && fs.lstatSync(path.join(extractedFilesPath, subdirs[0])).isDirectory()) {
+    return path.join(extractedFilesPath, subdirs[0]);
+  }
+  return extractedFilesPath;
+}
+
+/**
+ * @description Processes a resource in the imports directory as needed
+ * @param {Object} resource Resource object
+ * @param {String} extractedFilesPath Path the the import directory of this resource
+ * @return {String} Path to the directory of the processed files
+ */
+export function processResource(resource, extractedFilesPath) {
+  const processedFilesPath = extractedFilesPath + '_processed';
+  fs.ensureDirSync(processedFilesPath);
+  switch (resource.subject) {
+    case 'Translation_Words':
+      twArticleHelpers.processTranslationWords(extractedFilesPath, processedFilesPath);
+      break;
+    case 'Translation_Academy':
+      taArticleHelpers.processTranslationAcademy(extractedFilesPath, processedFilesPath);
+      break;
+    case 'Bible':
+    case 'Aligned_Bible':
+    case 'Greek_New_Testament':
+      packageParseHelpers.parseBiblePackage(resource, extractedFilesPath, processedFilesPath);
+      break;
+    default:
+      fs.copySync(extractedFilesPath, processedFilesPath);
+  }
+  return processedFilesPath;
+}
+
+/**
+ * @description Gets the actual path to a resource based on the resource object
+ * @param {Object} resource The resource object
+ * @param {String} resourcesPath The path to the resources directory
+ * @return {String} The resource path
+ */
+export function getActualResourcePath(resource, resourcesPath) {
+  const languageId = resource.languageId;
+  let resourceName = resource.resourceId;
+  let type = 'bible';
+  if (translationHelps[resourceName]) {
+    resourceName = translationHelps[resourceName];
+    type = 'translationHelps';
+  }
+  const actualResourcePath = path.join(resourcesPath, languageId, type, resourceName, 'v' + resource.version);
+  fs.ensureDirSync(actualResourcePath);
+  return actualResourcePath;
+}
+
+/**
+ * @description Downloads the resources that need to be updated for a given language using the DCS API
+ * @param {Object.<{
+ *             languageId: String,
+ *             resourceId: String,
+ *             localModifiedTime: String,
+ *             remoteModifiedTime: String,
+ *             downloadUrl: String,
+ *             version: String,
+ *             subject: String,
+ *             catalogEntry: {langResource, bookResource, format}
+ *           }>} resource - resource to download
+ * @param {String} bibleFilesPath Path to the Bible directory
+ * @return {String} Path to the processed tw Group Data files
+ */
+export function makeTwGroupDataResource(resource, bibleFilesPath) {
+  if ((resource.languageId === 'grc' && resource.resourceId === 'ugnt') ||
+      (resource.languageId === 'hbo' && resource.resourceId === 'uhb')) {
+    const twGroupDataPath = path.join(bibleFilesPath + '_tw_group_data_' + resource.languageId + '_v' + resource.version);
+    const result = twGroupDataHelpers.generateTwGroupDataFromAlignedBible(bibleFilesPath, twGroupDataPath);
+    if (result)
+      return twGroupDataPath;
+  }
+}
+
+/**
+ * Removes all version directories except the latest
+ * @param {String} resourcePath Path to the reosurce dirctory that has subdirs of versions
+ * @return {Boolean} True if versions were deleted, false if nothing was touched
+ */
+export function removeAllButLatestVersion(resourcePath) {
+  // Remove the previoius verison(s)
+  const versionDirs = getVersionsInPath(resourcePath);
+  if (versionDirs && versionDirs.length > 1) {
+    const lastVersion = versionDirs[versionDirs.length - 1];
+    versionDirs.forEach(versionDir => {
+      if (versionDir !== lastVersion) {
+        fs.removeSync(path.join(path.dirname(resourcePath), versionDir));
+      }
+    });
+    return true;
+  }
+  return false;
 }

@@ -41,7 +41,8 @@ function __setMockDirectories(newMockFiles) {
 /**
  * A custom version of `readdirSync` that reads from the special mocked out
  * file list set via __setMockDirectories
- * @param {String} directoryPath
+ * @param {String} directoryPath Directory path
+ * @return {Array} Contents of the given path
  */
 function readdirSync(directoryPath) {
   if (statSync(directoryPath).isDirectory()) {
@@ -70,9 +71,43 @@ function __dumpMockFS() {
   console.log("mock FS:\n" + fsList);
 }
 
-function __listMockFS() {
-  const fsList = JSON.stringify(Object.keys(mockFS), null, 2);
-  console.log("mock FS ls:\n" + fsList);
+function __listMockFS(directoryPath, recursive = false) {
+  if (!directoryPath) {
+    directoryPath = '/';
+    recursive = true;
+  }
+  if (mockFS[directoryPath] === undefined) {
+    console.log("mockFS - No directory: " + directoryPath);
+  } else if (statSync(directoryPath).isFile()) {
+    console.log("mockFS ls:\n", directoryPath);
+  } else {
+    console.log(__getListMockFS(directoryPath, recursive));
+  }
+}
+
+function __getListMockFS(directoryPath, recursive = false) {
+  let ls = directoryPath + ":\n";
+  const content = mockFS[directoryPath].sort();
+  content.forEach(item => {
+    const fullPath = path.join(directoryPath, item);
+    const isDir = statSync(path.join(fullPath)).isDirectory();
+    if (isDir) {
+      item += '/';
+    }
+    if (mockFS[fullPath])
+      item += "\t" + mockFS[fullPath].length;
+    ls += "\t" + item + "\n";
+  });
+  if (recursive) {
+    content.forEach(item => {
+      const fullPath = path.join(directoryPath, item);
+      const isDir = statSync(path.join(fullPath)).isDirectory();
+      if (isDir && mockFS[fullPath] && mockFS[fullPath].length) {
+        ls += __getListMockFS(fullPath, recursive);
+      }
+    });
+  }
+  return ls;
 }
 
 function __catMockFS(folder) {

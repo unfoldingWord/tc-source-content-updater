@@ -8,14 +8,28 @@
   ],
   "settings": {},
   "rules": {
-    "no-undef": "warn",
-    "semi": ["error", "always", {"omitLastInOneLineBlock": true}],
     "guard-for-in": "off",
-    "max-len": "off",
+    "indent": "off",
+    "linebreak-style": "off",
+    "max-len": "off", 
     "no-console": "off",
+    "no-duplicate-imports": [
+      "error",
+      {
+        "includeExports": false
+      }
+    ],
+    "no-negated-condition" : "off",
+    "no-nested-ternary": "off",
+    "no-throw-literal": "off",
+    "no-undef": "warn",
     "no-unused-vars": "warn",
+    "no-warning-comments": "warn",
+    "quote-props": "warn",
+    "padded-blocks": "warn",
     "radix": "off",
-    "indent": "off"
+    "semi": ["error", "always", {"omitLastInOneLineBlock": true}],
+    "space-before-function-paren": "off"
   },
   "parser": "babel-eslint",
   "parserOptions": {

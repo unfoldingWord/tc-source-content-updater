@@ -8,7 +8,7 @@ import * as resourcesHelpers from '../resourcesHelpers';
  * article
  * @param {String} extractedFilesPath - Path to the extracted files that came from the zip file in the catalog
  * @param {String} outputPath - Path to place the processed files WITHOUT version in the path
- * @return {String} The path to the processed translationAcademy files with version
+ * @return {Boolean} true if success
  */
 export function processTranslationAcademy(extractedFilesPath, outputPath) {
   if (!fs.pathExistsSync(extractedFilesPath)) {
@@ -17,11 +17,10 @@ export function processTranslationAcademy(extractedFilesPath, outputPath) {
   const resourceManifest = resourcesHelpers.getResourceManifest(extractedFilesPath);
   const version = resourcesHelpers.getVersionFromManifest(extractedFilesPath);
   if (version === null) {
-    return null;
+    return false;
   }
-  const taOutputPath = path.join(outputPath, 'v' + version);
-  if (fs.pathExistsSync(taOutputPath)) {
-    fs.removeSync(taOutputPath);
+  if (fs.pathExistsSync(outputPath)) {
+    fs.removeSync(outputPath);
   }
   resourceManifest.projects.forEach(project => {
     const folderPath = path.join(extractedFilesPath, project.path);
@@ -31,12 +30,12 @@ export function processTranslationAcademy(extractedFilesPath, outputPath) {
       let content = '# ' + fs.readFileSync(path.join(folderPath, articleDir, 'title.md'), 'utf8') + ' #\n';
       content += fs.readFileSync(path.join(folderPath, articleDir, '01.md'), 'utf8');
       const destinationPath = path.join(
-        taOutputPath,
+        outputPath,
         project.path,
         articleDir + '.md'
       );
       fs.outputFileSync(destinationPath, content);
     });
   });
-  return taOutputPath;
+  return true;
 }

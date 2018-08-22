@@ -15,7 +15,8 @@
       "!**/node_modules/**"
     ],
     "coverageDirectory": "coverage",
-    "testURL": "http://localhost"
+    "testURL": "http://localhost",
+    "setupFiles": ["./testSetup/global.js"]
   },
   "repository": {
     "type": "git",
@@ -46,14 +47,20 @@
     "eslint-config-google": "^0.6.0",
     "eslint-plugin-jest": "^21.21.0",
     "jest": "^22.4.0",
+    "nock": "^9.6.1",
     "rimraf": "^2.6.2",
+    "tmp": "0.0.33",
     "transform-runtime": "0.0.0"
   },
   "dependencies": {
+    "adm-zip": "^0.4.11",
+    "agentkeepalive": "3.3.0",
+    "follow-redirects": "^1.5.5",
     "fs-extra": "^4.0.3",
     "ospath": "^1.2.2",
     "path-extra": "^3.0.0",
     "request": "^2.87.0",
+    "url": "^0.11.0",
     "usfm-js": "1.0.0-beta.30",
     "yamljs": "^0.3.0"
   }

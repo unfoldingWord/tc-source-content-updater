@@ -10,9 +10,11 @@ export function moveResources(resourceSourcePath, resourceTargetPath) {
   if (resourceSourcePath && resourceSourcePath.length &&
       resourceTargetPath && resourceTargetPath.length) {
     try {
+      if (fs.pathExistsSync(resourceTargetPath)) {
+        fs.removeSync(resourceTargetPath);
+      }
       fs.ensureDirSync(resourceTargetPath);
-      fs.copySync(resourceSourcePath, resourceTargetPath);
-      fs.remove(resourceSourcePath);
+      fs.moveSync(resourceSourcePath, resourceTargetPath);
       return true;
     } catch (e) {
       console.log(e);

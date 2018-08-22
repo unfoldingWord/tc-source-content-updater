@@ -1,31 +1,64 @@
+import fs from 'fs-extra';
 // helpers
 import * as resourcesDownloadHelpers from '../src/helpers/resourcesDownloadHelpers';
+import * as parseHelpers from '../src/helpers/parseHelpers';
+
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+const catalog = require('./fixtures/api.door43.org/v3/subjects/pivoted.json');
 
 describe('Tests for resourcesDownloadHelpers', function() {
-  it('Test resourcesDownloadHelpers.processTranslationAcademy() for null', async () => {
-    // given
-    const resourceList = null;
-    const expectedError = new Error('Resource list empty');
+  const resources = parseHelpers.getLatestResources(catalog, []);
+  const resourcesPath = '/tmp/resources'; // a mocked resources directory
 
-    // then
-    await expect(resourcesDownloadHelpers.downloadResources(resourceList)).rejects.toEqual(expectedError);
+  beforeEach(() => {
+    fs.__resetMockFS();
+    fs.ensureDirSync(resourcesPath);
   });
 
-  it('Test resourcesDownloadHelpers.processTranslationAcademy() for empty list', async () => {
+  it('Test resourcesDownloadHelpers.downloadResources() for null', async () => {
     // given
-    const resourceList = [];
-    const expectedError = new Error('Resource list empty');
+    const languageList = null;
+    const expectedError = 'Language list is empty';
 
     // then
-    await expect(resourcesDownloadHelpers.downloadResources(resourceList)).rejects.toEqual(expectedError);
+    await expect(resourcesDownloadHelpers.downloadResources(languageList)).rejects.toEqual(expectedError);
   });
 
-  it('Test resourcesDownloadHelpers.processTranslationAcademy() for populated list', async () => {
+  it('Test resourcesDownloadHelpers.downloadResources() for empty list', async () => {
     // given
-    const resourceList = [{languageId: 'en', resourceId: 'ult'}];
-    const expectedResolve = 'success';
+    const languageList = [];
+    const expectedError = 'Language list is empty';
 
     // then
-    await expect(resourcesDownloadHelpers.downloadResources(resourceList)).resolves.toEqual(expectedResolve);
+    await expect(resourcesDownloadHelpers.downloadResources(languageList)).rejects.toEqual(expectedError);
+  });
+
+  it('Test resourcesDownloadHelpers.downloadResources() for "hi" should download, process and deploy all resources', async () => {
+    const languageList = ['hi'];
+    const expectedResourcesDownloaded = 3;
+    await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources)
+      .then(resourcesDownloaded => {
+        expect(resourcesDownloaded.length).toEqual(expectedResourcesDownloaded);
+      })
+      .catch(err => {
+        expect(err).not.toBeTruthy(); // shouldn't get here
+      });
+  });
+
+  it('Test resourcesDownloadHelpers.downloadResources() for "grc" should download, process and deploy the Bible and the tW Group Data', async () => {
+    const languageList = ['grc'];
+    const expectedResourcesDownloaded = 1;
+    const resourcesDownloaded = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources);
+    expect(resourcesDownloaded.length).toEqual(expectedResourcesDownloaded);
+  });
+
+  it('Test resourcesDownloadHelpers.processTranslationAcademy() for populated language list with no resources should pass', async () => {
+    // given
+    const languageList = ['en', 'hi'];
+    const resources = [];
+    const expectedResolve = [];
+
+    // then
+    await expect(resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources)).resolves.toEqual(expectedResolve);
   });
 });

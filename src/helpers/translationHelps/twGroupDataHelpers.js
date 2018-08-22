@@ -6,31 +6,30 @@ import * as resourcesHelpers from '../resourcesHelpers';
 
 /**
  * @description Generates the tW Group Data files from the given aligned Bible
- * @param {string} biblePath Path to the Bible with aligned data
- * @param {string} outputPath Path where the translationWords group data is to be placed WITHOUT version
- * @return {string} Path where tW was generated with version
+ * @param {String} biblePath Path to the Bible with aligned data
+ * @param {String} outputPath Path where the translationWords group data is to be placed WITHOUT version
+ * @return {Boolean} true if success
  */
 export const generateTwGroupDataFromAlignedBible = (biblePath, outputPath) => {
   if (!fs.pathExistsSync(biblePath)) {
-    return null;
+    return false;
   }
   const version = resourcesHelpers.getVersionFromManifest(biblePath);
   if (!version) {
-    return null;
+    return false;
   }
-  const twOutputPath = path.join(outputPath, 'v' + version);
   let books = bible.BIBLE_LIST_NT.slice(0);
   books.forEach(bookName => {
-    convertBookVerseObjectsToTwData(biblePath, twOutputPath, bookName);
+    convertBookVerseObjectsToTwData(biblePath, outputPath, bookName);
   });
-  return twOutputPath;
+  return true;
 };
 
 /**
  * @description Gets verseObjects of a book and converts to a tW data object to save to file
- * @param {string} biblePath Usually path to the UGNT
- * @param {string} twPath The output path for tW files
- * @param {string} bookName Book in format, e.g. '41-MAT'
+ * @param {String} biblePath Usually path to the UGNT
+ * @param {String} twPath The output path for tW files
+ * @param {String} bookName Book in format, e.g. '41-MAT'
  */
 function convertBookVerseObjectsToTwData(biblePath, twPath, bookName) {
   const bookId = getbookId(bookName);
@@ -62,10 +61,10 @@ function convertBookVerseObjectsToTwData(biblePath, twPath, bookName) {
 
 /**
  * @description Populates the groupData array with this verseObject and returns its own groupData for milestones
- * @param {object} groupData Group Data object
- * @param {object} verseObject Verse object
- * @param {bool} isMilestone If true, all word objects will be added to the group data
- * @return {object} Returns group data for this verse object
+ * @param {Object} groupData Group Data object
+ * @param {Object} verseObject Verse object
+ * @param {Boolean} isMilestone If true, all word objects will be added to the group data
+ * @return {Object} Returns group data for this verse object
  */
 function populateGroupDataFromVerseObject(groupData, verseObject, isMilestone = false) {
   var myGroupData = {
@@ -157,8 +156,8 @@ function populateTwDataFromGroupData(twData, groupData, bookId, chapter, verse) 
 
 /**
  * @description Splits book code out of book name, for example 'mat' from '41-MAT'
- * @param {string} bookName Book in format '41-MAT'
- * @return {string} The book ID, e.g. 'mat'
+ * @param {String} bookName Book in format '41-MAT'
+ * @return {String} The book ID, e.g. 'mat'
  */
 function getbookId(bookName) {
   return bookName.split('-')[1].toLowerCase();
