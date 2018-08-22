@@ -1,6 +1,6 @@
 {
   "name": "tc-source-content-updater",
-  "version": "0.0.1",
+  "version": "0.2.0",
   "description": "Module that updates source content for the desktop application translationCore.",
   "main": "lib/index.js",
   "scripts": {
@@ -16,7 +16,9 @@
     ],
     "coverageDirectory": "coverage",
     "testURL": "http://localhost",
-    "setupFiles": ["./testSetup/global.js"]
+    "setupFiles": [
+      "./testSetup/global.js"
+    ]
   },
   "repository": {
     "type": "git",
