@@ -32,7 +32,8 @@ export function download(uri, dest, progressCallback) {
 
   return new Promise((resolve, reject) => {
     const filePath = path.join(__dirname, '../../../__tests__/fixtures', parsedUrl.host, parsedUrl.path);
-    fs.writeFileSync(dest, fs.__actual.readFileSync(filePath));
+    const content = fs.__actual.readFileSync(filePath);
+    fs.writeFileSync(dest, content);
     resolve({
       uri,
       dest,

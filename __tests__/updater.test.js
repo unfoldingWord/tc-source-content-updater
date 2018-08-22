@@ -1,16 +1,7 @@
 import Updater from '../src';
 import fs from 'fs-extra';
-import nock from 'nock';
 
-jest.mock('../src/helpers/downloadHelpers');
-jest.mock('../src/helpers/zipFileHelpers');
-
-const catalog = require('./fixtures/api.door43.org/v3/subjects/pivoted.json');
-nock('https://api.door43.org:443')
-  .persist()
-  .get('/v3/subjects/pivoted.json')
-  .reply(200, JSON.stringify(catalog));
-
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 describe('Updater.downloadResources', () => {
   const resourcesPath = '/tmp/resources'; // a mocked resources directory
 

@@ -130,13 +130,13 @@ export function getLatestVersionInPath(resourcePath) {
  * @param {string} resourcesPath Path to the resources directory
  * @return {String} Path to the resource's import directory
  */
-export function unzipResource(resource, zipFilePath, resourcesPath) {
+export const unzipResource = async (resource, zipFilePath, resourcesPath) => {
   const importsPath = path.join(resourcesPath, 'imports');
   fs.ensureDirSync(importsPath);
   const importPath = zipFilePath.split('.').slice(0, -1).join('.');
-  zipFileHelpers.extractZipFile(zipFilePath, importPath);
+  await zipFileHelpers.extractZipFile(zipFilePath, importPath);
   return importPath;
-}
+};
 
 /**
  * Gets the single subdirector of an extracted zip file path

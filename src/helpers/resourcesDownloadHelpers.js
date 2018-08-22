@@ -7,6 +7,57 @@ import * as downloadHelpers from './downloadHelpers';
 import * as moveResourcesHelpers from './moveResourcesHelpers';
 
 /**
+ * @description Downloads the resources that need to be updated for a given language using the DCS API
+ * @param {Object.<{
+ *             languageId: String,
+ *             resourceId: String,
+ *             localModifiedTime: String,
+ *             remoteModifiedTime: String,
+ *             downloadUrl: String,
+ *             version: String,
+ *             subject: String,
+ *             catalogEntry: {langResource, bookResource, format}
+ *           }>} resource - resource to download
+ * @param {String} resourcesPath Path to the resources directory
+ * @param {Function} callback Callback when downloaded
+ * @param {Function} errCallback Callback for errors
+ * @return {Promise} Download promise
+ */
+export const downloadResource = async (resource, resourcesPath) => {
+  const importsPath = path.join(resourcesPath, 'imports');
+  fs.ensureDirSync(importsPath);
+  const zipFileName = resource.languageId + '_' + resource.resourceId + '_v' + resource.version + '.zip';
+  const zipFilePath = path.join(importsPath, zipFileName);
+  await downloadHelpers.download(resource.downloadUrl, zipFilePath);
+  const importPath = await resourcesHelpers.unzipResource(resource, zipFilePath, resourcesPath);
+  const importSubdirPath = resourcesHelpers.getSubdirOfUnzippedResource(importPath);
+  const processedFilesPath = resourcesHelpers.processResource(resource, importSubdirPath);
+  if (processedFilesPath) {
+    // Extra step if the resource is the Greek UGNT or Hebrew UHB
+    if ((resource.languageId === 'grc' && resource.resourceId === 'ugnt') ||
+      (resource.languageId === 'hbo' && resource.resourceId === 'uhb')) {
+      const twGroupDataPath = resourcesHelpers.makeTwGroupDataResource(resource, processedFilesPath);
+      const twGroupDataResourcesPath = path.join(resourcesPath, resource.languageId, 'translationHelps', 'translationWords');
+      const moveSuccess = moveResourcesHelpers.moveResources(twGroupDataPath, twGroupDataResourcesPath);
+      if (!moveSuccess) {
+        throw Error('Unable to create tW Group Data from ' + resource.resourceId + ' Bible');
+      }
+    }
+    const resourcePath = resourcesHelpers.getActualResourcePath(resource, resourcesPath);
+    const moveSuccess = moveResourcesHelpers.moveResources(processedFilesPath, resourcePath);
+    if (!moveSuccess) {
+      throw Error('Unable to copy resource into the resources directory');
+    }
+    resourcesHelpers.removeAllButLatestVersion(path.dirname(resourcePath));
+  } else {
+    throw Error('Failed to process resource "' + resource.resourceId + '" for language "' + resource.languageId + '"');
+  }
+  fs.unlink(zipFilePath);
+  fs.remove(importPath);
+  return resource;
+};
+
+/**
  * @description Downloads the resources that need to be updated for the given languages using the DCS API
  * @param {Array} languageList - Array of languages to download the resources for
  * @param {String} resourcesPath - Path to the resources directory where each resource will be placed
@@ -43,79 +94,8 @@ export const downloadResources = (languageList, resourcesPath, resources) => {
     downloadableResources.forEach(resource => {
       if (!resource)
         return;
-      const promise = new Promise((resolve, reject) => {
-        let zipFilePath = null;
-        let importPath = null;
-        let processedFilesPath = null;
-        let twGroupDataPath = null;
-        downloadResource(resource, resourcesPath)
-        .then(async result => {
-          zipFilePath = result.dest;
-          importPath = resourcesHelpers.unzipResource(resource, zipFilePath, resourcesPath);
-          const importSubdirPath = resourcesHelpers.getSubdirOfUnzippedResource(importPath);
-          processedFilesPath = resourcesHelpers.processResource(resource, importSubdirPath);
-          if (processedFilesPath) {
-            // Extra step if the resource is the Greek UGNT or Hebrew UHB
-            if ((resource.languageId === 'grc' && resource.resourceId === 'ugnt') ||
-                (resource.languageId === 'hbo' && resource.resourceId === 'uhb')) {
-              twGroupDataPath = resourcesHelpers.makeTwGroupDataResource(resource, processedFilesPath);
-              const twGroupDataResourcesPath = path.join(resourcesPath, resource.languageId, 'translationHelps', 'translationWords');
-              const moveSuccess = moveResourcesHelpers.moveResources(twGroupDataPath, twGroupDataResourcesPath);
-              if (!moveSuccess) {
-                reject('Unable to create tW Group Data from ' + resource.resourceId + ' Bible');
-                return;
-              }
-            }
-            const resourcePath = resourcesHelpers.getActualResourcePath(resource, resourcesPath);
-            const moveSuccess = moveResourcesHelpers.moveResources(processedFilesPath, resourcePath);
-            if (!moveSuccess) {
-              reject('Unable to copy resource into the resources directory');
-              return;
-            }
-            resourcesHelpers.removeAllButLatestVersion(path.dirname(resourcePath));
-          } else {
-            reject('Failed to process resource "' + resource.resourceId + '" for language "' + resource.languageId + '"');
-            return;
-          }
-          resolve(resource);
-        })
-        .catch(reject)
-        .finally(() => {
-          fs.unlink(zipFilePath);
-          fs.remove(importPath);
-          if (processedFilesPath)
-            fs.remove(processedFilesPath);
-          if (twGroupDataPath)
-            fs.remove(twGroupDataPath);
-        });
-      });
-      promises.push(promise);
+      promises.push(downloadResource(resource, resourcesPath));
     });
     Promise.all(promises).then(resolve, reject);
   });
 };
-
-/**
- * @description Downloads the resources that need to be updated for a given language using the DCS API
- * @param {Object.<{
- *             languageId: String,
- *             resourceId: String,
- *             localModifiedTime: String,
- *             remoteModifiedTime: String,
- *             downloadUrl: String,
- *             version: String,
- *             subject: String,
- *             catalogEntry: {langResource, bookResource, format}
- *           }>} resource - resource to download
- * @param {String} resourcesPath Path to the resources directory
- * @param {Function} callback Callback when downloaded
- * @param {Function} errCallback Callback for errors
- * @return {Promise} Download promise
- */
-export function downloadResource(resource, resourcesPath) {
-  const importsPath = path.join(resourcesPath, 'imports');
-  fs.ensureDirSync(importsPath);
-  const zipFileName = resource.languageId + '_' + resource.resourceId + '_v' + resource.version + '.zip';
-  const zipFilePath = path.join(importsPath, zipFileName);
-  return downloadHelpers.download(resource.downloadUrl, zipFilePath);
-}

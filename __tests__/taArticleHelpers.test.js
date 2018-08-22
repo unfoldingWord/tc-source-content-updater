@@ -3,8 +3,6 @@ import path from 'path-extra';
 // helpers
 import * as taArticleHelpers from '../src/helpers/translationHelps/taArticleHelpers';
 
-jest.mock('fs-extra');
-
 describe('Tests for taArticleHelpers', function() {
   beforeEach(() => {
     fs.__resetMockFS();

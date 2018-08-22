@@ -1,4 +1,3 @@
-jest.mock('fs-extra');
 import AdmZip from 'adm-zip';
 import tmp from 'tmp';
 import fs from 'fs-extra';

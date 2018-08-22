@@ -15,7 +15,8 @@
       "!**/node_modules/**"
     ],
     "coverageDirectory": "coverage",
-    "testURL": "http://localhost"
+    "testURL": "http://localhost",
+    "setupFiles": ["./testSetup/global.js"]
   },
   "repository": {
     "type": "git",

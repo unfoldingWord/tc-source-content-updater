@@ -7,5 +7,5 @@ import AdmZip from 'adm-zip';
  */
 export const extractZipFile = (zipFilePath, dest) => {
   const zip = new AdmZip(zipFilePath);
-  zip.extractAllTo(dest);
+  zip.extractAllTo(dest, true);
 };

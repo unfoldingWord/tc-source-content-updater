@@ -71,26 +71,43 @@ function __dumpMockFS() {
   console.log("mock FS:\n" + fsList);
 }
 
-function __listMockFS(directoryPath) {
+function __listMockFS(directoryPath, recursive = false) {
   if (!directoryPath) {
-    console.log("mockFS ls:\n", JSON.stringify(Object.keys(mockFS).sort(), null, 2));
-  } else if (mockFS[directoryPath] === undefined) {
+    directoryPath = '/';
+    recursive = true;
+  }
+  if (mockFS[directoryPath] === undefined) {
     console.log("mockFS - No directory: " + directoryPath);
   } else if (statSync(directoryPath).isFile()) {
     console.log("mockFS ls:\n", directoryPath);
   } else {
-    let log = "mockFS ls of " + directoryPath + ":\n";
-    const content = mockFS[directoryPath].sort();
+    console.log(__getListMockFS(directoryPath, recursive));
+  }
+}
+
+function __getListMockFS(directoryPath, recursive = false) {
+  let ls = directoryPath + ":\n";
+  const content = mockFS[directoryPath].sort();
+  content.forEach(item => {
+    const fullPath = path.join(directoryPath, item);
+    const isDir = statSync(path.join(fullPath)).isDirectory();
+    if (isDir) {
+      item += '/';
+    }
+    if (mockFS[fullPath])
+      item += "\t" + mockFS[fullPath].length;
+    ls += "\t" + item + "\n";
+  });
+  if (recursive) {
     content.forEach(item => {
       const fullPath = path.join(directoryPath, item);
-      if (statSync(path.join(fullPath)).isDirectory()) {
-        item += '/';
+      const isDir = statSync(path.join(fullPath)).isDirectory();
+      if (isDir && mockFS[fullPath] && mockFS[fullPath].length) {
+        ls += __getListMockFS(fullPath, recursive);
       }
-      item += "\t" + mockFS[fullPath].length;
-      log += "\t" + item + "\n";
     });
-    console.log(log);
   }
+  return ls;
 }
 
 function __catMockFS(folder) {
