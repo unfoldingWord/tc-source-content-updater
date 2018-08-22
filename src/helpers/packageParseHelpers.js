@@ -55,23 +55,18 @@ export function parseManifest(extractedFilePath, outputPath) {
 export function parseBiblePackage(resourceEntry, extractedFilesPath, resultsPath) {
   const index = {};
   try {
-    if (!resourceEntry) {
-      console.log("resourceEntry missing");
-      return false;
-    }
+    if (!resourceEntry) 
+      throw Error(resourceEntry.languageId + "_" + resourceEntry.resourceId + ": resourceEntry missing");
     if (!fs.pathExistsSync(extractedFilesPath)) {
-      console.log("Source folder does not exist: " + extractedFilesPath);
-      return false;
+      throw Error(resourceEntry.languageId + "_" + resourceEntry.resourceId + ": Source folder does not exist: " + extractedFilesPath);
     }
     if (!resultsPath) {
-      console.log("resultsPath missing");
-      return false;
+      throw Error(resourceEntry.languageId + "_" + resourceEntry.resourceId + ": resultsPath missing");
     }
     const manifest = parseManifest(extractedFilesPath,
       resultsPath);
     if (!manifest.projects) {
-      console.log("Manifest does not contain index to books");
-      return false;
+      throw Error(resourceEntry.languageId + "_" + resourceEntry.resourceId + ": Manifest does not contain index to books");
     }
 
     manifest.catalog_modified_time = resourceEntry.remoteModifiedTime;
@@ -88,9 +83,9 @@ export function parseBiblePackage(resourceEntry, extractedFilesPath, resultsPath
     }
     saveIndex(resultsPath, index);
   } catch (error) {
-    console.log("Error Parsing bible:");
+    console.log(resourceEntry.languageId + "_" + resourceEntry.resourceId + ": Error Parsing Bible:");
     console.log(error);
-    return false;
+    throw Error(resourceEntry.languageId + "_" + resourceEntry.resourceId + ": Error Parsing Bible");
   }
   return true;
 }

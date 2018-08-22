@@ -1,5 +1,6 @@
 import fs from 'fs-extra';
 import path from 'path-extra';
+import rimraf from 'rimraf';
 // helpers
 import * as resourcesHelpers from './resourcesHelpers';
 import * as parseHelpers from './parseHelpers';
@@ -24,6 +25,11 @@ import * as moveResourcesHelpers from './moveResourcesHelpers';
  * @return {Promise} Download promise
  */
 export const downloadResource = async (resource, resourcesPath) => {
+  if (!resource)
+    throw Error('No resource given');
+  if (!resourcesPath)
+    throw Error('No path to the resources directory given');
+  fs.ensureDirSync(resourcesPath);
   const importsPath = path.join(resourcesPath, 'imports');
   fs.ensureDirSync(importsPath);
   const zipFileName = resource.languageId + '_' + resource.resourceId + '_v' + resource.version + '.zip';
@@ -52,8 +58,8 @@ export const downloadResource = async (resource, resourcesPath) => {
   } else {
     throw Error('Failed to process resource "' + resource.resourceId + '" for language "' + resource.languageId + '"');
   }
-  fs.unlink(zipFilePath);
-  fs.remove(importPath);
+  // rimraf.sync(zipFilePath, fs);
+  // rimraf.sync(importPath, fs);
   return resource;
 };
 
@@ -80,6 +86,12 @@ export const downloadResources = (languageList, resourcesPath, resources) => {
       reject('Language list is empty');
       return;
     }
+    if (!resourcesPath) {
+      reject('No path to the resources directory given');
+      return;
+    }
+    fs.ensureDirSync(resourcesPath);
+    const importsDir = path.join(resourcesPath, 'imports');
     let downloadableResources = [];
     languageList.forEach(languageId => {
       downloadableResources = downloadableResources.concat(parseHelpers.getResourcesForLanguage(resources, languageId));
@@ -96,6 +108,10 @@ export const downloadResources = (languageList, resourcesPath, resources) => {
         return;
       promises.push(downloadResource(resource, resourcesPath));
     });
-    Promise.all(promises).then(resolve, reject);
+    Promise.all(promises)
+      .then(resolve, reject)
+      .finally(() => {
+        // rimraf.sync(importsDir, fs);
+      });
   });
 };

@@ -175,6 +175,10 @@ export function processResource(resource, extractedFilesPath) {
     default:
       fs.copySync(extractedFilesPath, processedFilesPath);
   }
+  let manifest = getResourceManifest(extractedFilesPath);
+  if (!getResourceManifest(processedFilesPath) && manifest) {
+    fs.writeJsonSync(path.join(processedFilesPath, 'mainfest.json'), manifest);
+  }
   return processedFilesPath;
 }
 
@@ -187,7 +191,7 @@ export function processResource(resource, extractedFilesPath) {
 export function getActualResourcePath(resource, resourcesPath) {
   const languageId = resource.languageId;
   let resourceName = resource.resourceId;
-  let type = 'bible';
+  let type = 'bibles';
   if (translationHelps[resourceName]) {
     resourceName = translationHelps[resourceName];
     type = 'translationHelps';
