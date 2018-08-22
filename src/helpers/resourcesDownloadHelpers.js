@@ -38,6 +38,7 @@ export const downloadResource = async (resource, resourcesPath) => {
   const importPath = await resourcesHelpers.unzipResource(resource, zipFilePath, resourcesPath);
   const importSubdirPath = resourcesHelpers.getSubdirOfUnzippedResource(importPath);
   const processedFilesPath = resourcesHelpers.processResource(resource, importSubdirPath);
+  console.log('parsed ', resource.resourceId);
   if (processedFilesPath) {
     // Extra step if the resource is the Greek UGNT or Hebrew UHB
     if ((resource.languageId === 'grc' && resource.resourceId === 'ugnt') ||
@@ -58,8 +59,8 @@ export const downloadResource = async (resource, resourcesPath) => {
   } else {
     throw Error('Failed to process resource "' + resource.resourceId + '" for language "' + resource.languageId + '"');
   }
-  // rimraf.sync(zipFilePath, fs);
-  // rimraf.sync(importPath, fs);
+  rimraf.sync(zipFilePath, fs);
+  rimraf.sync(importPath, fs);
   return resource;
 };
 
@@ -111,7 +112,7 @@ export const downloadResources = (languageList, resourcesPath, resources) => {
     Promise.all(promises)
       .then(resolve, reject)
       .finally(() => {
-        // rimraf.sync(importsDir, fs);
+        rimraf.sync(importsDir, fs);
       });
   });
 };

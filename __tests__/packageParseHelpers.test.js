@@ -95,9 +95,12 @@ describe('parseBiblePackage()', () => {
     fs.__loadFilesIntoMockFs([sourceBible], './__tests__/fixtures', PROJECTS_PATH);
     let packagePath = path.join(PROJECTS_PATH, sourceBible);
     fs.removeSync(path.join(packagePath, "manifest.yaml"));
-    const results = packageParseHelpers.parseBiblePackage(grcUntResource, packagePath,
-      resultsPath);
-    expect(results).not.toBeTruthy();
+    try {
+      const results = packageParseHelpers.parseBiblePackage(grcUntResource, packagePath, resultsPath);
+      expect(results).not.toBeTruthy(); // should not get here;
+    } catch (err) {
+      expect(err).toBeTruthy();
+    }
   });
 
   it('should fail if packagePath is not present', () => {
@@ -105,16 +108,22 @@ describe('parseBiblePackage()', () => {
     const PROJECTS_PATH = path.join(ospath.home(), 'resources/import');
     let packagePath = path.join(PROJECTS_PATH, sourceBible);
     const resultsPath = path.join(ospath.home(), 'resources/results');
-    const results = packageParseHelpers.parseBiblePackage(enUltResource, packagePath,
-      resultsPath);
-    expect(results).not.toBeTruthy();
+    try {
+      const results = packageParseHelpers.parseBiblePackage(enUltResource, packagePath, resultsPath);
+      expect(results).not.toBeTruthy(); // should not get here;
+    } catch (err) {
+      expect(err).toBeTruthy();
+    }
   });
 
   it('null packagePath should fail', () => {
     const resultsPath = path.join(ospath.home(), 'resources/results');
-    const results = packageParseHelpers.parseBiblePackage(enUltResource, null,
-      resultsPath);
-    expect(results).not.toBeTruthy();
+    try {
+      const results = packageParseHelpers.parseBiblePackage(enUltResource, null, resultsPath);
+      expect(results).not.toBeTruthy(); // should not get here;
+    } catch (err) {
+      expect(err).toBeTruthy();
+    }
   });
 
   it('null resultsPath should fail', () => {
@@ -122,9 +131,12 @@ describe('parseBiblePackage()', () => {
     const PROJECTS_PATH = path.join(ospath.home(), 'resources/import');
     fs.__loadFilesIntoMockFs([sourceBible], './__tests__/fixtures', PROJECTS_PATH);
     let packagePath = path.join(PROJECTS_PATH, sourceBible);
-    const results = packageParseHelpers.parseBiblePackage(grcUntResource, packagePath,
-      null);
-    expect(results).not.toBeTruthy();
+    try {
+      const results = packageParseHelpers.parseBiblePackage(grcUntResource, packagePath, null);
+      expect(results).not.toBeTruthy(); // should not get here;
+    } catch (err) {
+      expect(err).toBeTruthy();
+    }
   });
 
   it('null resourceEntry should fail', () => {
@@ -133,9 +145,12 @@ describe('parseBiblePackage()', () => {
     fs.__loadFilesIntoMockFs([sourceBible], './__tests__/fixtures', PROJECTS_PATH);
     let packagePath = path.join(PROJECTS_PATH, sourceBible);
     const resultsPath = path.join(ospath.home(), 'resources/results');
-    const results = packageParseHelpers.parseBiblePackage(null, packagePath,
-      resultsPath);
-    expect(results).not.toBeTruthy();
+    try {
+      const results = packageParseHelpers.parseBiblePackage(null, packagePath, resultsPath);
+      expect(results).not.toBeTruthy(); // should not get here;
+    } catch (err) {
+      expect(err).toBeTruthy();
+    }
   });
 });
 
