@@ -157,28 +157,34 @@ export function getSubdirOfUnzippedResource(extractedFilesPath) {
 /**
  * @description Processes a resource in the imports directory as needed
  * @param {Object} resource Resource object
- * @param {String} extractedFilesPath Path the the import directory of this resource
+ * @param {String} sourcePath Path the the import directory of this resource
  * @return {String} Path to the directory of the processed files
  */
-export function processResource(resource, extractedFilesPath) {
-  const processedFilesPath = extractedFilesPath + '_processed';
+export function processResource(resource, sourcePath) {
+  if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId)
+    throw Error(formatError(resource, errors.RESOURCE_NOT_GIVEN));
+  if (!sourcePath)
+    throw Error(formatError(resource, errors.SOURCE_PATH_NOT_GIVEN));
+  if (!fs.pathExistsSync(sourcePath))
+    throw Error(formatError(resource, errors.SOURCE_PATH_NOT_EXIST));
+  const processedFilesPath = sourcePath + '_processed';
   fs.ensureDirSync(processedFilesPath);
   switch (resource.subject) {
     case 'Translation_Words':
-      twArticleHelpers.processTranslationWords(resource, extractedFilesPath, processedFilesPath);
+      twArticleHelpers.processTranslationWords(resource, sourcePath, processedFilesPath);
       break;
     case 'Translation_Academy':
-      taArticleHelpers.processTranslationAcademy(resource, extractedFilesPath, processedFilesPath);
+      taArticleHelpers.processTranslationAcademy(resource, sourcePath, processedFilesPath);
       break;
     case 'Bible':
     case 'Aligned_Bible':
     case 'Greek_New_Testament':
-      packageParseHelpers.parseBiblePackage(resource, extractedFilesPath, processedFilesPath);
+      packageParseHelpers.parseBiblePackage(resource, sourcePath, processedFilesPath);
       break;
     default:
-      fs.copySync(extractedFilesPath, processedFilesPath);
+      fs.copySync(sourcePath, processedFilesPath);
   }
-  let manifest = getResourceManifest(extractedFilesPath);
+  let manifest = getResourceManifest(sourcePath);
   if (!getResourceManifest(processedFilesPath) && manifest) {
     fs.writeJsonSync(path.join(processedFilesPath, 'mainfest.json'), manifest);
   }
