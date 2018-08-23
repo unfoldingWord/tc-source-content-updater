@@ -38,7 +38,6 @@ export const downloadResource = async (resource, resourcesPath) => {
   const importPath = await resourcesHelpers.unzipResource(resource, zipFilePath, resourcesPath);
   const importSubdirPath = resourcesHelpers.getSubdirOfUnzippedResource(importPath);
   const processedFilesPath = resourcesHelpers.processResource(resource, importSubdirPath);
-  console.log('parsed ', resource.resourceId);
   if (processedFilesPath) {
     // Extra step if the resource is the Greek UGNT or Hebrew UHB
     if ((resource.languageId === 'grc' && resource.resourceId === 'ugnt') ||
