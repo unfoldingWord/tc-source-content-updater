@@ -16,49 +16,33 @@ describe('Tests for resourcesDownloadHelpers', function() {
   });
 
   it('Test resourcesDownloadHelpers.downloadResources() for null', async () => {
-    // given
     const languageList = null;
     const expectedError = 'Language list is empty';
-
-    // then
-    await expect(resourcesDownloadHelpers.downloadResources(languageList)).rejects.toEqual(expectedError);
+    expect(resourcesDownloadHelpers.downloadResources(languageList)).rejects.toEqual(expectedError);
   });
 
   it('Test resourcesDownloadHelpers.downloadResources() for empty list', async () => {
-    // given
     const languageList = [];
     const expectedError = 'Language list is empty';
-
-    // then
-    await expect(resourcesDownloadHelpers.downloadResources(languageList)).rejects.toEqual(expectedError);
+    expect(resourcesDownloadHelpers.downloadResources(languageList)).rejects.toEqual(expectedError);
   });
 
   it('Test resourcesDownloadHelpers.downloadResources() for "hi" should download, process and deploy all resources', async () => {
     const languageList = ['hi'];
-    const expectedResourcesDownloaded = 3;
-    await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources)
-      .then(resourcesDownloaded => {
-        expect(resourcesDownloaded.length).toEqual(expectedResourcesDownloaded);
-      })
-      .catch(err => {
-        expect(err).not.toBeTruthy(); // shouldn't get here
-      });
+    const expectedLength = 3;
+    expect(resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources)).resolves.toHaveLength(expectedLength);
   });
 
   it('Test resourcesDownloadHelpers.downloadResources() for "grc" should download, process and deploy the Bible and the tW Group Data', async () => {
     const languageList = ['grc'];
-    const expectedResourcesDownloaded = 1;
-    const resourcesDownloaded = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources);
-    expect(resourcesDownloaded.length).toEqual(expectedResourcesDownloaded);
+    const expectedLength = 1;
+    expect(resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources)).resolves.toHaveLength(expectedLength);
   });
 
   it('Test resourcesDownloadHelpers.processTranslationAcademy() for populated language list with no resources should pass', async () => {
-    // given
     const languageList = ['en', 'hi'];
     const resources = [];
     const expectedResolve = [];
-
-    // then
-    await expect(resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources)).resolves.toEqual(expectedResolve);
+    expect(resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources)).resolves.toEqual(expectedResolve);
   });
 });

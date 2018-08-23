@@ -26,7 +26,7 @@ describe('moveResourcesHelpers', () => {
     const deepFolder = fs.__catMockFS(path.join(
         toFolder, 'bibles', 'v1', 'mat'));
     const chapter1 = JSON.stringify([
-      "1.json"
+      '1.json'
     ], null, 2);
 
     expect(res).toEqual(true);
@@ -38,7 +38,7 @@ describe('moveResourcesHelpers', () => {
     const deepFolder = fs.__catMockFS(path.join(
         toFolder, 'lexicons', 'ugl', 'v1', 'content'));
     const aWord = JSON.stringify([
-      "beauty.json"
+      'beauty.json'
     ], null, 2);
 
     expect(res).toEqual(true);
@@ -50,7 +50,7 @@ describe('moveResourcesHelpers', () => {
     const deepFolder = fs.__catMockFS(path.join(
         toFolder, 'translationHelps', 'translationAcademy', 'v9', 'process'));
     const share = JSON.stringify([
-      "share-content.md"
+      'share-content.md'
     ], null, 2);
 
     expect(res).toEqual(true);

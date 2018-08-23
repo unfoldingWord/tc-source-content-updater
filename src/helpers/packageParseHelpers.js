@@ -8,8 +8,12 @@ import path from 'path-extra';
 import usfm from 'usfm-js';
 import * as bible from '../resources/bible';
 import assert from 'assert';
-import {generateBibleManifest} from "./biblesHelpers";
-import {getResourceManifest} from "./resourcesHelpers";
+import {isObject} from 'util';
+// helpers
+import {generateBibleManifest} from './biblesHelpers';
+import * as resourcesHelpers from './resourcesHelpers';
+// constants
+import * as errors from '../errors';
 
 /**
  * @description - This function outputs chapter files from an input usfm file
@@ -32,65 +36,54 @@ export const parseUsfmOfBook = (usfmPath, outputPath) => {
  * @return {Object} new manifest data
  */
 export function parseManifest(extractedFilePath, outputPath) {
-  let oldManifest = getResourceManifest(extractedFilePath);
+  let oldManifest = resourcesHelpers.getResourceManifest(extractedFilePath);
   return generateBibleManifest(oldManifest, outputPath);
 }
 
 /**
  * Parse the bible package to generate json bible contents, manifest, and index
  * @param {{
- *                   languageId: String,
- *                   resourceId: String,
- *                   localModifiedTime: String,
- *                   remoteModifiedTime: String,
- *                   downloadUrl: String,
- *                   version: String,
- *                   subject: String,
- *                   catalogEntry: {langResource, bookResource, format}
- *                 }} resourceEntry - resource entry for download
- * @param {String} extractedFilesPath - path to unzipped files from bible package
- * @param {String} resultsPath - path to store processed bible
+ *          languageId: String,
+ *          resourceId: String,
+ *          localModifiedTime: String,
+ *          remoteModifiedTime: String,
+ *          downloadUrl: String,
+ *          version: String,
+ *          subject: String,
+ *          catalogEntry: {langResource, bookResource, format}
+ *        }} resource - resource entry for download
+ * @param {String} sourcePath - path to unzipped files from bible package
+ * @param {String} outputPath - path to store processed bible
  * @return {Boolean} true if success
  */
-export function parseBiblePackage(resourceEntry, extractedFilesPath, resultsPath) {
+export function parseBiblePackage(resource, sourcePath, outputPath) {
   const index = {};
+  if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId)
+    throw Error(resourcesHelpers.formatError(resource, errors.RESOURCE_NOT_GIVEN));
+  if (!sourcePath)
+    throw Error(resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_GIVEN));
+  if (!fs.pathExistsSync(sourcePath))
+    throw Error(resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_EXIST + ": " + sourcePath));
+  if (!outputPath)
+    throw Error(resourcesHelpers.formatError(resource, errors.OUTPUT_PATH_NOT_GIVEN));
   try {
-    if (!resourceEntry) {
-      console.log("resourceEntry missing");
-      return false;
-    }
-    if (!fs.pathExistsSync(extractedFilesPath)) {
-      console.log("Source folder does not exist: " + extractedFilesPath);
-      return false;
-    }
-    if (!resultsPath) {
-      console.log("resultsPath missing");
-      return false;
-    }
-    const manifest = parseManifest(extractedFilesPath,
-      resultsPath);
-    if (!manifest.projects) {
-      console.log("Manifest does not contain index to books");
-      return false;
-    }
-
-    manifest.catalog_modified_time = resourceEntry.remoteModifiedTime;
-    let savePath = path.join(resultsPath, 'manifest.json');
+    const manifest = parseManifest(sourcePath, outputPath);
+    if (!manifest.projects)
+      throw Error(resourcesHelpers.formatError(resource, errors.MANIFEST_MISSING_BOOKS));
+    manifest.catalog_modified_time = resource.remoteModifiedTime;
+    let savePath = path.join(outputPath, 'manifest.json');
     fs.outputJsonSync(savePath, manifest);
-
     const projects = manifest.projects || [];
     for (let project of projects) {
       if (project.identifier && project.path) {
-        let bookPath = path.join(resultsPath, project.identifier);
-        parseUsfmOfBook(path.join(extractedFilesPath, project.path), bookPath);
+        let bookPath = path.join(outputPath, project.identifier);
+        parseUsfmOfBook(path.join(sourcePath, project.path), bookPath);
         indexBook(bookPath, index, project.identifier);
       }
     }
-    saveIndex(resultsPath, index);
+    saveIndex(outputPath, index);
   } catch (error) {
-    console.log("Error Parsing bible:");
-    console.log(error);
-    return false;
+    throw Error(resourcesHelpers.formatError(resource, errors.ERROR_PARSING_BIBLE + ": " + error.message));
   }
   return true;
 }
@@ -124,7 +117,6 @@ function indexBook(bookPath, index, bookCode) {
     if (ugntVerses.length !== expectedVerseCount) {
       console.warn(`WARNING: ${bookCode} - in chapter ${chapter}, found ${ugntVerses.length} verses but should be ${expectedVerseCount} verses`);
     }
-
     // add verses
     for (let verse of ugntVerses) {
       let words = ugntChapter[verse];
