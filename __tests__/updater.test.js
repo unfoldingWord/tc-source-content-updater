@@ -18,9 +18,16 @@ describe('Updater.downloadResources', () => {
     expect(resources.length).toEqual(1);
   });
 
-  it('should fail', async () => {
+  it('should fail due to language list empty', async () => {
     const updater = new Updater();
     const expectedError = errors.LANGUAGE_LIST_EMPTY;
     expect(updater.downloadResources()).rejects.toEqual(expectedError);
+  });
+
+  it('should fail due to resources path not given', async () => {
+    const updater = new Updater();
+    const languageIds = ['en'];
+    const expectedError = errors.RESOURCES_PATH_NOT_GIVEN;
+    expect(updater.downloadResources(languageIds)).rejects.toEqual(expectedError);
   });
 });
