@@ -1,20 +1,31 @@
 import fs from 'fs-extra';
 import path from 'path-extra';
+import {isObject} from 'util';
+// helpers
+import * as resourcesHelpers from '../resourcesHelpers';
+// constants
+import * as errors from '../../errors';
 
 /**
  * @description Processes the extracted files for translationWord to cerate the folder
  * structure and produce the index.js file for the language with the title of each article.
  * @param {Object} resource - Resource object
- * @param {String} extractedFilesPath - Path to the extracted files that came from the zip file from the catalog
+ * @param {String} sourcePath - Path to the extracted files that came from the zip file from the catalog
  * @param {String} outputPath - Path to place the processed resource files WIHTOUT the version in the path
  * @return {Boolean} true if success
  */
-export function processTranslationWords(resource, extractedFilesPath, outputPath) {
-  if (!fs.pathExistsSync(extractedFilesPath))
-    throw Error(extractedFilesPath + ' does not exist');
+export function processTranslationWords(resource, sourcePath, outputPath) {
+  if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId)
+    throw Error(resourcesHelpers.formatError(resource, errors.RESOURCE_NOT_GIVEN));
+  if (!sourcePath)
+    throw Error(resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_GIVEN));
+  if (!fs.pathExistsSync(sourcePath))
+    throw Error(resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_EXIST));
+  if (!outputPath)
+    throw Error(resourcesHelpers.formatError(resource, errors.OUTPUT_PATH_NOT_GIVEN));
   if (fs.pathExistsSync(outputPath))
     fs.removeSync(outputPath);
-  const typesPath = path.join(extractedFilesPath, 'bible');
+  const typesPath = path.join(sourcePath, 'bible');
   const isDirectory = item => fs.lstatSync(path.join(typesPath, item)).isDirectory();
   const typeDirs = fs.readdirSync(typesPath).filter(isDirectory);
   typeDirs.forEach(typeDir => {

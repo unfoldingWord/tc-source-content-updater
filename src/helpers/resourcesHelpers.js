@@ -2,12 +2,15 @@
 import fs from 'fs-extra';
 import path from 'path-extra';
 import yaml from 'yamljs';
+import {isObject} from 'util';
 // helpers
 import * as zipFileHelpers from './zipFileHelpers';
 import * as twArticleHelpers from './translationHelps/twArticleHelpers';
 import * as taArticleHelpers from './translationHelps/taArticleHelpers';
 import * as twGroupDataHelpers from './translationHelps/twGroupDataHelpers';
 import * as packageParseHelpers from './packageParseHelpers';
+// constants
+import * as errors from '../errors';
 
 const translationHelps = {
   ta: 'translationAcademy',
@@ -213,14 +216,18 @@ export function getActualResourcePath(resource, resourcesPath) {
  *             subject: String,
  *             catalogEntry: {langResource, bookResource, format}
  *           }>} resource - resource to download
- * @param {String} bibleFilesPath Path to the Bible directory
+ * @param {String} sourcePath Path to the Bible directory
  * @return {String} Path to the processed tw Group Data files
  */
-export function makeTwGroupDataResource(resource, bibleFilesPath) {
+export function makeTwGroupDataResource(resource, sourcePath) {
+  if (!resource)
+    throw Error(formatError(resource, errors.RESOURCE_NOT_GIVEN));
+  if (!fs.pathExistsSync(sourcePath))
+    throw Error(formatError(resource, errors.SOURCE_PATH_NOT_EXIST));
   if ((resource.languageId === 'grc' && resource.resourceId === 'ugnt') ||
       (resource.languageId === 'hbo' && resource.resourceId === 'uhb')) {
-    const twGroupDataPath = path.join(bibleFilesPath + '_tw_group_data_' + resource.languageId + '_v' + resource.version);
-    const result = twGroupDataHelpers.generateTwGroupDataFromAlignedBible(bibleFilesPath, twGroupDataPath);
+    const twGroupDataPath = path.join(sourcePath + '_tw_group_data_' + resource.languageId + '_v' + resource.version);
+    const result = twGroupDataHelpers.generateTwGroupDataFromAlignedBible(resource, sourcePath, twGroupDataPath);
     if (result)
       return twGroupDataPath;
   }
@@ -244,4 +251,20 @@ export function removeAllButLatestVersion(resourcePath) {
     return true;
   }
   return false;
+}
+
+/**
+ * @description Formats an error for all resources to have a standard format
+ * @param {Object} resource Resource object
+ * @param {String} errMessage Error essage
+ * @return {String} The formatted error message
+ */
+export function formatError(resource, errMessage) {
+  if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId) {
+    resource = {
+      languageId: 'unknown',
+      resourceId: 'unknown'
+    };
+  }
+  return resource.languageId + '_' + resource.resourceId + ': ' + errMessage;
 }

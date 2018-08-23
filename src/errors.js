@@ -1,0 +1,11 @@
+export const RESOURCE_NOT_GIVEN = 'Resource entry was not given';
+export const SOURCE_PATH_NOT_GIVEN = 'Source path not given';
+export const SOURCE_PATH_NOT_EXIST = 'Source path does not exist';
+export const OUTPUT_PATH_NOT_GIVEN = 'Output path was not given';
+export const ERROR_PARSING_BIBLE = 'Error Parsing Bible';
+export const MANIFEST_MISSING_BOOKS = 'Manifest is missing the books entry';
+export const RESOURCES_PATH_NOT_GIVEN = 'Resources path not given';
+export const UNABLE_TO_CREATE_TW_GROUP_DATA = 'Unable to create tW Group Data from Bible source';
+export const UNABLE_TO_MOVE_RESOURCE_INTO_RESOURCES = 'Unable to move the resource files into the resources directory';
+export const FAILED_TO_PROCESS_RESOURCE = 'Failed to process resource';
+export const LANGUAGE_LIST_EMPTY = 'Language list is empty';

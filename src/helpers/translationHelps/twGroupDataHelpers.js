@@ -1,40 +1,51 @@
 import fs from 'fs-extra';
 import path from 'path-extra';
 import * as bible from '../../resources/bible';
+import {isObject} from 'util';
 // helpers
 import * as resourcesHelpers from '../resourcesHelpers';
+// constants
+import * as errors from '../../errors';
 
 /**
  * @description Generates the tW Group Data files from the given aligned Bible
- * @param {String} biblePath Path to the Bible with aligned data
+ * @param {Objecd} resource Resource object
+ * @param {String} sourcePath Path to the Bible with aligned data
  * @param {String} outputPath Path where the translationWords group data is to be placed WITHOUT version
  * @return {Boolean} true if success
  */
-export const generateTwGroupDataFromAlignedBible = (biblePath, outputPath) => {
-  if (!fs.pathExistsSync(biblePath)) {
-    return false;
-  }
-  const version = resourcesHelpers.getVersionFromManifest(biblePath);
+export const generateTwGroupDataFromAlignedBible = (resource, sourcePath, outputPath) => {
+  if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId)
+    throw Error(resourcesHelpers.formatError(resource, errors.RESOURCE_NOT_GIVEN));
+  if (!sourcePath)
+    throw Error(resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_GIVEN));
+  if (!fs.pathExistsSync(sourcePath))
+    throw Error(resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_EXIST));
+  if (!outputPath)
+    throw Error(resourcesHelpers.formatError(resource, errors.OUTPUT_PATH_NOT_GIVEN));
+  if (fs.pathExistsSync(outputPath))
+    fs.removeSync(outputPath);
+  const version = resourcesHelpers.getVersionFromManifest(sourcePath);
   if (!version) {
     return false;
   }
   let books = bible.BIBLE_LIST_NT.slice(0);
   books.forEach(bookName => {
-    convertBookVerseObjectsToTwData(biblePath, outputPath, bookName);
+    convertBookVerseObjectsToTwData(sourcePath, outputPath, bookName);
   });
   return true;
 };
 
 /**
  * @description Gets verseObjects of a book and converts to a tW data object to save to file
- * @param {String} biblePath Usually path to the UGNT
- * @param {String} twPath The output path for tW files
+ * @param {String} sourcePath Usually path to the UGNT
+ * @param {String} outputPath The output path for tW files
  * @param {String} bookName Book in format, e.g. '41-MAT'
  */
-function convertBookVerseObjectsToTwData(biblePath, twPath, bookName) {
+function convertBookVerseObjectsToTwData(sourcePath, outputPath, bookName) {
   const bookId = getbookId(bookName);
   let twData = {};
-  const bookDir = path.join(biblePath, bookId);
+  const bookDir = path.join(sourcePath, bookId);
   if (fs.existsSync(bookDir)) {
     const chapters = Object.keys(bible.BOOK_CHAPTER_VERSES[bookId]).length;
     for (let chapter = 1; chapter <= chapters; chapter++) {
@@ -52,7 +63,7 @@ function convertBookVerseObjectsToTwData(biblePath, twPath, bookName) {
     }
     for (let category in twData) {
       for (let groupId in twData[category]) {
-        let groupPath = path.join(twPath, category, 'groups', bookId, groupId + '.json');
+        let groupPath = path.join(outputPath, category, 'groups', bookId, groupId + '.json');
         fs.outputFileSync(groupPath, JSON.stringify(twData[category][groupId], null, 2));
       }
     }

@@ -6,6 +6,8 @@ import * as resourcesHelpers from './resourcesHelpers';
 import * as parseHelpers from './parseHelpers';
 import * as downloadHelpers from './downloadHelpers';
 import * as moveResourcesHelpers from './moveResourcesHelpers';
+// constants
+import * as errors from '../errors';
 
 /**
  * @description Downloads the resources that need to be updated for a given language using the DCS API
@@ -26,9 +28,9 @@ import * as moveResourcesHelpers from './moveResourcesHelpers';
  */
 export const downloadResource = async (resource, resourcesPath) => {
   if (!resource)
-    throw Error('No resource given');
+    throw Error(errors.RESOURCE_NOT_GIVEN);
   if (!resourcesPath)
-    throw Error('No path to the resources directory given');
+    throw Error(resourcesHelpers.formatError(resource, errors.RESOURCES_PATH_NOT_GIVEN));
   fs.ensureDirSync(resourcesPath);
   const importsPath = path.join(resourcesPath, 'imports');
   fs.ensureDirSync(importsPath);
@@ -46,17 +48,17 @@ export const downloadResource = async (resource, resourcesPath) => {
       const twGroupDataResourcesPath = path.join(resourcesPath, resource.languageId, 'translationHelps', 'translationWords');
       const moveSuccess = moveResourcesHelpers.moveResources(twGroupDataPath, twGroupDataResourcesPath);
       if (!moveSuccess) {
-        throw Error('Unable to create tW Group Data from ' + resource.resourceId + ' Bible');
+        throw Error(resourcesHelpers.formatError(resource, errors.UNABLE_TO_CREATE_TW_GROUP_DATA));
       }
     }
     const resourcePath = resourcesHelpers.getActualResourcePath(resource, resourcesPath);
     const moveSuccess = moveResourcesHelpers.moveResources(processedFilesPath, resourcePath);
     if (!moveSuccess) {
-      throw Error('Unable to copy resource into the resources directory');
+      throw Error(resourcesHelpers.formatError(resource, errors.UNABLE_TO_MOVE_RESOURCE_INTO_RESOURCES));
     }
     resourcesHelpers.removeAllButLatestVersion(path.dirname(resourcePath));
   } else {
-    throw Error('Failed to process resource "' + resource.resourceId + '" for language "' + resource.languageId + '"');
+    throw Error(resourcesHelpers.formatError(resource, errors.FAILED_TO_PROCESS_RESOURCE));
   }
   rimraf.sync(zipFilePath, fs);
   rimraf.sync(importPath, fs);
@@ -83,11 +85,11 @@ export const downloadResource = async (resource, resourcesPath) => {
 export const downloadResources = (languageList, resourcesPath, resources) => {
   return new Promise((resolve, reject) => {
     if (!languageList || !languageList.length) {
-      reject('Language list is empty');
+      reject(errors.LANGUAGE_LIST_EMPTY);
       return;
     }
     if (!resourcesPath) {
-      reject('No path to the resources directory given');
+      reject(errors.RESOURCES_PATH_NOT_GIVEN);
       return;
     }
     fs.ensureDirSync(resourcesPath);
