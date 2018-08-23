@@ -71,7 +71,7 @@ export function parseBiblePackage(resource, sourcePath, outputPath) {
     if (!manifest.projects)
       throw Error(resourcesHelpers.formatError(resource, errors.MANIFEST_MISSING_BOOKS));
     manifest.catalog_modified_time = resource.remoteModifiedTime;
-    let savePath = path.join(sourcePath, 'manifest.json');
+    let savePath = path.join(outputPath, 'manifest.json');
     fs.outputJsonSync(savePath, manifest);
     const projects = manifest.projects || [];
     for (let project of projects) {
