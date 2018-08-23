@@ -1,5 +1,6 @@
 import Updater from '../src';
 import fs from 'fs-extra';
+import * as errors from '../src/errors';
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 
@@ -19,9 +20,7 @@ describe('Updater.downloadResources', () => {
 
   it('should fail', async () => {
     const updater = new Updater();
-    await updater.downloadResources()
-    .catch(err => {
-      expect(err).toEqual('Language list is empty');
-    });
+    const expectedError = errors.LANGUAGE_LIST_EMPTY;
+    expect(updater.downloadResources()).rejects.toEqual(expectedError);
   });
 });
