@@ -11,14 +11,9 @@ import * as resourcesHelpers from '../resourcesHelpers';
  * @return {Boolean} true if success
  */
 export function processTranslationAcademy(extractedFilesPath, outputPath) {
-  if (!fs.pathExistsSync(extractedFilesPath)) {
-    return null;
-  }
+  if (!fs.pathExistsSync(extractedFilesPath))
+    throw Error(extractedFilesPath + ' does not exist');
   const resourceManifest = resourcesHelpers.getResourceManifest(extractedFilesPath);
-  const version = resourcesHelpers.getVersionFromManifest(extractedFilesPath);
-  if (version === null) {
-    return false;
-  }
   if (fs.pathExistsSync(outputPath)) {
     fs.removeSync(outputPath);
   }

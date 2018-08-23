@@ -6,21 +6,16 @@ import * as resourcesHelpers from '../resourcesHelpers';
 /**
  * @description Processes the extracted files for translationWord to cerate the folder
  * structure and produce the index.js file for the language with the title of each article.
+ * @param {Object} resource - Resource object
  * @param {String} extractedFilesPath - Path to the extracted files that came from the zip file from the catalog
  * @param {String} outputPath - Path to place the processed resource files WIHTOUT the version in the path
  * @return {Boolean} true if success
  */
-export function processTranslationWords(extractedFilesPath, outputPath) {
-  if (!fs.pathExistsSync(extractedFilesPath)) {
-    return false;
-  }
-  const version = resourcesHelpers.getVersionFromManifest(extractedFilesPath);
-  if (version === null) {
-    return false;
-  }
-  if (fs.pathExistsSync(outputPath)) {
+export function processTranslationWords(resource, extractedFilesPath, outputPath) {
+  if (!fs.pathExistsSync(extractedFilesPath))
+    throw Error(extractedFilesPath + ' does not exist');
+  if (fs.pathExistsSync(outputPath))
     fs.removeSync(outputPath);
-  }
   const typesPath = path.join(extractedFilesPath, 'bible');
   const isDirectory = item => fs.lstatSync(path.join(typesPath, item)).isDirectory();
   const typeDirs = fs.readdirSync(typesPath).filter(isDirectory);

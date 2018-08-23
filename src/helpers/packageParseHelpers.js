@@ -61,8 +61,7 @@ export function parseBiblePackage(resourceEntry, extractedFilesPath, resultsPath
       throw Error(resourceEntry.languageId + "_" + resourceEntry.resourceId + ": Source folder does not exist: " + extractedFilesPath);
     if (!resultsPath)
       throw Error(resourceEntry.languageId + "_" + resourceEntry.resourceId + ": resultsPath missing");
-    const manifest = parseManifest(extractedFilesPath,
-      resultsPath);
+    const manifest = parseManifest(extractedFilesPath, resultsPath);
     if (!manifest.projects)
       throw Error(resourceEntry.languageId + "_" + resourceEntry.resourceId + ": Manifest does not contain index to books");
 
