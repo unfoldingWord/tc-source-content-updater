@@ -157,7 +157,7 @@ export function getSubdirOfUnzippedResource(extractedFilesPath) {
 /**
  * @description Processes a resource in the imports directory as needed
  * @param {Object} resource Resource object
- * @param {String} sourcePath Path the the import directory of this resource
+ * @param {String} sourcePath Path the the source dictory of the resource
  * @return {String} Path to the directory of the processed files
  */
 export function processResource(resource, sourcePath) {
