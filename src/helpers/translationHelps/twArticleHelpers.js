@@ -4,7 +4,7 @@ import {isObject} from 'util';
 // helpers
 import * as resourcesHelpers from '../resourcesHelpers';
 // constants
-import * as errors from '../../errors';
+import * as errors from '../../resources/errors';
 
 /**
  * @description Processes the extracted files for translationWord to cerate the folder

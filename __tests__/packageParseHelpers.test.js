@@ -8,7 +8,7 @@ import * as packageParseHelpers from '../src/helpers/packageParseHelpers';
 import * as bible from '../src/resources/bible';
 import * as resourcesHelpers from '../src/helpers/resourcesHelpers';
 // constants
-import * as errors from '../src/errors';
+import * as errors from '../src/resources/errors';
 
 const BOOKS_OF_THE_BIBLE = Object.keys(bible.BOOK_CHAPTER_VERSES);
 

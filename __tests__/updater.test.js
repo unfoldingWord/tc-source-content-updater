@@ -1,6 +1,6 @@
 import Updater from '../src';
 import fs from 'fs-extra';
-import * as errors from '../src/errors';
+import * as errors from '../src/resources/errors';
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 

@@ -10,7 +10,7 @@ import * as taArticleHelpers from './translationHelps/taArticleHelpers';
 import * as twGroupDataHelpers from './translationHelps/twGroupDataHelpers';
 import * as packageParseHelpers from './packageParseHelpers';
 // constants
-import * as errors from '../errors';
+import * as errors from '../resources/errors';
 
 const translationHelps = {
   ta: 'translationAcademy',

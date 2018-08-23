@@ -5,7 +5,7 @@ import {isObject} from 'util';
 // helpers
 import * as resourcesHelpers from '../resourcesHelpers';
 // constants
-import * as errors from '../../errors';
+import * as errors from '../../resources/errors';
 
 /**
  * @description Generates the tW Group Data files from the given aligned Bible

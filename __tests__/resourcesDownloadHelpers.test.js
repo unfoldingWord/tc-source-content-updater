@@ -2,6 +2,7 @@ import fs from 'fs-extra';
 // helpers
 import * as resourcesDownloadHelpers from '../src/helpers/resourcesDownloadHelpers';
 import * as parseHelpers from '../src/helpers/parseHelpers';
+import * as errors from '../src/resources/errors';
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 const catalog = require('./fixtures/api.door43.org/v3/subjects/pivoted.json');
@@ -17,13 +18,13 @@ describe('Tests for resourcesDownloadHelpers', function() {
 
   it('Test resourcesDownloadHelpers.downloadResources() for null', async () => {
     const languageList = null;
-    const expectedError = 'Language list is empty';
+    const expectedError = errors.LANGUAGE_LIST_EMPTY;
     expect(resourcesDownloadHelpers.downloadResources(languageList)).rejects.toEqual(expectedError);
   });
 
   it('Test resourcesDownloadHelpers.downloadResources() for empty list', async () => {
     const languageList = [];
-    const expectedError = 'Language list is empty';
+    const expectedError = errors.LANGUAGE_LIST_EMPTY;
     expect(resourcesDownloadHelpers.downloadResources(languageList)).rejects.toEqual(expectedError);
   });
 
