@@ -67,8 +67,7 @@ describe('parseBiblePackage()', () => {
     fs.__loadFilesIntoMockFs([sourceBible], './__tests__/fixtures', PROJECTS_PATH);
     let packagePath = path.join(PROJECTS_PATH, sourceBible);
     const resource = enUltResource;
-    const results = packageParseHelpers.parseBiblePackage(resource, packagePath,
-      resultsPath);
+    const results = packageParseHelpers.parseBiblePackage(resource, packagePath, resultsPath);
     expect(results).toBeTruthy();
     verifyBibleResults(resultsPath, BOOKS_OF_THE_BIBLE);
     verifyCatalogModifiedTimeInManifest(resultsPath, resource);
@@ -81,76 +80,50 @@ describe('parseBiblePackage()', () => {
     fs.__loadFilesIntoMockFs([sourceBible], './__tests__/fixtures', PROJECTS_PATH);
     let packagePath = path.join(PROJECTS_PATH, sourceBible);
     const resource = grcUntResource;
-    const results = packageParseHelpers.parseBiblePackage(resource, packagePath,
-      resultsPath);
+    const results = packageParseHelpers.parseBiblePackage(resource, packagePath, resultsPath);
     expect(results).toBeTruthy();
     verifyBibleResults(resultsPath, NT_BOOKS);
     verifyCatalogModifiedTimeInManifest(resultsPath, resource);
   });
 
-  it('should fail if manifest not found', () => {
+  it('should throw error if manifest not found', () => {
     const sourceBible = 'el-x-koine_ugnt';
     const PROJECTS_PATH = path.join(ospath.home(), 'resources/import');
     const resultsPath = path.join(ospath.home(), 'resources/results');
     fs.__loadFilesIntoMockFs([sourceBible], './__tests__/fixtures', PROJECTS_PATH);
     let packagePath = path.join(PROJECTS_PATH, sourceBible);
     fs.removeSync(path.join(packagePath, "manifest.yaml"));
-    try {
-      const results = packageParseHelpers.parseBiblePackage(grcUntResource, packagePath, resultsPath);
-      expect(results).not.toBeTruthy(); // should not get here;
-    } catch (err) {
-      expect(err).toBeTruthy();
-    }
+    expect(() => packageParseHelpers.parseBiblePackage(grcUntResource, packagePath, resultsPath)).toThrow();
   });
 
-  it('should fail if packagePath is not present', () => {
+  it('should throw error if packagePath is not present', () => {
     const sourceBible = 'en_ult';
     const PROJECTS_PATH = path.join(ospath.home(), 'resources/import');
     let packagePath = path.join(PROJECTS_PATH, sourceBible);
     const resultsPath = path.join(ospath.home(), 'resources/results');
-    try {
-      const results = packageParseHelpers.parseBiblePackage(enUltResource, packagePath, resultsPath);
-      expect(results).not.toBeTruthy(); // should not get here;
-    } catch (err) {
-      expect(err).toBeTruthy();
-    }
+    expect(() => packageParseHelpers.parseBiblePackage(enUltResource, packagePath, resultsPath)).toThrow();
   });
 
-  it('null packagePath should fail', () => {
+  it('null packagePath should throw error', () => {
     const resultsPath = path.join(ospath.home(), 'resources/results');
-    try {
-      const results = packageParseHelpers.parseBiblePackage(enUltResource, null, resultsPath);
-      expect(results).not.toBeTruthy(); // should not get here;
-    } catch (err) {
-      expect(err).toBeTruthy();
-    }
+    expect(() => packageParseHelpers.parseBiblePackage(enUltResource, null, resultsPath)).toThrow();
   });
 
-  it('null resultsPath should fail', () => {
+  it('null resultsPath should throw error', () => {
     const sourceBible = 'el-x-koine_ugnt';
     const PROJECTS_PATH = path.join(ospath.home(), 'resources/import');
     fs.__loadFilesIntoMockFs([sourceBible], './__tests__/fixtures', PROJECTS_PATH);
     let packagePath = path.join(PROJECTS_PATH, sourceBible);
-    try {
-      const results = packageParseHelpers.parseBiblePackage(grcUntResource, packagePath, null);
-      expect(results).not.toBeTruthy(); // should not get here;
-    } catch (err) {
-      expect(err).toBeTruthy();
-    }
+    expect(() => packageParseHelpers.parseBiblePackage(grcUntResource, packagePath, null)).toThrow();
   });
 
-  it('null resourceEntry should fail', () => {
+  it('null resourceEntry should throw error', () => {
     const sourceBible = 'el-x-koine_ugnt';
     const PROJECTS_PATH = path.join(ospath.home(), 'resources/import');
     fs.__loadFilesIntoMockFs([sourceBible], './__tests__/fixtures', PROJECTS_PATH);
     let packagePath = path.join(PROJECTS_PATH, sourceBible);
     const resultsPath = path.join(ospath.home(), 'resources/results');
-    try {
-      const results = packageParseHelpers.parseBiblePackage(null, packagePath, resultsPath);
-      expect(results).not.toBeTruthy(); // should not get here;
-    } catch (err) {
-      expect(err).toBeTruthy();
-    }
+    expect(() => packageParseHelpers.parseBiblePackage(null, packagePath, resultsPath)).toThrow();
   });
 });
 

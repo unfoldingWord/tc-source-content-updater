@@ -10,18 +10,22 @@ describe('Tests for taArticleHelpers', function() {
 
   it('Test taArticleHelpers.processTranslationAcademy() for en', () => {
     // given
-    const lang = 'en';
-    const version = 'v9';
+    const resource = {
+      languageId: 'en',
+      resourceId: 'ta',
+      version: '9'
+    };
     const actualExtractedPath = path.join(__dirname, 'fixtures/translationHelps/taExtractedFromCDN');
     const mockedExtractedPath = '/tmp/extracted';
     fs.__loadDirIntoMockFs(actualExtractedPath, mockedExtractedPath);
-    const outputPath = path.join('/resources', lang, 'translationHelps/translationAcademy', version);
+    const outputPath = path.join('/resources', resource.languageId, 'translationHelps/translationAcademy', 'v' + resource.version);
+    fs.ensureDirSync(outputPath);
     const expectedProjectList = ['checking', 'translate'];
     const expectedCheckingArticleListLength = 6;
     const expectedTranslateArticleListLength = 4;
 
     // when
-    const result = taArticleHelpers.processTranslationAcademy(path.join(mockedExtractedPath, lang + '_ta'), outputPath);
+    const result = taArticleHelpers.processTranslationAcademy(resource, path.join(mockedExtractedPath, resource.languageId + '_' + resource.resourceId), outputPath);
     const projectList = fs.readdirSync(outputPath);
     const checkingArticleList = fs.readdirSync(path.join(outputPath, 'checking'));
     const translateArticleList = fs.readdirSync(path.join(outputPath, 'translate'));
@@ -44,12 +48,8 @@ describe('Tests for taArticleHelpers', function() {
     const extractedPath = '/bad/dir';
     const lang = 'en';
     const outputPath = path.join('/resources', lang, 'translationHelps/translationAcademy');
-    const expectedTaOutputPath = null;
 
     // when
-    const taOutputPath = taArticleHelpers.processTranslationAcademy(extractedPath, outputPath);
-
-    // then
-    expect(taOutputPath).toEqual(expectedTaOutputPath);
+    expect(() => taArticleHelpers.processTranslationAcademy(extractedPath, outputPath)).toThrow();
   });
 });

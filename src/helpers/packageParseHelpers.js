@@ -54,21 +54,20 @@ export function parseManifest(extractedFilePath, outputPath) {
  */
 export function parseBiblePackage(resourceEntry, extractedFilesPath, resultsPath) {
   const index = {};
+  if (!resourceEntry)
+    throw Error(resourceEntry.languageId + "_" + resourceEntry.resourceId + ": resourceEntry missing");
+  if (!fs.pathExistsSync(extractedFilesPath))
+    throw Error(resourceEntry.languageId + "_" + resourceEntry.resourceId + ": Source folder does not exist: " + extractedFilesPath);
+  if (!resultsPath)
+    throw Error(resourceEntry.languageId + "_" + resourceEntry.resourceId + ": resultsPath missing");
+  const manifest = parseManifest(extractedFilesPath, resultsPath);
+  if (!manifest.projects)
+    throw Error(resourceEntry.languageId + "_" + resourceEntry.resourceId + ": Manifest does not contain index to books");
+
+  manifest.catalog_modified_time = resourceEntry.remoteModifiedTime;
+  let savePath = path.join(extractedFilesPath, 'manifest.json');
+  fs.outputJsonSync(savePath, manifest);
   try {
-    if (!resourceEntry)
-      throw Error(resourceEntry.languageId + "_" + resourceEntry.resourceId + ": resourceEntry missing");
-    if (!fs.pathExistsSync(extractedFilesPath))
-      throw Error(resourceEntry.languageId + "_" + resourceEntry.resourceId + ": Source folder does not exist: " + extractedFilesPath);
-    if (!resultsPath)
-      throw Error(resourceEntry.languageId + "_" + resourceEntry.resourceId + ": resultsPath missing");
-    const manifest = parseManifest(extractedFilesPath, resultsPath);
-    if (!manifest.projects)
-      throw Error(resourceEntry.languageId + "_" + resourceEntry.resourceId + ": Manifest does not contain index to books");
-
-    manifest.catalog_modified_time = resourceEntry.remoteModifiedTime;
-    let savePath = path.join(extractedFilesPath, 'manifest.json');
-    fs.outputJsonSync(savePath, manifest);
-
     const projects = manifest.projects || [];
     for (let project of projects) {
       if (project.identifier && project.path) {
@@ -79,8 +78,7 @@ export function parseBiblePackage(resourceEntry, extractedFilesPath, resultsPath
     }
     saveIndex(resultsPath, index);
   } catch (error) {
-    console.log(resourceEntry.languageId + "_" + resourceEntry.resourceId + ": Error Parsing Bible:");
-    console.log(error);
+    console.log(resourceEntry.languageId + "_" + resourceEntry.resourceId + ": Error Parsing Bible:", error);
     throw Error(resourceEntry.languageId + "_" + resourceEntry.resourceId + ": Error Parsing Bible");
   }
   return true;

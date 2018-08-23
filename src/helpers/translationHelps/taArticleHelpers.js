@@ -6,11 +6,12 @@ import * as resourcesHelpers from '../resourcesHelpers';
 /**
  * @description Processes the extracted files for translationAcademy to create a single file for each
  * article
+ * @param {Object} resource - Resource object
  * @param {String} extractedFilesPath - Path to the extracted files that came from the zip file in the catalog
  * @param {String} outputPath - Path to place the processed files WITHOUT version in the path
  * @return {Boolean} true if success
  */
-export function processTranslationAcademy(extractedFilesPath, outputPath) {
+export function processTranslationAcademy(resource, extractedFilesPath, outputPath) {
   if (!fs.pathExistsSync(extractedFilesPath))
     throw Error(extractedFilesPath + ' does not exist');
   const resourceManifest = resourcesHelpers.getResourceManifest(extractedFilesPath);

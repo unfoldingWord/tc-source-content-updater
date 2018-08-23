@@ -10,19 +10,26 @@ describe('Tests for twArticleHelpers', function() {
 
   it('Test twArticleHelpers.processTranslationWords() for en', () => {
     // given
-    const lang = 'en';
-    const version = 'v8';
+    const resource = {
+      languageId: 'en',
+      resourceId: 'tw',
+      version: '8'
+    };
     const actualExtractedPath = path.join(__dirname, 'fixtures/translationHelps/twExtractedFromCDN');
-    const mockedExtractedPath = '/tmp/extracted';
+    const mockedExtractedPath = '/tmp/resources/imports';
     fs.__loadDirIntoMockFs(actualExtractedPath, mockedExtractedPath);
-    const outputPath = path.join('/resources', lang, 'translationHelps/translationWords', version);
+    const outputPath = path.join('/tmp/resources', resource.languageId, 'translationHelps/translationWords', 'v' + resource.version);
+    fs.ensureDirSync(outputPath);
     const expectedTypeList = ['kt', 'names', 'other'];
     const expectedKtArticleListLength = 3;
     const expectedNamesArticleListLength = 2;
-    const expectedIndexJson = [{"id": "apostle", "name": "apostle, apostles, apostleship"}, {"id": "god", "name": "God"}, {"id": "sanctify", "name": "sanctify, sanctifies, sanctification"}]    ;
+    const expectedIndexJson = [
+      {id: "apostle", name: "apostle, apostles, apostleship"},
+      {id: "god", name: "God"}, {id: "sanctify", name: "sanctify, sanctifies, sanctification"}
+    ];
 
     // when
-    const result = twArticleHelpers.processTranslationWords(path.join(mockedExtractedPath, lang+'_tw'), outputPath);
+    const result = twArticleHelpers.processTranslationWords(resource, path.join(mockedExtractedPath, resource.languageId + '_' + resource.resourceId), outputPath);
     const indexFile = path.join(outputPath, 'kt', 'index.json');
     const indexJson = fs.readJsonSync(indexFile);
     const typeList = fs.readdirSync(outputPath);
@@ -50,9 +57,6 @@ describe('Tests for twArticleHelpers', function() {
     const lang = 'en';
 
     // when
-    const twOutputPath = twArticleHelpers.processTranslationWords(extractedPath, lang);
-
-    // then
-    expect(twOutputPath).not.toBeTruthy();
+    expect(() => twArticleHelpers.processTranslationWords(extractedPath, lang)).toThrow();
   });
 });
