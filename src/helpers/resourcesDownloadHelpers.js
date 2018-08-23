@@ -111,9 +111,13 @@ export const downloadResources = (languageList, resourcesPath, resources) => {
       promises.push(downloadResource(resource, resourcesPath));
     });
     Promise.all(promises)
-      .then(resolve, reject)
-      .finally(() => {
+      .then(result => {
         rimraf.sync(importsDir, fs);
+        resolve(result);
+      },
+      err => {
+        rimraf.sync(importsDir, fs);
+        reject(err);
       });
   });
 };
