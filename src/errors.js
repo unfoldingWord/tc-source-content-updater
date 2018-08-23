@@ -9,3 +9,4 @@ export const UNABLE_TO_CREATE_TW_GROUP_DATA = 'Unable to create tW Group Data fr
 export const UNABLE_TO_MOVE_RESOURCE_INTO_RESOURCES = 'Unable to move the resource files into the resources directory';
 export const FAILED_TO_PROCESS_RESOURCE = 'Failed to process resource';
 export const LANGUAGE_LIST_EMPTY = 'Language list is empty';
+export const MANIFEST_NOT_FOUND = 'Manifest not found';

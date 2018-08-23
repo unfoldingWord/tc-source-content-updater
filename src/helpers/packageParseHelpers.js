@@ -59,13 +59,13 @@ export function parseManifest(extractedFilePath, outputPath) {
 export function parseBiblePackage(resource, sourcePath, outputPath) {
   const index = {};
   if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId)
-    throw Error(resourcesHelpers.formatError(errors.RESOURCE_NOT_GIVEN));
+    throw Error(resourcesHelpers.formatError(resource, errors.RESOURCE_NOT_GIVEN));
   if (!sourcePath)
     throw Error(resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_GIVEN));
   if (!fs.pathExistsSync(sourcePath))
-    throw Error(resourcesHelpers.formatError(errors.SOURCE_PATH_NOT_EXIST + ": " + sourcePath));
+    throw Error(resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_EXIST + ": " + sourcePath));
   if (!outputPath)
-    throw Error(resourcesHelpers.formatError(errors.OUTPUT_PATH_IS_MISSING));
+    throw Error(resourcesHelpers.formatError(resource, errors.OUTPUT_PATH_NOT_GIVEN));
   try {
     const manifest = parseManifest(sourcePath, outputPath);
     if (!manifest.projects)
@@ -83,7 +83,7 @@ export function parseBiblePackage(resource, sourcePath, outputPath) {
     }
     saveIndex(outputPath, index);
   } catch (error) {
-    throw Error(resourcesHelpers.formatError(errors.ERROR_PARSING_BIBLE + ": " + error.message));
+    throw Error(resourcesHelpers.formatError(resource, errors.ERROR_PARSING_BIBLE + ": " + error.message));
   }
   return true;
 }

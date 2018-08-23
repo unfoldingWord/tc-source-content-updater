@@ -65,26 +65,36 @@ describe('Tests for twArticleHelpers', function() {
     expect(() => twArticleHelpers.processTranslationWords(resource, sourcePath, outputPath)).toThrowError(expectedError);
   });
 
-  it('Test twArticlesHelpers.processTranslationWord() for no resource given', () => {
+  it('Test twArticlesHelpers.processTranslationWord() for sourcePath not given', () => {
+    // given
+    const sourcePath = null;
+    const outputPath = '/tmp/resources/imports/en_tw_processed';
+    const expectedError = resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_GIVEN);
+
+    // when
+    expect(() => twArticleHelpers.processTranslationWords(resource, sourcePath, outputPath)).toThrowError(expectedError);
+  });
+
+  it('Test twArticlesHelpers.processTranslationWord() forresource not given', () => {
     // given
     const sourcePath = '/tmp/resources/imports/en_tw';
     const outputPath = '/tmp/resources/imports/en_tw_processed';
     const badResource = null;
     fs.ensureDirSync(sourcePath);
-    const expectedError = errors.RESOURCE_NOT_GIVEN;
+    const expectedError = resourcesHelpers.formatError(null, errors.RESOURCE_NOT_GIVEN);
 
     // when
     expect(() => twArticleHelpers.processTranslationWords(badResource, sourcePath, outputPath)).toThrowError(expectedError);
   });
 
-  it('Test twArticlesHelpers.processTranslationWord() for invalid output path', () => {
+  it('Test twArticlesHelpers.processTranslationWord() for output path not given', () => {
     // given
     const sourcePath = '/tmp/resources/imports/en_tw';
     const outputPath = null;
     fs.ensureDirSync(sourcePath);
-    const expectedError = errors.RESOURCE_NOT_GIVEN;
+    const expectedError = resourcesHelpers.formatError(resource, errors.OUTPUT_PATH_NOT_GIVEN);
 
     // when
-    expect(() => twArticleHelpers.processTranslationWords(null, sourcePath, outputPath)).toThrowError(expectedError);
+    expect(() => twArticleHelpers.processTranslationWords(resource, sourcePath, outputPath)).toThrowError(expectedError);
   });
 });
