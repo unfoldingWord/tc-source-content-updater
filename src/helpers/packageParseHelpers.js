@@ -63,7 +63,6 @@ export function parseBiblePackage(resourceEntry, extractedFilesPath, resultsPath
   const manifest = parseManifest(extractedFilesPath, resultsPath);
   if (!manifest.projects)
     throw Error(resourceEntry.languageId + "_" + resourceEntry.resourceId + ": Manifest does not contain index to books");
-
   manifest.catalog_modified_time = resourceEntry.remoteModifiedTime;
   let savePath = path.join(extractedFilesPath, 'manifest.json');
   fs.outputJsonSync(savePath, manifest);
@@ -113,7 +112,6 @@ function indexBook(bookPath, index, bookCode) {
     if (ugntVerses.length !== expectedVerseCount) {
       console.warn(`WARNING: ${bookCode} - in chapter ${chapter}, found ${ugntVerses.length} verses but should be ${expectedVerseCount} verses`);
     }
-
     // add verses
     for (let verse of ugntVerses) {
       let words = ugntChapter[verse];
