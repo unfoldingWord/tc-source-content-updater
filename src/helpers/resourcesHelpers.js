@@ -165,10 +165,10 @@ export function processResource(resource, extractedFilesPath) {
   fs.ensureDirSync(processedFilesPath);
   switch (resource.subject) {
     case 'Translation_Words':
-      twArticleHelpers.processTranslationWords(extractedFilesPath, processedFilesPath);
+      twArticleHelpers.processTranslationWords(resource, extractedFilesPath, processedFilesPath);
       break;
     case 'Translation_Academy':
-      taArticleHelpers.processTranslationAcademy(extractedFilesPath, processedFilesPath);
+      taArticleHelpers.processTranslationAcademy(resource, extractedFilesPath, processedFilesPath);
       break;
     case 'Bible':
     case 'Aligned_Bible':
