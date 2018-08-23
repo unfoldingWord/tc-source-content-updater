@@ -10,41 +10,42 @@ import * as bible from '../src/resources/bible';
 const BOOKS_OF_THE_BIBLE = Object.keys(bible.BOOK_CHAPTER_VERSES);
 
 const enUltResource = {
-  "languageId": "en",
-  "resourceId": "ulb",
-  "remoteModifiedTime": "2017-12-07T23:45:40+00:00",
-  "downloadUrl": "https://cdn.door43.org/en/ulb/v12/ulb.zip",
-  "version": "12",
-  "subject": "Bible",
-  "catalogEntry": {
-    "subject": {},
-    "resource": {},
-    "format": {
-      "format": "application/zip; type=bundle content=text/usfm conformsto=rc0.2",
-      "modified": "2017-12-07T23:45:40+00:00",
-      "signature": "https://cdn.door43.org/en/ulb/v12/ulb.zip.sig",
-      "size": 1439488,
-      "url": "https://cdn.door43.org/en/ulb/v12/ulb.zip"
+  languageId: 'en',
+  resourceId: 'ulb',
+  remoteModifiedTime: '2017-12-07T23:45:40+00:00',
+  downloadUrl: 'https://cdn.door43.org/en/ulb/v12/ulb.zip',
+  version: '12',
+  subject: 'Bible',
+  catalogEntry: {
+    subject: {},
+    resource: {},
+    format: {
+      format: 'application/zip; type=bundle content=text/usfm conformsto=rc0.2',
+      modified: '2017-12-07T23:45:40+00:00',
+      signature: 'https://cdn.door43.org/en/ulb/v12/ulb.zip.sig',
+      size: 1439488,
+      url: 'https://cdn.door43.org/en/ulb/v12/ulb.zip'
     }
   }
 };
 
 const grcUntResource = {
-  "languageId": "grc",
-  "resourceId": "ugnt",
-  "remoteModifiedTime": "2018-08-02T17:46:25+00:00",
-  "downloadUrl": "https://cdn.door43.org/el-x-koine/ugnt/v0.2/ugnt.zip",
-  "version": "0.2",
-  "subject": "Greek_New_Testament",
-  "catalogEntry": {
-    "subject": {}},
-  "resource": {},
-  "format": {
-    "format": "application/zip; type=bundle content=text/usfm3 conformsto=rc0.2",
-    "modified": "2018-08-02T17:46:25+00:00",
-    "signature": "https://cdn.door43.org/el-x-koine/ugnt/v0.2/ugnt.zip.sig",
-    "size": 1465124,
-    "url": "https://cdn.door43.org/el-x-koine/ugnt/v0.2/ugnt.zip"
+  languageId: 'grc',
+  resourceId: 'ugnt',
+  remoteModifiedTime: '2018-08-02T17:46:25+00:00',
+  downloadUrl: 'https://cdn.door43.org/el-x-koine/ugnt/v0.2/ugnt.zip',
+  version: '0.2',
+  subject: 'Greek_New_Testament',
+  catalogEntry: {
+    subject: {}
+  },
+  resource: {},
+  format: {
+    format: 'application/zip; type=bundle content=text/usfm3 conformsto=rc0.2',
+    modified: '2018-08-02T17:46:25+00:00',
+    signature: 'https://cdn.door43.org/el-x-koine/ugnt/v0.2/ugnt.zip.sig',
+    size: 1465124,
+    url: 'https://cdn.door43.org/el-x-koine/ugnt/v0.2/ugnt.zip'
   }
 };
 
@@ -92,7 +93,7 @@ describe('parseBiblePackage()', () => {
     const resultsPath = path.join(ospath.home(), 'resources/results');
     fs.__loadFilesIntoMockFs([sourceBible], './__tests__/fixtures', PROJECTS_PATH);
     let packagePath = path.join(PROJECTS_PATH, sourceBible);
-    fs.removeSync(path.join(packagePath, "manifest.yaml"));
+    fs.removeSync(path.join(packagePath, 'manifest.yaml'));
     expect(() => packageParseHelpers.parseBiblePackage(grcUntResource, packagePath, resultsPath)).toThrow();
   });
 

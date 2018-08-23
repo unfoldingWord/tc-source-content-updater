@@ -24,8 +24,8 @@ describe('Tests for twArticleHelpers', function() {
     const expectedKtArticleListLength = 3;
     const expectedNamesArticleListLength = 2;
     const expectedIndexJson = [
-      {id: "apostle", name: "apostle, apostles, apostleship"},
-      {id: "god", name: "God"}, {id: "sanctify", name: "sanctify, sanctifies, sanctification"}
+      {id: 'apostle', name: 'apostle, apostles, apostleship'},
+      {id: 'god', name: 'God'}, {id: 'sanctify', name: 'sanctify, sanctifies, sanctification'}
     ];
 
     // when
