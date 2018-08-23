@@ -4,7 +4,7 @@ import {isObject} from 'util';
 // heleprs
 import * as resourcesHelpers from '../resourcesHelpers';
 // constants
-import * as errors from '../../errors';
+import * as errors from '../../resources/errors';
 
 /**
  * @description Processes the extracted files for translationAcademy to create a single file for each

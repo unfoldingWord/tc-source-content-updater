@@ -4,7 +4,7 @@ import path from 'path-extra';
 import * as twGroupDataHelpers from '../src/helpers/translationHelps/twGroupDataHelpers';
 import * as resourcesHelpers from '../src/helpers/resourcesHelpers';
 // constants
-import * as errors from '../src/errors';
+import * as errors from '../src/resources/errors';
 
 describe('Test twGroupDataHelpers.generateTwGroupDataFromAlignedBible()', function() {
   const resource = {

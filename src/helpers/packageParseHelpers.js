@@ -13,7 +13,7 @@ import {isObject} from 'util';
 import {generateBibleManifest} from './biblesHelpers';
 import * as resourcesHelpers from './resourcesHelpers';
 // constants
-import * as errors from '../errors';
+import * as errors from '../resources/errors';
 
 /**
  * @description - This function outputs chapter files from an input usfm file

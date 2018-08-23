@@ -7,7 +7,7 @@ import * as parseHelpers from './parseHelpers';
 import * as downloadHelpers from './downloadHelpers';
 import * as moveResourcesHelpers from './moveResourcesHelpers';
 // constants
-import * as errors from '../errors';
+import * as errors from '../resources/errors';
 
 /**
  * @description Downloads the resources that need to be updated for a given language using the DCS API

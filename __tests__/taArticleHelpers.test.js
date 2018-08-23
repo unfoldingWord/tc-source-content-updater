@@ -4,7 +4,7 @@ import path from 'path-extra';
 import * as taArticleHelpers from '../src/helpers/translationHelps/taArticleHelpers';
 import * as resourcesHelpers from '../src/helpers/resourcesHelpers';
 // constants
-import * as errors from '../src/errors';
+import * as errors from '../src/resources/errors';
 
 describe('Tests for taArticleHelpers', function() {
   const resource = {
