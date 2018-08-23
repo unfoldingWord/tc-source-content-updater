@@ -1,6 +1,7 @@
 /* eslint-env jest */
 /* eslint-disable camelcase,no-empty */
 import * as parseHelpers from '../src/helpers/parseHelpers';
+import * as ERROR from '../src/resources/errors';
 
 const catalog = require('./fixtures/catalog');
 
@@ -26,9 +27,14 @@ describe('parseCatalogResources()', () => {
     expect(results.length).toEqual(80);
   });
 
-  it('should return null for null catalog', () => {
-    const results = parseHelpers.parseCatalogResources(null);
-    expect(results).toBeNull();
+  it('should throw exception for null catalog', done => {
+    try {
+      const results = parseHelpers.parseCatalogResources(null);
+      done.fail(results);
+    } catch (e) {
+      expect(e.message).toEqual(ERROR.CATALOG_CONTENT_ERROR);
+      done();
+    }
   });
 });
 
@@ -73,19 +79,34 @@ describe('getLatestResources()', () => {
     expect(frenchResources.length).toEqual(1);
   });
 
-  it('should return null for null resource list', () => {
-    const results = parseHelpers.getLatestResources(catalog, null);
-    expect(results).toBeNull();
+  it('should throw exception for null resource list', done => {
+    try {
+      const results = parseHelpers.getLatestResources(catalog, null);
+      done.fail(results);
+    } catch (e) {
+      expect(e.message).toEqual(ERROR.PARAMETER_ERROR);
+      done();
+    }
   });
 
-  it('should return null for null catalog', () => {
-    const results = parseHelpers.getLatestResources(null, []);
-    expect(results).toBeNull();
+  it('should throw exception for null catalog', done => {
+    try {
+      const results = parseHelpers.getLatestResources(null, []);
+      done.fail(results);
+    } catch (e) {
+      expect(e.message).toEqual(ERROR.PARAMETER_ERROR);
+      done();
+    }
   });
 
-  it('should return null for invalid catalog object', () => {
-    const results = parseHelpers.getLatestResources({ }, []);
-    expect(results).toBeNull();
+  it('should throw exception for invalid catalog object', done => {
+    try {
+      const results = parseHelpers.getLatestResources({ }, []);
+      done.fail(results);
+    } catch (e) {
+      expect(e.message).toEqual(ERROR.CATALOG_CONTENT_ERROR);
+      done();
+    }
   });
 });
 

@@ -135,7 +135,9 @@ function addFileToParentDirectory(filePath) {
 
 function outputJsonSync(filePath, data) {
   addFileToParentDirectory(filePath);
-  mockFS[filePath] = data;
+  // clone data so changes to object do not affect object in file system
+  const clonedData = JSON.parse(JSON.stringify(data));
+  mockFS[filePath] = clonedData;
 }
 
 function readJsonSync(filePath) {

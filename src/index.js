@@ -44,7 +44,7 @@ Updater.prototype.updateCatalog = async function() {
  *                   localModifiedTime: String,
  *                   remoteModifiedTime: String
  *                 }>
- *         }|null} - list of languages that have updates in catalog (returns null on error)
+ *         }} - list of languages that have updates in catalog (throws exception on error)
  */
 Updater.prototype.getLatestResources = async function(localResourceList) {
   await this.updateCatalog();
