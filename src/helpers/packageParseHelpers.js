@@ -75,7 +75,7 @@ export function parseBiblePackage(resourceEntry, extractedFilesPath, resultsPath
     }
 
     manifest.catalog_modified_time = resourceEntry.remoteModifiedTime;
-    let savePath = path.join(extractedFilesPath, 'manifest.json');
+    let savePath = path.join(resultsPath, 'manifest.json');
     fs.outputJsonSync(savePath, manifest);
 
     const projects = manifest.projects || [];
