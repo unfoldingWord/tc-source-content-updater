@@ -76,6 +76,7 @@ export const downloadResourceAndCatchErrors = async (resource, resourcesPath, er
   let result = null;
   try {
     result = await downloadResource(resource, resourcesPath);
+    console.log("Download Success: " + resource.downloadUrl);
   } catch (e) {
     console.log("Download Error:");
     console.log(e);
@@ -136,8 +137,9 @@ export const downloadResources = (languageList, resourcesPath, resources) => {
         if (!errorList.length) {
           resolve(result);
         } else {
-          const errorMessages = errorList.map(e => e.message);
-          reject(errorMessages.join('\n'));
+          const errorMessages = errorList.map(e => (e.message || e));
+          const returnErrorMessage = errorMessages.join('\n');
+          reject(new Error(returnErrorMessage));
         }
       },
       err => {
