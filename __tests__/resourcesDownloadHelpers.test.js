@@ -7,7 +7,7 @@ import * as errors from '../src/resources/errors';
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 const catalog = require('./fixtures/api.door43.org/v3/subjects/pivoted.json');
 
-describe('Tests for resourcesDownloadHelpers', function() {
+describe('Tests for resourcesDownloadHelpers.downloadResources()', function() {
   const resources = parseHelpers.getLatestResources(catalog, []);
   const resourcesPath = '/tmp/resources'; // a mocked resources directory
 
@@ -45,5 +45,25 @@ describe('Tests for resourcesDownloadHelpers', function() {
     const resources = [];
     const expectedResolve = [];
     expect(resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources)).resolves.toEqual(expectedResolve);
+  });
+});
+
+describe('Tests for resourcesDownloadHelpers.downloadResource()', () => {
+  it('Test resourcesDownloadHelpers.downloadResource() for CEB ULB', () => {
+    const resource = {
+      languageId: 'ceb',
+      resourceId: 'ulb',
+      remoteModifiedTime: '0001-01-01T00:00:00+00:00',
+      downloadUrl: 'https://cdn.door43.org/ceb/ulb/v4.2/ulb.zip',
+      version: '4.2',
+      subject: 'Bible',
+      catalogEntry: {
+        subject: {},
+        resource: {},
+        format: {}
+      }
+    };
+    const resourcesPath = '/tmp/resources';
+    expect(resourcesDownloadHelpers.downloadResource(resource, resourcesPath)).resolves.toEqual(resource);
   });
 });
