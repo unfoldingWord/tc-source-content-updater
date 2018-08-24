@@ -12,7 +12,7 @@ describe('Updater.downloadResources', () => {
     fs.ensureDirSync(resourcesPath);
   });
 
-  it('should resolve', async () => {
+  it('should resolve for grc', async () => {
     const updater = new Updater();
     const resources = await updater.downloadResources(['grc'], resourcesPath);
     expect(resources.length).toEqual(1);
