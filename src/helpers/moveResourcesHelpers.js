@@ -13,8 +13,9 @@ export function moveResources(resourceSourcePath, resourceTargetPath) {
       if (fs.pathExistsSync(resourceTargetPath)) {
         fs.removeSync(resourceTargetPath);
       }
-      fs.ensureDirSync(resourceTargetPath);
-      fs.moveSync(resourceSourcePath, resourceTargetPath);
+      fs.ensureDirSync(path.dirname(resourceTargetPath));
+      fs.copySync(resourceSourcePath, resourceTargetPath);
+      fs.removeSync(resourceSourcePath);
       resolve(resourceTargetPath);
     } else {
       reject('Invalid parameters to moveResources()');
