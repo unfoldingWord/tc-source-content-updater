@@ -1,5 +1,6 @@
 import fs from 'fs-extra';
 import path from 'path-extra';
+import ospath from 'ospath';
 // helpers
 import * as twGroupDataHelpers from '../src/helpers/translationHelps/twGroupDataHelpers';
 import * as resourcesHelpers from '../src/helpers/resourcesHelpers';
@@ -13,8 +14,8 @@ describe('Test twGroupDataHelpers.generateTwGroupDataFromAlignedBible()', functi
     version: '0.2'
   };
   const bibleRealPath = path.join(__dirname, 'fixtures/resources/grc/bibles/ugnt/v0.2');
-  const sourcePath = '/tmp/resources/imports/grc_ugnt_processed';
-  const outputPath = '/tmp/resources/imports/grc_tw_processed';
+  const sourcePath = path.join(ospath.home(), 'translationCore/resources/imports/grc_ugnt_processed');
+  const outputPath = path.join(ospath.home(), 'translationCore/resources/imports/grc_tw_processed');
 
   beforeEach(() => {
     fs.__resetMockFS();

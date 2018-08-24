@@ -1,5 +1,6 @@
 import fs from 'fs-extra';
 import path from 'path-extra';
+import ospath from 'ospath';
 // helpers
 import * as twArticleHelpers from '../src/helpers/translationHelps/twArticleHelpers';
 import * as resourcesHelpers from '../src/helpers/resourcesHelpers';
@@ -20,9 +21,9 @@ describe('Tests for twArticleHelpers', function() {
   it('Test twArticleHelpers.processTranslationWords() for en', () => {
     // given
     const actualExtractedPath = path.join(__dirname, 'fixtures/translationHelps/twExtractedFromCDN');
-    const mockedExtractedPath = '/tmp/resources/imports';
+    const mockedExtractedPath = path.join(ospath.home(), 'translationCore/resources/imports');
     fs.__loadDirIntoMockFs(actualExtractedPath, mockedExtractedPath);
-    const outputPath = path.join('/tmp/resources', resource.languageId, 'translationHelps/translationWords', 'v' + resource.version);
+    const outputPath = path.join(ospath.home(), 'translationCore/resources', resource.languageId, 'translationHelps/translationWords', 'v' + resource.version);
     fs.ensureDirSync(outputPath);
     const expectedTypeList = ['kt', 'names', 'other'];
     const expectedKtArticleListLength = 3;
@@ -58,7 +59,7 @@ describe('Tests for twArticleHelpers', function() {
   it('Test twArticlesHelpers.processTranslationWord() for invalid sourcePath', () => {
     // given
     const sourcePath = '/bad/dir';
-    const outputPath = '/tmp/resources/imports/en_tw_processed';
+    const outputPath = path.join(ospath.home(), 'translationCore/resources/imports/en_tw_processed');
     const expectedError = resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_EXIST);
 
     // when
@@ -68,7 +69,7 @@ describe('Tests for twArticleHelpers', function() {
   it('Test twArticlesHelpers.processTranslationWord() for sourcePath not given', () => {
     // given
     const sourcePath = null;
-    const outputPath = '/tmp/resources/imports/en_tw_processed';
+    const outputPath = path.join(ospath.home(), 'translationCore/resources/imports/en_tw_processed');
     const expectedError = resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_GIVEN);
 
     // when
@@ -77,8 +78,8 @@ describe('Tests for twArticleHelpers', function() {
 
   it('Test twArticlesHelpers.processTranslationWord() forresource not given', () => {
     // given
-    const sourcePath = '/tmp/resources/imports/en_tw';
-    const outputPath = '/tmp/resources/imports/en_tw_processed';
+    const sourcePath = path.join(ospath.home(), 'translationCore/resources/imports/en_tw');
+    const outputPath = path.join(ospath.home(), 'translationCore/resources/imports/en_tw_processed');
     const badResource = null;
     fs.ensureDirSync(sourcePath);
     const expectedError = resourcesHelpers.formatError(null, errors.RESOURCE_NOT_GIVEN);
@@ -89,7 +90,7 @@ describe('Tests for twArticleHelpers', function() {
 
   it('Test twArticlesHelpers.processTranslationWord() for output path not given', () => {
     // given
-    const sourcePath = '/tmp/resources/imports/en_tw';
+    const sourcePath = path.join(ospath.home(), 'translationCore/resources/imports/en_tw');
     const outputPath = null;
     fs.ensureDirSync(sourcePath);
     const expectedError = resourcesHelpers.formatError(resource, errors.OUTPUT_PATH_NOT_GIVEN);
