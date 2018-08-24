@@ -9,7 +9,7 @@ const PIVOTED_CATALOG_PATH = '/v3/subjects/pivoted.json';
  * @param {string} url - Url of the get request to make
  * @return {Promise} - parsed body from the response
  */
-export function makeRequest(url) {
+function makeRequest(url) {
   return new Promise((resolve, reject) => {
     request(url, function(error, response, body) {
       if (error)
