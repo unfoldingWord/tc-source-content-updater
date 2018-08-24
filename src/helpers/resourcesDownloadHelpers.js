@@ -55,8 +55,7 @@ export const downloadResource = async (resource, resourcesPath) => {
     const resourcePath = resourcesHelpers.getActualResourcePath(resource, resourcesPath);
     try {
       await moveResourcesHelpers.moveResources(processedFilesPath, resourcePath);
-    }
-    catch (err) {
+    } catch (err) {
       throw Error(resourcesHelpers.formatError(resource, errors.UNABLE_TO_MOVE_RESOURCE_INTO_RESOURCES));
     }
     resourcesHelpers.removeAllButLatestVersion(path.dirname(resourcePath));
