@@ -45,7 +45,7 @@ export const downloadResource = async (resource, resourcesPath) => {
     if ((resource.languageId === 'grc' && resource.resourceId === 'ugnt') ||
       (resource.languageId === 'hbo' && resource.resourceId === 'uhb')) {
       const twGroupDataPath = resourcesHelpers.makeTwGroupDataResource(resource, processedFilesPath);
-      const twGroupDataResourcesPath = path.join(resourcesPath, resource.languageId, 'translationHelps', 'translationWords');
+      const twGroupDataResourcesPath = path.join(resourcesPath, resource.languageId, 'translationHelps', 'translationWords', 'v' + resource.version);
       const moveSuccess = moveResourcesHelpers.moveResources(twGroupDataPath, twGroupDataResourcesPath);
       if (!moveSuccess) {
         throw Error(resourcesHelpers.formatError(resource, errors.UNABLE_TO_CREATE_TW_GROUP_DATA));
