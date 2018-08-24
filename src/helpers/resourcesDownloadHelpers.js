@@ -66,6 +66,25 @@ export const downloadResource = async (resource, resourcesPath) => {
 };
 
 /**
+ * download the resource catching and saving errors
+ * @param {Object} resource being downloaded
+ * @param {String} resourcesPath - path to save resources
+ * @param {Array} errorList - keeps track of errors
+ * @return {Promise} promise
+ */
+export const downloadResourceAndCatchErrors = async (resource, resourcesPath, errorList) => {
+  let result = null;
+  try {
+    result = await downloadResource(resource, resourcesPath);
+  } catch (e) {
+    console.log("Download Error:");
+    console.log(e);
+    errorList.push(e);
+  }
+  return result;
+};
+
+/**
  * @description Downloads the resources that need to be updated for the given languages using the DCS API
  * @param {Array} languageList - Array of languages to download the resources for
  * @param {String} resourcesPath - Path to the resources directory where each resource will be placed
@@ -105,15 +124,21 @@ export const downloadResources = (languageList, resourcesPath, resources) => {
     }
 
     const promises = [];
+    const errorList = [];
     downloadableResources.forEach(resource => {
       if (!resource)
         return;
-      promises.push(downloadResource(resource, resourcesPath));
+      promises.push(downloadResourceAndCatchErrors(resource, resourcesPath, errorList));
     });
     Promise.all(promises)
       .then(result => {
         rimraf.sync(importsDir, fs);
-        resolve(result);
+        if (!errorList.length) {
+          resolve(result);
+        } else {
+          const errorMessages = errorList.map(e => e.message);
+          reject(errorMessages.join('\n'));
+        }
       },
       err => {
         rimraf.sync(importsDir, fs);
