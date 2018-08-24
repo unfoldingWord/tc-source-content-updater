@@ -28,8 +28,7 @@ describe('moveResourcesHelpers', () => {
     const chapter1 = JSON.stringify([
       '1.json'
     ], null, 2);
-
-    expect(res).toEqual(true);
+    expect(res).toBeTruthy();
     expect(deepFolder).toEqual(chapter1);
   });
 
@@ -40,31 +39,29 @@ describe('moveResourcesHelpers', () => {
     const aWord = JSON.stringify([
       'beauty.json'
     ], null, 2);
-
-    expect(res).toEqual(true);
+    expect(res).toBeTruthy();
     expect(deepFolder).toEqual(aWord);
   });
 
-  test('moveResources: copy translation helps', () => {
-    res = moveResourcesHelpers.moveResources(fromFolder, toFolder);
+  test('moveResources: copy translation helps', async () => {
+    res = await moveResourcesHelpers.moveResources(fromFolder, toFolder);
     const deepFolder = fs.__catMockFS(path.join(
         toFolder, 'translationHelps', 'translationAcademy', 'v9', 'process'));
     const share = JSON.stringify([
       'share-content.md'
     ], null, 2);
-
-    expect(res).toEqual(true);
+    expect(res).toBeTruthy();
     expect(deepFolder).toEqual(share);
   });
 
-  test('moveResources: missing first arg', () => {
+  test('moveResources: missing first arg', async () => {
     res = moveResourcesHelpers.moveResources(null, toFolder);
-    expect(res).toEqual(false);
+    expect(res).rejects.toBeTruthy();
   });
 
   test('moveResources: missing second arg', () => {
     res = moveResourcesHelpers.moveResources(fromFolder);
-    expect(res).toEqual(false);
+    expect(res).rejects.toBeTruthy();
   });
 });
 

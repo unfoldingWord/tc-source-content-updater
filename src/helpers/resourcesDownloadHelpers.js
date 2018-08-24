@@ -46,14 +46,17 @@ export const downloadResource = async (resource, resourcesPath) => {
       (resource.languageId === 'hbo' && resource.resourceId === 'uhb')) {
       const twGroupDataPath = resourcesHelpers.makeTwGroupDataResource(resource, processedFilesPath);
       const twGroupDataResourcesPath = path.join(resourcesPath, resource.languageId, 'translationHelps', 'translationWords', 'v' + resource.version);
-      const moveSuccess = moveResourcesHelpers.moveResources(twGroupDataPath, twGroupDataResourcesPath);
-      if (!moveSuccess) {
+      try {
+        await moveResourcesHelpers.moveResources(twGroupDataPath, twGroupDataResourcesPath);
+      } catch (err) {
         throw Error(resourcesHelpers.formatError(resource, errors.UNABLE_TO_CREATE_TW_GROUP_DATA));
       }
     }
     const resourcePath = resourcesHelpers.getActualResourcePath(resource, resourcesPath);
-    const moveSuccess = moveResourcesHelpers.moveResources(processedFilesPath, resourcePath);
-    if (!moveSuccess) {
+    try {
+      await moveResourcesHelpers.moveResources(processedFilesPath, resourcePath);
+    }
+    catch (err) {
       throw Error(resourcesHelpers.formatError(resource, errors.UNABLE_TO_MOVE_RESOURCE_INTO_RESOURCES));
     }
     resourcesHelpers.removeAllButLatestVersion(path.dirname(resourcePath));
