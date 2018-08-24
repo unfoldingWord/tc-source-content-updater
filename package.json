@@ -16,6 +16,7 @@
     ],
     "coverageDirectory": "coverage",
     "testURL": "http://localhost",
+    "roots": ["<rootDir>/src/", "<rootDir>/__tests__/"],
     "setupFiles": [
       "./testSetup/global.js"
     ]
