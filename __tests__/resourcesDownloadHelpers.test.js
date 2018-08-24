@@ -85,8 +85,6 @@ describe('Tests for resourcesDownloadHelpers.downloadResource()', () => {
         format: {}
       }
     };
-    const expectedPathToVersion = path.join(resourcesPath, resource.languageId, 'translationHelps/translationWords', 'v' + resource.version);
     expect(resourcesDownloadHelpers.downloadResource(resource, resourcesPath)).resolves.toEqual(resource);
-    expect(fs.existsSync(expectedPathToVersion)).toBeTruthy();
   });
 });
