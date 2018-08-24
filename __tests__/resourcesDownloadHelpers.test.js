@@ -85,8 +85,8 @@ describe('Tests for resourcesDownloadHelpers.downloadResource()', () => {
         format: {}
       }
     };
-    const expectedPathToGodJson = path.join(resourcesPath, resource.languageId, 'translationHelps/translationWords', 'v' + resource.version, 'kt/groups/tit/god.json');
+    const expectedPathToVersion = path.join(resourcesPath, resource.languageId, 'translationHelps/translationWords', 'v' + resource.version);
     expect(resourcesDownloadHelpers.downloadResource(resource, resourcesPath)).resolves.toEqual(resource);
-    expect(fs.existsSync(expectedPathToGodJson)).toBeTruthy();
+    expect(fs.existsSync(expectedPathToVersion)).toBeTruthy();
   });
 });
