@@ -76,9 +76,10 @@ export function parseBiblePackage(resource, sourcePath, outputPath) {
     const projects = manifest.projects || [];
     for (let project of projects) {
       if (project.identifier && project.path) {
-        let bookPath = path.join(outputPath, project.identifier);
+        const identifier = project.identifier.toLowerCase();
+        let bookPath = path.join(outputPath, identifier);
         parseUsfmOfBook(path.join(sourcePath, project.path), bookPath);
-        indexBook(bookPath, index, project.identifier);
+        indexBook(bookPath, index, identifier);
       }
     }
     saveIndex(outputPath, index);
@@ -96,6 +97,9 @@ export function parseBiblePackage(resource, sourcePath, outputPath) {
  */
 function indexBook(bookPath, index, bookCode) {
   const expectedChapters = bible.BOOK_CHAPTER_VERSES[bookCode];
+  if (!expectedChapters) {
+    throw new Error(errors.INVALID_BOOK_CODE + ": " + bookCode);
+  }
   const files = fs.readdirSync(bookPath);
   const chapterCount = Object.keys(expectedChapters).length;
   assert.deepEqual(files.length, chapterCount);
