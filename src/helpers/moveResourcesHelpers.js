@@ -1,4 +1,5 @@
 import fs from 'fs-extra';
+import path from 'path';
 
 /**
  * @description transfer an entire resource from source to target directory

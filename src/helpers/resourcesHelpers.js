@@ -71,7 +71,7 @@ export function getResourceManifestFromYaml(resourcePath) {
   const manifestPath = path.join(resourcePath, fileName);
   let manifest = null;
   if (fs.existsSync(manifestPath)) {
-    const yamlManifest = fs.readFileSync(manifestPath);
+    const yamlManifest = fs.readFileSync(manifestPath, 'utf8').replace(/^\uFEFF/, '');
     manifest = yaml.parse(yamlManifest);
   }
   return manifest;

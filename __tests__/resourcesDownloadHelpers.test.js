@@ -76,7 +76,7 @@ describe('Tests for resourcesDownloadHelpers.downloadResource()', () => {
       languageId: 'grc',
       resourceId: 'ugnt',
       remoteModifiedTime: '0001-01-01T00:00:00+00:00',
-      downloadUrl: 'https://cdn.door43.org/el-x-koin/ulb/v0.2/ugnt.zip',
+      downloadUrl: 'https://cdn.door43.org/el-x-koine/ugnt/v0.2/ugnt.zip',
       version: '0.2',
       subject: 'Bible',
       catalogEntry: {
