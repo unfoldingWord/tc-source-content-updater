@@ -1,11 +1,14 @@
 import Updater from '../src';
 import fs from 'fs-extra';
+import path from 'path-extra';
+import ospath from 'ospath';
+// constants
 import * as errors from '../src/resources/errors';
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 
 describe('Updater.downloadResources', () => {
-  const resourcesPath = '/tmp/resources'; // a mocked resources directory
+  const resourcesPath = path.join(ospath.home(), 'translationCore/resources'); // a mocked resources directory
 
   beforeEach(() => {
     fs.__resetMockFS();

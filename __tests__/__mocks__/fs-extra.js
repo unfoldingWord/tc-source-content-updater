@@ -71,22 +71,37 @@ function __dumpMockFS() {
   console.log("mock FS:\n" + fsList);
 }
 
-function __listMockFS(directoryPath, recursive = false) {
+/**
+ * @description Call this to list out a directory's content of the mockFS. 
+ * Can be recursive to list all files and directories under the directoryPath
+ * @param {String} directoryPath The root path to list
+ * @param {Boolean} recursive If this is to be recursive or not
+ */
+function __listMockFS(directoryPath, recursive = true) {
   if (!directoryPath) {
-    directoryPath = '/';
+    directoryPath = path.parse(process.cwd()).root;  // '/' for Unix, C:\ for Windows
     recursive = true;
   }
   if (mockFS[directoryPath] === undefined) {
-    console.log("mockFS - No directory: " + directoryPath);
+    console.log("mockFS - Does not exist: " + directoryPath);
   } else if (statSync(directoryPath).isFile()) {
-    console.log("mockFS ls:\n", directoryPath);
+    console.log("mockFS - ls:\n", directoryPath);
   } else {
     console.log(__getListMockFS(directoryPath, recursive));
   }
 }
 
-function __getListMockFS(directoryPath, recursive = false) {
+/**
+ * @description The recursive function for getting a mocked directory listing
+ * @param {String} directoryPath The root path to list
+ * @param {Boolean} recursive If this is to be recursive or not
+ * @return {String} The list of files
+ */
+function __getListMockFS(directoryPath, recursive = true) {
   let ls = directoryPath + ":\n";
+  if (!mockFS[directoryPath] || !mockFS[directoryPath].length) {
+    return "\t<empty>\n";
+  }
   const content = mockFS[directoryPath].sort();
   content.forEach(item => {
     const fullPath = path.join(directoryPath, item);
@@ -117,7 +132,7 @@ function __catMockFS(folder) {
 
 /**
  * create subdirs and add file name to them
- * @param filePath
+ * @param {String} filePath Fie path
  */
 function addFileToParentDirectory(filePath) {
   const dir = path.dirname(filePath);

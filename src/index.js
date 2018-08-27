@@ -95,27 +95,26 @@ Updater.prototype.downloadResources = async function(languageList, resourcesPath
  * @description move the converted resource to user's resource folder
  * @param {String} resourceSourcePath - Location of selected downloaded resources
  * @param {String} languageCode - language of resource like en or hi
+ * @return {Promise} Promise to move directory
  */
-Updater.prototype.moveResources = async function(
-  resourceSourcePath, languageCode) {
+Updater.prototype.moveResources = async function(resourceSourcePath, languageCode) {
   const resourceTargetPath = path.join(
     ospath.home(), 'translationCore', 'resources', languageCode);
-  await moveResourcesHelpers.move(resourceSourcePath, resourceTargetPath);
-  return;
+  return moveResourcesHelpers.move(resourceSourcePath, resourceTargetPath);
 };
 
 /**
  * @description Parses the bible package to generate json bible contents, manifest, and index
  * @param {{
- *                   languageId: String,
- *                   resourceId: String,
- *                   localModifiedTime: String,
- *                   remoteModifiedTime: String,
- *                   downloadUrl: String,
- *                   version: String,
- *                   subject: String,
- *                   catalogEntry: {langResource, bookResource, format}
- *                 }} resourceEntry - resource entry for download
+ *          languageId: String,
+ *          resourceId: String,
+ *          localModifiedTime: String,
+ *          remoteModifiedTime: String,
+ *          downloadUrl: String,
+ *          version: String,
+ *          subject: String,
+ *          catalogEntry: {langResource, bookResource, format}
+ *        }} resourceEntry - resource entry for download
  * @param {String} extractedFilesPath - path to unzipped files from bible package
  * @param {String} resultsPath - path to store processed bible
  * @return {Boolean} true if success
