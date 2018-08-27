@@ -1,5 +1,6 @@
 import fs from 'fs-extra';
 import path from 'path-extra';
+import ospath from 'ospath';
 // helpers
 import * as taArticleHelpers from '../src/helpers/translationHelps/taArticleHelpers';
 import * as resourcesHelpers from '../src/helpers/resourcesHelpers';
@@ -20,9 +21,9 @@ describe('Tests for taArticleHelpers', function() {
   it('Test taArticleHelpers.processTranslationAcademy() for en', () => {
     // given
     const actualExtractedPath = path.join(__dirname, 'fixtures/translationHelps/taExtractedFromCDN');
-    const mockedExtractedPath = '/tmp/resources/imports/en_ta';
+    const mockedExtractedPath = path.join(ospath.home(), 'translationCore/resources/imports/en_ta');
     fs.__loadDirIntoMockFs(actualExtractedPath, mockedExtractedPath);
-    const outputPath = '/tmp/resources/imports/en_ta_processed';
+    const outputPath = path.join(ospath.home(), 'translationCore/resources/imports/en_ta_processed');
     fs.ensureDirSync(outputPath);
     const expectedProjectList = ['checking', 'translate'];
     const expectedCheckingArticleListLength = 6;
@@ -50,7 +51,7 @@ describe('Tests for taArticleHelpers', function() {
   it('Test taArticlesHelpers.processTranslationAcademy() for invalid source path', () => {
     // given
     const sourcePath = '/bad/dir';
-    const outputPath = '/tmp/resources/imports/en_ta_processed';
+    const outputPath = path.join(ospath.home(), 'translationCore/resources/imports/en_ta_processed');
     const expectedError = resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_EXIST);
 
     // when
@@ -60,7 +61,7 @@ describe('Tests for taArticleHelpers', function() {
   it('Test taArticlesHelpers.processTranslationAcademy() for no source path given', () => {
     // given
     const sourcePath = null;
-    const outputPath = '/tmp/resources/imports/en_ta_processed';
+    const outputPath = path.join(ospath.home(), 'translationCore/resources/imports/en_ta_processed');
     const expectedError = errors.SOURCE_PATH_NOT_GIVEN;
 
     // when
@@ -69,8 +70,8 @@ describe('Tests for taArticleHelpers', function() {
 
   it('Test taArticlesHelpers.processTranslationAcademy() for no resource given', () => {
     // given
-    const sourcePath = '/tmp/resources/imports/en_ta';
-    const outputPath = '/tmp/resources/imports/en_ta_processed';
+    const sourcePath = path.join(ospath.home(), 'translationCore/resources/imports/en_ta');
+    const outputPath = path.join(ospath.home(), 'translationCore/resources/imports/en_ta_processed');
     const resource = null;
     fs.ensureDirSync(sourcePath);
     const expectedError = errors.RESOURCE_NOT_GIVEN;
@@ -81,7 +82,7 @@ describe('Tests for taArticleHelpers', function() {
 
   it('Test taArticlesHelpers.processTranslationAcademy() for invalid output path', () => {
     // given
-    const sourcePath = '/tmp/resources/imports/en_ta';
+    const sourcePath = path.join(ospath.home(), 'translationCore/resources/imports/en_ta');
     const outputPath = null;
     fs.ensureDirSync(sourcePath);
     const expectedError = resourcesHelpers.formatError(resource, errors.OUTPUT_PATH_NOT_GIVEN);
