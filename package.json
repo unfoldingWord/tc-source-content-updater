@@ -16,7 +16,10 @@
     ],
     "coverageDirectory": "coverage",
     "testURL": "http://localhost",
-    "roots": ["src", "__tests__"],
+    "roots": [
+      "src",
+      "__tests__"
+    ],
     "testRegex": ".*\\.test\\.js$",
     "setupFiles": [
       "./testSetup/global.js"
