@@ -1,13 +1,13 @@
 {
   "name": "tc-source-content-updater",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Module that updates source content for the desktop application translationCore.",
   "main": "lib/index.js",
   "scripts": {
     "test": "eslint ./src ./index.js && jest",
     "fix": "eslint ./src ./index.js --fix",
     "compile": "rimraf lib && babel src/ -d lib/",
-    "prepublish": "npm run compile"
+    "prepublishOnly": "npm run compile"
   },
   "jest": {
     "collectCoverageFrom": [
