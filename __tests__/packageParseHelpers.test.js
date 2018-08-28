@@ -65,16 +65,55 @@ describe('parseBiblePackage()', () => {
   });
 
   it('en_ult should pass', () => {
+    // given
     const sourceBible = 'en_ult';
     const PROJECTS_PATH = path.join(ospath.home(), 'resources/import');
     const resultsPath = path.join(ospath.home(), 'resources/results');
     fs.__loadFilesIntoMockFs([sourceBible], './__tests__/fixtures', PROJECTS_PATH);
     let packagePath = path.join(PROJECTS_PATH, sourceBible);
     const resource = enUltResource;
+
+    // when
     const results = packageParseHelpers.parseBiblePackage(resource, packagePath, resultsPath);
+
+    // then
     expect(results).toBeTruthy();
     verifyBibleResults(resultsPath, BOOKS_OF_THE_BIBLE);
     verifyCatalogModifiedTimeInManifest(resultsPath, resource);
+  });
+
+  it('en_ult should pass with uppercase book ID', () => {
+    // given
+    const sourceBible = 'en_ult';
+    const PROJECTS_PATH = path.join(ospath.home(), 'resources/import');
+    const resultsPath = path.join(ospath.home(), 'resources/results');
+    fs.__loadFilesIntoMockFs([sourceBible], './__tests__/fixtures', PROJECTS_PATH);
+    let packagePath = path.join(PROJECTS_PATH, sourceBible);
+    modifyFile(packagePath, "manifest.yaml", "identifier: 'gen'", "identifier: 'GEN'");
+    const resource = enUltResource;
+
+    // when
+    const results = packageParseHelpers.parseBiblePackage(resource, packagePath, resultsPath);
+
+    // then
+    expect(results).toBeTruthy();
+    verifyBibleResults(resultsPath, BOOKS_OF_THE_BIBLE);
+    verifyCatalogModifiedTimeInManifest(resultsPath, resource);
+  });
+
+  it('en_ult should throw error with invalid book ID', () => {
+    // given
+    const sourceBible = 'en_ult';
+    const PROJECTS_PATH = path.join(ospath.home(), 'resources/import');
+    const resultsPath = path.join(ospath.home(), 'resources/results');
+    fs.__loadFilesIntoMockFs([sourceBible], './__tests__/fixtures', PROJECTS_PATH);
+    let packagePath = path.join(PROJECTS_PATH, sourceBible);
+    modifyFile(packagePath, "manifest.yaml", "identifier: 'gen'", "identifier: 'GE'");
+    const resource = enUltResource;
+    const expectedError = resourcesHelpers.formatError(resource, errors.ERROR_PARSING_BIBLE + ": " + errors.INVALID_BOOK_CODE + ": ge");
+
+    // when
+    expect(() => packageParseHelpers.parseBiblePackage(resource, packagePath, resultsPath)).toThrowError(expectedError);
   });
 
   it('el-x-koine_ugnt should pass', () => {
@@ -182,4 +221,11 @@ function verifyCatalogModifiedTimeInManifest(resultsPath, resource) {
   let manifestPath = path.join(resultsPath, 'manifest.json');
   const manifest = fs.readJSONSync(manifestPath);
   expect(manifest.catalog_modified_time).toEqual(resource.remoteModifiedTime);
+}
+
+function modifyFile(folderPath, filename, find, replace) {
+  const pathToFile = path.join(folderPath, filename);
+  let text = fs.readFileSync(pathToFile);
+  text = text.replace(find, replace);
+  fs.outputFileSync(pathToFile, text);
 }

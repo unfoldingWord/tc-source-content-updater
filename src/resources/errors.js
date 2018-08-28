@@ -12,3 +12,4 @@ export const UNABLE_TO_MOVE_RESOURCE_INTO_RESOURCES = 'Unable to move the resour
 export const FAILED_TO_PROCESS_RESOURCE = 'Failed to process resource';
 export const LANGUAGE_LIST_EMPTY = 'Language list is empty';
 export const MANIFEST_NOT_FOUND = 'Manifest not found';
+export const INVALID_BOOK_CODE = 'Invalid Book Code';
