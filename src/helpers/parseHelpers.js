@@ -116,7 +116,7 @@ export function getLatestResources(catalog, localResourceList) {
   for (let localResource of localResourceList) {
     let resourceId = localResource.resourceId;
     if (localResource.languageId && resourceId) {
-      resourceId = resourceNames.includes(resourceId) ? resourceNames[resourceId] : resourceId; // map resource names to ids
+      resourceId = resourceNames.includes(resourceId) ? RESOURCE_ID_MAP[resourceId] : resourceId; // map resource names to ids
       const index = tCoreResources.findIndex(remoteResource =>
         ((localResource.languageId === remoteResource.languageId) &&
           (remoteResource.resourceId === resourceId)));
