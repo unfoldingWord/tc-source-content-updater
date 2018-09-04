@@ -130,6 +130,7 @@ function indexBook(bookPath, index, bookCode) {
       chapterIndex[verse] = words.length;
     }
   }
+  bookIndex.chapters = chapterCount;
 }
 
 /**
