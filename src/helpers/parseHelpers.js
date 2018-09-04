@@ -2,6 +2,11 @@
 import * as ERROR from '../resources/errors';
 
 export const TC_RESOURCES = ['Bible', 'Aligned_Bible', 'Greek_New_Testament', 'Translator_Notes', 'Bible_translation_comprehension_questions', 'Translation_Words', 'Translation_Academy'];
+export const RESOURCE_ID_MAP = {
+  translationWords: 'tw',
+  translationNotes: 'tn',
+  translationAcademy: 'ta'
+};
 
 /**
  * get all resources to update for language
@@ -105,13 +110,16 @@ export function getLatestResources(catalog, localResourceList) {
   if (!catalog || !Array.isArray(localResourceList)) {
     throw new Error(ERROR.PARAMETER_ERROR);
   }
+  const resourceNames = Object.keys(RESOURCE_ID_MAP);
   const tCoreResources = parseCatalogResources(catalog, true, TC_RESOURCES);
   // remove resources that are already up to date
   for (let localResource of localResourceList) {
-    if (localResource.languageId && localResource.resourceId) {
+    let resourceId = localResource.resourceId;
+    if (localResource.languageId && resourceId) {
+      resourceId = resourceNames.includes(resourceId) ? resourceNames[resourceId] : resourceId; // map resource names to ids
       const index = tCoreResources.findIndex(remoteResource =>
         ((localResource.languageId === remoteResource.languageId) &&
-          (remoteResource.resourceId === localResource.resourceId)));
+          (remoteResource.resourceId === resourceId)));
       if (index >= 0) {
         const catalogResource = tCoreResources[index];
         const isNewer = !localResource.modifiedTime ||
