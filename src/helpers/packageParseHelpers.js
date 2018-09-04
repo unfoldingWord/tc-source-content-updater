@@ -119,7 +119,13 @@ function indexBook(bookPath, index, bookCode) {
     if (ugntVerses.length !== expectedVerseCount) {
       console.warn(`WARNING: ${bookCode} - in chapter ${chapter}, found ${ugntVerses.length} verses but should be ${expectedVerseCount} verses`);
     }
-    const highVerse = Object.keys(ugntChapter).reduce((a, b) => Math.max(a, b)); // get highest verse
+    let highVerse = 0;
+    Object.keys(ugntChapter).forEach(verseID => {
+      const verse = parseInt(verseID);
+      if (verse > highVerse) { // get highest verse
+        highVerse = verse;
+      }
+    });
     bookIndex[chapter] = highVerse;
   }
   bookIndex.chapters = chapterCount;
