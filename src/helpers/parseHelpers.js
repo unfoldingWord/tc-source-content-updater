@@ -1,7 +1,7 @@
 /* eslint-disable camelcase,no-empty,no-negated-condition */
 import * as ERROR from '../resources/errors';
 
-export const TC_RESOURCES = ['Bible', 'Greek_New_Testament', 'Translator_Notes', 'Bible_translation_comprehension_questions', 'Translation_Words', 'Translation_Academy'];
+export const TC_RESOURCES = ['Bible', 'Aligned_Bible', 'Greek_New_Testament', 'Translator_Notes', 'Bible_translation_comprehension_questions', 'Translation_Words', 'Translation_Academy'];
 
 /**
  * get all resources to update for language
