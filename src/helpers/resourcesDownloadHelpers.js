@@ -39,6 +39,8 @@ export const downloadResource = async (resource, resourcesPath) => {
     const zipFileName = resource.languageId + '_' + resource.resourceId + '_v' + resource.version + '.zip';
     zipFilePath = path.join(importsPath, zipFileName);
     await downloadHelpers.download(resource.downloadUrl, zipFilePath);
+    console.log("Downloaded: " + resource.downloadUrl);
+    console.log(zipFilePath + "exists: " + fs.existsSync(zipFilePath));
     importPath = await unzipResource(resource, zipFilePath, resourcesPath);
   } catch (err) {
     throw Error(formatError(resource, appendError(errors.UNABLE_TO_DOWNLOAD_AND_UNZIP_RESOURCES, err.message)));
