@@ -35,9 +35,10 @@ export const downloadResource = async (resource, resourcesPath) => {
   const importsPath = path.join(resourcesPath, 'imports');
   fs.ensureDirSync(importsPath);
   let importPath = null;
+  let zipFilePath = null;
   try {
     const zipFileName = resource.languageId + '_' + resource.resourceId + '_v' + resource.version + '.zip';
-    const zipFilePath = path.join(importsPath, zipFileName);
+    zipFilePath = path.join(importsPath, zipFileName);
     await downloadHelpers.download(resource.downloadUrl, zipFilePath);
     importPath = await resourcesHelpers.unzipResource(resource, zipFilePath, resourcesPath);
   } catch (err) {
@@ -67,8 +68,12 @@ export const downloadResource = async (resource, resourcesPath) => {
   } else {
     throw Error(resourcesHelpers.formatError(resource, errors.FAILED_TO_PROCESS_RESOURCE));
   }
-  rimraf.sync(zipFilePath, fs);
-  rimraf.sync(importPath, fs);
+  if (zipFilePath) {
+    rimraf.sync(zipFilePath, fs);
+  }
+  if (importPath) {
+    rimraf.sync(importPath, fs);
+  }
   return resource;
 };
 
