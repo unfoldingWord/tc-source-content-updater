@@ -66,6 +66,7 @@
     "fs-extra": "^4.0.3",
     "ospath": "^1.2.2",
     "path-extra": "^3.0.0",
+    "promise-parallel-throttle": "^3.2.0",
     "request": "^2.87.0",
     "url": "^0.11.0",
     "usfm-js": "1.0.1",

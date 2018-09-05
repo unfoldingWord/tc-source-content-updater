@@ -1,6 +1,7 @@
 import fs from 'fs-extra';
 import path from 'path-extra';
 import rimraf from 'rimraf';
+import * as Throttle from 'promise-parallel-throttle';
 // helpers
 import {formatError, unzipResource, getSubdirOfUnzippedResource, processResource, makeTwGroupDataResource,
   getActualResourcePath, removeAllButLatestVersion, appendError} from './resourcesHelpers';
@@ -144,7 +145,7 @@ export const downloadResources = (languageList, resourcesPath, resources) => {
         return;
       promises.push(downloadResourceAndCatchErrors(resource, resourcesPath, errorList));
     });
-    Promise.all(promises)
+    Throttle.all(promises, {maxInProgress: 2})
       .then(result => {
         rimraf.sync(importsDir, fs);
         if (!errorList.length) {
