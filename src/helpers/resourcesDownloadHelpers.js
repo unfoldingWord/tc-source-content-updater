@@ -39,6 +39,7 @@ export const downloadResource = async (resource, resourcesPath) => {
   try {
     const zipFileName = resource.languageId + '_' + resource.resourceId + '_v' + resource.version + '.zip';
     zipFilePath = path.join(importsPath, zipFileName);
+    console.log("Downloading: " + resource.downloadUrl);
     await downloadHelpers.download(resource.downloadUrl, zipFilePath);
     console.log("Downloaded: " + resource.downloadUrl);
     console.log(zipFilePath + ", zip exists: " + fs.existsSync(zipFilePath));
