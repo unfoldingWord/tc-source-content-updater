@@ -1,4 +1,4 @@
-/* eslint-disable no-console,max-len */
+/* eslint-disable no-console,max-len,camelcase */
 import fs from 'fs-extra';
 import path from 'path-extra';
 import yaml from 'yamljs';
@@ -186,7 +186,8 @@ export function processResource(resource, sourcePath) {
   }
   let manifest = getResourceManifest(sourcePath);
   if (!getResourceManifest(processedFilesPath) && manifest) {
-    fs.writeJsonSync(path.join(processedFilesPath, 'mainfest.json'), manifest);
+    manifest.catalog_modified_time = resource.remoteModifiedTime;
+    fs.writeJsonSync(path.join(processedFilesPath, 'manifest.json'), manifest);
   }
   return processedFilesPath;
 }

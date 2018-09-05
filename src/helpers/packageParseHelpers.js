@@ -108,8 +108,6 @@ function indexBook(bookPath, index, bookCode) {
 
   // add chapters
   for (let chapter of Object.keys(expectedChapters)) {
-    const chapterIndex = {};
-    bookIndex[chapter] = chapterIndex;
     const expectedVerseCount = parseInt(expectedChapters[chapter], 10);
     const chapterPath = path.join(bookPath, chapter + ".json");
     const ugntChapter = fs.readJSONSync(chapterPath);
@@ -121,15 +119,16 @@ function indexBook(bookPath, index, bookCode) {
     if (ugntVerses.length !== expectedVerseCount) {
       console.warn(`WARNING: ${bookCode} - in chapter ${chapter}, found ${ugntVerses.length} verses but should be ${expectedVerseCount} verses`);
     }
-    // add verses
-    for (let verse of ugntVerses) {
-      let words = ugntChapter[verse];
-      if (words.verseObjects) { // check for new verse objects support
-        words = words.verseObjects;
+    let highVerse = 0;
+    Object.keys(ugntChapter).forEach(verseID => {
+      const verse = parseInt(verseID);
+      if (verse > highVerse) { // get highest verse
+        highVerse = verse;
       }
-      chapterIndex[verse] = words.length;
-    }
+    });
+    bookIndex[chapter] = highVerse;
   }
+  bookIndex.chapters = chapterCount;
 }
 
 /**
