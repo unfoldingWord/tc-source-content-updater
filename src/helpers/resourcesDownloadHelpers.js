@@ -34,10 +34,15 @@ export const downloadResource = async (resource, resourcesPath) => {
   fs.ensureDirSync(resourcesPath);
   const importsPath = path.join(resourcesPath, 'imports');
   fs.ensureDirSync(importsPath);
-  const zipFileName = resource.languageId + '_' + resource.resourceId + '_v' + resource.version + '.zip';
-  const zipFilePath = path.join(importsPath, zipFileName);
-  await downloadHelpers.download(resource.downloadUrl, zipFilePath);
-  const importPath = await resourcesHelpers.unzipResource(resource, zipFilePath, resourcesPath);
+  let importPath = null;
+  try {
+    const zipFileName = resource.languageId + '_' + resource.resourceId + '_v' + resource.version + '.zip';
+    const zipFilePath = path.join(importsPath, zipFileName);
+    await downloadHelpers.download(resource.downloadUrl, zipFilePath);
+    importPath = await resourcesHelpers.unzipResource(resource, zipFilePath, resourcesPath);
+  } catch (err) {
+    throw Error(resourcesHelpers.formatError(resource, errors.UNABLE_TO_DOWNLOAD_AND_UNZIP_RESOURCES + ' ' + err.message));
+  }
   const importSubdirPath = resourcesHelpers.getSubdirOfUnzippedResource(importPath);
   const processedFilesPath = resourcesHelpers.processResource(resource, importSubdirPath);
   if (processedFilesPath) {
