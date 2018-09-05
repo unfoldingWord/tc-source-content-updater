@@ -110,13 +110,12 @@ export function getLatestResources(catalog, localResourceList) {
   if (!catalog || !Array.isArray(localResourceList)) {
     throw new Error(ERROR.PARAMETER_ERROR);
   }
-  const resourceNames = Object.keys(RESOURCE_ID_MAP);
   const tCoreResources = parseCatalogResources(catalog, true, TC_RESOURCES);
   // remove resources that are already up to date
   for (let localResource of localResourceList) {
     let resourceId = localResource.resourceId;
     if (localResource.languageId && resourceId) {
-      resourceId = resourceNames.includes(resourceId) ? RESOURCE_ID_MAP[resourceId] : resourceId; // map resource names to ids
+      resourceId = RESOURCE_ID_MAP[resourceId] || resourceId; // map resource names to ids
       const index = tCoreResources.findIndex(remoteResource =>
         ((localResource.languageId === remoteResource.languageId) &&
           (remoteResource.resourceId === resourceId)));
