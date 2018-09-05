@@ -146,7 +146,7 @@ export const downloadResources = (languageList, resourcesPath, resources) => {
         return;
       promises.push(downloadResourceAndCatchErrors(resource, resourcesPath, errorList));
     });
-    Throttle.all(promises, {maxInProgress: 2})
+    Throttle.all(promises, {maxInProgress: 3})
       .then(result => {
         rimraf.sync(importsDir, fs);
         if (!errorList.length) {
