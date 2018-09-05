@@ -29,6 +29,6 @@ export function generateBibleManifest(oldManifest, RESOURCE_OUTPUT_PATH) {
     'Original Language' : 'Gateway Language';
 
   let savePath = path.join(RESOURCE_OUTPUT_PATH, 'manifest.json');
-  fs.outputJsonSync(savePath, newManifest);
+  fs.writeFileSync(savePath, JSON.stringify(newManifest, null, 2));
   return newManifest;
 }

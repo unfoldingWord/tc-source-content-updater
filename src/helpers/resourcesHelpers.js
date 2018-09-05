@@ -187,7 +187,7 @@ export function processResource(resource, sourcePath) {
   let manifest = getResourceManifest(sourcePath);
   if (!getResourceManifest(processedFilesPath) && manifest) {
     manifest.catalog_modified_time = resource.remoteModifiedTime;
-    fs.writeJsonSync(path.join(processedFilesPath, 'manifest.json'), manifest);
+    fs.writeFileSync(path.join(processedFilesPath, 'manifest.json'), JSON.stringify(manifest, null, 2));
   }
   return processedFilesPath;
 }
