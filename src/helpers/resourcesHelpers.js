@@ -187,7 +187,7 @@ export function processResource(resource, sourcePath) {
   let manifest = getResourceManifest(sourcePath);
   if (!getResourceManifest(processedFilesPath) && manifest) {
     manifest.catalog_modified_time = resource.remoteModifiedTime;
-    fs.writeJsonSync(path.join(processedFilesPath, 'manifest.json'), manifest);
+    fs.writeFileSync(path.join(processedFilesPath, 'manifest.json'), JSON.stringify(manifest, null, 2));
   }
   return processedFilesPath;
 }
@@ -263,7 +263,7 @@ export function removeAllButLatestVersion(resourcePath) {
 /**
  * @description Formats an error for all resources to have a standard format
  * @param {Object} resource Resource object
- * @param {String} errMessage Error essage
+ * @param {String} errMessage Error message
  * @return {String} The formatted error message
  */
 export function formatError(resource, errMessage) {
@@ -274,4 +274,14 @@ export function formatError(resource, errMessage) {
     };
   }
   return resource.languageId + '_' + resource.resourceId + ': ' + errMessage;
+}
+
+/**
+ * appends error message to string
+ * @param {string} str - string to use as prefix
+ * @param {Error|String} err - error to append
+ * @return {string} concatenated message
+ */
+export function appendError(str, err) {
+  return str + ": " + (err.message || err);
 }
