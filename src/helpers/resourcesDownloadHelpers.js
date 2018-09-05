@@ -2,7 +2,8 @@ import fs from 'fs-extra';
 import path from 'path-extra';
 import rimraf from 'rimraf';
 // helpers
-import * as resourcesHelpers from './resourcesHelpers';
+import {formatError, unzipResource, getSubdirOfUnzippedResource, processResource, makeTwGroupDataResource,
+  getActualResourcePath, removeAllButLatestVersion, appendError} from './resourcesHelpers';
 import * as parseHelpers from './parseHelpers';
 import * as downloadHelpers from './downloadHelpers';
 import * as moveResourcesHelpers from './moveResourcesHelpers';
@@ -22,15 +23,13 @@ import * as errors from '../resources/errors';
  *             catalogEntry: {langResource, bookResource, format}
  *           }>} resource - resource to download
  * @param {String} resourcesPath Path to the resources directory
- * @param {Function} callback Callback when downloaded
- * @param {Function} errCallback Callback for errors
  * @return {Promise} Download promise
  */
 export const downloadResource = async (resource, resourcesPath) => {
   if (!resource)
     throw Error(errors.RESOURCE_NOT_GIVEN);
   if (!resourcesPath)
-    throw Error(resourcesHelpers.formatError(resource, errors.RESOURCES_PATH_NOT_GIVEN));
+    throw Error(formatError(resource, errors.RESOURCES_PATH_NOT_GIVEN));
   fs.ensureDirSync(resourcesPath);
   const importsPath = path.join(resourcesPath, 'imports');
   fs.ensureDirSync(importsPath);
@@ -40,33 +39,33 @@ export const downloadResource = async (resource, resourcesPath) => {
     const zipFileName = resource.languageId + '_' + resource.resourceId + '_v' + resource.version + '.zip';
     zipFilePath = path.join(importsPath, zipFileName);
     await downloadHelpers.download(resource.downloadUrl, zipFilePath);
-    importPath = await resourcesHelpers.unzipResource(resource, zipFilePath, resourcesPath);
+    importPath = await unzipResource(resource, zipFilePath, resourcesPath);
   } catch (err) {
-    throw Error(resourcesHelpers.formatError(resource, errors.UNABLE_TO_DOWNLOAD_AND_UNZIP_RESOURCES + ' ' + err.message));
+    throw Error(formatError(resource, appendError(errors.UNABLE_TO_DOWNLOAD_AND_UNZIP_RESOURCES, err.message)));
   }
-  const importSubdirPath = resourcesHelpers.getSubdirOfUnzippedResource(importPath);
-  const processedFilesPath = resourcesHelpers.processResource(resource, importSubdirPath);
+  const importSubdirPath = getSubdirOfUnzippedResource(importPath);
+  const processedFilesPath = processResource(resource, importSubdirPath);
   if (processedFilesPath) {
     // Extra step if the resource is the Greek UGNT or Hebrew UHB
     if ((resource.languageId === 'grc' && resource.resourceId === 'ugnt') ||
       (resource.languageId === 'hbo' && resource.resourceId === 'uhb')) {
-      const twGroupDataPath = resourcesHelpers.makeTwGroupDataResource(resource, processedFilesPath);
+      const twGroupDataPath = makeTwGroupDataResource(resource, processedFilesPath);
       const twGroupDataResourcesPath = path.join(resourcesPath, resource.languageId, 'translationHelps', 'translationWords', 'v' + resource.version);
       try {
         await moveResourcesHelpers.moveResources(twGroupDataPath, twGroupDataResourcesPath);
       } catch (err) {
-        throw Error(resourcesHelpers.formatError(resource, errors.UNABLE_TO_CREATE_TW_GROUP_DATA));
+        throw Error(formatError(resource, appendError(errors.UNABLE_TO_CREATE_TW_GROUP_DATA, err)));
       }
     }
-    const resourcePath = resourcesHelpers.getActualResourcePath(resource, resourcesPath);
+    const resourcePath = getActualResourcePath(resource, resourcesPath);
     try {
       await moveResourcesHelpers.moveResources(processedFilesPath, resourcePath);
     } catch (err) {
-      throw Error(resourcesHelpers.formatError(resource, errors.UNABLE_TO_MOVE_RESOURCE_INTO_RESOURCES));
+      throw Error(formatError(resource, appendError(errors.UNABLE_TO_MOVE_RESOURCE_INTO_RESOURCES, err)));
     }
-    resourcesHelpers.removeAllButLatestVersion(path.dirname(resourcePath));
+    removeAllButLatestVersion(path.dirname(resourcePath));
   } else {
-    throw Error(resourcesHelpers.formatError(resource, errors.FAILED_TO_PROCESS_RESOURCE));
+    throw Error(formatError(resource, errors.FAILED_TO_PROCESS_RESOURCE));
   }
   if (zipFilePath) {
     rimraf.sync(zipFilePath, fs);
