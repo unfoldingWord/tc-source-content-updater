@@ -139,14 +139,10 @@ export const downloadResources = (languageList, resourcesPath, resources) => {
       return;
     }
 
-    const promises = [];
     const errorList = [];
-    downloadableResources.forEach(resource => {
-      if (!resource)
-        return;
-      promises.push(downloadResourceAndCatchErrors(resource, resourcesPath, errorList));
-    });
-    Throttle.all(promises, {maxInProgress: 3})
+    downloadableResources = downloadableResources.filter(resource => resource);
+    const queue = downloadableResources.map(resource => () => downloadResourceAndCatchErrors(resource, resourcesPath, errorList));
+    Throttle.all(queue, {maxInProgress: 3})
       .then(result => {
         rimraf.sync(importsDir, fs);
         if (!errorList.length) {
