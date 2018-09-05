@@ -283,5 +283,5 @@ export function formatError(resource, errMessage) {
  * @return {string} concatenated message
  */
 export function appendError(str, err) {
-  return str + " " + (err.message || err);
+  return str + ": " + (err.message || err);
 }
