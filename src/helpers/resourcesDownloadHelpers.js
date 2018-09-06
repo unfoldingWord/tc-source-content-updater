@@ -142,7 +142,7 @@ export const downloadResources = (languageList, resourcesPath, resources) => {
     const errorList = [];
     downloadableResources = downloadableResources.filter(resource => resource);
     const queue = downloadableResources.map(resource => () => downloadResourceAndCatchErrors(resource, resourcesPath, errorList));
-    Throttle.all(queue, {maxInProgress: 2})
+    Throttle.all(queue, {maxInProgress: 3})
       .then(result => {
         rimraf.sync(importsDir, fs);
         if (!errorList.length) {
