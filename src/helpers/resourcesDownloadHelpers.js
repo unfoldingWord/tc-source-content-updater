@@ -75,7 +75,9 @@ export const downloadAndProcessResource = async (resource, resourcesPath) => {
       throw Error(errors.FAILED_TO_PROCESS_RESOURCE);
     }
   } catch (err) {
-    throw Error(formatError(resource, getErrorMessage(err)));
+    const errorMessage = getErrorMessage(err);
+    console.log("Error getting " + resource.downloadUrl + ': ' + errorMessage);
+    throw Error(formatError(resource, errorMessage));
   } finally {
     if (zipFilePath) {
       rimraf.sync(zipFilePath, fs);
@@ -84,6 +86,7 @@ export const downloadAndProcessResource = async (resource, resourcesPath) => {
       rimraf.sync(importPath, fs);
     }
   }
+  console.log("Processed: " + resource.downloadUrl);
   return resource;
 };
 
