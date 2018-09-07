@@ -4,5 +4,4 @@ __mocks__
 testSetUp
 coverage
 .idea
-src
 .vscode
