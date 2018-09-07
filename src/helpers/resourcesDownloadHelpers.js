@@ -88,9 +88,6 @@ export const downloadAndProcessResource = async (resource, resourcesPath) => {
   }
   console.log("Processed: " + resource.downloadUrl);
   return resource;
-  } catch (e) {
-    throw Error(e);
-  }
 };
 
 /**
