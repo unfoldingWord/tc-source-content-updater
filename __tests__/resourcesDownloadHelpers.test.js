@@ -51,10 +51,10 @@ describe('Tests for resourcesDownloadHelpers.downloadResources()', function() {
   });
 });
 
-describe('Tests for resourcesDownloadHelpers.downloadResource()', () => {
+describe('Tests for resourcesDownloadHelpers.downloadAndProcessResource()', () => {
   const resourcesPath = path.join(ospath.home(), 'translationCore/resources');
 
-  it('Test resourcesDownloadHelpers.downloadResource() for CEB ULB', () => {
+  it('Test resourcesDownloadHelpers.downloadAndProcessResource() for CEB ULB', () => {
     const resource = {
       languageId: 'ceb',
       resourceId: 'ulb',
@@ -68,10 +68,10 @@ describe('Tests for resourcesDownloadHelpers.downloadResource()', () => {
         format: {}
       }
     };
-    expect(resourcesDownloadHelpers.downloadResource(resource, resourcesPath)).resolves.toEqual(resource);
+    expect(resourcesDownloadHelpers.downloadAndProcessResource(resource, resourcesPath)).resolves.toEqual(resource);
   });
 
-  it('Test resourcesDownloadHelpers.downloadResource() for GRC UGNT', () => {
+  it('Test resourcesDownloadHelpers.downloadAndProcessResource() for GRC UGNT', () => {
     const resource = {
       languageId: 'grc',
       resourceId: 'ugnt',
@@ -85,6 +85,6 @@ describe('Tests for resourcesDownloadHelpers.downloadResource()', () => {
         format: {}
       }
     };
-    expect(resourcesDownloadHelpers.downloadResource(resource, resourcesPath)).resolves.toEqual(resource);
+    expect(resourcesDownloadHelpers.downloadAndProcessResource(resource, resourcesPath)).resolves.toEqual(resource);
   });
 });

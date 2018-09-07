@@ -277,11 +277,20 @@ export function formatError(resource, errMessage) {
 }
 
 /**
+ *  converts error to string
+ * @param {Error|String} error - error to append
+ * @return {string} concatenated message
+ */
+export function getErrorMessage(error) {
+  return ((error && error.message) || error || "UNDEFINED");
+}
+
+/**
  * appends error message to string
  * @param {string} str - string to use as prefix
  * @param {Error|String} err - error to append
  * @return {string} concatenated message
  */
 export function appendError(str, err) {
-  return str + ": " + ((err && err.message) || err || "UNDEFINED");
+  return str + ": " + getErrorMessage(err);
 }
