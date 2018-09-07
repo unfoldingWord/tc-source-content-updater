@@ -26,6 +26,7 @@ import * as errors from '../resources/errors';
  * @return {Promise} Download promise
  */
 export const downloadResource = async (resource, resourcesPath) => {
+  try {
   if (!resource)
     throw Error(errors.RESOURCE_NOT_GIVEN);
   if (!resourcesPath)
@@ -76,6 +77,9 @@ export const downloadResource = async (resource, resourcesPath) => {
     rimraf.sync(importPath, fs);
   }
   return resource;
+  } catch (e) {
+    throw Error(e);
+  }
 };
 
 /**
