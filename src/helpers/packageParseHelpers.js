@@ -67,6 +67,7 @@ export function parseBiblePackage(resource, sourcePath, outputPath) {
   if (!outputPath)
     throw Error(resourcesHelpers.formatError(resource, errors.OUTPUT_PATH_NOT_GIVEN));
   try {
+    const isOL = (resource.resourceId === 'ugnt') || (resource.resourceId === 'uhb');
     const manifest = parseManifest(sourcePath, outputPath);
     if (!manifest.projects)
       throw Error(resourcesHelpers.formatError(resource, errors.MANIFEST_MISSING_BOOKS));
@@ -79,7 +80,7 @@ export function parseBiblePackage(resource, sourcePath, outputPath) {
         const identifier = project.identifier.toLowerCase();
         let bookPath = path.join(outputPath, identifier);
         parseUsfmOfBook(path.join(sourcePath, project.path), bookPath);
-        indexBook(bookPath, index, identifier);
+        indexBook(bookPath, index, identifier, isOL);
       }
     }
     saveIndex(outputPath, index);
@@ -90,12 +91,32 @@ export function parseBiblePackage(resource, sourcePath, outputPath) {
 }
 
 /**
+ * get word count for verse - will also recursively check children
+ * @param {Array} verseObjects - array to search for verseObjects
+ * @return {number} word count found in verseObjects
+ */
+function getWordCount(verseObjects) {
+  let wordCount = 0;
+  if (verseObjects && verseObjects.length) {
+    for (let item of verseObjects) {
+      if (item.type === 'word') {
+        wordCount++;
+      } else if (item.children) {
+        wordCount += getWordCount(item.children);
+      }
+    }
+  }
+  return wordCount;
+}
+
+/**
  * @description - update index with chapter/verse/words for specified book code
  * @param {string} bookPath - path to books
  * @param {Object} index - data for index.json
  * @param {string} bookCode - book to index
+ * @param {Boolean} isOL - if true then this is an Original Language
  */
-function indexBook(bookPath, index, bookCode) {
+function indexBook(bookPath, index, bookCode, isOL) {
   const expectedChapters = bible.BOOK_CHAPTER_VERSES[bookCode];
   if (!expectedChapters) {
     throw new Error(errors.INVALID_BOOK_CODE + ": " + bookCode);
@@ -119,16 +140,31 @@ function indexBook(bookPath, index, bookCode) {
     if (ugntVerses.length !== expectedVerseCount) {
       console.warn(`WARNING: ${bookCode} - in chapter ${chapter}, found ${ugntVerses.length} verses but should be ${expectedVerseCount} verses`);
     }
-    let highVerse = 0;
-    Object.keys(ugntChapter).forEach(verseID => {
-      const verse = parseInt(verseID);
-      if (verse > highVerse) { // get highest verse
-        highVerse = verse;
+
+    if (isOL) { // if an OL, we need word counts of verses
+      const chapterIndex = {};
+      bookIndex[chapter] = chapterIndex;
+      for (let verse of ugntVerses) {
+        let words = ugntChapter[verse];
+        if (words.verseObjects) { // check for new verse objects support
+          words = words.verseObjects;
+        }
+        chapterIndex[verse] = getWordCount(words);
       }
-    });
-    bookIndex[chapter] = highVerse;
+    } else { // is not an OL, so we need verse count
+      let highVerse = 0;
+      Object.keys(ugntChapter).forEach(verseID => {
+        const verse = parseInt(verseID);
+        if (verse > highVerse) { // get highest verse
+          highVerse = verse;
+        }
+      });
+      bookIndex[chapter] = highVerse;
+    }
   }
-  bookIndex.chapters = chapterCount;
+  if (!isOL) { // is not an OL, so we add chapter count
+    bookIndex.chapters = chapterCount;
+  }
 }
 
 /**
