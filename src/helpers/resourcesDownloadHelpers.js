@@ -1,9 +1,10 @@
 import fs from 'fs-extra';
 import path from 'path-extra';
 import rimraf from 'rimraf';
+import * as Throttle from 'promise-parallel-throttle';
 // helpers
 import {formatError, unzipResource, getSubdirOfUnzippedResource, processResource, makeTwGroupDataResource,
-  getActualResourcePath, removeAllButLatestVersion, appendError} from './resourcesHelpers';
+  getActualResourcePath, removeAllButLatestVersion, appendError, getErrorMessage} from './resourcesHelpers';
 import * as parseHelpers from './parseHelpers';
 import * as downloadHelpers from './downloadHelpers';
 import * as moveResourcesHelpers from './moveResourcesHelpers';
@@ -25,7 +26,7 @@ import * as errors from '../resources/errors';
  * @param {String} resourcesPath Path to the resources directory
  * @return {Promise} Download promise
  */
-export const downloadResource = async (resource, resourcesPath) => {
+export const downloadAndProcessResource = async (resource, resourcesPath) => {
   if (!resource)
     throw Error(errors.RESOURCE_NOT_GIVEN);
   if (!resourcesPath)
@@ -36,59 +37,70 @@ export const downloadResource = async (resource, resourcesPath) => {
   let importPath = null;
   let zipFilePath = null;
   try {
-    const zipFileName = resource.languageId + '_' + resource.resourceId + '_v' + resource.version + '.zip';
-    zipFilePath = path.join(importsPath, zipFileName);
-    await downloadHelpers.download(resource.downloadUrl, zipFilePath);
-    console.log("Downloaded: " + resource.downloadUrl);
-    console.log(zipFilePath + ", zip exists: " + fs.existsSync(zipFilePath));
-    importPath = await unzipResource(resource, zipFilePath, resourcesPath);
-  } catch (err) {
-    throw Error(formatError(resource, appendError(errors.UNABLE_TO_DOWNLOAD_AND_UNZIP_RESOURCES, err)));
-  }
-  const importSubdirPath = getSubdirOfUnzippedResource(importPath);
-  const processedFilesPath = processResource(resource, importSubdirPath);
-  if (processedFilesPath) {
-    // Extra step if the resource is the Greek UGNT or Hebrew UHB
-    if ((resource.languageId === 'grc' && resource.resourceId === 'ugnt') ||
-      (resource.languageId === 'hbo' && resource.resourceId === 'uhb')) {
-      const twGroupDataPath = makeTwGroupDataResource(resource, processedFilesPath);
-      const twGroupDataResourcesPath = path.join(resourcesPath, resource.languageId, 'translationHelps', 'translationWords', 'v' + resource.version);
-      try {
-        await moveResourcesHelpers.moveResources(twGroupDataPath, twGroupDataResourcesPath);
-      } catch (err) {
-        throw Error(formatError(resource, appendError(errors.UNABLE_TO_CREATE_TW_GROUP_DATA, err)));
-      }
-    }
-    const resourcePath = getActualResourcePath(resource, resourcesPath);
     try {
-      await moveResourcesHelpers.moveResources(processedFilesPath, resourcePath);
+      const zipFileName = resource.languageId + '_' + resource.resourceId + '_v' + resource.version + '.zip';
+      zipFilePath = path.join(importsPath, zipFileName);
+      console.log("Downloading: " + resource.downloadUrl);
+      await downloadHelpers.download(resource.downloadUrl, zipFilePath);
     } catch (err) {
-      throw Error(formatError(resource, appendError(errors.UNABLE_TO_MOVE_RESOURCE_INTO_RESOURCES, err)));
+      throw Error(appendError(errors.UNABLE_TO_DOWNLOAD_RESOURCES, err));
     }
-    removeAllButLatestVersion(path.dirname(resourcePath));
-  } else {
-    throw Error(formatError(resource, errors.FAILED_TO_PROCESS_RESOURCE));
+    try {
+      importPath = await unzipResource(resource, zipFilePath, resourcesPath);
+    } catch (err) {
+      throw Error(appendError(errors.UNABLE_TO_UNZIP_RESOURCES, err));
+    }
+    const importSubdirPath = getSubdirOfUnzippedResource(importPath);
+    const processedFilesPath = processResource(resource, importSubdirPath);
+    if (processedFilesPath) {
+      // Extra step if the resource is the Greek UGNT or Hebrew UHB
+      if ((resource.languageId === 'grc' && resource.resourceId === 'ugnt') ||
+        (resource.languageId === 'hbo' && resource.resourceId === 'uhb')) {
+        const twGroupDataPath = makeTwGroupDataResource(resource, processedFilesPath);
+        const twGroupDataResourcesPath = path.join(resourcesPath, resource.languageId, 'translationHelps', 'translationWords', 'v' + resource.version);
+        try {
+          await moveResourcesHelpers.moveResources(twGroupDataPath, twGroupDataResourcesPath);
+        } catch (err) {
+          throw Error(appendError(errors.UNABLE_TO_CREATE_TW_GROUP_DATA, err));
+        }
+      }
+      const resourcePath = getActualResourcePath(resource, resourcesPath);
+      try {
+        await moveResourcesHelpers.moveResources(processedFilesPath, resourcePath);
+      } catch (err) {
+        throw Error(appendError(errors.UNABLE_TO_MOVE_RESOURCE_INTO_RESOURCES, err));
+      }
+      removeAllButLatestVersion(path.dirname(resourcePath));
+    } else {
+      throw Error(errors.FAILED_TO_PROCESS_RESOURCE);
+    }
+  } catch (err) {
+    const errorMessage = getErrorMessage(err);
+    console.log("Error getting " + resource.downloadUrl + ': ' + errorMessage);
+    throw Error(formatError(resource, errorMessage));
+  } finally {
+    if (zipFilePath) {
+      rimraf.sync(zipFilePath, fs);
+    }
+    if (importPath) {
+      rimraf.sync(importPath, fs);
+    }
   }
-  if (zipFilePath) {
-    rimraf.sync(zipFilePath, fs);
-  }
-  if (importPath) {
-    rimraf.sync(importPath, fs);
-  }
+  console.log("Processed: " + resource.downloadUrl);
   return resource;
 };
 
 /**
- * download the resource catching and saving errors
+ * downloads and processes the resource catching and saving errors
  * @param {Object} resource being downloaded
  * @param {String} resourcesPath - path to save resources
  * @param {Array} errorList - keeps track of errors
  * @return {Promise} promise
  */
-export const downloadResourceAndCatchErrors = async (resource, resourcesPath, errorList) => {
+export const downloadAndProcessResourceWithCatch = async (resource, resourcesPath, errorList) => {
   let result = null;
   try {
-    result = await downloadResource(resource, resourcesPath);
+    result = await downloadAndProcessResource(resource, resourcesPath);
     console.log("Download Success: " + resource.downloadUrl);
   } catch (e) {
     console.log("Download Error:");
@@ -137,14 +149,11 @@ export const downloadResources = (languageList, resourcesPath, resources) => {
       return;
     }
 
-    const promises = [];
     const errorList = [];
-    downloadableResources.forEach(resource => {
-      if (!resource)
-        return;
-      promises.push(downloadResourceAndCatchErrors(resource, resourcesPath, errorList));
-    });
-    Promise.all(promises)
+    downloadableResources = downloadableResources.filter(resource => resource);
+    const queue = downloadableResources.map(resource =>
+      () => downloadAndProcessResourceWithCatch(resource, resourcesPath, errorList));
+    Throttle.all(queue, {maxInProgress: 2})
       .then(result => {
         rimraf.sync(importsDir, fs);
         if (!errorList.length) {

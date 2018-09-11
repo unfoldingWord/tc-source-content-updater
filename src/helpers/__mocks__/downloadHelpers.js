@@ -27,10 +27,16 @@ export function read(uri) {
  * @return {Promise.<{}|Error>} the status code or an error
  */
 export function download(uri, dest, progressCallback) {
-  progressCallback = progressCallback || function() {};
-  let parsedUrl = url.parse(uri, false, true);
-
   return new Promise((resolve, reject) => {
+    if (uri === 'a/url/that/should/fail') {
+      return reject({
+        uri,
+        dest,
+        status: 400
+      });
+    }
+    progressCallback = progressCallback || function() {};
+    let parsedUrl = url.parse(uri, false, true);
     const filePath = path.join(__dirname, '../../../__tests__/fixtures', parsedUrl.host, parsedUrl.path);
     const content = fs.__actual.readFileSync(filePath);
     fs.writeFileSync(dest, content);
