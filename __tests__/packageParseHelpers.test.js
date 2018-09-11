@@ -125,7 +125,7 @@ describe('parseBiblePackage()', () => {
     const resource = grcUgntResource;
     const results = packageParseHelpers.parseBiblePackage(resource, packagePath, resultsPath);
     expect(results).toBeTruthy();
-    verifyBibleResults(resultsPath, NT_BOOKS);
+    verifyBibleResults(resultsPath, NT_BOOKS, true);
     verifyCatalogModifiedTimeInManifest(resultsPath, resource);
   });
 
@@ -192,7 +192,13 @@ function getChapterCount(bookID) {
   return 0;
 }
 
-function verifyBibleResults(resultsPath, verifyBooks) {
+/**
+ * verifies the parsed bible
+ * @param {String} resultsPath - path to the results
+ * @param {Array} verifyBooks - array of expected books
+ * @param {Boolean} isOL - if true then this is an Original Language
+ */
+function verifyBibleResults(resultsPath, verifyBooks, isOL = false) {
   for (let bookId of verifyBooks) {
     const bookPath = path.join(resultsPath, bookId);
     expect(fs.pathExistsSync(bookPath)).toBeTruthy();
@@ -201,10 +207,22 @@ function verifyBibleResults(resultsPath, verifyBooks) {
       const chapterPath = path.join(bookPath, chapter + '.json');
       expect(fs.pathExistsSync(chapterPath)).toBeTruthy();
     }
-    const manifest = fs.readJSONSync(path.join(resultsPath, 'manifest.json'));
-    expect(Object.keys(manifest).length).toBeGreaterThan(10);
-    const index = fs.readJSONSync(path.join(resultsPath, 'index.json'));
-    expect(Object.keys(index).length).toEqual(verifyBooks.length);
+  }
+  // test manifest
+  const manifest = fs.readJSONSync(path.join(resultsPath, 'manifest.json'));
+  expect(Object.keys(manifest).length).toBeGreaterThan(10);
+
+  // test index
+  const index = fs.readJSONSync(path.join(resultsPath, 'index.json'));
+  expect(Object.keys(index).length).toEqual(verifyBooks.length);
+  const firstBook = Object.keys(index)[0];
+  const chapter1 = index[firstBook][1];
+  const expectNumber = !isOL; // should have verse count if not OL
+  expect(!isNaN(chapter1)).toEqual(expectNumber);
+  if (isOL) { // should be Objects that contains verses
+    expect(Object.keys(chapter1).length).toBeGreaterThan(0);
+    const verse1 = chapter1[1];
+    expect(!isNaN(verse1)).toEqual(true); // verse one should have word count
   }
 }
 
