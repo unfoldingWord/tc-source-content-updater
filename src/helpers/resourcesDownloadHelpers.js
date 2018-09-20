@@ -85,6 +85,7 @@ export const downloadAndProcessResource = async (resource, resourcesPath) => {
     }
     if (importPath) {
       rimraf.sync(importPath, fs);
+      rimraf.sync(importPath + '_processed', fs);
     }
   }
   console.log("Processed: " + resource.downloadUrl);
