@@ -252,7 +252,7 @@ export function removeAllButLatestVersion(resourcePath) {
     const lastVersion = versionDirs[versionDirs.length - 1];
     versionDirs.forEach(versionDir => {
       if (versionDir !== lastVersion) {
-        fs.removeSync(path.join(path.dirname(resourcePath), versionDir));
+        fs.removeSync(path.join(resourcePath, versionDir));
       }
     });
     return true;
