@@ -4,10 +4,12 @@
   "description": "Module that updates source content for the desktop application translationCore.",
   "main": "lib/index.js",
   "scripts": {
-    "test": "eslint ./src ./index.js && jest",
-    "fix": "eslint ./src ./index.js --fix",
-    "compile": "rimraf lib && babel src/ -d lib/",
-    "prepublishOnly": "npm run compile"
+    "test": "eslint ./src && jest",
+    "fix": "eslint ./src --fix",
+    "prebuild": "rm -rf ./lib",
+    "build": "babel ./src -d ./lib",
+    "prepare": "if [ ! -d './lib/' ]; then npm run build; fi",
+    "prepublishOnly": "npm test && npm run build"
   },
   "jest": {
     "collectCoverageFrom": [
@@ -56,8 +58,7 @@
     "jest": "^22.4.0",
     "nock": "^9.6.1",
     "rimraf": "^2.6.2",
-    "tmp": "0.0.33",
-    "transform-runtime": "0.0.0"
+    "tmp": "0.0.33"
   },
   "dependencies": {
     "adm-zip": "^0.4.11",
