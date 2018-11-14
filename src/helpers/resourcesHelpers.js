@@ -179,6 +179,7 @@ export function processResource(resource, sourcePath) {
     case 'Bible':
     case 'Aligned_Bible':
     case 'Greek_New_Testament':
+    case 'Hebrew_Old_Testament':
       packageParseHelpers.parseBiblePackage(resource, sourcePath, processedFilesPath);
       break;
     default:

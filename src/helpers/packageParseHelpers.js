@@ -123,14 +123,21 @@ function indexBook(bookPath, index, bookCode, isOL) {
   }
   const files = fs.readdirSync(bookPath);
   const chapterCount = Object.keys(expectedChapters).length;
-  assert.deepEqual(files.length, chapterCount);
+  if (files.length !== chapterCount) {
+    console.warn("Unexpected chapter count in '" + bookCode + "': Found " + files.length + " chapters, but expected " + chapterCount);
+  }
   const bookIndex = {};
   index[bookCode] = bookIndex;
 
   // add chapters
-  for (let chapter of Object.keys(expectedChapters)) {
-    const expectedVerseCount = parseInt(expectedChapters[chapter], 10);
-    const chapterPath = path.join(bookPath, chapter + ".json");
+  for (let file of files) {
+    const chapter = parseInt(file, 10);
+    if (isNaN(chapter)) {
+      continue;
+    }
+    let expectedVerses = expectedChapters[chapter];
+    const expectedVerseCount = (expectedVerses && parseInt(expectedVerses, 10)) || 0;
+    const chapterPath = path.join(bookPath, file);
     const ugntChapter = fs.readJSONSync(chapterPath);
     const ugntVerses = Object.keys(ugntChapter);
     let frontPos = ugntVerses.indexOf("front");

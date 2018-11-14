@@ -1,7 +1,16 @@
 /* eslint-disable camelcase,no-empty,no-negated-condition */
 import * as ERROR from '../resources/errors';
 
-export const TC_RESOURCES = ['Bible', 'Aligned_Bible', 'Greek_New_Testament', 'Translator_Notes', 'Bible_translation_comprehension_questions', 'Translation_Words', 'Translation_Academy', 'Hebrew_Old_Testament'];
+export const TC_RESOURCES = [
+  'Bible',
+  'Aligned_Bible',
+  'Greek_New_Testament',
+  'Hebrew_Old_Testament',
+  'Translator_Notes',
+  'Bible_translation_comprehension_questions',
+  'Translation_Words',
+  'Translation_Academy'];
+
 export const RESOURCE_ID_MAP = {
   translationWords: 'tw',
   translationNotes: 'tn',
