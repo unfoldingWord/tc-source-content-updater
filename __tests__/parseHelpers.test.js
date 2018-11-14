@@ -124,7 +124,7 @@ describe('getUpdatedLanguageList()', () => {
   });
 });
 
-describe.skip('getResourcesForLanguage()', () => {
+describe('getResourcesForLanguage()', () => {
   const resources = parseHelpers.getLatestResources(catalog, []);
 
   it('should find grc', () => {
