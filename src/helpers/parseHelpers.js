@@ -1,7 +1,7 @@
 /* eslint-disable camelcase,no-empty,no-negated-condition */
 import * as ERROR from '../resources/errors';
 
-export const TC_RESOURCES = ['Bible', 'Aligned_Bible', 'Greek_New_Testament', 'Translator_Notes', 'Bible_translation_comprehension_questions', 'Translation_Words', 'Translation_Academy'];
+export const TC_RESOURCES = ['Bible', 'Aligned_Bible', 'Greek_New_Testament', 'Translator_Notes', 'Bible_translation_comprehension_questions', 'Translation_Words', 'Translation_Academy', 'Hebrew_Old_Testament'];
 export const RESOURCE_ID_MAP = {
   translationWords: 'tw',
   translationNotes: 'tn',
@@ -191,12 +191,14 @@ export function parseCatalogResources(catalog, ignoreObsResources = true, subjec
   }
   const catalogResources = [];
   if (catalog && catalog.subjects) {
-    for (let catSubject of catalog.subjects) {
+    for (let i = 0, len = catalog.subjects.length; i < len; i++) {
+      const catSubject = catalog.subjects[i];
       const subject = catSubject.identifier;
       const isGreekOL = (catSubject.language === "el-x-koine");
       const languageId = isGreekOL ? 'grc' : catSubject.language; // we use grc internally for Greek Original language
       const resources = getValidArray(catSubject.resources);
-      for (let resource of resources) {
+      for (let j = 0, rLen = resources.length; j < rLen; j++) {
+        const resource = resources[j];
         const isCheckingLevel2 = resource.checking.checking_level >= 2;
         const resourceId = resource.identifier;
         if (ignoreObsResources && (resourceId.indexOf('obs') >= 0)) { // see if we should skip obs resources
@@ -204,7 +206,8 @@ export function parseCatalogResources(catalog, ignoreObsResources = true, subjec
         }
         const version = resource.version;
         const formats = getFormatsForResource(resource);
-        for (let format of formats) {
+        for (let k = 0, kLen = formats.length; k < kLen; k++) {
+          const format = formats[k];
           try {
             const isZipFormat = format.format.indexOf("application/zip;") >= 0;
             const downloadUrl = format.url;

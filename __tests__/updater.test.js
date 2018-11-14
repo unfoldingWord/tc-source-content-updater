@@ -16,6 +16,16 @@ describe('Updater.downloadResources', () => {
     fs.ensureDirSync(resourcesPath);
   });
 
+  it('should resolve for hbo', async () => {
+    await updater.getLatestResources([]);
+    let languageID = 'hbo';
+    const hebrewSubject = updater.remoteCatalog.subjects.find(item => (item.language === languageID));
+    const resources = await updater.downloadResources([languageID], resourcesPath);
+    expect(resources.length).toEqual(1);
+    expect(hebrewSubject.languageId).toEqual(resources[0].language);
+    expect(hebrewSubject.subject).toEqual(resources[0].subject);
+  });
+
   it('should resolve for grc', async () => {
     const resources = await updater.downloadResources(['grc'], resourcesPath);
     expect(resources.length).toEqual(1);
