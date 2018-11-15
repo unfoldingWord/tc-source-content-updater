@@ -7,7 +7,6 @@ import fs from 'fs-extra';
 import path from 'path-extra';
 import usfm from 'usfm-js';
 import * as bible from '../resources/bible';
-import assert from 'assert';
 import {isObject} from 'util';
 // helpers
 import {generateBibleManifest} from './biblesHelpers';
