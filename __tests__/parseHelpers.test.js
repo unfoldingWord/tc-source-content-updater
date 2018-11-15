@@ -19,12 +19,12 @@ describe('parseCatalogResources()', () => {
 
   it('should return everything with no filter', () => {
     const results = parseHelpers.parseCatalogResources(catalog, false, null);
-    expect(results.length).toEqual(123);
+    expect(results.length).toEqual(137);
   });
 
   it('should return everything with default filter', () => {
     const results = parseHelpers.parseCatalogResources(catalog, true);
-    expect(results.length).toEqual(80);
+    expect(results.length).toEqual(93);
   });
 
   it('should throw exception for null catalog', done => {
@@ -42,13 +42,13 @@ describe('getLatestResources()', () => {
   it('should succeed with empty resourceList', () => {
     const resourceList = [];
     const results = parseHelpers.getLatestResources(catalog, resourceList);
-    expect(results.length).toEqual(76);
+    expect(results.length).toEqual(56);
 
     const greekResources = getResourcesForLanguageAndResource(results, 'grc');
     expect(greekResources.length).toEqual(1);
 
     const frenchResources = getResourcesForLanguageAndResource(results, 'fr');
-    expect(frenchResources.length).toEqual(2);
+    expect(frenchResources.length).toEqual(3);
   });
 
   it('should remove french/f10 since already up to date', () => {
@@ -56,7 +56,7 @@ describe('getLatestResources()', () => {
       {languageId: 'fr', resourceId: 'f10', modifiedTime: '2018-04-27T18:51:27+00:00'}
     ];
     const results = parseHelpers.getLatestResources(catalog, resourceList);
-    expect(results.length).toEqual(75);
+    expect(results.length).toEqual(55);
 
     const greekResources = getResourcesForLanguageAndResource(results, 'grc');
     expect(greekResources.length).toEqual(1);
@@ -70,7 +70,7 @@ describe('getLatestResources()', () => {
       {languageId: 'fr', resourceId: 'f10', modifiedTime: '2018-04-27T18:51:26+00:00'}
     ];
     const results = parseHelpers.getLatestResources(catalog, resourceList);
-    expect(results.length).toEqual(76);
+    expect(results.length).toEqual(56);
 
     const greekResources = getResourcesForLanguageAndResource(results, 'grc');
     expect(greekResources.length).toEqual(1);
@@ -115,7 +115,7 @@ describe('getUpdatedLanguageList()', () => {
 
   it('should succeed', () => {
     const languages = parseHelpers.getUpdatedLanguageList(resources);
-    expect(languages.length).toEqual(30);
+    expect(languages.length).toEqual(32);
   });
 
   it('should return null on null resources', () => {
@@ -134,9 +134,8 @@ describe('getResourcesForLanguage()', () => {
 
   it('should find hi', () => {
     const results = parseHelpers.getResourcesForLanguage(resources, 'hi');
-    expect(results.length).toEqual(5);
-    validateResourceType(results, 'tq', 1);
-    validateResourceType(results, 'tn', 1);
+    expect(results.length).toEqual(4);
+    validateResourceType(results, 'irv', 1);
     validateResourceType(results, 'tw', 1);
     validateResourceType(results, 'ulb', 1);
     validateResourceType(results, 'udb', 1);
@@ -144,7 +143,7 @@ describe('getResourcesForLanguage()', () => {
 
   it('should find en', () => {
     const results = parseHelpers.getResourcesForLanguage(resources, 'en');
-    expect(results.length).toEqual(4);
+    expect(results.length).toEqual(6);
     validateResourceType(results, 'ta', 1);
     validateResourceType(results, 'tw', 1);
     validateResourceType(results, 'ulb', 1);

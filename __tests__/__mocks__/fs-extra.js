@@ -1,14 +1,10 @@
-// 'use strict';
+'use strict';
 import path from 'path-extra';
 const fsActual = require.requireActual('fs-extra'); // for copying test files into mock
 const fs = jest.genMockFromModule('fs-extra');
 let mockFS = Object.create(null);
 
-/**
- *  @deprecated
- *
- * @param {any} newMockFS - optional fs structure
- */
+/** @deprecated */
 function __setMockFS(newMockFS) {
   mockFS = newMockFS;
 }
@@ -41,7 +37,7 @@ function __setMockDirectories(newMockFiles) {
 /**
  * A custom version of `readdirSync` that reads from the special mocked out
  * file list set via __setMockDirectories
- * @param {String} directoryPath Directory path
+ * @param {String} directoryPath - Directory path
  * @return {Array} Contents of the given path
  */
 function readdirSync(directoryPath) {
@@ -212,6 +208,7 @@ function Stats(path, exists, isDir) {
   this.path = path;
   this.exists = exists;
   this.isDir = isDir;
+  this.atime = "Not-a-real-date";
   this.isDirectory = () => {
     const isDir = this.exists && this.isDir;
     return isDir;
@@ -240,7 +237,7 @@ function isValidDirectory(path) {
 /**
  * @description only minimal implementation of fs.Stats: isDirectory() and isFile()
  * @param {string} path - file name to stat
- * @return {array} - components of stat function
+ * @return {Object} - Stats Object
  */
 function statSync(path) {
   const exists = existsSync(path);
@@ -269,7 +266,7 @@ function __loadFilesIntoMockFs(copyFiles, sourceFolder, mockDestinationFolder) {
       __correctSeparatorsFromLinux(mockDestinationFolder);
   const sourceFolder_ = __correctSeparatorsFromLinux(sourceFolder);
   for (let copyFile of copyFiles) {
-    const filePath2 = path.join(sourceFolder_, 
+    const filePath2 = path.join(sourceFolder_,
         __correctSeparatorsFromLinux(copyFile));
     let fileData = null;
     const isDir = fsActual.statSync(filePath2).isDirectory();

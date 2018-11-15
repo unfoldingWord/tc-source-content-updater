@@ -29,7 +29,7 @@ export const generateTwGroupDataFromAlignedBible = (resource, sourcePath, output
   if (!version) {
     return false;
   }
-  let books = bible.BIBLE_LIST_NT.slice(0);
+  let books = resource.languageId === 'hbo' ? bible.BIBLE_LIST_OT.slice(0) : bible.BIBLE_LIST_NT.slice(0);
   books.forEach(bookName => {
     convertBookVerseObjectsToTwData(sourcePath, outputPath, bookName);
   });

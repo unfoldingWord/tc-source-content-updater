@@ -16,6 +16,16 @@ describe('Updater.downloadResources', () => {
     fs.ensureDirSync(resourcesPath);
   });
 
+  it('should resolve for hbo', async () => {
+    await updater.getLatestResources([]);
+    let languageID = 'hbo';
+    const hebrewSubject = updater.remoteCatalog.subjects.find(item => (item.language === languageID));
+    const resources = await updater.downloadResources([languageID], resourcesPath);
+    expect(resources.length).toEqual(1);
+    expect(hebrewSubject.languageId).toEqual(resources[0].language);
+    expect(hebrewSubject.subject).toEqual(resources[0].subject);
+  });
+
   it('should resolve for grc', async () => {
     const resources = await updater.downloadResources(['grc'], resourcesPath);
     expect(resources.length).toEqual(1);
@@ -35,7 +45,7 @@ describe('Updater.downloadResources', () => {
   it('should resolve for multiple languages being downloaded', async () => {
     const languageList = ['grc', 'en', 'hi', 'ceb'];
     const resources = await updater.downloadResources(languageList, resourcesPath);
-    expect(resources.length).toEqual(11);
+    expect(resources.length).toEqual(14);
     expect(fs.readdirSync(resourcesPath)).toContain(...languageList);
   });
 
@@ -49,12 +59,12 @@ describe('Updater.downloadResources', () => {
       subject: 'Greek_New_Testament',
       catalogEntry: {}
     }];
-    return updater.downloadResources(['grc'], resourcesPath, prevResources).catch(err => {
+    await updater.downloadResources(['grc'], resourcesPath, prevResources).catch(err => {
       expect(err).toBeTruthy();
     });
   });
 
-  it('should reject for a download url that does not exist', async () => {
+  it('should reject for a download url that does not exist #2', async () => {
     const prevResources = [{
       languageId: 'en',
       resourceId: 'tw',
@@ -146,10 +156,9 @@ describe('Updater.downloadResources', () => {
       catalogEntry: {}
     }];
     const languageList = ['en', 'hi', 'ceb'];
-    return updater.downloadResources(languageList, resourcesPath, prevResources).catch(err => {
+    await updater.downloadResources(languageList, resourcesPath, prevResources).catch(err => {
       expect(err).toBeTruthy();
       expect(fs.readdirSync(path.join(resourcesPath, 'en', 'translationHelps', 'translationWords')).length).toBe(0);
-      expect(fs.readdirSync(path.join(resourcesPath, 'en', 'translationHelps', 'translationAcademy')).length).toBeGreaterThan(0);
       expect(fs.readdirSync(path.join(resourcesPath, 'en', 'bibles', 'ulb')).length).toBeGreaterThan(0);
       expect(fs.readdirSync(path.join(resourcesPath, 'en', 'bibles', 'udb')).length).toBeGreaterThan(0);
       expect(fs.readdirSync(path.join(resourcesPath, 'hi', 'bibles', 'ulb')).length).toBeGreaterThan(0);

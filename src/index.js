@@ -73,7 +73,7 @@ export function getResourcesForLanguage(languageId) {
 
 /**
  * @description Downloads the resources that need to be updated for the given languages using the DCS API
- * @param {Array.<String>} languageList - Array of language codes to download the resources fsor
+ * @param {Array.<String>} languageList - Array of language codes to download their resources
  * @param {String} resourcesPath - Path to the resources directory where each resource will be placed
  * @param {Array.<Object>} resources - Array of resources that are newer than previously downloaded resources;
  * defaults to this.updatedCatalogResources which was set by previously calling getLatestResources();

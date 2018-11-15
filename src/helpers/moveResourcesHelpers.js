@@ -10,7 +10,8 @@ import path from 'path';
 export function moveResources(resourceSourcePath, resourceTargetPath) {
   return new Promise((resolve, reject) => {
     if (resourceSourcePath && resourceSourcePath.length &&
-      resourceTargetPath && resourceTargetPath.length) {
+            resourceTargetPath && resourceTargetPath.length &&
+            fs.pathExistsSync(resourceSourcePath)) {
       if (fs.pathExistsSync(resourceTargetPath)) {
         fs.removeSync(resourceTargetPath);
       }
