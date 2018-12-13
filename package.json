@@ -64,7 +64,7 @@
   },
   "dependencies": {
     "adm-zip": "^0.4.11",
-    "agentkeepalive": "3.3.0",
+    "agentkeepalive": "4.0.0",
     "follow-redirects": "^1.5.5",
     "fs-extra": "^4.0.3",
     "ospath": "^1.2.2",
