@@ -27,10 +27,14 @@ import * as errors from '../resources/errors';
  * @return {Promise} Download promise
  */
 export const downloadAndProcessResource = async (resource, resourcesPath) => {
-  if (!resource)
-    throw Error(errors.RESOURCE_NOT_GIVEN);
-  if (!resourcesPath)
-    throw Error(formatError(resource, errors.RESOURCES_PATH_NOT_GIVEN));
+  if (!resource) {
+throw Error(errors.RESOURCE_NOT_GIVEN)
+;
+}
+  if (!resourcesPath) {
+throw Error(formatError(resource, errors.RESOURCES_PATH_NOT_GIVEN))
+;
+}
   fs.ensureDirSync(resourcesPath);
   const importsPath = path.join(resourcesPath, 'imports');
   fs.ensureDirSync(importsPath);
@@ -40,7 +44,7 @@ export const downloadAndProcessResource = async (resource, resourcesPath) => {
     try {
       const zipFileName = resource.languageId + '_' + resource.resourceId + '_v' + resource.version + '.zip';
       zipFilePath = path.join(importsPath, zipFileName);
-      console.log("Downloading: " + resource.downloadUrl);
+      console.log('Downloading: ' + resource.downloadUrl);
       await downloadHelpers.download(resource.downloadUrl, zipFilePath);
     } catch (err) {
       throw Error(appendError(errors.UNABLE_TO_DOWNLOAD_RESOURCES, err));
@@ -77,7 +81,7 @@ export const downloadAndProcessResource = async (resource, resourcesPath) => {
     }
   } catch (err) {
     const errorMessage = getErrorMessage(err);
-    console.log("Error getting " + resource.downloadUrl + ': ' + errorMessage);
+    console.log('Error getting ' + resource.downloadUrl + ': ' + errorMessage);
     throw Error(formatError(resource, errorMessage));
   } finally {
     if (zipFilePath) {
@@ -87,7 +91,7 @@ export const downloadAndProcessResource = async (resource, resourcesPath) => {
       rimraf.sync(importPath, fs);
     }
   }
-  console.log("Processed: " + resource.downloadUrl);
+  console.log('Processed: ' + resource.downloadUrl);
   return resource;
 };
 
@@ -102,9 +106,9 @@ export const downloadAndProcessResourceWithCatch = async (resource, resourcesPat
   let result = null;
   try {
     result = await downloadAndProcessResource(resource, resourcesPath);
-    console.log("Download Success: " + resource.downloadUrl);
+    console.log('Download Success: ' + resource.downloadUrl);
   } catch (e) {
-    console.log("Download Error:");
+    console.log('Download Error:');
     console.log(e);
     errorList.push(e);
   }
@@ -141,7 +145,7 @@ export const downloadResources = (languageList, resourcesPath, resources) => {
     fs.ensureDirSync(resourcesPath);
     const importsDir = path.join(resourcesPath, 'imports');
     let downloadableResources = [];
-    languageList.forEach(languageId => {
+    languageList.forEach((languageId) => {
       downloadableResources = downloadableResources.concat(parseHelpers.getResourcesForLanguage(resources, languageId));
     });
 
@@ -151,21 +155,21 @@ export const downloadResources = (languageList, resourcesPath, resources) => {
     }
 
     const errorList = [];
-    downloadableResources = downloadableResources.filter(resource => resource);
-    const queue = downloadableResources.map(resource =>
+    downloadableResources = downloadableResources.filter((resource) => resource);
+    const queue = downloadableResources.map((resource) =>
       () => downloadAndProcessResourceWithCatch(resource, resourcesPath, errorList));
     Throttle.all(queue, {maxInProgress: 2})
-      .then(result => {
+      .then((result) => {
         rimraf.sync(importsDir, fs);
         if (!errorList.length) {
           resolve(result);
         } else {
-          const errorMessages = errorList.map(e => (e.message || e));
+          const errorMessages = errorList.map((e) => (e.message || e));
           const returnErrorMessage = errorMessages.join('\n');
           reject(new Error(returnErrorMessage));
         }
       },
-      err => {
+      (err) => {
         rimraf.sync(importsDir, fs);
         reject(err);
       });

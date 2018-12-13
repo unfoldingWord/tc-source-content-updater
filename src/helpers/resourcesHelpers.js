@@ -16,7 +16,7 @@ const translationHelps = {
   ta: 'translationAcademy',
   tn: 'translationNotes',
   tw: 'translationWords',
-  tq: 'translationQuestions'
+  tq: 'translationQuestions',
 };
 
 /**
@@ -86,7 +86,7 @@ export function getVersionsInPath(resourcePath) {
   if (!resourcePath || !fs.pathExistsSync(resourcePath)) {
     return null;
   }
-  const isVersionDirectory = name => {
+  const isVersionDirectory = (name) => {
     const fullPath = path.join(resourcePath, name);
     return fs.lstatSync(fullPath).isDirectory() && name.match(/^v\d/i);
   };
@@ -161,12 +161,18 @@ export function getSubdirOfUnzippedResource(extractedFilesPath) {
  * @return {String} Path to the directory of the processed files
  */
 export function processResource(resource, sourcePath) {
-  if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId)
-    throw Error(formatError(resource, errors.RESOURCE_NOT_GIVEN));
-  if (!sourcePath)
-    throw Error(formatError(resource, errors.SOURCE_PATH_NOT_GIVEN));
-  if (!fs.pathExistsSync(sourcePath))
-    throw Error(formatError(resource, errors.SOURCE_PATH_NOT_EXIST));
+  if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId) {
+throw Error(formatError(resource, errors.RESOURCE_NOT_GIVEN))
+;
+}
+  if (!sourcePath) {
+throw Error(formatError(resource, errors.SOURCE_PATH_NOT_GIVEN))
+;
+}
+  if (!fs.pathExistsSync(sourcePath)) {
+throw Error(formatError(resource, errors.SOURCE_PATH_NOT_EXIST))
+;
+}
   const processedFilesPath = sourcePath + '_processed';
   fs.ensureDirSync(processedFilesPath);
   switch (resource.subject) {
@@ -185,7 +191,7 @@ export function processResource(resource, sourcePath) {
     default:
       fs.copySync(sourcePath, processedFilesPath);
   }
-  let manifest = getResourceManifest(sourcePath);
+  const manifest = getResourceManifest(sourcePath);
   if (!getResourceManifest(processedFilesPath) && manifest) {
     manifest.catalog_modified_time = resource.remoteModifiedTime;
     fs.writeFileSync(path.join(processedFilesPath, 'manifest.json'), JSON.stringify(manifest, null, 2));
@@ -228,16 +234,22 @@ export function getActualResourcePath(resource, resourcesPath) {
  * @return {String} Path to the processed tw Group Data files
  */
 export function makeTwGroupDataResource(resource, sourcePath) {
-  if (!resource)
-    throw Error(formatError(resource, errors.RESOURCE_NOT_GIVEN));
-  if (!fs.pathExistsSync(sourcePath))
-    throw Error(formatError(resource, errors.SOURCE_PATH_NOT_EXIST));
+  if (!resource) {
+throw Error(formatError(resource, errors.RESOURCE_NOT_GIVEN))
+;
+}
+  if (!fs.pathExistsSync(sourcePath)) {
+throw Error(formatError(resource, errors.SOURCE_PATH_NOT_EXIST))
+;
+}
   if ((resource.languageId === 'grc' && resource.resourceId === 'ugnt') ||
       (resource.languageId === 'hbo' && resource.resourceId === 'uhb')) {
     const twGroupDataPath = path.join(sourcePath + '_tw_group_data_' + resource.languageId + '_v' + resource.version);
     const result = twGroupDataHelpers.generateTwGroupDataFromAlignedBible(resource, sourcePath, twGroupDataPath);
-    if (result)
-      return twGroupDataPath;
+    if (result) {
+return twGroupDataPath
+;
+}
   }
 }
 
@@ -251,7 +263,7 @@ export function removeAllButLatestVersion(resourcePath) {
   const versionDirs = getVersionsInPath(resourcePath);
   if (versionDirs && versionDirs.length > 1) {
     const lastVersion = versionDirs[versionDirs.length - 1];
-    versionDirs.forEach(versionDir => {
+    versionDirs.forEach((versionDir) => {
       if (versionDir !== lastVersion) {
         fs.removeSync(path.join(resourcePath, versionDir));
       }
@@ -271,7 +283,7 @@ export function formatError(resource, errMessage) {
   if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId) {
     resource = {
       languageId: 'unknown',
-      resourceId: 'unknown'
+      resourceId: 'unknown',
     };
   }
   return resource.languageId + '_' + resource.resourceId + ': ' + errMessage;
@@ -283,7 +295,7 @@ export function formatError(resource, errMessage) {
  * @return {string} concatenated message
  */
 export function getErrorMessage(error) {
-  return ((error && error.message) || error || "UNDEFINED");
+  return ((error && error.message) || error || 'UNDEFINED');
 }
 
 /**
@@ -293,5 +305,5 @@ export function getErrorMessage(error) {
  * @return {string} concatenated message
  */
 export function appendError(str, err) {
-  return str + ": " + getErrorMessage(err);
+  return str + ': ' + getErrorMessage(err);
 }

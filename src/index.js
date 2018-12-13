@@ -1,14 +1,15 @@
+/* eslint-disable curly, no-invalid-this */
 import path from 'path';
 import ospath from 'ospath';
 // helpers
 import * as apiHelpers from './helpers/apiHelpers';
 import * as parseHelpers from './helpers/parseHelpers';
 import * as moveResourcesHelpers from './helpers/moveResourcesHelpers';
-import * as packageParseHelpers from "./helpers/packageParseHelpers";
-import * as taArticleHelpers from "./helpers/translationHelps/taArticleHelpers";
-import * as twArticleHelpers from "./helpers/translationHelps/twArticleHelpers";
-import * as twGroupDataHelpers from "./helpers/translationHelps/twGroupDataHelpers";
-import * as resourcesDownloadHelpers from "./helpers/resourcesDownloadHelpers";
+import * as packageParseHelpers from './helpers/packageParseHelpers';
+import * as taArticleHelpers from './helpers/translationHelps/taArticleHelpers';
+import * as twArticleHelpers from './helpers/translationHelps/twArticleHelpers';
+import * as twGroupDataHelpers from './helpers/translationHelps/twGroupDataHelpers';
+import * as resourcesDownloadHelpers from './helpers/resourcesDownloadHelpers';
 
 /**
  * Updater constructor

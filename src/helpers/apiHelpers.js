@@ -1,4 +1,4 @@
-var request = require('request');
+const request = require('request');
 const DCS_API = 'https://api.door43.org';
 const PIVOTED_CATALOG_PATH = '/v3/subjects/pivoted.json';
 /**
