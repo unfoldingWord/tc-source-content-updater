@@ -8,13 +8,13 @@ import path from 'path-extra';
  * @return {Promise.<string>} the url contents
  */
 export function read(uri) {
-  let parsedUrl = url.parse(uri, false, true);
+  const parsedUrl = url.parse(uri, false, true);
 
   return new Promise((resolve, reject) => {
     const filePath = path.join(__dirname, '../../../__tests__/fixtures', parsedUrl.host, parsedUrl.path);
     resolve({
       status: 200,
-      data: fs.__actual.readFileSync(filePath)
+      data: fs.__actual.readFileSync(filePath),
     });
   });
 }
@@ -32,18 +32,18 @@ export function download(uri, dest, progressCallback) {
       return reject({
         uri,
         dest,
-        status: 400
+        status: 400,
       });
     }
     progressCallback = progressCallback || function() {};
-    let parsedUrl = url.parse(uri, false, true);
+    const parsedUrl = url.parse(uri, false, true);
     const filePath = path.join(__dirname, '../../../__tests__/fixtures', parsedUrl.host, parsedUrl.path);
     const content = fs.__actual.readFileSync(filePath);
     fs.writeFileSync(dest, content);
     resolve({
       uri,
       dest,
-      status: 200
+      status: 200,
     });
   });
 }

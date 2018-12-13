@@ -8,6 +8,7 @@
   ],
   "settings": {},
   "rules": {
+    "curly": "off",
     "guard-for-in": "off",
     "indent": "off",
     "linebreak-style": "off",

@@ -1,5 +1,5 @@
-export const PARAMETER_ERROR = "Parameter Error";
-export const CATALOG_CONTENT_ERROR = "Catalog Content Error";
+export const PARAMETER_ERROR = 'Parameter Error';
+export const CATALOG_CONTENT_ERROR = 'Catalog Content Error';
 export const RESOURCE_NOT_GIVEN = 'Resource entry was not given';
 export const SOURCE_PATH_NOT_GIVEN = 'Source path not given';
 export const SOURCE_PATH_NOT_EXIST = 'Source path does not exist';

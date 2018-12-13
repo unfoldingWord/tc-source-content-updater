@@ -1,3 +1,4 @@
+/* eslint-disable curly */
 import fs from 'fs-extra';
 import path from 'path-extra';
 import * as bible from '../../resources/bible';
@@ -29,8 +30,8 @@ export const generateTwGroupDataFromAlignedBible = (resource, sourcePath, output
   if (!version) {
     return false;
   }
-  let books = resource.languageId === 'hbo' ? bible.BIBLE_LIST_OT.slice(0) : bible.BIBLE_LIST_NT.slice(0);
-  books.forEach(bookName => {
+  const books = resource.languageId === 'hbo' ? bible.BIBLE_LIST_OT.slice(0) : bible.BIBLE_LIST_NT.slice(0);
+  books.forEach((bookName) => {
     convertBookVerseObjectsToTwData(sourcePath, outputPath, bookName);
   });
   return true;
@@ -44,7 +45,7 @@ export const generateTwGroupDataFromAlignedBible = (resource, sourcePath, output
  */
 function convertBookVerseObjectsToTwData(sourcePath, outputPath, bookName) {
   const bookId = getbookId(bookName);
-  let twData = {};
+  const twData = {};
   const bookDir = path.join(sourcePath, bookId);
   if (fs.existsSync(bookDir)) {
     const chapters = Object.keys(bible.BOOK_CHAPTER_VERSES[bookId]).length;
@@ -52,18 +53,18 @@ function convertBookVerseObjectsToTwData(sourcePath, outputPath, bookName) {
       const chapterFile = path.join(bookDir, chapter + '.json');
       if (fs.existsSync(chapterFile)) {
         const json = JSON.parse(fs.readFileSync(chapterFile));
-        for (let verse in json) {
-          let groupData = [];
-          json[verse].verseObjects.forEach(verseObject => {
+        for (const verse in json) {
+          const groupData = [];
+          json[verse].verseObjects.forEach((verseObject) => {
             populateGroupDataFromVerseObject(groupData, verseObject);
           });
           populateTwDataFromGroupData(twData, groupData, bookId, chapter, verse);
         }
       }
     }
-    for (let category in twData) {
-      for (let groupId in twData[category]) {
-        let groupPath = path.join(outputPath, category, 'groups', bookId, groupId + '.json');
+    for (const category in twData) {
+      for (const groupId in twData[category]) {
+        const groupPath = path.join(outputPath, category, 'groups', bookId, groupId + '.json');
         fs.outputFileSync(groupPath, JSON.stringify(twData[category][groupId], null, 2));
       }
     }
@@ -78,17 +79,17 @@ function convertBookVerseObjectsToTwData(sourcePath, outputPath, bookName) {
  * @return {Object} Returns group data for this verse object
  */
 function populateGroupDataFromVerseObject(groupData, verseObject, isMilestone = false) {
-  var myGroupData = {
+  const myGroupData = {
     quote: [],
-    strong: []
+    strong: [],
   };
   if (verseObject.type === 'milestone' || (verseObject.type === 'word' && (verseObject.tw || isMilestone))) {
     if (verseObject.type === 'milestone') {
       if (verseObject.text) {
         myGroupData.text.push(verseObject.text);
       }
-      verseObject.children.forEach(childVerseObject => {
-        let childGroupData = populateGroupDataFromVerseObject(groupData, childVerseObject, true);
+      verseObject.children.forEach((childVerseObject) => {
+        const childGroupData = populateGroupDataFromVerseObject(groupData, childVerseObject, true);
         if (childGroupData) {
           myGroupData.quote = myGroupData.quote.concat(childGroupData.quote);
           myGroupData.strong = myGroupData.strong.concat(childGroupData.strong);
@@ -111,7 +112,7 @@ function populateGroupDataFromVerseObject(groupData, verseObject, isMilestone = 
         }
         groupData[category][groupId].push({
           quote: myGroupData.quote.join(' '),
-          strong: myGroupData.strong
+          strong: myGroupData.strong,
         });
       }
     }
@@ -128,16 +129,16 @@ function populateGroupDataFromVerseObject(groupData, verseObject, isMilestone = 
  * @param {int} verse Number of the verse
  */
 function populateTwDataFromGroupData(twData, groupData, bookId, chapter, verse) {
-  for (let category in groupData) {
+  for (const category in groupData) {
     if (!twData[category]) {
       twData[category] = [];
     }
-    for (let groupId in groupData[category]) {
+    for (const groupId in groupData[category]) {
       if (!twData[category][groupId]) {
         twData[category][groupId] = [];
       }
-      let occurrences = {};
-      groupData[category][groupId].forEach(item => {
+      const occurrences = {};
+      groupData[category][groupId].forEach((item) => {
         if (!occurrences[item.quote]) {
           occurrences[item.quote] = 1;
         }
@@ -151,14 +152,14 @@ function populateTwDataFromGroupData(twData, groupData, bookId, chapter, verse) 
             reference: {
               bookId: bookId,
               chapter: chapter,
-              verse: parseInt(verse)
+              verse: parseInt(verse),
             },
             tool: 'translationWords',
             groupId: groupId,
             quote: item.quote,
             strong: item.strong,
-            occurrence: occurrences[item.quote]++
-          }
+            occurrence: occurrences[item.quote]++,
+          },
         });
       });
     }

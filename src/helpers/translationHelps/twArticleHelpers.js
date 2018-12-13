@@ -1,3 +1,4 @@
+/* eslint-disable curly */
 import fs from 'fs-extra';
 import path from 'path-extra';
 import {isObject} from 'util';
@@ -26,13 +27,13 @@ export function processTranslationWords(resource, sourcePath, outputPath) {
   if (fs.pathExistsSync(outputPath))
     fs.removeSync(outputPath);
   const typesPath = path.join(sourcePath, 'bible');
-  const isDirectory = item => fs.lstatSync(path.join(typesPath, item)).isDirectory();
+  const isDirectory = (item) => fs.lstatSync(path.join(typesPath, item)).isDirectory();
   const typeDirs = fs.readdirSync(typesPath).filter(isDirectory);
-  typeDirs.forEach(typeDir => {
+  typeDirs.forEach((typeDir) => {
     const typePath = path.join(typesPath, typeDir);
-    const files = fs.readdirSync(typePath).filter(filename => path.extname(filename) === '.md');
+    const files = fs.readdirSync(typePath).filter((filename) => path.extname(filename) === '.md');
     generateGroupsIndex(typePath, outputPath, typeDir);
-    files.forEach(fileName => {
+    files.forEach((fileName) => {
       const sourcePath = path.join(typePath, fileName);
       const destinationPath = path.join(
         outputPath,
@@ -53,12 +54,12 @@ export function processTranslationWords(resource, sourcePath, outputPath) {
  * @param {String} folderName article type. ex. kt or other.
  */
 function generateGroupsIndex(filesPath, twOutputPath, folderName) {
-  let groupsIndex = [];
-  let groupIds = fs.readdirSync(filesPath).filter(filename => {
+  const groupsIndex = [];
+  const groupIds = fs.readdirSync(filesPath).filter((filename) => {
     return filename.split('.').pop() === 'md';
   });
-  groupIds.forEach(fileName => {
-    let groupObject = {};
+  groupIds.forEach((fileName) => {
+    const groupObject = {};
     const filePath = path.join(filesPath, fileName);
     const articleFile = fs.readFileSync(filePath, 'utf8');
     const groupId = fileName.replace('.md', '');
@@ -85,15 +86,15 @@ function generateGroupsIndex(filesPath, twOutputPath, folderName) {
  * @return {int} comparison result
  */
 function compareByFirstUniqueWord(a, b) {
-  let aWords = a.name.toUpperCase().split(',');
-  let bWords = b.name.toUpperCase().split(',');
+  const aWords = a.name.toUpperCase().split(',');
+  const bWords = b.name.toUpperCase().split(',');
   while (aWords.length || bWords.length) {
     if (!aWords.length)
       return -1;
     if (!bWords.length)
       return 1;
-    let aWord = aWords.shift().trim();
-    let bWord = bWords.shift().trim();
+    const aWord = aWords.shift().trim();
+    const bWord = bWords.shift().trim();
     if (aWord !== bWord)
       return (aWord < bWord ? -1 : 1);
   }

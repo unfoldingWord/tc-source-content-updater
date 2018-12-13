@@ -1,4 +1,4 @@
-/* eslint-disable camelcase */
+/* eslint-disable curly, camelcase */
 /**
  * packageParseHelpers.js - methods for processing manifest and USFM files to verseObjects
  */
@@ -21,9 +21,9 @@ import * as errors from '../resources/errors';
  */
 export const parseUsfmOfBook = (usfmPath, outputPath) => {
   const usfmData = fs.readFileSync(usfmPath, 'UTF-8').toString();
-  const converted = usfm.toJSON(usfmData, {convertToInt: ["occurrence", "occurrences"]});
+  const converted = usfm.toJSON(usfmData, {convertToInt: ['occurrence', 'occurrences']});
   const {chapters} = converted;
-  Object.keys(chapters).forEach(chapter => {
+  Object.keys(chapters).forEach((chapter) => {
     fs.outputFileSync(path.join(outputPath, chapter + '.json'), JSON.stringify(chapters[chapter], null, 2));
   });
 };
@@ -35,7 +35,7 @@ export const parseUsfmOfBook = (usfmPath, outputPath) => {
  * @return {Object} new manifest data
  */
 export function parseManifest(extractedFilePath, outputPath) {
-  let oldManifest = resourcesHelpers.getResourceManifest(extractedFilePath);
+  const oldManifest = resourcesHelpers.getResourceManifest(extractedFilePath);
   return generateBibleManifest(oldManifest, outputPath);
 }
 
@@ -57,34 +57,44 @@ export function parseManifest(extractedFilePath, outputPath) {
  */
 export function parseBiblePackage(resource, sourcePath, outputPath) {
   const index = {};
-  if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId)
-    throw Error(resourcesHelpers.formatError(resource, errors.RESOURCE_NOT_GIVEN));
-  if (!sourcePath)
-    throw Error(resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_GIVEN));
-  if (!fs.pathExistsSync(sourcePath))
-    throw Error(resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_EXIST + ": " + sourcePath));
-  if (!outputPath)
-    throw Error(resourcesHelpers.formatError(resource, errors.OUTPUT_PATH_NOT_GIVEN));
+  if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId) {
+throw Error(resourcesHelpers.formatError(resource, errors.RESOURCE_NOT_GIVEN))
+;
+}
+  if (!sourcePath) {
+throw Error(resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_GIVEN))
+;
+}
+  if (!fs.pathExistsSync(sourcePath)) {
+throw Error(resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_EXIST + ': ' + sourcePath))
+;
+}
+  if (!outputPath) {
+throw Error(resourcesHelpers.formatError(resource, errors.OUTPUT_PATH_NOT_GIVEN))
+;
+}
   try {
     const isOL = (resource.resourceId === 'ugnt') || (resource.resourceId === 'uhb');
     const manifest = parseManifest(sourcePath, outputPath);
-    if (!manifest.projects)
-      throw Error(resourcesHelpers.formatError(resource, errors.MANIFEST_MISSING_BOOKS));
+    if (!manifest.projects) {
+throw Error(resourcesHelpers.formatError(resource, errors.MANIFEST_MISSING_BOOKS))
+;
+}
     manifest.catalog_modified_time = resource.remoteModifiedTime;
-    let savePath = path.join(outputPath, 'manifest.json');
+    const savePath = path.join(outputPath, 'manifest.json');
     fs.writeFileSync(savePath, JSON.stringify(manifest, null, 2));
     const projects = manifest.projects || [];
-    for (let project of projects) {
+    for (const project of projects) {
       if (project.identifier && project.path) {
         const identifier = project.identifier.toLowerCase();
-        let bookPath = path.join(outputPath, identifier);
+        const bookPath = path.join(outputPath, identifier);
         parseUsfmOfBook(path.join(sourcePath, project.path), bookPath);
         indexBook(bookPath, index, identifier, isOL);
       }
     }
     saveIndex(outputPath, index);
   } catch (error) {
-    throw Error(resourcesHelpers.formatError(resource, errors.ERROR_PARSING_BIBLE + ": " + error.message));
+    throw Error(resourcesHelpers.formatError(resource, errors.ERROR_PARSING_BIBLE + ': ' + error.message));
   }
   return true;
 }
@@ -97,7 +107,7 @@ export function parseBiblePackage(resource, sourcePath, outputPath) {
 function getWordCount(verseObjects) {
   let wordCount = 0;
   if (verseObjects && verseObjects.length) {
-    for (let item of verseObjects) {
+    for (const item of verseObjects) {
       if (item.type === 'word') {
         wordCount++;
       } else if (item.children) {
@@ -118,28 +128,28 @@ function getWordCount(verseObjects) {
 function indexBook(bookPath, index, bookCode, isOL) {
   const expectedChapters = bible.BOOK_CHAPTER_VERSES[bookCode];
   if (!expectedChapters) {
-    throw new Error(errors.INVALID_BOOK_CODE + ": " + bookCode);
+    throw new Error(errors.INVALID_BOOK_CODE + ': ' + bookCode);
   }
   const files = fs.readdirSync(bookPath);
   const chapterCount = Object.keys(expectedChapters).length;
   if (files.length !== chapterCount) {
-    console.warn("Unexpected chapter count in '" + bookCode + "': Found " + files.length + " chapters, but expected " + chapterCount);
+    console.warn('Unexpected chapter count in \'' + bookCode + '\': Found ' + files.length + ' chapters, but expected ' + chapterCount);
   }
   const bookIndex = {};
   index[bookCode] = bookIndex;
 
   // add chapters
-  for (let file of files) {
+  for (const file of files) {
     const chapter = parseInt(file, 10);
     if (isNaN(chapter)) {
       continue;
     }
-    let expectedVerses = expectedChapters[chapter];
+    const expectedVerses = expectedChapters[chapter];
     const expectedVerseCount = (expectedVerses && parseInt(expectedVerses, 10)) || 0;
     const chapterPath = path.join(bookPath, file);
     const ugntChapter = fs.readJSONSync(chapterPath);
     const ugntVerses = Object.keys(ugntChapter);
-    let frontPos = ugntVerses.indexOf("front");
+    const frontPos = ugntVerses.indexOf('front');
     if (frontPos >= 0) { // remove chapter front matter
       ugntVerses.splice(frontPos, 1); // remove front item
     }
@@ -150,7 +160,7 @@ function indexBook(bookPath, index, bookCode, isOL) {
     if (isOL) { // if an OL, we need word counts of verses
       const chapterIndex = {};
       bookIndex[chapter] = chapterIndex;
-      for (let verse of ugntVerses) {
+      for (const verse of ugntVerses) {
         let words = ugntChapter[verse];
         if (words.verseObjects) { // check for new verse objects support
           words = words.verseObjects;
@@ -159,7 +169,7 @@ function indexBook(bookPath, index, bookCode, isOL) {
       }
     } else { // is not an OL, so we need verse count
       let highVerse = 0;
-      Object.keys(ugntChapter).forEach(verseID => {
+      Object.keys(ugntChapter).forEach((verseID) => {
         const verse = parseInt(verseID);
         if (verse > highVerse) { // get highest verse
           highVerse = verse;
@@ -181,7 +191,7 @@ function indexBook(bookPath, index, bookCode, isOL) {
 function saveIndex(outputFolder, index) {
   const indexPath = path.join(outputFolder, 'index.json');
   if (fs.existsSync(indexPath)) {
-    const tempPath = indexPath + "_temp";
+    const tempPath = indexPath + '_temp';
     fs.moveSync(indexPath, tempPath);
     fs.removeSync(tempPath);
   }

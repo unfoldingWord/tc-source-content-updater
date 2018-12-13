@@ -1,3 +1,4 @@
+/* eslint-disable curly */
 import url from 'url';
 import {https, http} from 'follow-redirects';
 import fs from 'fs-extra';
@@ -5,8 +6,8 @@ import rimraf from 'rimraf';
 const HttpAgent = require('agentkeepalive');
 const HttpsAgent = require('agentkeepalive').HttpsAgent;
 
-let httpAgent = new HttpAgent();
-let httpsAgent = new HttpsAgent();
+const httpAgent = new HttpAgent();
+const httpsAgent = new HttpsAgent();
 
 /**
  * @description Reads the contents of a url as a string.
@@ -14,35 +15,35 @@ let httpsAgent = new HttpsAgent();
  * @return {Promise.<string>} the url contents
  */
 export function read(uri) {
-  let parsedUrl = url.parse(uri, false, true);
-  let makeRequest = parsedUrl.protocol === 'https:' ? https.request.bind(https) : http.request.bind(http);
-  let serverPort = parsedUrl.port ? parsedUrl.port : parsedUrl.protocol === 'https:' ? 443 : 80;
-  let agent = parsedUrl.protocol === 'https:' ? httpsAgent : httpAgent;
+  const parsedUrl = url.parse(uri, false, true);
+  const makeRequest = parsedUrl.protocol === 'https:' ? https.request.bind(https) : http.request.bind(http);
+  const serverPort = parsedUrl.port ? parsedUrl.port : parsedUrl.protocol === 'https:' ? 443 : 80;
+  const agent = parsedUrl.protocol === 'https:' ? httpsAgent : httpAgent;
 
-  let options = {
+  const options = {
     host: parsedUrl.host,
     path: parsedUrl.path,
     agent: agent,
     port: serverPort,
     method: 'GET',
-    headers: {'Content-Type': 'application/json'}
+    headers: {'Content-Type': 'application/json'},
   };
 
   return new Promise((resolve, reject) => {
-    let req = makeRequest(options, response => {
+    const req = makeRequest(options, (response) => {
       let data = '';
-      response.on('data', chunk => {
+      response.on('data', (chunk) => {
         data += chunk;
       });
       response.on('end', () => {
         resolve({
           status: response.statusCode,
-          data: data
+          data: data,
         });
       });
     });
 
-    req.on('socket', socket => {
+    req.on('socket', (socket) => {
       socket.setTimeout(30000);
     });
     req.on('error', reject);
@@ -59,26 +60,26 @@ export function read(uri) {
  */
 export function download(uri, dest, progressCallback) {
   progressCallback = progressCallback || function() {};
-  let parsedUrl = url.parse(uri, false, true);
-  let makeRequest = parsedUrl.protocol === 'https:' ? https.request.bind(https) : http.request.bind(http);
-  let serverPort = parsedUrl.port ? parsedUrl.port : parsedUrl.protocol === 'https:' ? 443 : 80;
-  let agent = parsedUrl.protocol === 'https:' ? httpsAgent : httpAgent;
-  let file = fs.createWriteStream(dest);
+  const parsedUrl = url.parse(uri, false, true);
+  const makeRequest = parsedUrl.protocol === 'https:' ? https.request.bind(https) : http.request.bind(http);
+  const serverPort = parsedUrl.port ? parsedUrl.port : parsedUrl.protocol === 'https:' ? 443 : 80;
+  const agent = parsedUrl.protocol === 'https:' ? httpsAgent : httpAgent;
+  const file = fs.createWriteStream(dest);
 
-  let options = {
+  const options = {
     host: parsedUrl.host,
     path: parsedUrl.path,
     agent: agent,
     port: serverPort,
-    method: 'GET'
+    method: 'GET',
   };
 
   return new Promise((resolve, reject) => {
-    let req = makeRequest(options, response => {
-      let size = response.headers['content-length'];
+    const req = makeRequest(options, (response) => {
+      const size = response.headers['content-length'];
       let progress = 0;
 
-      response.on('data', chunk => {
+      response.on('data', (chunk) => {
         progress += chunk.length;
         progressCallback(size, progress);
       });
@@ -88,12 +89,12 @@ export function download(uri, dest, progressCallback) {
         resolve({
           uri,
           dest,
-          status: response.statusCode
+          status: response.statusCode,
         });
       });
     });
 
-    req.on('error', error => {
+    req.on('error', (error) => {
       file.end();
       rimraf.sync(dest);
       reject(error);

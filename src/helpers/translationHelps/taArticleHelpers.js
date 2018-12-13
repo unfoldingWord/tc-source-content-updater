@@ -1,3 +1,4 @@
+/* eslint-disable curly */
 import fs from 'fs-extra';
 import path from 'path-extra';
 import {isObject} from 'util';
@@ -26,11 +27,11 @@ export function processTranslationAcademy(resource, sourcePath, outputPath) {
   if (fs.pathExistsSync(outputPath))
     fs.removeSync(outputPath);
   const manifest = resourcesHelpers.getResourceManifest(sourcePath);
-  manifest.projects.forEach(project => {
+  manifest.projects.forEach((project) => {
     const folderPath = path.join(sourcePath, project.path);
-    const isDirectory = item => fs.lstatSync(path.join(folderPath, item)).isDirectory();
+    const isDirectory = (item) => fs.lstatSync(path.join(folderPath, item)).isDirectory();
     const articleDirs = fs.readdirSync(folderPath).filter(isDirectory);
-    articleDirs.forEach(articleDir => {
+    articleDirs.forEach((articleDir) => {
       let content = '# ' + fs.readFileSync(path.join(folderPath, articleDir, 'title.md'), 'utf8') + ' #\n';
       content += fs.readFileSync(path.join(folderPath, articleDir, '01.md'), 'utf8');
       const destinationPath = path.join(
