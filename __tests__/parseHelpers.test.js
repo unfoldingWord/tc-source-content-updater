@@ -2,6 +2,7 @@
 /* eslint-disable camelcase,no-empty */
 import * as parseHelpers from '../src/helpers/parseHelpers';
 import * as ERROR from '../src/resources/errors';
+import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
 
 const catalog = require('./fixtures/catalog');
 
@@ -9,6 +10,16 @@ describe('parseCatalogResources()', () => {
   it('should find Bibles', () => {
     const results = parseHelpers.parseCatalogResources(catalog, true, ['Bible']);
     expect(results.length).toEqual(38);
+  });
+
+  it('All language Ids are lower case', () => {
+    const results = parseHelpers.parseCatalogResources(catalog, true, ['Bible']);
+    const re = /^[-a-z0-9]*$/; // dash is allowed
+
+    for( let idx = 0; idx < results.length; idx++) {
+      //console.log( "results.languageId: ", results[idx].languageId );
+      expect(results[idx].languageId).toEqual(expect.stringMatching(re));
+    }
   });
 
   it('should find Greek OL', () => {
@@ -115,7 +126,7 @@ describe('getUpdatedLanguageList()', () => {
 
   it('should succeed', () => {
     const languages = parseHelpers.getUpdatedLanguageList(resources);
-    expect(languages.length).toEqual(32);
+    expect(languages.length).toEqual(31); // ur-deva = ur-Deva
   });
 
   it('should return null on null resources', () => {
