@@ -126,7 +126,7 @@ export function getLatestResources(catalog, localResourceList) {
     if (localResource.languageId && resourceId) {
       resourceId = RESOURCE_ID_MAP[resourceId] || resourceId; // map resource names to ids
       const index = tCoreResources.findIndex((remoteResource) =>
-        ((localResource.languageId === remoteResource.languageId) &&
+        ((localResource.languageId.toLowerCase() === remoteResource.languageId.toLowerCase()) &&
           (remoteResource.resourceId === resourceId)));
       if (index >= 0) {
         const catalogResource = tCoreResources[index];
@@ -204,7 +204,7 @@ export function parseCatalogResources(catalog, ignoreObsResources = true, subjec
       const catSubject = catalog.subjects[i];
       const subject = catSubject.identifier;
       const isGreekOL = (catSubject.language === 'el-x-koine');
-      const languageId = isGreekOL ? 'grc' : catSubject.language; // we use grc internally for Greek Original language
+      const languageId = isGreekOL ? 'grc' : (catSubject.language).toLowerCase(); // we use grc internally for Greek Original language
       const resources = getValidArray(catSubject.resources);
       for (let j = 0, rLen = resources.length; j < rLen; j++) {
         const resource = resources[j];
