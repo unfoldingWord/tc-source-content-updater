@@ -6,6 +6,7 @@ import {isObject} from 'util';
 // helpers
 import * as zipFileHelpers from './zipFileHelpers';
 import * as twArticleHelpers from './translationHelps/twArticleHelpers';
+import * as tnArticleHelpers from './translationHelps/tnArticleHelpers';
 import * as taArticleHelpers from './translationHelps/taArticleHelpers';
 import * as twGroupDataHelpers from './translationHelps/twGroupDataHelpers';
 import * as packageParseHelpers from './packageParseHelpers';
@@ -178,6 +179,9 @@ throw Error(formatError(resource, errors.SOURCE_PATH_NOT_EXIST))
   switch (resource.subject) {
     case 'Translation_Words':
       twArticleHelpers.processTranslationWords(resource, sourcePath, processedFilesPath);
+      break;
+    case 'Translator_Notes':
+      tnArticleHelpers.processTranslationNotes(resource, sourcePath, processedFilesPath);
       break;
     case 'Translation_Academy':
       taArticleHelpers.processTranslationAcademy(resource, sourcePath, processedFilesPath);
