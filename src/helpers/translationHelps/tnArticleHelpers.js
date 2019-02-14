@@ -1,10 +1,12 @@
 import fs from 'fs-extra';
-// import path from 'path-extra';
+import path from 'path-extra';
 import {isObject} from 'util';
+import tsvParser from 'tsv-groupdata-parser';
 // helpers
 import * as resourcesHelpers from '../resourcesHelpers';
 // constants
 import * as errors from '../../resources/errors';
+import * as bibleUtils from '../../resources/bible';
 
 /**
  * @description Processes the extracted files for translationNotes to separate the folder
@@ -30,25 +32,21 @@ export function processTranslationNotes(resource, sourcePath, outputPath) {
     fs.removeSync(outputPath);
   }
 
-  console.log('processTranslationNotes', resource, sourcePath, outputPath);
+  const tsvFiles = fs.readdirSync(sourcePath).filter((filename) => path.extname(filename) === '.tsv');
 
-  // const typesPath = path.join(sourcePath, 'bible');
-  // const isDirectory = (item) => fs.lstatSync(path.join(typesPath, item)).isDirectory();
-  // const typeDirs = fs.readdirSync(typesPath).filter(isDirectory);
+  tsvFiles.forEach(async(fileName) => {
+    const filepath = path.join(sourcePath, fileName);
+    const bookId = fileName.split('-')[1].toLowerCase();
 
-  // typeDirs.forEach((typeDir) => {
-  //   const typePath = path.join(typesPath, typeDir);
-  //   const files = fs.readdirSync(typePath).filter((filename) => path.extname(filename) === '.md');
-  //   // generateGroupsIndex(typePath, outputPath, typeDir);
-  //   files.forEach((fileName) => {
-  //     const sourcePath = path.join(typePath, fileName);
-  //     const destinationPath = path.join(
-  //       outputPath,
-  //       typeDir,
-  //       'articles',
-  //       fileName,
-  //     );
-  //     fs.copySync(sourcePath, destinationPath);
-  //   });
-  // });
+    if (!bibleUtils.BOOK_CHAPTER_VERSES[bookId]) {
+      console.error(`${bookId} is not a valid book id.`);
+    }
+
+    console.log(filepath);
+
+    const groupData = await tsvParser.tsvToGroupData(filepath, 'translationNotes');
+    const categorizeGroupData = tsvParser.categorizeGroupData(groupData);
+
+    tsvParser.formatAndSaveGroupData(categorizeGroupData, outputPath, bookId);
+  });
 }

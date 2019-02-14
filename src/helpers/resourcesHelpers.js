@@ -180,7 +180,7 @@ throw Error(formatError(resource, errors.SOURCE_PATH_NOT_EXIST))
     case 'Translation_Words':
       twArticleHelpers.processTranslationWords(resource, sourcePath, processedFilesPath);
       break;
-    case 'Translator_Notes':
+    case 'TSV_Translation_Notes':
       tnArticleHelpers.processTranslationNotes(resource, sourcePath, processedFilesPath);
       break;
     case 'Translation_Academy':
