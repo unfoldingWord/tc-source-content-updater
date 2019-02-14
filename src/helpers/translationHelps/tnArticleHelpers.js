@@ -36,7 +36,7 @@ export function processTranslationNotes(resource, sourcePath, outputPath) {
 
   tsvFiles.forEach(async(fileName) => {
     const filepath = path.join(sourcePath, fileName);
-    const bookId = fileName.split('-')[1].toLowerCase();
+    const bookId = fileName.split('-')[1].toLowerCase().replace('.tsv', '');
 
     if (!bibleUtils.BOOK_CHAPTER_VERSES[bookId]) {
       console.error(`${bookId} is not a valid book id.`);
