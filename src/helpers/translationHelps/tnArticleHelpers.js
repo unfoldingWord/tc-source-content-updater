@@ -15,7 +15,7 @@ import * as bibleUtils from '../../resources/bible';
  * @param {String} sourcePath - Path to the extracted files that came from the zip file from the catalog
  * @param {String} outputPath - Path to place the processed resource files WIHTOUT the version in the path
  */
-export function processTranslationNotes(resource, sourcePath, outputPath) {
+export async function processTranslationNotes(resource, sourcePath, outputPath) {
   if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId) {
     throw Error(resourcesHelpers.formatError(resource, errors.RESOURCE_NOT_GIVEN));
   }

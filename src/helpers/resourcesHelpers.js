@@ -161,7 +161,7 @@ export function getSubdirOfUnzippedResource(extractedFilesPath) {
  * @param {String} sourcePath Path the the source dictory of the resource
  * @return {String} Path to the directory of the processed files
  */
-export function processResource(resource, sourcePath) {
+export async function processResource(resource, sourcePath) {
   if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId) {
 throw Error(formatError(resource, errors.RESOURCE_NOT_GIVEN))
 ;
@@ -181,7 +181,7 @@ throw Error(formatError(resource, errors.SOURCE_PATH_NOT_EXIST))
       twArticleHelpers.processTranslationWords(resource, sourcePath, processedFilesPath);
       break;
     case 'TSV_Translation_Notes':
-      tnArticleHelpers.processTranslationNotes(resource, sourcePath, processedFilesPath);
+      await tnArticleHelpers.processTranslationNotes(resource, sourcePath, processedFilesPath);
       break;
     case 'Translation_Academy':
       taArticleHelpers.processTranslationAcademy(resource, sourcePath, processedFilesPath);
