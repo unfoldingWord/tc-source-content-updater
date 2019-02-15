@@ -55,7 +55,7 @@ throw Error(formatError(resource, errors.RESOURCES_PATH_NOT_GIVEN))
       throw Error(appendError(errors.UNABLE_TO_UNZIP_RESOURCES, err));
     }
     const importSubdirPath = getSubdirOfUnzippedResource(importPath);
-    const processedFilesPath = processResource(resource, importSubdirPath);
+    const processedFilesPath = await processResource(resource, importSubdirPath);
     if (processedFilesPath) {
       // Extra step if the resource is the Greek UGNT or Hebrew UHB
       if ((resource.languageId === 'grc' && resource.resourceId === 'ugnt') ||

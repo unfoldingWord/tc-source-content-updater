@@ -163,19 +163,18 @@ export function getSubdirOfUnzippedResource(extractedFilesPath) {
  */
 export async function processResource(resource, sourcePath) {
   if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId) {
-throw Error(formatError(resource, errors.RESOURCE_NOT_GIVEN))
-;
-}
+    throw Error(formatError(resource, errors.RESOURCE_NOT_GIVEN));
+  }
   if (!sourcePath) {
-throw Error(formatError(resource, errors.SOURCE_PATH_NOT_GIVEN))
-;
-}
+    throw Error(formatError(resource, errors.SOURCE_PATH_NOT_GIVEN));
+  }
   if (!fs.pathExistsSync(sourcePath)) {
-throw Error(formatError(resource, errors.SOURCE_PATH_NOT_EXIST))
-;
-}
+    throw Error(formatError(resource, errors.SOURCE_PATH_NOT_EXIST));
+  }
+
   const processedFilesPath = sourcePath + '_processed';
   fs.ensureDirSync(processedFilesPath);
+
   switch (resource.subject) {
     case 'Translation_Words':
       twArticleHelpers.processTranslationWords(resource, sourcePath, processedFilesPath);
