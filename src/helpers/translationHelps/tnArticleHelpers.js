@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 import path from 'path-extra';
 import {isObject} from 'util';
-import tsvParser from 'tsv-groupdata-parser';
+import {tsvToGroupData, formatAndSaveGroupData} from 'tsv-groupdata-parser';
 // helpers
 import * as resourcesHelpers from '../resourcesHelpers';
 // constants
@@ -42,11 +42,8 @@ export async function processTranslationNotes(resource, sourcePath, outputPath) 
       console.error(`${bookId} is not a valid book id.`);
     }
 
-    console.log(filepath);
+    const groupData = await tsvToGroupData(filepath, 'translationNotes', {categorized: true});
 
-    const groupData = tsvParser.tsvToGroupData(filepath, 'translationNotes');
-    const categorizeGroupData = tsvParser.categorizeGroupData(groupData);
-
-    tsvParser.formatAndSaveGroupData(categorizeGroupData, outputPath, bookId);
+    formatAndSaveGroupData(groupData, outputPath, bookId);
   });
 }
