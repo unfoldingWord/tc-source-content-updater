@@ -180,6 +180,7 @@ export async function processResource(resource, sourcePath) {
       twArticleHelpers.processTranslationWords(resource, sourcePath, processedFilesPath);
       break;
     case 'TSV_Translation_Notes':
+      fs.copyFileSync(sourcePath + '/manifest.yaml', processedFilesPath + '/manifest.yaml');
       await tnArticleHelpers.processTranslationNotes(resource, sourcePath, processedFilesPath);
       break;
     case 'Translation_Academy':
