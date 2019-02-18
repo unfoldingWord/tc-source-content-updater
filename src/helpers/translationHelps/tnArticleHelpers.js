@@ -44,7 +44,7 @@ export async function processTranslationNotes(resource, sourcePath, outputPath) 
 
     console.log(filepath);
 
-    const groupData = await tsvParser.tsvToGroupData(filepath, 'translationNotes');
+    const groupData = tsvParser.tsvToGroupData(filepath, 'translationNotes');
     const categorizeGroupData = tsvParser.categorizeGroupData(groupData);
 
     tsvParser.formatAndSaveGroupData(categorizeGroupData, outputPath, bookId);
