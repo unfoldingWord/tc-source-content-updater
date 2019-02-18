@@ -1,0 +1,523 @@
+Book	Chapter	Verse	ID	SupportReference	OrigQuote	Occurrence	GLQuote	OccurrenceNote
+EZR	front	intro	fa5r			0		# Introduction to Ezra<br>## Part 1: General Introduction<br><br>### Outline of Ezra<br><br>1. The first Jewish exiles return to Jerusalem from Persia (1:1–2:70)<br>1. The people rebuild and dedicate the temple in Jerusalem (3:1–6:22)<br>1. More exiles return; Ezra teaches the Law of Yahweh (7:1-8:36)<br>1. The problem of the people marrying foreigners, and how it is solved (9:1–10:44)<br><br>### What is the Book of Ezra about?<br><br>The Book of Ezra is about how the people of Israel returned from Babylon and tried to worship Yahweh again as the law required. To do this they needed to rebuild their temple so they could sacrifice to Yahweh. (See: [[rc://en/tw/dict/bible/kt/temple]])<br><br>### How should the title of this book be translated?<br><br>The Book of Ezra is named for the priest Ezra who led the first group of Jews out of exile and back to Judah. Translators can use the traditional title "Ezra." Or they might choose a clearer title, such as "The Book about Ezra."<br><br>## Part 2: Important Religious and Cultural Concepts<br><br>### Why were Israelites not allowed to marry people from other nations?<br><br>Foreigners worshiped many false gods. Yahweh did not allow his people to marry foreigners. He knew this would cause the people of Israel to worship false gods. (See: [[rc://en/tw/dict/bible/kt/falsegod]])<br><br>### Did all of the people of Israel return to their homeland?<br><br>Many of the Jews remained in Babylon instead of returning to the Promised Land. Many of them were successful in Babylon and desired to remain there. However, this meant that they were unable to worship Yahweh in Jerusalem as their ancestors had done. (See: [[rc://en/tw/dict/bible/kt/promisedland]])<br><br>## Part 3: Important Translation Issues<br><br>### How does the Book of Ezra use the term "Israel"?<br><br>The Book of Ezra uses the term "Israel" to refer to the kingdom of Judah. It was mostly made up of the tribes of Judah and Benjamin. The other ten tribes had ended their loyalty to any kings descended from David. God allowed the Assyrians to conquer the other ten tribes and take them into exile. As a result, they mixed with other people groups and did not return to the land of Israel. (See: [[rc://en/tw/dict/bible/kt/israel]])<br><br>### Are the events in the Book of Ezra told in the order that they actually happened?<br><br>Some of the events in the Book of Ezra are not told in the order they actually happened. Translators should pay attention to notes that signal when events are probably out of order.<br>
+EZR	1	intro	dd25			0		# Ezra 01 General Notes<br>## Structure and formatting<br><br>The chapter records the story of the first Jews as they return from Persia to Judea.<br><br>## Special concepts in this chapter<br><br>### King Cyrus<br>King Cyrus allowed them to return because he wanted them to rebuild the temple. Those who stayed behind gave gifts to those who left to help them on their journey and resettlement. This practice was common under the reign of Cyrus and was used as a way to maintain peace throughout his kingdom. (See: [[rc://en/tw/dict/bible/kt/temple]])<br><br>## Possible translation difficulties in this chapter<br>### Jews<br>Upon return to Judea, the focus of the rest of the Old Testament is on the Jewish people.<br>
+EZR	1	1	p6b4	translate-ordinal		0	first year	This refers to the beginning of the reign of King Cyrus. (See: [[rc://en/ta/man/translate/translate-ordinal]])
+EZR	1	1	y7r9	figs-metonymy		0	Yahweh fulfilled his word that came from the mouth of Jeremiah	Here "mouth" represents speaking. Alternate translation: "Yahweh did what Jeremiah prophesied that Yahweh would do" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+EZR	1	1	l953			0	Yahweh	This is the name of God that he revealed to his people in the Old Testament. See the translationWord page about Yahweh concerning how to translate this.
+EZR	1	1	fn3a	figs-synecdoche		0	Yahweh ... stirred Cyrus's spirit	Here Cyrus is represented by his spirit. This speaks of Yahweh causing Cyrus to want to act as if he "stirred" his spirit. Alternate translation: "Yahweh ... made Cyrus want to act" (See: [[rc://en/ta/man/translate/figs-synecdoche]] and [[rc://en/ta/man/translate/figs-metaphor]])
+EZR	1	1	yiq4	figs-metonymy		0	Cyrus' voice went out over his entire kingdom	The voice is a metonym for the message the voice speaks, and the kingdom is a metonym for the people whom a king rules. Alternate translation: "Cyrus sent a message to everyone over whom he ruled" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+EZR	1	1	x1wz	figs-activepassive		0	what was written and spoken	This can be translated in active form. It might be best to translate so the reader understands that other people might have helped Cyrus get the message to the people over whom he ruled. Alternate translation: "what Cyrus wrote and what his messengers read so people could hear them" (See: [[rc://en/ta/man/translate/figs-activepassive]] and [[rc://en/ta/man/translate/figs-explicit]])
+EZR	1	2	aqj5	figs-hyperbole		0	all the kingdoms of the earth	Here "all" is an exaggeration, as there were kingdoms over which Cyrus did not rule. (See: [[rc://en/ta/man/translate/figs-hyperbole]])
+EZR	1	2	gmx4	figs-explicit		0	for him a house in ... Judea	You may need to make explicit that the house was for people to worship Yahweh. Alternate translation: "a house in ... Judea where people can worship him" (See: [[rc://en/ta/man/translate/figs-explicit]])
+EZR	1	3	xf34			0	his people	the people who belong to Yahweh.
+EZR	1	4	t7ux			0	survivors of that land ... should provide them	Those Israelites who choose to stay where they are should help those who choose to go to Jerusalem physically and financially.
+EZR	1	5	s2yg	figs-metonymy		0	everyone whose spirit God stirred to go	Stirring the spirit is a metonym for making someone want to act. See how you translated these words in [Ezra 1:1](../01/01.md). Alternate translation: "everyone whom God had made want to go" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+EZR	1	6	wwg6			0	their work	This refers to the work of the people roused by God in the previous verse.
+EZR	1	8	m5w3	translate-names		0	Mithredath ... Sheshbazzar	These are men's names. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	1	8	wc54	figs-metaphor		0	put them into the hand of Mithredath the treasurer	Putting an object into someone's hand is a metaphor for allowing that person to do what he wants with that object. Here the reader should understand that Cyrus expected Mithredath to do what Cyrus wanted him to do. Alternate translation: "put Mithredath the treasurer in charge of them" or "made Mithredath the treasurer responsible for them" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+EZR	1	8	w8rk			0	treasurer	official in charge of money
+EZR	1	9	hu9c			0	General Information:	This is a list of numbered items.
+EZR	1	9	d3ui	translate-numbers		0	thirty ... one thousand ... twenty-nine	"30 ... 1,000 ... 29" (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	1	9	y5g1			0	basins	objects used to hold water for washing
+EZR	1	10	yk1k	translate-numbers		0	410	"30 ... 1,000 ... 29 ... four hundred and ten" (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	1	10	ja6u			0	bowls	objects used to hold water for washing
+EZR	1	11	z55f	translate-numbers		0	5,400 ... in all	"five thousand four hundred ... in all." This is the total number of items returned to Jerusalem from Babylon, which are listed above individually. (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	2	intro	rr42			0		# Ezra 02 General Notes<br>## Special concepts in this chapter<br><br>### Genealogy<br>People had to prove they were priests, or that they were Jews, through their genealogies. (See: [[rc://en/tw/dict/bible/kt/priest]])<br>
+EZR	2	1	ezk9			0	General Information:	This begins a list of the names of people who returned from the exile.
+EZR	2	1	byc2	figs-idiom		0	went up	This is an idiom that refers to traveling toward Jerusalem. Alternate translation: "returned" or "came back" (See: [[rc://en/ta/man/translate/figs-idiom]])
+EZR	2	2	tmp8	translate-names		0	Seraiah, Reelaiah, Mordecai, Bilshan, Mispar, Bigvai, Rehum, and Baanah	These are men's names. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	2	z77p			0	This is the record	This refers to the list of men in 2:3-35.
+EZR	2	3	i2m7	translate-numbers		0	General Information:	This continues the list of the names of people who returned from the exile along with the number in each group. (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	2	3	zew1	translate-names		0	Parosh	a man's name (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	4	zhh6	translate-names		0	Shephatiah	a man's name (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	5	inj3	translate-names		0	Arah	a man's name (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	6	fw6a	translate-names		0	Pahath-Moab ... Jeshua	a man's name (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	7	a6df	translate-numbers		0	General Information:	This continues the list of the names of people who returned from the exile along with the number in each group. (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	2	8	d53m	translate-names		0	Zattu	a man's name (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	9	da7k	translate-names		0	Zakkai	a man's name (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	10	jcd8	translate-names		0	Bani	a man's name (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	11	ak1t	translate-numbers		0	General Information:	This continues the list of the names of people who returned from the exile along with the number in each group. (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	2	11	h16w	translate-names		0	Bebai	a man's name (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	12	rxn6	translate-names		0	Azgad	These are men's names. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	13	uzn6	translate-names		0	Adonikam	a man's name (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	14	qkv6			0	Bigvai	This is a man's name. See how you translated this in [Ezra 2:2](../02/02.md).
+EZR	2	15	u5zk	translate-numbers		0	General Information:	This continues the list of the names of people who returned from the exile along with the number in each group. (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	2	15	it7t	translate-names		0	Adin	a man's name (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	16	vui3	translate-names		0	Ater	a man's name (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	16	kk2c	translate-numbers		0	ninety-eight	"98" (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	2	17	t3k5	translate-names		0	Bezai	a man's name (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	19	i6kg	translate-numbers		0	General Information:	This continues the list of people who returned from the exile along with the number in each group. Notice that staring in 2:21 these now are the names of places from where they originally came. (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	2	19	j9nm	translate-names		0	Hashum	a man's name (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	20	r5bq	translate-names		0	Gibbar	These are men's names. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	20	g26q	translate-numbers		0	ninety-five	"95" (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	2	21	iu4s	figs-explicit		0	The men of Bethlehem	This begins to list the number of people whose ancestors had lived in towns in Judah. (See: [[rc://en/ta/man/translate/figs-explicit]])
+EZR	2	22	syz2	translate-numbers		0	fifty-six	"56" (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	2	22	v2ky	translate-names		0	Netophah	This is the name of a town in Judah. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	23	l5x8	translate-numbers		0	General Information:	This continues the list people who returned from the exile along with the number in each group whose ancestors came from the places listed. (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	2	23	l29x	translate-names		0	Anathoth	This is the name of a place. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	24	d37s	translate-names		0	Azmaveth	This is the name of a place. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	24	qlw7	translate-numbers		0	forty-two	"42" (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	2	25	y9xa	translate-names		0	Kiriath Arim ... Kephirah ... Beeroth	These are names of places. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	26	k69y	translate-names		0	Geba	This is the name of a place. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	27	fs65	translate-numbers		0	General Information:	This continues with the list of people who returned from the exile along with the number in each group whose ancestors came from the places listed. (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	2	27	m82a	translate-names		0	Michmas	This is the name of a place. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	29	j5sn	translate-names		0	Nebo	This is the name of a place. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	29	n7ir	translate-numbers		0	fifty-two	"52" (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	2	30	kvd9	translate-names		0	Magbish	This is the name of a place. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	31	bv43	translate-numbers		0	General Information:	This continues with the list of people who returned from the exile along with the number in each group whose ancestors came from the places listed. (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	2	32	ubs3	translate-names		0	Harim	This is the name of a place. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	33	e3tw	translate-names		0	Lod ... Hadid ... Ono	These are names of places. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	34	pt5k	translate-numbers		0	General Information:	This continues with the list of people who returned from the exile along with the number in each group whose ancestors came from the places listed. (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	2	35	ce4j	translate-names		0	Senaah	This is the name of a place. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	36	c52r	translate-numbers		0	General Information:	This section lists the names of priests whose descendants returned from the exile along with the number in each group. (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	2	36	xd3k	translate-names		0	Jedaiah	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	36	m352			0	Jeshua	This is a man's name. See how you translated this in [Ezra 2:6](../02/06.md).
+EZR	2	39	g31h			0	Harim	The "Harim" in [Ezra 2:32](../02/32.md) is the name of a place, but here "Harim" is the name of a man.
+EZR	2	40	tm51	translate-names		0	General Information:	This section lists the names of Levites whose descendants returned from the exile along with the number in each group. (See: [[rc://en/ta/man/translate/translate-names]] and [[rc://en/ta/man/translate/translate-numbers]])
+EZR	2	40	vug8	translate-names		0	Kadmiel ... Hodaviah	These are men's names. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	40	yu1j	translate-numbers		0	seventy-four	"74" (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	2	42	imn8	translate-names		0	Shallum ... Talmon, Akkub, Hatita, and Shobai	These are men's names. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	42	i72w			0	gatekeepers	those in charge of who goes through the gates of the temple
+EZR	2	42	lyb8			0	Ater	This is a man's name. See how you translated this in [Ezra 2:16](../02/16.md).
+EZR	2	43	fhw8			0	General Information:	This section continues listing the names of Levites whose descendants returned from the exile.
+EZR	2	43	tx4y	translate-names		0	Ziha, Hasupha, Tabbaoth	These are men's names. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	44	vl6i	translate-names		0	Keros, Siaha, Padon	These are men's names. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	45	b5nu	translate-names		0	Lebanah, Hagabah	These are men's names. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	45	chi4			0	Akkub	See how you translated this in [Ezra 2:42](../02/42.md).
+EZR	2	46	qx4z	translate-names		0	Hagab, Shalmai, and Hanan	These are men's names. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	47	qg3y	translate-names		0	General Information:	This section continues listing the names of Levites whose descendants returned from the exile. These are all names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	51	fd31	translate-names		0	General Information:	This section continues listing the names of Levites whose descendants returned from the exile. These are all names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	55	kd7e	translate-names		0	General Information:	This section continues listing the names of Levites whose descendants returned from the exile. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	58	y86d	translate-numbers		0	392 total descendants	"three hundred and ninety-two total descendants." This is the number of all the people in this group who came back from the exile. (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	2	59	fa24	translate-numbers		0	General Information:	This is a list of people who had returned to Israel from various Babylonian cities but could not prove their heritage. (See: [[rc://en/ta/man/translate/translate-numbers]] and [[rc://en/ta/man/translate/translate-names]])
+EZR	2	60	k7wr	translate-numbers		0	652 descendants	"six hundred and fifty-two descendants." (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	2	60	xr2g	translate-names		0	Delaiah, Tobiah, and Nekoda	These are men's names. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	61	vg3t	translate-names		0	Habaiah ... Hakkoz ... Barzillai	These are men's names. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	2	62	yiq1			0	their genealogical records	the records that told who their ancestors were
+EZR	2	62	jis4			0	could not find them	"could not find their names in the records of the priests"
+EZR	2	62	qt2w	figs-activepassive		0	they were excluded from the priesthood as unclean	This can be translated in active form. The abstract noun "priesthood" can be translated as the verb "work as priests." Alternate translation: "the other priests treated them as if they were unclean and did not allow them to work as priests" (See: [[rc://en/ta/man/translate/figs-activepassive]] and [[rc://en/ta/man/translate/figs-abstractnouns]])
+EZR	2	62	x8ns			0	unclean	not fit to be priests
+EZR	2	63	n2du			0	Urim and Thummim	two items like dice that the priests used to decide what God wanted them to do
+EZR	2	64	a73j			0	whole group	This means the whole group that returned back to the land of Judah from the exile.
+EZR	2	64	i9g9	translate-numbers		0	42360	"forty-two thousand three hundred and sixty" (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	2	65	w7yu			0	their maidservants	"their female servants"
+EZR	2	65	i75w	translate-numbers		0	these were 7,337	"these were seven thousand three hundred and thirty-seven" (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	2	65	g5wm	translate-numbers		0	two hundred	"200" (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	2	66	t7kb	translate-numbers		0	General Information:	This is a list of the animals along with the numbers of each kind that returned with the people from the exile. (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	2	69	v744	translate-numbers		0	sixty-one thousand ... five thousand ... one hundred	"61,000 ... 5,000 ... 100" (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	2	69	qh93	translate-bmoney		0	gold darics	A "daric" was a small gold coin used by the Persian Empire. (See: [[rc://en/ta/man/translate/translate-bmoney]])
+EZR	2	69	ln9c	translate-bweight		0	minas	A mina is a unit of weight. One mina equals 550 grams. Minas are normally linked with measuring silver. (See: [[rc://en/ta/man/translate/translate-bweight]])
+EZR	2	69	h3zd			0	tunics	garments worn next to the skin
+EZR	2	70	w7fw			0	All the people in Israel were in their cities	Everyone went back to their home towns in Judea. Not everyone resettled in Jerusalem.
+EZR	3	intro	rp9a			0		# Ezra 03 General Notes<br>## Structure and formatting<br><br>This chapter begins the story of the building of the temple and re-establishment of worship in the new temple. (See: [[rc://en/tw/dict/bible/kt/temple]])<br><br>## Special concepts in this chapter<br><br>### Rebuilding the temple<br>They immediately began the temple worship, even though the temple had not yet been built because they feared the people of the surrounding nations.<br>
+EZR	3	1	a2ka	translate-hebrewmonths		0	the seventh month	This is the seventh month of the Hebrew calendar. It is at the end of the dry season and the beginning of the early rain season. It is during the last part of September and the first part of October on Western calendars. (See: [[rc://en/ta/man/translate/translate-hebrewmonths]] and [[rc://en/ta/man/translate/translate-ordinal]])
+EZR	3	1	hwv6	figs-simile		0	as one man	One man is in only one place and has only one purpose. Alternate translation: "for one purpose" (See: [[rc://en/ta/man/translate/figs-simile]])
+EZR	3	2	ua8i			0	Jeshua	This is the name of a man. Translate the same as in [Ezra 2:36](../02/36.md).
+EZR	3	2	gq2e	translate-names		0	Shealtiel	This is the name of a man. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	3	2	yy1u	figs-metaphor		0	rose up and built	Standing up is a metaphor for beginning to act. Alternate translation: "began to act and built" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+EZR	3	2	eg3w	figs-activepassive		0	as it is written in the law of Moses	This can be translated in active form. You may need to make explicit whom and what Yahweh had commanded. Alternate translation: "as Yahweh had commanded them to do in the law of Moses" (See: [[rc://en/ta/man/translate/figs-activepassive]] and [[rc://en/ta/man/translate/figs-explicit]])
+EZR	3	3	t8y7			0	established the altar on its stand	"mounted the altar on its stand" or "placed the altar on its stand so it would stay there"
+EZR	3	3	bk73	figs-idiom		0	dread was on them	This is an idiom. Alternate translation: "they were very afraid" (See: [[rc://en/ta/man/translate/figs-idiom]])
+EZR	3	3	c33h	figs-explicit		0	because of the people of the land	You may need to make explicit what it was about the people of the land that made the Jews afraid. Alternate translation: "because they thought the people of the land wanted to attack them" (See: [[rc://en/ta/man/translate/figs-explicit]])
+EZR	3	3	a9a2			0	They offered burnt offerings to Yahweh at dawn and evening	One of the first things the people did was to begin offering sacrifices. This was before the temple was rebuilt.
+EZR	3	4	iej2	figs-explicit		0	the Festival of Shelters	This is a festival that was celebrated for eight days during the seventh month of the Hebrew calendar. It was associated with the time of the exodus when the Israelites lived in tents. (See: [[rc://en/ta/man/translate/figs-explicit]])
+EZR	3	6	x3mt	translate-hebrewmonths		0	the first day of the seventh month	This is the seventh month of the Hebrew calendar. The first day is near the middle of September on Western calendars. (See: [[rc://en/ta/man/translate/translate-hebrewmonths]] and [[rc://en/ta/man/translate/translate-ordinal]])
+EZR	3	6	cip8	figs-activepassive		0	the temple had not been founded	The Jews began the ceremonies of worship even before they started building the temple. Alternate translation: "they had not yet laid the foundation for the temple" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+EZR	3	7	ze22			0	as authorized for them by Cyrus, king of Persia	The letters sent by Cyrus gave the Jews permission to buy materials and build the temple.
+EZR	3	8	eh5s	translate-hebrewmonths		0	second month	This is the second month of the Hebrew calendar. This is during the warm season when people are harvesting crops. It is during the last part of April and the first part of May on Western calendars. (See: [[rc://en/ta/man/translate/translate-hebrewmonths]] and [[rc://en/ta/man/translate/translate-ordinal]])
+EZR	3	8	ckj4	translate-ordinal		0	the second year	This is during the year after the one in which they returned. (See: [[rc://en/ta/man/translate/translate-ordinal]])
+EZR	3	8	y8bn	figs-explicit		0	to the house of God	You may need to make explicit that there was no house of God standing when they arrived. Alternate translation: "to where the house of God had stood" or "to where they were going to build the house of God" (See: [[rc://en/ta/man/translate/figs-explicit]])
+EZR	3	8	fa38	translate-names		0	Jeshua ... Jozadak	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	3	8	hf5n	translate-numbers		0	twenty years old	"20 years old" (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	3	9	s6i8	translate-names		0	Jeshua ... Henadad	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	3	9	r3rx			0	Kadmiel	This is a man's name. See how you translated this in [Ezra 2:40](../02/40.md).
+EZR	3	10	w1j9			0	laid a foundation	"foundation" in this sense was more than just the stone blocks to support the temple walls. It included the entire temple floor set in stone. This enabled all the temple worshipers to wear their special garments and keep them clean.
+EZR	3	10	kh7e			0	their garments	"their special robes"
+EZR	3	10	v35v	translate-unknown		0	cymbals	two thin, round metal plates that are hit together to make a loud sound (See: [[rc://en/ta/man/translate/translate-unknown]])
+EZR	3	10	t64z	figs-metonymy		0	the hand of David ... had commanded	The hand of a king is a metonym for the power to give commands. Alternate translation: "as David ... had commanded" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+EZR	3	11	hgd5			0	thankfulness	A feeling and expression of appreciation and gratitude for the kindness of another.
+EZR	3	11	ut4a	figs-abstractnouns		0	His covenant faithfulness to Israel endures forever	The abstract noun "faithfulness" can be stated as "faithfully" or "faithful." Alternate translation: "He faithfully loves Israel forever" or "He is always faithful to his covenant with Israel" (See: [[rc://en/ta/man/translate/figs-abstractnouns]])
+EZR	3	12	xj13	figs-metonymy		0	first house	This refers to the first temple that Solomon built, the house of God. (See: [[rc://en/ta/man/translate/figs-metonymy]])
+EZR	3	12	rmy5	figs-synecdoche		0	before their eyes	The people are represented by their "eyes" to emphasize what they saw. Alternate translation: "in their sight" or "and they saw it" (See: [[rc://en/ta/man/translate/figs-synecdoche]])
+EZR	3	12	d9tw			0	wept loudly	This refers to emotional expression of sorrow involving tears and vocal sounds.
+EZR	4	intro	x878			0		# Ezra 04 General Notes<br>## Structure and formatting<br><br>The story of the building of the temple and re-establishment of the temple worship continues in this chapter. (See: [[rc://en/tw/dict/bible/kt/temple]])<br><br>## Special concepts in this chapter<br><br>### Helping to build the temple<br>The people of the surrounding nations offered to help to build the temple. It is unknown why the Jews refused their help. These other people became their enemies and tried to hinder the work. They even persuaded the king of Persia to stop the Jews from building.<br>
+EZR	4	1	v368			0	General Information:	The non-Jewish people offer to help build the temple.
+EZR	4	1	uie3	figs-activepassive		0	who had been exiled	This can be translated in active form. Alternate translation: "whom the Babylonians had taken into exile" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+EZR	4	2	spx4	translate-names		0	Zerubbabel	This is a man's name. See how you translated this in [Ezra 2:2](../02/02.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	4	2	yx1s	translate-names		0	Esarhaddon, king of Assyria	He ruled in Assyria before Cyrus ruled in Persia. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	4	3	xp3f			0	Jeshua	This is a man's name. See how you translated this in [Ezra 2:6](../02/06.md).
+EZR	4	3	isv8			0	It is not you, but we who must build	Possible meanings are 1) the Jewish leader felt that Cyrus had authorized only them to build the temple or 2) building the temple was the exclusive work of the Jews and no non-Jew would be permitted to contribute to the work.
+EZR	4	4	d9da			0	the people of the land	"the people who were living in the land at that time," which could include non-Jews and Jews whose families the Babylonians had not taken into exile
+EZR	4	4	n1m9	figs-metaphor		0	made the Judeans' hands weak	This speaks of the people of the land discouraging the Judeans as if they made their hands physically weak. Alternate translation: "discouraged the Judeans" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+EZR	4	4	aq32			0	Judeans	people who returned from Babylon and settled in the land of Judah
+EZR	4	5	kd9a			0	to frustrate their plans	"to make it so the Judeans could not build the temple as they had planned"
+EZR	4	6	iaw6	figs-abstractnouns		0	wrote an accusation against the inhabitants of Judah and Jerusalem	The abstract nouns "accusation" can be translated as a verb "accuse." You may need to make explicit what the enemies accused the Judeans of doing. Alternate translation: "wrote a letter in which they accused those who lived in Judah and Jerusalem of disobeying the king" (See: [[rc://en/ta/man/translate/figs-abstractnouns]] and [[rc://en/ta/man/translate/figs-explicit]])
+EZR	4	7	x91s	translate-names		0	Bishlam ... Mithredath ... Tabeel	names of men (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	4	7	jl52			0	The letter	This is the letter spoken of in [Ezra 4:6](../04/06.md).
+EZR	4	7	isg5			0	Aramaic	the language used in that area at the time for official business
+EZR	4	7	ym9r			0	translated	into Persian
+EZR	4	8	uu3t	translate-names		0	Shimshai	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	4	8	hwq8			0	Rehum	This is a man's name. See how you translated this in [Ezra 2:1](../02/01.md).
+EZR	4	9	vvp8	translate-names		0	Erech ... Susa	names of cities (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	4	10	d6lu	translate-names		0	Ashurbanipal	This is a name of a man. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	4	10	pu35	translate-names		0	the Province Beyond the River	This is the name of the province that was west of the Euphrates River. It was across the river from the city of Susa. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	4	11	a7sk			0	This is a copy	Ezra includes in his writing the content of the letter sent to King Artaxerxes.
+EZR	4	11	n6mp	translate-names		0	the Province Beyond the River	This is the name of the province that was west of the Euphrates River. It was across the river from the city of Susa. See how you translated this in [Ezra 4:10](../04/10.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	4	12	fu8s	figs-metonymy		0	a rebellious city	The city is a metonym for the people who live in it. Alternate translation: "a city that they plan to live in and rebel against you" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+EZR	4	12	jr26			0	repaired the foundations	"fixed the foundations" or "mended the foundations"
+EZR	4	13	wj57	figs-activepassive		0	if this city is built and the wall is completed	This can be translated in active form. Alternate translation: "if they build the city and complete the wall" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+EZR	4	13	pgs2			0	but they will harm the kings	The word "harm" refers to the Judeans no longer giving money to the kings.
+EZR	4	14	m7yw	figs-metonymy		0	we have eaten the palace salt	Possible meanings are that this refers to 1) the writers being loyal to the king or 2) the king giving the writers special honors. Alternate translation: "we are loyal to you" or "you have honored us by making us your officials" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+EZR	4	15	sa9b	figs-metonymy		0	a rebellious city	The city is a metonym for the people who live in it. Alternate translation: "a city in which live people who have rebelled against your father" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+EZR	4	15	au5i	figs-activepassive		0	the city was destroyed	This can be translated in active form, in which case you will need to make explicit who destroyed the city. The "city" represents the people who live in it. Alternate translation: "the Babylonians destroyed the city" (See: [[rc://en/ta/man/translate/figs-activepassive]] and [[rc://en/ta/man/translate/figs-explicit]] and [[rc://en/ta/man/translate/figs-metonymy]])
+EZR	4	16	cr21	figs-activepassive		0	if this city and wall are built	This can be translated in active form. See how you translated these words in [Ezra 4:13](../04/13.md). Alternate translation: "if they build the city and wall" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+EZR	4	16	n9kz	figs-hyperbole		0	there will be nothing remaining for you	Here "nothing" is an exaggeration to make the king think that he will be losing much tax money if the Judeans rebel. (See: [[rc://en/ta/man/translate/figs-hyperbole]])
+EZR	4	16	keh5	translate-names		0	the Province Beyond the River	This is the name of the province that was west of the Euphrates River. It was across the river from the city of Susa. See how you translated this in [Ezra 4:10](../04/10.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	4	17	qp5d	translate-names		0	the Province Beyond the River	This is the name of the province that was west of the Euphrates River. It was across the river from the city of Susa. See how you translated this in [Ezra 4:10](../04/10.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	4	17	u66e			0	Rehum	This is a man's name. See how you translated this in [Ezra 2:2](../02/02.md).
+EZR	4	17	hja4			0	Shimshai	This is a man's name. See how you translated this in [Ezra 4:8](../04/08.md).
+EZR	4	17	rsd2			0	the River	the Euphrates River
+EZR	4	18	sza5	figs-activepassive		0	The letter that you sent me has been translated and read	This can be translated in active form, in which case you will need to make explicit who translated and read the letter to the king. Alternate translation: "I have had my servants translate and read the letter that you sent to me" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+EZR	4	20	vmb6	translate-names		0	the Province Beyond the River	This is the name of the province that was west of the Euphrates River. It was across the river from the city of Susa. See how you translated this in [Ezra 4:10](../04/10.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	4	20	s7mv	figs-activepassive		0	Tribute and taxes were paid to them	This can be translated in active form. Alternate translation: "The people in Jerusalem paid tribute and taxes to those kings" or "Those kings were able to collect tribute and taxes" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+EZR	4	21	ie6i			0	make a decree	"make a law"
+EZR	4	22	xxy6	figs-litotes		0	Be careful not to neglect this	The litotes "not to neglect" is an understatement to emphasize that the writers want Artaxerxes to do what they tell him to do. Alternate translation: "Be careful to do this" (See: [[rc://en/ta/man/translate/figs-litotes]])
+EZR	4	22	t7e7	figs-rquestion		0	Why allow this threat to grow and cause more loss for the royal interests?	Artaxerxes uses a question to tell them that he understands that he will lose taxes and honor if the city is built. Alternate translation: "You must make sure that this threat does not grow and cause more loss for the royal interests." (See: [[rc://en/ta/man/translate/figs-rquestion]])
+EZR	4	22	kqp4	figs-metaphor		0	threat to grow	Danger is spoken of as if it were a plant that could increase in size. Alternate translation: "danger to become worse" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+EZR	4	22	fy32	figs-metonymy		0	cause more loss for the royal interests	The words "the royal interests" are a metonym for the king himself. Alternate translation: "cause more bad things to happen to the kings" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+EZR	4	23	zq2h	figs-activepassive		0	King Artaxerxes' decree was read	This can be translated in active form, in which case you will need to make explicit who read the decree from the king to the officials. Alternate translation: "The messengers from King Artaxerxes read his decree" (See: [[rc://en/ta/man/translate/figs-activepassive]] and [[rc://en/ta/man/translate/figs-explicit]])
+EZR	4	23	s349			0	Rehum	See how you translated this in [Ezra 2:1](../02/01.md).
+EZR	4	23	qu4l			0	Shimshai	See how you translated this in [Ezra 4:7](../04/07.md).
+EZR	4	24	kj9i			0	the work on the house of God in Jerusalem stopped until the second year of the reign of Darius	This delay lasted about 16 years.
+EZR	5	intro	rn2j			0		# Ezra 05 General Notes<br>## Structure and formatting<br><br>The story of the building of the temple and re-establishment of the temple worship continues in this chapter. (See: [[rc://en/tw/dict/bible/kt/temple]])<br><br>## Special concepts in this chapter<br><br>### Rebuilding the temple<br>The prophets Haggai and Zechariah encouraged the Jews to begin again building the temple. This was very important to life in Judah. (See: [[rc://en/tw/dict/bible/kt/prophet]])<br>
+EZR	5	1	bdb8	translate-names		0	Iddo	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	5	2	u7ce	translate-names		0	Jeshua ... Jozadak	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	5	2	z38k			0	Shealtiel	This is a man's name. See how you translated this in [Ezra 3:1](../03/01.md).
+EZR	5	2	mz7h			0	to build the house of God	This was the temple of God.
+EZR	5	3	kl9l	translate-names		0	Tattenai ... Shethar-Bozenai	men's names (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	5	3	gs4x	translate-names		0	the Province Beyond the River	This is the name of the province that was west of the Euphrates River. It was across the river from the city of Susa. See how you translated it in [Ezra 4:10](../04/10.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	5	5	gv23	figs-synecdoche		0	God's eye was on	The eye represents the person watching over another person. Alternate translation: "God was watching over" (See: [[rc://en/ta/man/translate/figs-synecdoche]])
+EZR	5	5	eu4e	figs-activepassive		0	for a letter to be sent to the king and for a decree to be returned to them	This can be translated in active form. Alternate translation: "for an official to send a letter to the king and for the king to send a letter back to them with a decree" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+EZR	5	6	jbg5			0	This is a copy of the letter	Ezra includes the contents of the letter to King Darius regarding their work on the temple.
+EZR	5	6	uq1x	translate-names		0	the Province Beyond the River	This is the name of the province that was west of the Euphrates River. It was across the river from the city of Susa. See how you translated this in [Ezra 4:10](../04/10.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	5	8	sp27			0	General Information:	The letter from Tattenai to the king that began in [Ezra 5:7](../05/07.md) continues.
+EZR	5	8	nmq2			0	timbers	wood for building
+EZR	5	9	uee9			0	Who gave you a decree	"Who gave you permission"
+EZR	5	11	f9fm			0	General Information:	The letter from Tattenai to the king that began in [Ezra 5:7](../05/07.md) continues.
+EZR	5	11	m5y2			0	We are servants of the one	Possible meaning are 1) they were calling the Jewish people servants of God or 2) those who replied were from the tribe of Levi and Aaron, who were the ones actually responsible for the temple worship and sacrifices.
+EZR	5	11	a1ui	figs-activepassive		0	that had been built many years ago when the great king of Israel built it and completed it	This can be translated in active form. Alternate translation: "that the great king of Israel had built and supplied all the equipment for" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+EZR	5	11	y9hr			0	completed it	"supplied all the equipment for it"
+EZR	5	12	un5r			0	General Information:	The letter from Tattenai to the king continues. Tattenai continues to tell the king what the Judeans had told him beginning in [Ezra 5:11](../05/11.md).
+EZR	5	12	pqp8			0	enraged the God of heaven	"made the God of heaven become very angry with us"
+EZR	5	12	cy4x	figs-metonymy		0	he gave them into the hand of Nebuchadnezzar king of Babylon, the Chaldean, who destroyed this house and took the people	The hand is a metonym for power or control. Also, "Nebuchadnezzar" represents his army. Alternate translation: "allowed the army of Nebuchadnezzar, king of Babylon, the Chaldean, to destroy this house and to take the people" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+EZR	5	12	sgt7			0	destroyed this house	"tore down this house"
+EZR	5	13	e3wn			0	Cyrus issued a decree to rebuild the house of God	Cyrus ordered that the people rebuild God's temple.
+EZR	5	14	q6am			0	General Information:	The letter from Tattenai to the king that began in [Ezra 5:7](../05/07.md) continues. Tattenai continues to tell the king what the Judeans had told him beginning in ([Ezra 5:11](./11.md)).
+EZR	5	14	w7ix			0	Sheshbazzar	See how you translated this in [Ezra 1:7](../01/07.md).
+EZR	5	14	caq3			0	He restored them	King Cyrus returned the temple objects.
+EZR	5	15	q6r3	figs-activepassive		0	Let the house of God be rebuilt	This can be translated in active form. Alternate translation: "I want the Judeans to rebuild the house of God" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+EZR	5	16	x9zt			0	General Information:	The letter from Tattenai to the king that began in [Ezra 5:7](../05/07.md) continues. Tattenai continues to tell the king what the Judeans had told him beginning in ([Ezra 5:11](./11.md)).
+EZR	5	16	d7m8	figs-activepassive		0	it is being constructed, but is not yet complete	This can be translated in active form. Alternate translation: "people are now constructing it, but they have not done all the work yet" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+EZR	5	16	myr8			0	constructed	built
+EZR	5	17	f4m4			0	General Information:	The letter from Tattenai to the king that began in [Ezra 5:7](../05/07.md) continues. Tattenai has finished telling the king what the Judeans told him and now asks the king to see if what the Judeans told him was true.
+EZR	5	17	abm5	figs-activepassive		0	may it be investigated	This can be translated in active form. Alternate translation: "I would like you to have someone investigate this matter" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+EZR	5	17	vii9			0	if a judgment from King Cyrus exists there	"if there is a record there that King Cyrus issued a law"
+EZR	6	intro	y5d8			0		# Ezra 06 General Notes<br>## Structure and formatting<br><br>The completion of the story of the building of the temple and re-establishment of the temple worship occurs in this chapter. (See: [[rc://en/tw/dict/bible/kt/temple]])<br><br>## Special concepts in this chapter<br><br>### Temple taxes<br>The king said the Jews were right and ordered money from his taxes to be used to help them with their sacrifices.<br><br>## Other possible translation difficulties in this chapter<br>### Darius<br>In this chapter, Darius is called the king of Assyria. In reality, besides ruling over the former Assyrian Empire, Darius was also king of Persia. Persia had conquered Babylon, which had previously conquered Assyria. This made the king of Persia, the king of Assyria as well. It was unusual to refer to Darius as the king or ruler of Assyria. Ezra may have referred to him in this way to contrast Darius' actions with those of the former rulers of Assyria, who had treated the Jews very cruelly. It was those earlier Assyrian rulers who had conquered the northern tribes of Israel and deported them to other lands. It was for this reasons that the northern tribes lost their identity and were no longer a distinct people group.<br>
+EZR	6	1	spf8	figs-abstractnouns		0	ordered an investigation	The abstract noun "investigation" can be expressed with the verbs "investigate" or "search." Alternate translation: "ordered his officials to investigate" or "ordered his officials to search" (See: [[rc://en/ta/man/translate/figs-abstractnouns]])
+EZR	6	1	pb3s	figs-explicit		0	ordered an investigation	What they were to investigate can be stated clearly. Alternate translation: "ordered his officials to investigate the records" or "ordered his officials to search and find out if there was a record of King Cyrus telling the Jews to build the house of God in Jerusalem" (See: [[rc://en/ta/man/translate/figs-explicit]])
+EZR	6	1	dze3			0	house of archives	This is a building where the king's officials kept the important government records.
+EZR	6	2	f8w5	translate-names		0	Ecbatana	This is the name of a city. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	6	2	gfa8	figs-activepassive		0	a scroll was found	This can be stated in active form. Alternate translation: "they found a scroll" or "they found a scroll that told about Darius and Jerusalem" (See: [[rc://en/ta/man/translate/figs-activepassive]] and [[rc://en/ta/man/translate/figs-explicit]])
+EZR	6	3	i2dk			0	General Information:	This begins the record of King Cyrus's command that the Jews rebuild God's temple in Jerusalem.
+EZR	6	3	ev3b	figs-explicit		0	In the first year of King Cyrus	It can be stated clearly that this is the first year of his reign. Alternate translation: "In year 1 of the reign of King Cyrus" (See: [[rc://en/ta/man/translate/figs-explicit]] and [[rc://en/ta/man/translate/translate-numbers]])
+EZR	6	3	gi3x	figs-activepassive		0	Let the house be rebuilt	This can be stated in active form. Alternate translation: "Let the Jews rebuild the house" or "The Jews must rebuild the house" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+EZR	6	3	ts4a	translate-numbers		0	sixty cubits	"60 cubits." You may convert this to a modern measure. Alternate translation: "twenty-seven meters" (See: [[rc://en/ta/man/translate/translate-numbers]] and [[rc://en/ta/man/translate/translate-bdistance]])
+EZR	6	4	q3hv	figs-explicit		0	with three rows of large stones and a row of new timber	This can be stated as a new sentence. Possible meanings are 1) this describes how to build the foundation. Alternate translation: "Build the foundation on three layers of large stones covered with one layer of timber" or 2) this describes how to build the walls. Alternate translation: "Build the house's walls with three layers of large stones alternating with one layer of timber" (See: [[rc://en/ta/man/translate/figs-explicit]])
+EZR	6	4	tny3	figs-metonymy		0	let the cost be paid by the king's house	The phrase "the king's house" represents King Cyrus's own wealth in the royal treasury. This can be stated in active form. Alternate translation: "I will pay for it with money from the royal treasury" (See: [[rc://en/ta/man/translate/figs-metonymy]] and [[rc://en/ta/man/translate/figs-activepassive]])
+EZR	6	6	f9x5			0	General Information:	This continues the record of King Cyrus's command that the Jews rebuild God's temple in Jerusalem, which began in [Ezra 6:3](../06/03.md).
+EZR	6	6	xd9g	translate-names		0	Tattenai ... Shethar-Bozenai	Darius writes directly to these men. Translate their names as in [Ezra 5:3](../05/03.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	6	6	xk9x	translate-names		0	the Province Beyond the River	This is the name of the province that was west of the Euphrates River. It was across the river from the city of Susa. See how you translated it in [Ezra 4:10](../04/10.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	6	8	ci97			0	General Information:	This continues the record of King Cyrus's command that the Jews rebuild God's temple in Jerusalem, which began in [Ezra 6:3](../06/03.md).
+EZR	6	8	njb9	figs-activepassive		0	Funds from the king's tribute beyond the River will be used to pay these men	This can be stated in active form. Alternate translation: "Use funds from the king's tribute beyond the river to pay these men" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+EZR	6	8	te7b	figs-explicit		0	Funds from the king's tribute beyond the River	"The king's tribute" refers to taxes that people pay the king. Alternate translation: "Money from the taxes that you collect for the king from the people beyond the river" (See: [[rc://en/ta/man/translate/figs-explicit]])
+EZR	6	11	em18			0	General Information:	This continues the record of King Cyrus's command that the Jews rebuild God's temple in Jerusalem, which began in [Ezra 6:3](../06/03.md).
+EZR	6	11	uqt8	figs-activepassive		0	a beam must be pulled from his house and he must be impaled on it. His house must then be turned into a rubbish heap	This can be translated in active form. Alternate translation: "I command my officials to pull a beam from his house and impale him on it. They are then to turn his house into a rubbish heap" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+EZR	6	11	w334			0	beam	a long, sturdy piece of wood, supporting the roof of a house
+EZR	6	11	i9yf			0	impaled	pierced through
+EZR	6	12	mn8y	figs-metonymy		0	who lifts a hand to change ... or to destroy	Lifting the hand represents trying or daring to do something. Alternate translation: "who tries to change ... or to destroy" or "who dares to change ... or to destroy" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+EZR	6	12	y3sn	figs-abstractnouns		0	to change this decree	The abstract noun "decree" can be expressed with the phrase "what I have decreed." Alternate translation: "to change what I have decreed" or "to say that I have decreed something else" (See: [[rc://en/ta/man/translate/figs-abstractnouns]])
+EZR	6	13	alm6	translate-names		0	Tattenai ... Shethar-Bozenai	Translate the names of these men as you did in [Ezra 5:3](../05/03.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	6	15	q4v5	figs-activepassive		0	The house was completed	This can be translated in active form. You may need to make explicit which house they completed. Alternate translation: "They completed God's house" or "They finished building the temple" (See: [[rc://en/ta/man/translate/figs-activepassive]] and [[rc://en/ta/man/translate/figs-explicit]])
+EZR	6	15	c1qx	translate-hebrewmonths		0	the third day of the month of Adar	"Adar" is the name of the twelfth and last month of the Hebrew calendar. It is during the cold season. The third day is near the middle of February on Western calendars. (See: [[rc://en/ta/man/translate/translate-hebrewmonths]] and [[rc://en/ta/man/translate/translate-names]] and [[rc://en/ta/man/translate/translate-ordinal]])
+EZR	6	15	bhp9	translate-ordinal		0	sixth year	King Darius had been ruling for five years, so he was now in year number six of his reign. (See: [[rc://en/ta/man/translate/translate-ordinal]])
+EZR	6	16	cq1q	figs-explicit		0	the rest of the captives	These people had been captured and taken to Babylon, but they returned to Jerusalem. Alternate translation: "the rest of the people who had been taken captive to Babylon and had returned to Jerusalem" or "the rest of the people who had returned from captivity" (See: [[rc://en/ta/man/translate/figs-explicit]])
+EZR	6	17	r49v	translate-numbers		0	one hundred bulls ... four hundred lambs	"100 bulls ... 400 lambs" (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	6	18	th9n	figs-abstractnouns		0	to work divisions	The abstract noun "work divisions" can be expressed with a verbal phrase. Alternate translation: "to work in groups" (See: [[rc://en/ta/man/translate/figs-abstractnouns]])
+EZR	6	18	iix1			0	work divisions	"groups that work together"
+EZR	6	19	j6lm	translate-hebrewmonths		0	fourteenth day of the first month	This is the first month of the Hebrew calendar. The fourteenth day is near the beginning of April on Western calendars. (See: [[rc://en/ta/man/translate/translate-hebrewmonths]] and [[rc://en/ta/man/translate/translate-ordinal]])
+EZR	6	20	j34t	figs-metaphor		0	purified themselves	"made themselves pure." Being pure represents being acceptable to God. Alternate translation: "made themselves acceptable to God" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+EZR	6	21	p72z	figs-metaphor		0	separated themselves from the uncleanness of the people of the land	Separating themselves from uncleanness represents refusing to do things that make people unclean. Alternate translation: "They refused to do the things that the people of the land did that made them unclean" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+EZR	6	21	alu2	figs-metaphor		0	the uncleanness of the people of the land	Here "uncleanness" represents being unacceptable to God. Alternate translation: "the things that the people of the land did that made them unacceptable to God" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+EZR	6	21	tyz7	figs-metaphor		0	sought Yahweh	Seeking Yahweh represents choosing to know, worship, and obey him. Alternate translation: "chose to obey Yahweh" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+EZR	6	22	k6q8	figs-metonymy		0	turned the heart of Assyria's king	Turning the king's heart represents making him think differently about the work of the temple. Alternate translation: "changed the attitude of Assyria's king" or "made Assyria's king willing" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+EZR	6	22	x9ls	figs-metaphor		0	to strengthen their hands in the work of his house	Strengthening their hands in the work represents helping them to work. The Assyrian king did this by telling them to do the work and providing the money for it. Alternate translation: "to help them do the work of his house" or "to make it possible for them to do the work of his house" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+EZR	6	22	m7l7			0	the work of his house	This refers to building the temple.
+EZR	7	intro	p3he			0		# Ezra 07 General Notes<br>## Structure and formatting<br><br>Ezra begins his religious reforms.<br><br>## Special concepts in this chapter<br><br>### God's Law<br>The people no longer know the law of Moses. Therefore, the king allows Ezra to return to Judea to teach the people about God's law. Many people go with him. (See: [[rc://en/tw/dict/bible/kt/lawofmoses]])<br>
+EZR	7	1	h549			0	General Information:	Ezra's genealogy goes back to Aaron, the first high priest.
+EZR	7	1	xe3c	figs-explicit		0	Ezra came up from Babylon	Where Ezra came up to can be stated clearly. Alternate translation: "Ezra came up to Jerusalem from Babylon" (See: [[rc://en/ta/man/translate/figs-explicit]])
+EZR	7	1	n9di	translate-names		0	Seraiah	See how you translated this man's name in [Ezra 2:2](../02/02.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	7	1	gcr6	translate-names		0	Azariah, Hilkiah	men's names (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	7	2	iy78	translate-names		0	Shallum	See how you translated this man's name in [Ezra 2:42](../02/42.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	7	2	e2ek	translate-names		0	Zadok, Ahitub	men's names (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	7	3	h5gv	translate-names		0	Amariah, Azariah, Meraioth	This list is all men's names. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	7	4	zd73	translate-names		0	Zerahiah, Uzzi, Bukki	men's names (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	7	5	jvt2	translate-names		0	Abishua, Phinehas, Eleazar	men's names (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	7	6	xd8u			0	The king gave him anything he asked	"The king gave Ezra anything he asked for"
+EZR	7	6	w6u9	figs-metonymy		0	the hand of Yahweh was with him	The "hand" of Yahweh represents Yahweh's blessing or help. Alternate translation: "the blessing of Yahweh was with Ezra" or "Yahweh was blessing Ezra" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+EZR	7	7	tt66	figs-explicit		0	in the seventh year of King Artaxerxes	This refers to the seventh year of his reign. Alternate translation: "in the seventh year that Artaxerxes was king" (See: [[rc://en/ta/man/translate/figs-explicit]])
+EZR	7	8	cr7y	translate-hebrewmonths		0	the fifth month	This is the fifth month of the Hebrew calendar. It is during the last part of July and the first part of August on Western calendars. (See: [[rc://en/ta/man/translate/translate-hebrewmonths]] and [[rc://en/ta/man/translate/translate-ordinal]])
+EZR	7	9	f68n	translate-hebrewmonths		0	the first day of the first month	This is near the middle of March on Western calendars. (See: [[rc://en/ta/man/translate/translate-hebrewmonths]] and [[rc://en/ta/man/translate/translate-ordinal]])
+EZR	7	9	s9by	translate-hebrewmonths		0	the first day of the fifth month	This is near the middle of July on Western calendars. (See: [[rc://en/ta/man/translate/translate-hebrewmonths]] and [[rc://en/ta/man/translate/translate-ordinal]])
+EZR	7	9	k4wr	figs-metonymy		0	the good hand of God	"Hand" represents the power or control that God uses for good results. (See: [[rc://en/ta/man/translate/figs-metonymy]])
+EZR	7	10	b5p7	figs-metaphor		0	Ezra had established his heart to study	Establishing his heart represents firmly deciding or committing himself to do something. Alternate translation: "Ezra committed his life to study" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+EZR	7	10	y7yr			0	carry out	"obey"
+EZR	7	10	w9d8			0	the statutes and decrees of the law of Yahweh	These were the laws that God passed down to Israel through Moses.
+EZR	7	11	qjr1			0	This was the decree	The text following this statement was the decree given by King Artaxerxes.
+EZR	7	12	y33a	figs-explicit		0	The King of kings Artaxerxes	"The King of kings" was a title, meaning that he was the greatest of kings, the king that other kings obeyed. Alternate translation: "The Great King Artaxerxes" or "Artaxerxes, the greatest king" (See: [[rc://en/ta/man/translate/figs-explicit]])
+EZR	7	13	d9b4			0	I am ordering that anyone ... who desires to go to Jerusalem	In those days people needed permission from the king to resettle and rebuild in an area previously destroyed by the conquering nation.
+EZR	7	13	wi2u			0	may go with you	The word "you" refers to Ezra.
+EZR	7	14	cbf2			0	Connecting Statement:	This continues the decree that King Artaxerxes gave to Ezra.
+EZR	7	14	h7cx			0	I, the king, and my seven counselors	The word "I" and the phrase "the king" refer to the same person. The king is reminding the people who hear this letter that he is the author of this letter.
+EZR	7	14	v44t	figs-explicit		0	to inquire concerning Judah and Jerusalem according to God's law	What they were to inquire about can be stated more clearly. Alternate translation: "to investigate the situation in Judah and Jerusalem, in order to learn whether or not they are obeying God's law" (See: [[rc://en/ta/man/translate/figs-explicit]])
+EZR	7	15	m1pn	figs-explicit		0	You are to bring the silver and gold	Where they were to bring it can be stated clearly. Alternate translation: "You are to bring to Jerusalem the silver and gold" (See: [[rc://en/ta/man/translate/figs-explicit]])
+EZR	7	15	uu8a			0	the silver and gold that they have freely offered	"Freely" means that they were not forced to offer the money. They gave it because they wanted to. Alternate translation: "the silver and gold that they have willingly offered"
+EZR	7	16	p3du	figs-explicit		0	what is freely offered by the people and the priests	This can be expressed active form. Alternate translation: "what the people and the priests have freely offered" (See: [[rc://en/ta/man/translate/figs-explicit]])
+EZR	7	17	pr2c			0	Connecting Statement:	This continues the decree that King Artaxerxes gave to Ezra.
+EZR	7	17	b2sq	figs-explicit		0	So buy in full ... offerings	The phrase "in full" means as many as are necessary to complete the task. They were to use the gold and silver to buy all they needed in order to worship God in the temple. Alternate translation: "Buy as many of the oxen, rams, lambs, grain and drink offerings as are needed" (See: [[rc://en/ta/man/translate/figs-explicit]])
+EZR	7	18	a2bh	figs-metaphor		0	you and your brothers	The phrase "your brothers" refers to the people who were doing this work with Ezra. Alternate translation: "your co-workers" or "your companions" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+EZR	7	19	h5qf			0	Connecting Statement:	This continues the decree that King Artaxerxes gave to Ezra.
+EZR	7	19	h6x1	figs-activepassive		0	the objects that were freely given to you	This can be expressed in active form. Alternate translation: "the objects that we have freely given to you" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+EZR	7	19	bkk8			0	Place the objects ... before him	The word "him" refers to God.
+EZR	7	19	a3tf	figs-abstractnouns		0	for the service of the house of your God	The abstract noun "service" can be expressed with the verbs "serve" or "use." Alternate translation: "to use in the house of your God" or "to serve in the house of your God" (See: [[rc://en/ta/man/translate/figs-abstractnouns]])
+EZR	7	20	hgu9			0	treasury	a secure place where money is stored
+EZR	7	21	wiy2			0	Connecting Statement:	This continues the decree that King Artaxerxes gave to Ezra.
+EZR	7	21	i7dz	translate-names		0	the Province Beyond the River	This is the name of the province that was west of the Euphrates River. It was across the river from the city of Susa. See how you translated it in [Ezra 4:10](../04/10.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	7	21	h6c8	figs-activepassive		0	that anything that Ezra asks from you should be given in full	This can be expressed in active form. "Give Ezra in full anything he asks of you" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+EZR	7	21	euy1	figs-explicit		0	should be given in full	The phrase "in full" here represents whatever quantity necessary to do the work. Alternate translation: "should be given as much as he needs" (See: [[rc://en/ta/man/translate/figs-explicit]])
+EZR	7	22	c716	translate-numbers		0	one hundred silver talents	"100 talents of silver." You may convert this to a modern measure. Alternate translation: "3,300 kilograms of silver" (See: [[rc://en/ta/man/translate/translate-numbers]] and [[rc://en/ta/man/translate/translate-bweight]])
+EZR	7	22	cja2	translate-bvolume		0	one hundred cors of grain	You may convert this to a modern measure. Alternate translation: "22,000 liters of grain" or "twenty thousand liters of grain" (See: [[rc://en/ta/man/translate/translate-bvolume]] and [[rc://en/ta/man/translate/translate-numbers]])
+EZR	7	22	u3yi	translate-bvolume		0	one hundred baths of oil	You may convert this to a modern measure. Alternate translation: 2,200 liters of oil" or "two thousand liters of oil" (See: [[rc://en/ta/man/translate/translate-bvolume]] and [[rc://en/ta/man/translate/translate-numbers]])
+EZR	7	23	t2e7			0	his house	This refers to God's temple.
+EZR	7	23	i89i	figs-rquestion		0	For why should his wrath come upon the kingdom of me and my sons?	The king uses this question to say that he does not want God's wrath to come upon them. The implied information is that if they do not do give Ezra what he needs, then God will punish the kingdom. Alternate translation: "For we do not want God's wrath to come upon the kingdom of me and my sons." or "For if you do not do these things, God's wrath will come upon the kingdom of me and my sons." (See: [[rc://en/ta/man/translate/figs-rquestion]])
+EZR	7	23	x6h5	figs-metonymy		0	For why should his wrath come upon the kingdom of me and my sons	God's wrath represents God punishing them. Alternate translation: "For why should God punish the kingdom of me and my sons" or "For if you do not do these things, God will punish the kingdom of me and my sons" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+EZR	7	24	pw3i			0	Connecting Statement:	This continues the decree that King Artaxerxes gave to Ezra.
+EZR	7	24	wx23			0	We are informing them about you not to impose any tribute or taxes	"We are telling them not to impose any tribute or taxes"
+EZR	7	24	ycd8			0	musicians	people who play musical instruments
+EZR	7	25	r244			0	Connecting Statement:	This is the end of the decree that King Artaxerxes gave to Ezra.
+EZR	7	25	qzk1	figs-abstractnouns		0	with the wisdom that God has given you, you must appoint judges and magistrates	The abstract noun "wisdom" can be expressed with a verbal phrase. Alternate translation: "God has made you wise, so you must wisely appoint judges and magistrates" (See: [[rc://en/ta/man/translate/figs-abstractnouns]])
+EZR	7	26	sr94	figs-abstractnouns		0	whether by death, banishment, confiscation of their goods, or imprisonment	The abstract nouns can be translated with verbs. Alternate translation: "whether by killing them, banishing them, confiscating their goods, or imprisoning them" or "You may kill them, send them away, take the things the own, or put them in prison" (See: [[rc://en/ta/man/translate/figs-abstractnouns]])
+EZR	7	27	qh6m			0	Connecting Statement:	Ezra praises God because of what King Artaxerxes decreed.
+EZR	7	27	t4cz	figs-metaphor		0	placed all this into the king's heart to glorify Yahweh's house in Jerusalem	Placing things in the king's heart represents causing him to have certain thoughts and desires. Alternate translation: "caused the king to want to glorify Yahweh's house in Jerusalem" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+EZR	7	27	w14w	figs-metaphor		0	Yahweh's house	This refers to Yahweh's temple" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+EZR	7	28	y4zu	figs-abstractnouns		0	who extended covenant faithfulness to me	The abstract noun "faithfulness" can be stated as "faithful" or "loyal." Alternate translation: "who has been faithful to me" or "who has been loyal to me" (See: [[rc://en/ta/man/translate/figs-abstractnouns]])
+EZR	7	28	q1iu	figs-metaphor		0	I have been strengthened	Being strengthened represents being encouraged. Alternate translation: I am encouraged" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+EZR	7	28	gxx2	figs-metonymy		0	by the hand of Yahweh my God	Here Yahweh's hand represents what he did to help Ezra. Alternate translation: "because Yahweh has helped me" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+EZR	8	intro	ye9m			0		# Ezra 08 General Notes<br>## Special concepts in this chapter<br><br>### The people's return to Judah<br>Many people went back to Judah with Ezra. They trusted God to protect them and the precious items they carried with them, which had been given for the temple. (See: [[rc://en/tw/dict/bible/kt/trust]])<br>
+EZR	8	1	ss8d	translate-names		0	General Information:	There is an apparent shift in authorship beginning here. Chapters 1-7 were written as if the author were writing about Ezra. Chapter 8 was written as if the author were Ezra. Verses 2-14 are a list of leaders and their ancestors. All of them are men. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	8	2	m2b9			0	Of the descendants of Phinehas, Gershom	This is the first item in the list. It can be written with the verb "was." Alternate translation: "The leader of the descendants of Phinehas was Gershom" or "Gershom was the leader of the descendants of Phinehas"
+EZR	8	2	i7e9			0	Of the descendants of Ithamar, Daniel	This is the second item in the list. It can be written with the verb "was." Alternate translation: "The leader of the descendants of Ithamar was Daniel" or "Daniel was the leader of the descendants of Ithamar"
+EZR	8	2	kb7h			0	Of the descendants of David, Hattush	This is the third item in the list. It can be written with the verb "were." Alternate translation: "The leaders of the descendants of David were Hattush who was ... Parosh; and Zechariah" or "The leaders of the descendants of David were Hattush and Zechariah. Hattush was from ... Parosh"
+EZR	8	2	xt4r			0	Hattush	This is a man's name.
+EZR	8	3	m91f			0	Parosh	See how you translated this man's name in [Ezra 2:3](../02/03.md).
+EZR	8	3	ds2y			0	with him there were 150 males listed in the record of his genealogy	"with Zechariah there were 150 males listed in the record of his genealogy"
+EZR	8	3	se12	translate-numbers		0	150 males	"one hundred and fifty males" (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	8	4	c961	translate-names		0	General Information:	The list of men's names continues. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	8	4	f7d5			0	Of the descendants of Pahath-Moab, Eliehoenai son of Zerahiah	This is the next item in the list. It can be written with the verb "was." Alternate translation: "The leader of the descendants of Pahath-Moab was Eliehoenai son of Zerahiah" or "Eliehoenai son of Zerahiah was the leader of the descendants of Pahath-Moab"
+EZR	8	4	y6jz			0	with him were two hundred males	"with Eliehoenai were two hundred males"
+EZR	8	4	kyx7			0	Zerahiah	See how you translated this man's name in [Ezra 7:4](../07/04.md).
+EZR	8	4	z9s8	translate-numbers		0	two hundred	"200" (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	8	5	j5rk	translate-numbers		0	three hundred	"300" (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	8	6	x9hz			0	Adin	See how you translated this man's name in [Ezra 2:15](../02/15.md).
+EZR	8	6	c84d	translate-numbers		0	fifty	"50" (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	8	7	ckp4	translate-numbers		0	seventy	"70" (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	8	8	b23z	translate-names		0	General Information:	The list of men's names continues. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	8	8	v9nn			0	Of the descendants of Shephatiah, Zebadiah son of Michael	This is the next item in the list. It can be written with the verb "was." Alternate translation: "The leader of the descendants of Shephatiah was Zebadiah son of Michael" or "Zebadiah son of Michael was the leader of the descendants of Shephatiah"
+EZR	8	8	cw6w			0	Shephatiah	See how you translated this man's name in [Ezra 2:2](../02/02.md).
+EZR	8	8	u8wj	translate-names		0	Michael	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	8	8	w6u1			0	with him were listed eighty males	"with Zebadiah were listed eighty males"
+EZR	8	8	rsp4	translate-numbers		0	eighty	"80" (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	8	9	ude8	translate-numbers		0	218 males	"two hundred and eighteen males" (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	8	10	y254	translate-numbers		0	160 males	"one hundred and sixty males" (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	8	11	s7ng			0	Bebai	See how you translated this in [Ezra 2:11](../02/11.md).
+EZR	8	11	w892	translate-numbers		0	twenty-eight	"28" (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	8	12	z7xc	translate-names		0	General Information:	This is the end of the list of men's names. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	8	12	a3dx			0	Of the descendants of Azgad, Johanan son of Hakkatan	This is the next item in the list. It can be written with the verb "was." Alternate translation: "The leader of the descendants of Azgad was Johanan son of Hakkatan" or "Johanan son of Hakkatan was the leader of the descendants of Azgad"
+EZR	8	12	j4bn			0	with him were listed 110 males	"with Johanan were listed 110 males"
+EZR	8	12	pr9v	translate-numbers		0	110 males	"one hundred and ten males" (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	8	12	elm1			0	Azgad	See how you translated this man's name in [Ezra 2:12](../02/12.md).
+EZR	8	13	rzr8			0	Those of the descendants of Adonikam	The word "those" refers to the leaders. Alternate translation: "The leaders of the descendants of Adonikam"
+EZR	8	13	k1ic			0	Adonikam	See how you translated this man's name in [Ezra 2:13](../02/13.md).
+EZR	8	13	hu49	translate-numbers		0	sixty	"60" (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	8	14	p7ej			0	Bigvai	See how you translated this man's name in [Ezra 2:2](../02/02.md).
+EZR	8	14	we81	translate-numbers		0	seventy	"70" (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	8	15	x4yl	translate-names		0	General Information:	The word "I" in chapter 8 refers to Ezra. He is the author. Verse 16 contains a list of men's names. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	8	15	gl34			0	the canal that goes to Ahava	Possible meanings are that the "canal" was 1) a waterway that men built or 2) an ordinary river. It can be translated in a more general way. Alternate translation: "the waterway that flows to Ahava"
+EZR	8	15	cl4j	translate-names		0	Ahava	This is the name of a place (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	8	16	ufp7			0	Shemaiah	See how you translated this man's name in [Ezra 8:13](../08/13.md).
+EZR	8	16	sw7e			0	Elnathan ... Elnathan ... Elnathan	There were apparently three men with the same name.
+EZR	8	17	a4dg	translate-names		0	Iddo	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	8	17	akq5	figs-explicit		0	Next I sent them to Iddo	The word "them" refers to the nine leaders and two teachers written about in [Ezra 8:16](../08/16.md). Alternate translation: "Next I sent those men to Iddo" (See: [[rc://en/ta/man/translate/figs-explicit]])
+EZR	8	17	ggi9	translate-names		0	Kasiphia	This is the name of a place. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	8	17	nq66			0	I told them what to say to Iddo ... that is, to send to us servants for the house of God	The words "that is" introduces what he told them to say. Alternate translation: "I told them to tell Iddo ... to send us servants for the house of God"
+EZR	8	18	kbq4	translate-names		0	Sherebiah ... Mahli	These are men's names. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	8	18	a7cr	figs-metonymy		0	So they sent us by our God's good hand a man	God's "good hand" represents his kindness in providing for them. Alternate translation: "Because God was kind to us, they sent us a man" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+EZR	8	18	kue1			0	a prudent man	This is a man of understanding and wisdom.
+EZR	8	18	d8n9			0	son of Levi son of Israel	Here "Israel" is a man's name. It is the name God gave to Jacob.
+EZR	8	18	pp9z	translate-numbers		0	eighteen	"18" (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	8	19	vsm6	translate-names		0	Hashabiah ... Merari	These are men's names. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	8	19	bwf7	translate-numbers		0	twenty	"20" (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	8	19	mf7n	translate-names		0	Jeshaiah	See how you translated this man's name in [Ezra 8:7](../08/07.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	8	20	f9pd			0	officials	people with specific authority within a government system
+EZR	8	21	zh8n	translate-names		0	the Ahava Canal	This is the name of the canal that flows to the place called Ahava. See how you translated Ahava and canal in [Ezra 8:15](../08/15.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	8	21	sq2q	figs-metaphor		0	to seek a straight path from him for us, our little ones, and all our possessions	The word "seek" represents asking God to do something for them. Here a "straight path" represents safety while they travel. Alternate translation: "to ask God to give us, our little ones, and all our possessions safety while we travel" or "to ask God to protect us, our little ones, and all our possessions while we travel" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+EZR	8	22	n4fd	figs-metonymy		0	The hand of our God is on all who seek him	The hand of God being on people is a metonym for God helping people. Seeking God is a metaphor for serving him. Alternate translation: "God helps all who serve him" (See: [[rc://en/ta/man/translate/figs-metonymy]] and [[rc://en/ta/man/translate/figs-metaphor]])
+EZR	8	22	fb5x	figs-metonymy		0	but his might and wrath are on all who forget him	God's might and wrath being on people is a metonym for him punishing people. Forgetting God is a metaphor for refusing to serve him. Alternate translation: "but he punishes all who refuse to serve him" (See: [[rc://en/ta/man/translate/figs-metonymy]] and [[rc://en/ta/man/translate/figs-metaphor]])
+EZR	8	23	nfn4	figs-metaphor		0	So we fasted and sought God about this	Here seeking God is a metaphor for asking God to do something for them. Alternate translation: "So we fasted and asked God to help us" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+EZR	8	24	v6yb	translate-names		0	Sherebiah, Hashabiah	See how you translated these men's names in [Ezra 8:19](../08/19.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	8	26	v4vy	translate-numbers		0	650 talents of silver	"six hundred and fifty talents of silver." A talent weighs about thirty-three kilograms. You may convert this to a modern measure. Alternate translation: "22,000 kilograms of silver" (See: [[rc://en/ta/man/translate/translate-numbers]] and [[rc://en/ta/man/translate/translate-bweight]])
+EZR	8	26	an5i	translate-numbers		0	one hundred talents of silver objects	"100 talents of silver objects." You may convert this to a modern measure. Alternate translation: "3,300 kilograms of silver objects" (See: [[rc://en/ta/man/translate/translate-numbers]] and [[rc://en/ta/man/translate/translate-bweight]])
+EZR	8	26	ih18	translate-numbers		0	one hundred talents of gold	"100 talents of gold." You may convert this to a modern measure. Alternate translation: "3,300 kilograms of gold" (See: [[rc://en/ta/man/translate/translate-numbers]] and [[rc://en/ta/man/translate/translate-bweight]])
+EZR	8	27	q2jm	translate-numbers		0	one thousand darics	"1,000 darics." A "daric" was a small gold coin that people in the Persian Empire used. You can translate this in terms of the number of coins or their weight. Alternate translation: "one thousand Persian gold coins" or "eight and one half kilograms of gold" (See: [[rc://en/ta/man/translate/translate-numbers]] and [[rc://en/ta/man/translate/translate-bmoney]])
+EZR	8	27	zlh5			0	bronze vessels	Bronze is a mixture of copper and another metal. It is stronger than pure copper.
+EZR	8	28	rbg4			0	Then I said to them	"Then I said to the twelve priestly officials"
+EZR	8	29	im6g			0	until you weigh them out before the priestly officials, Levites, and leaders	When they arrived in Jerusalem, they would weigh the silver, gold, and bronze to show that they had not taken any of it for themselves.
+EZR	8	30	ia74			0	The priests and the Levites	According to the law of Moses, the tribe of Levi had the work of caring for the temple, its possessions, and the offerings.
+EZR	8	31	c4v2			0	We went out from the Ahava Canal	"We left the Ahava Canal" or "We started traveling from the Ahava Canal"
+EZR	8	31	c9im	translate-names		0	Ahava Canal	This is the name of the canal that flows to the place called Ahava. See how you translated this in [Ezra 8:21](../08/21.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	8	31	ju8u	translate-hebrewmonths		0	twelfth day of the first month	This is the first month of the Hebrew calendar. The twelfth day is near the end of March on Western calendars. (See: [[rc://en/ta/man/translate/translate-hebrewmonths]] and [[rc://en/ta/man/translate/translate-ordinal]])
+EZR	8	31	b7m1	figs-metonymy		0	The hand of our God was on us	The hand of God being on people is a metonym for God helping people. Alternate translation: "God was helping us" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+EZR	8	31	dj8h	figs-metonymy		0	he protected us from the hand of the enemy and the ones ... road	The hand represents what those people might do. It specifically refers to the enemy attacking the group that was traveling. Alternate translation: "he protected us from the attack of the enemy and the ones who wished to ambush us along the road" or "He kept the enemy from attacking us and he kept robbers from ambushing us along the road" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+EZR	8	31	pj64			0	the ones who wished to ambush us	This refers to thieves and robbers who wanted to attack them for their treasures.
+EZR	8	33	p3qm	figs-activepassive		0	the silver, gold, and objects were weighed out	This can be translated in active form. Alternate translation: "the twelve priestly officials weighed out the silver, gold and objects" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+EZR	8	33	b9l2	figs-metonymy		0	the silver, gold, and objects were weighed out ... into the hand of Meremoth	Here "the hand of Meremoth" represents Meremoth's care of the silver, gold, and objects. The men weighed those things and gave them to Meremoth to take care of them. (See: [[rc://en/ta/man/translate/figs-metonymy]])
+EZR	8	33	lte3	translate-names		0	Meremoth ... Uriah ... Eleazar ... Phinehas ... Jozabad ... Jeshua ... Noadiah ... Binnui	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	8	33	jb4h			0	Jeshua	See how you translated this man's name in [Ezra 2:6](../02/06.md).
+EZR	8	35	gxu7			0	The ones who came back from the captivity ... the people of exile	These two phrases refer to the Jewish people who were living as exiles in Babylon and who left Babylon and returned to Jerusalem in Judea. Alternate translation: "The ones who came back to Jerusalem from the captivity in Babylon, the people of exile"
+EZR	8	35	lgl7	translate-numbers		0	twelve ... ninety-six ... seventy-seven ... twelve	"12 ... 96 ... 77 ... 12" (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	8	36	r5gu			0	the governors in the Province Beyond the River	These were the Babylonian officials managing the people west of the Euphrates River, which included the people living in Judea.
+EZR	8	36	d38g	translate-names		0	the Province Beyond the River	This is the name of the province that was west of the Euphrates River. It was across the river from the city of Susa. It included Judea. See how you translated it in [Ezra 4:10](../04/10.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	9	intro	k1yz			0		# Ezra 09 General Notes<br>## Special concepts in this chapter<br><br>### Intermarriage<br>When Ezra found out that many Jews had married Gentile wives, he prayed to God and asked God why he had been so good to them by letting these few people return from captivity even though they sinned by marrying Gentile wives. They did this before and God had punished them for it. God forbid this type of marriage because it caused the people to worship other gods. (See: [[rc://en/tw/dict/bible/kt/sin]] and [[rc://en/tw/dict/bible/kt/falsegod]])<br>
+EZR	9	1	kb76			0	have not separated themselves	have married people from other lands and have adopted their religion
+EZR	9	3	qhy7			0	When I heard this	When Ezra heard that many Israelites had married foreign women and were worshiping their gods
+EZR	9	3	ck87	figs-explicit		0	I tore apart my clothing and robe and pulled out hair from my head and beard	Ezra was showing everyone how unhappy he was that people were doing things that offended God. (See: [[rc://en/ta/man/translate/figs-explicit]])
+EZR	9	4	m8dw			0	evening offering	a sacrifice that the priests would offer around the time the sun was going down
+EZR	9	5	v2nb			0	my position of humiliation	another way of saying he was "sitting ashamed" (﻿﻿[Ezra 9:4](../09/04.md)). "where I was sitting on the ground to show how ashamed I was"
+EZR	9	5	qye1			0	knelt down and spread my hands	"got on my knees and stretched out my arms with my hands open toward the sky"
+EZR	9	6	aca6	figs-parallelism		0	our iniquities increase over our head, and our guilt grows to the heavens	These words are two ways of speaking of iniquity and guilt as if they were physical objects that could grow to be larger than people. The abstract nouns "iniquity" and "guilt" can be expressed as a noun and an adjective, respectively. Alternate translation: "we have committed wicked deeds and we are very guilty" (See: [[rc://en/ta/man/translate/figs-parallelism]] and [[rc://en/ta/man/translate/figs-abstractnouns]])
+EZR	9	7	sv5f			0	the days of our ancestors	"the time when our ancestors were alive"
+EZR	9	7	wet1	figs-abstractnouns		0	in great guilt ... In our iniquities	The abstract nouns "guilt" and "iniquity" can be translated as an adjective and a verb, respectively. Alternate translation: "very guilty ... Because of the evil deeds we did" (See: [[rc://en/ta/man/translate/figs-abstractnouns]])
+EZR	9	7	h1bs	figs-activepassive		0	we ... were given into the hand of kings	This can be translated in active form. Alternate translation: "you gave us ... into the hand of kings" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+EZR	9	7	v9sd	figs-metonymy		0	were given into the hand of kings of this world	Here "hand" represents power or control. Alternate translation: "were given into the control of the kings of this world" or "were given over to the kings of this world" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+EZR	9	7	f2hv	figs-metonymy		0	to the sword, to captivity, and to plunder and ashamed faces	The sword is a metonym for people killing other people. The abstract nouns "captivity" and "plunder" can be stated as verb phrases. And, "faces" is a synecdoche representing the whole person. Alternate translation: "to our enemies to kill us, to capture us, to steal from us, and to cause us shame" (See: [[rc://en/ta/man/translate/figs-metonymy]] and [[rc://en/ta/man/translate/figs-abstractnouns]] and [[rc://en/ta/man/translate/figs-synecdoche]])
+EZR	9	8	jqq9	figs-metaphor		0	mercy from Yahweh our God has come	God deciding to be merciful is spoken of as if mercy were a person who could move. Alternate translation: "Yahweh our God has decided to be merciful to us and" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+EZR	9	9	xh8d	figs-abstractnouns		0	but has extended covenant faithfulness to us	The abstract noun "faithfulness" can be stated as "faithful" or "loyal." See how you translated a similar phrase in [Ezra 7:28](../07/28.md). Alternate translation: "but he as been faithful to us" or "he has been loyal to us" (See: [[rc://en/ta/man/translate/figs-abstractnouns]])
+EZR	9	9	eb2m	figs-metonymy		0	in the sight of the king of Persia	The king could not literally see the temple, but he did know about what was happening in Jerusalem. Here "sight" is a metonym for what a person knows. Alternate translation: "so that the king of Persia knows about it" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+EZR	9	9	f833			0	God's house	the temple
+EZR	9	9	b5aw	figs-metaphor		0	could give us a wall of safety	The wall that keeps people safe is a metaphor for Yahweh protecting his people. Alternate translation: "could keep us safe" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+EZR	9	12	uax9			0	for all time	"until the end of the ages"
+EZR	9	14	jh1x	figs-rquestion		0	should we again break your commandments and make ... people?	This can be translated as a statement. Alternate translation: "it is very wrong that some of us have broken your commandments and made ... people." (See: [[rc://en/ta/man/translate/figs-rquestion]])
+EZR	9	14	mn62	figs-rquestion		0	Will you not be angry ... escape?	This can be translated as a statement. Alternate translation: "I am afraid that you will be angry ... escape." (See: [[rc://en/ta/man/translate/figs-rquestion]])
+EZR	9	15	qhg9			0	Look	"Pay attention to what I am about to say"
+EZR	9	15	a177			0	We are here before you in our guilt	"You can see that we are all guilty"
+EZR	9	15	lh5h			0	there is no one who can stand before you	"you do not think that any person is innocent"
+EZR	10	intro	ah4y			0		# Ezra 10 General Notes<br>## Special concepts in this chapter<br><br>### Intermarriages<br>The people agree to divorce their Gentile wives. Many Jews were involved in these mixed marriages. Divorce should not normally have been common for the Jews to engage in, but marriage with non-Jewish women was not allowed.<br>
+EZR	10	1	ufb1	figs-pronouns		0	As Ezra prayed and confessed ... threw himself down	Ezra speaks of himself as if he were someone else. (See: [[rc://en/ta/man/translate/figs-pronouns]])
+EZR	10	1	ekt7			0	threw himself down	quickly went from standing to lying facedown
+EZR	10	1	vcs1			0	before God's house	in front of the temple
+EZR	10	2	zx9r			0	Shekaniah	See how you translated this in [Ezra 8:5](../08/05.md).
+EZR	10	2	at6v			0	Jehiel	See how you translated this in [Ezra 8:9](../08/09.md).
+EZR	10	2	af7v			0	We have been unfaithful to our God	This was made as a public confession, not as a boastful claim.
+EZR	10	4	m4vg			0	we are with you	"we will help you"
+EZR	10	6	j3bg	translate-names		0	Jehohanan ... Eliashib	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	8	tv2h			0	Anyone who did not come ... forfeited all of his possessions and would be excluded	"The officials would take all the possessions away from anyone who did not come ... and would excuse them" or "The people of Judah and Jerusalem would take all the possessions away from anyone who did not come ... and would exclude them"
+EZR	10	8	a5ia	translate-numbers		0	three days	3 days (See: [[rc://en/ta/man/translate/translate-numbers]])
+EZR	10	9	kp1w			0	in three days	"three days later"
+EZR	10	9	v2eh	translate-hebrewmonths		0	ninth month and the twentieth day of the month	This is the ninth month of the Hebrew calendar. The twentieth day is near the middle of December on Western calendars. (See: [[rc://en/ta/man/translate/translate-hebrewmonths]] and [[rc://en/ta/man/translate/translate-ordinal]])
+EZR	10	9	j9d3			0	in the square	a large open courtyard in front of the temple
+EZR	10	10	x4sz	figs-abstractnouns		0	committed treason	The abstract noun "treason" can be translated as a verb. Alternate translation: "helped the enemies of your people" (See: [[rc://en/ta/man/translate/figs-abstractnouns]])
+EZR	10	10	v95n			0	so as to increase Israel's guilt	"and now God considers us guilty of worse sin than before"
+EZR	10	11	man9			0	Separate from	move away from, be different from
+EZR	10	13	wqu4	figs-litotes		0	this is not only one or two days of work	This litotes can be translated in positive form. Alternate translation: "we will need a long time to do all this work" (See: [[rc://en/ta/man/translate/figs-litotes]])
+EZR	10	14	fcw7	figs-activepassive		0	at the time that will be fixed with the city elders and the city judges	This can be translated in active form and as separate sentences. Alternate translation: "at the time that you will determine. Let them come with the city elder and the city judges" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+EZR	10	15	z2yc	translate-names		0	Jonathan ... Asahel ... Jahzeiah ... Tikvah ... Meshullam ... Shabbethai	men's names (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	15	sl99			0	Jonathan son of Asahel and Jahzeiah son of Tikvah opposed this	Possible meanings are, 1) these men did not want the city officials to investigate the offenses or 2) they did not want anyone to investigate the people's marriages.
+EZR	10	16	jyy9			0	did this	The people investigated who had married non-Jewish wives.
+EZR	10	16	c2z7	translate-hebrewmonths		0	the first day of the tenth month	This is the tenth month of the Hebrew calendar. The first day is near the middle of December on Western calendars. (See: [[rc://en/ta/man/translate/translate-hebrewmonths]] and [[rc://en/ta/man/translate/translate-ordinal]])
+EZR	10	17	kgk5	translate-hebrewmonths		0	first day of the first month	This is near the middle of March on Western calendars. (See: [[rc://en/ta/man/translate/translate-hebrewmonths]] and [[rc://en/ta/man/translate/translate-ordinal]])
+EZR	10	18	rqg8			0	Jeshua	See how you translated this in [Ezra 2:2](../02/02.md).
+EZR	10	18	pqk9			0	Jozadak	See how you translated this in [Ezra 3:2](../03/02.md).
+EZR	10	18	sf5b	translate-names		0	Maaseiah ... Gedaliah	names of men (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	18	pp5e			0	Eliezer ... Jarib	See how you translated this in [Ezra 8:16](../08/16.md).
+EZR	10	20	yu42			0	General Information:	Ezra continues to list the men who married non-Jewish women.
+EZR	10	20	d98p			0	Immer	a man's name. See how you translated this in [Ezra 2:37](../02/37.md).
+EZR	10	20	re8v	translate-names		0	Hanani	a man's name (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	20	dkn7	translate-names		0	Zebadiah	a man's name. See how you translated this in [Ezra 8:8](../08/08.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	21	hqu7	translate-names		0	Harim	This is a man's name. See how you translated this in [Ezra 2:32](../02/32.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	21	vq5r	translate-names		0	Maaseiah	This is a man's name. See how you translated this in [Ezra 10:18](../10/18.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	21	xx3d	translate-names		0	Shemaiah ... Jehiel	These are the names of men. See how you translated this in [Ezra 8:13](../08/13.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	22	bs2z			0	Pashhur	This is a man's name. See how you translated this in [Ezra 2:37](../02/37.md).
+EZR	10	22	yf1x	translate-names		0	Elioenai ... Nethanel ... Elasah	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	22	e2ac	translate-names		0	Jozabad	This is a man's name. See how you translated this in [Ezra 8:33](../08/33.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	23	ef8q	translate-names		0	General Information:	Ezra continues to list the men who married non-Jewish women. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	23	y5l2	translate-names		0	Jozabad	This is a man's name. See how you translated this in [Ezra 8:33](../08/33.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	24	cg6w	translate-names		0	Eliashib	This is a man's name. See how you translated this in [Ezra 10:6](../10/06.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	24	dsd1	translate-names		0	Shallum	This is a man's name. See how you translated this in [Ezra 2:42](../02/42.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	25	frh1	translate-names		0	Parosh	This is a man's name. See how you translated this in [Ezra 2:3](../02/03.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	25	y951	translate-names		0	Eleazar	This is a man's name. See how you translated this in [Ezra 7:5](../07/05.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	26	n4c3	translate-names		0	General Information:	Ezra continues to list the men who married non-Jewish women. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	26	xd7i	translate-names		0	Elam	See how you translated this man's name in [Ezra 2:7](../02/07.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	26	gy8p	translate-names		0	Jehiel	See how you translated this man's name in [Ezra 8:9](../08/09.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	27	t24c	translate-names		0	Zattu	See how you translated this man's name in [Ezra 2:8](../02/08.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	27	x1id	translate-names		0	Elioenai	See how you translated this man's name in [Ezra 10:22](../10/22.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	27	ecz6	translate-names		0	Eliashib	See how you translated this man's name in [Ezra 10:6](../10/06.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	28	h43s	translate-names		0	Bebai	This is a man's name. See how you translated this in [Ezra 2:11](../02/11.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	28	jfh1	translate-names		0	Jehohanan	This is a man's name. See how you translated this in [Ezra 10:6](../10/06.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	29	n4fe	translate-names		0	Bani	See how you translated this man's name in [Ezra 2:10](../02/10.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	29	j32x	translate-names		0	Meshullam	See how you translated this man's name in [Ezra 8:16](../08/16.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	30	gmx3	translate-names		0	General Information:	Ezra continues to list the men who married non-Jewish women. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	30	phn5	translate-names		0	Pahath-Moab	This is a man's name. See how you translated this in [Ezra 8:4](../08/04.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	30	pms5	translate-names		0	Benaiah	This is a man's name. See how you translated this in [Ezra 10:25](../10/25.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	30	pwh7	translate-names		0	Maaseiah	This is a man's name. See how you translated this in [Ezra 10:18](../10/18.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	30	hh1b	translate-names		0	Mattaniah	This is a man's name. See how you translated this in [Ezra 10:26](../10/26.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	30	ul4r	translate-names		0	Binnui	This is a man's name. See how you translated this in [Ezra 8:33](../08/33.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	31	xr3u	translate-names		0	Malkijah	This is a man's name. See how you translated this in [Ezra 10:25](../10/25.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	31	z6j4	translate-names		0	Harim	This is a man's name. See how you translated this in [Ezra 2:32](../02/32.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	31	nrh8	translate-names		0	Eliezer	This is a man's name. See how you translated this in [Ezra 8:16](../08/16.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	32	gyh9	translate-names		0	Malluk	This is a man's name. See how you translated this in [Ezra 10:29](../10/29.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	33	uek2	translate-names		0	General Information:	Ezra continues to list the men who married non-Jewish women. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	33	my1a	translate-names		0	Hashum	This is a man's name. See how you translated this in [Ezra 2:19](../02/19.md) (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	33	b1la	translate-names		0	Zabad	This is a man's name. See how you translated this in [Ezra 10:27](../10/27.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	33	gh5f	translate-names		0	Eliphelet	This is a man's name. See how you translated this in [Ezra 8:13](../08/13.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	33	zz6j	translate-names		0	Manasseh	This is a man's name. See how you translated this in [Ezra 10:30](../10/30.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	33	zbx2	translate-names		0	Shimei	This is a man's name. See how you translated this in [Ezra 10:23](../10/23.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	34	v361	translate-names		0	Bani	This is a man's name. See how you translated this in [Ezra 2:10](../02/10.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	35	pcb9	translate-names		0	Benaiah	This is a man's name. See how you translated this in [Ezra 10:23](../10/23.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	36	h5e9	translate-names		0	Meremoth	This is a man's name. See how you translated this in [Ezra 8:33](../08/33.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	36	tg36	translate-names		0	Eliashib	This is a man's name. See how you translated this in [Ezra 10:6](../10/06.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	37	j4vh	translate-names		0	General Information:	Ezra continues to list the men who married non-Jewish women. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	37	zkk4	translate-names		0	Mattaniah	This is a man's name. See how you translated this in [Ezra 10:26](../10/26.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	37	dyu7	translate-names		0	Mattenai	This is a man's name. See how you translated this in [Ezra 10:33](../10/33.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	38	z3zn	translate-names		0	Binnui	This is a man's name. See how you translated this in [Ezra 8:33](../08/33.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	38	p6gp	translate-names		0	Shimei	This is a man's name. See how you translated this in [Ezra 10:23](../10/23.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	39	maz3	translate-names		0	Adaiah	This is a man's name. See how you translated this in [Ezra 10:26](../10/26.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	41	mf9g	translate-names		0	General Information:	Ezra finishes to list the men who married non-Jewish women. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	41	hgp4	translate-names		0	Shelemiah	This is a man's name. See how you translated this in [Ezra 10:39](../10/39.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	41	bt3u	translate-names		0	Shemariah	This is a man's name. See how you translated this in [Ezra 10:32](../10/32.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	42	y5rp	translate-names		0	Shallum	This is a man's name. See how you translated this in [Ezra 2:42](../02/42.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	42	ny8e	translate-names		0	Amariah	This is a man's name. See how you translated this in [Ezra 7:3](../07/03.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	43	cab3	translate-names		0	Nebo	This is a man's name. See how you translated this in [Ezra 2:29](../02/29.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	43	tih9	translate-names		0	Jeiel	This is a man's name. See how you translated this in [Ezra 8:13](../08/13.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	43	tun4	translate-names		0	Zabad	This is a man's name. See how you translated this in [Ezra 10:27](../10/27.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	43	kb1m	translate-names		0	Zebina ... Jaddai ... Joel	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	43	jwl8	translate-names		0	Benaiah	This is a man's name. See how you translated this in [Ezra 10:25](../10/25.md). (See: [[rc://en/ta/man/translate/translate-names]])
+EZR	10	44	f8ms			0	All of these	all the men in the list beginning in [Ezra 10:20](../10/20.md)

@@ -1,0 +1,988 @@
+Book	Chapter	Verse	ID	SupportReference	OrigQuote	Occurrence	GLQuote	OccurrenceNote
+NEH	front	intro	k2y2			0		# Introduction to Nehemiah<br>## Part 1: General Introduction<br><br>### Outline of Nehemiah<br><br>1. Nehemiah returns to Jerusalem and inspects the walls (1:1-2:20)<br>1. The people rebuild the walls of Jerusalem (3:1-4:23)<br>1. Nehemiah helps the poor and provides an unselfish example (5:1–19)<br>1. Enemies try to slow down the work, but the people finish the walls (6:1–19)<br>1. Nehemiah lists the people who returned from exile (7:6–73)<br>1. Ezra reads the Law of Yahweh and the people respond (8:1-10:39)<br>1. Nehemiah lists the people who lived in and around Jerusalem (11:1–36)<br>1. Nehemiah lists the priests and Levites (12:1–26)<br>1. The people dedicate the walls of Jerusalem (12:27–47)<br>1. Nehemiah corrects problems (13:1–31)<br><br>### What is the Book of Nehemiah about?<br><br>A Jew named Nehemiah lived in Persia and worked for King Artaxerxes. Nehemiah received a report that the walls around Jerusalem were broken down. Nehemiah returned to Jerusalem to help rebuild the city walls. The walls around the city helped protect the city against armies and invaders.<br><br>### How should the title of this book be translated?<br><br>The Book of Nehemiah is named for a Jewish leader named Nehemiah. Translators can use the traditional title "Nehemiah." Or they may choose a clearer title, such as "The Book about Nehemiah." (See: [[rc://en/ta/man/translate/translate-names]])<br><br>## Part 2: Important Religious and Cultural Concepts<br><br>### Why were Israelites not allowed to marry people from other nations?<br><br>Foreigners worshiped many false gods. Yahweh did not allow his people to marry foreigners. He knew this would cause the people of Israel to worship false gods. (See: [[rc://en/tw/dict/bible/kt/falsegod]])<br><br>### Did all of the people of Israel return to their homeland?<br><br>Many of the Jews remained in Babylon instead of returning to the Promised Land. Many of them were successful in Babylon and desired to remain there. However, this meant that they were unable to worship Yahweh in Jerusalem as their ancestors had done. (See: [[rc://en/tw/dict/bible/kt/promisedland]])<br><br>## Part 3: Important Translation Issues<br><br>### How does the Book of Nehemiah use the term "Israel"?<br><br>The Book of Nehemiah uses the term "Israel" to refer to the kingdom of Judah. It was mostly made up of the tribes of Judah and Benjamin. The other ten tribes had ended their loyalty to any kings descended from David. God allowed the Assyrians to conquer the other ten tribes and take them into exile. As a result, they mixed with other people groups and did not return to the land of Israel. (See: [[rc://en/tw/dict/bible/kt/israel]])<br><br>### Are the events in the Book of Nehemiah told in the order that they actually happened?<br><br>Some of the events in the Book of Nehemiah are not told in the order they actually happened. Translators should pay attention to notes that signal when events are probably out of order.<br>
+NEH	1	intro	y5jf			0		# Nehemiah 01 General Notes<br>## Structure and formatting<br><br>### "The words of Nehemiah son of Hacaliah:"<br>This phrase serves as an introduction to this entire book.<br><br>## Special concepts in this chapter<br><br>### Repentance<br>This chapter is a single long record of Nehemiah's repentance on behalf of the people. (See: [[rc://en/tw/dict/bible/kt/repent]])<br><br>## Other possible translation difficulties in this chapter<br><br>### I<br>While the author of this book is probably Ezra, the word "I" always refers to Nehemiah.<br><br>### Israel<br>It is uncertain to whom "Israel" refers. It probably does not refer to the northern kingdom of Israel. Neither does it likely refer to the twelve tribes of Israel. Instead, it is probably a reference to Israel in the sense of the surviving people group. At Nehemiah's time, this people group exclusively comprised the tribe of Judah because the other tribes had already been scattered throughout the entire Near East, where they lost their identity, for the most part.<br>
+NEH	1	1	bi9h	translate-names		0	Nehemiah ... Hakaliah	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	1	1	qd3e	translate-hebrewmonths		0	in the month of Kislev	"Kislev" is the ninth month of the Hebrew calendar. It is during the last part of November and the first part of December on Western calendars. (See: [[rc://en/ta/man/translate/translate-hebrewmonths]] and [[rc://en/ta/man/translate/translate-names]])
+NEH	1	1	hn28	figs-explicit		0	in the twentieth year	Nehemiah is referring to the number of years that Artaxerxes had been reigning as king. Alternate translation: "in the twentieth year of the reign of Artaxerxes, King of Persia" (See: [[rc://en/ta/man/translate/figs-explicit]] and [[rc://en/ta/man/translate/translate-ordinal]])
+NEH	1	1	g6dl			0	fortress of Susa	This was one of the royal cities of Persian kings, located in the country of Elam. It was a large, fortified city with high walls surrounding it.
+NEH	1	2	f2ab	translate-names		0	Hanani	This is the name of a man. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	1	2	l6cw			0	one of my brothers, Hanani	Hanani was Nehemiah's biological brother.
+NEH	1	2	lg14			0	Hanani, came with some people from Judah	"Hanani came from Judah with some other people"
+NEH	1	2	q7zi	figs-explicit		0	the Jews who had escaped, the remnant of the Jews who were there	These two phrases refer to the same group of people. Possible meanings are 1) the few Jews who were taken as exiles to Babylon but escaped and returned to live in Jerusalem or 2) the few Jews who had escaped from those who were trying to take them into exile in Babylon and so remained in Jerusalem. Since it is unclear from where they escaped, it may be best not to specify in the translation. Alternate translation: "the Jews who had escaped the exile and who remained in Jerusalem" (See: [[rc://en/ta/man/translate/figs-explicit]])
+NEH	1	3	igf2			0	They said to me	Here "They" refers to Hanani and the other people who had come from Judah.
+NEH	1	3	y1zg	figs-explicit		0	the province	Here "province" refers to Judah as an administrative district under the Persian Empire. Alternate translation: "the province of Judah" or "Judah" (See: [[rc://en/ta/man/translate/figs-explicit]])
+NEH	1	3	pk3f	figs-activepassive		0	the wall of Jerusalem has been broken open, and its gates have been set on fire	This can be stated in active form. Alternate translation: "armies have broken open the wall of Jerusalem and have set its gates on fire" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	1	5	tzl8	figs-explicit		0	Then I said	Nehemiah tells what he prayed. Alternate translation: "Then I said to Yahweh" (See: [[rc://en/ta/man/translate/figs-explicit]])
+NEH	1	5	pf2l			0	Yahweh	This is the name of God that he revealed to his people in the Old Testament. See the translationWord page about Yahweh concerning how to translate this.
+NEH	1	5	zc64	figs-123person		0	who love him and keep his commandments	Since Nehemiah is speaking to Yahweh, the pronouns "him" and "his" can be translated as "you" and "your." Alternate translation: "who love you and keep your commandments" (See: [[rc://en/ta/man/translate/figs-123person]])
+NEH	1	6	g947	figs-metaphor		0	open your eyes	"look at me." Here "open your eyes" is a metaphor that represents paying attention to someone. Alternate translation: "pay attention to me" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+NEH	1	6	qjf3			0	so you may hear the prayer of your servant	"so that you may hear the prayer that I, your servant, am praying." The word "servant" refers to Nehemiah. This is how a person would address his superior in order to show humility and respect.
+NEH	1	6	v8gx	figs-merism		0	day and night	By saying that he prays both during the day and during the night, Nehemiah emphasizes the frequency of his prayers. Alternate translation: "all the time" (See: [[rc://en/ta/man/translate/figs-merism]])
+NEH	1	6	bxj6	figs-metonymy		0	Both I and my father's house	Here the word "house" represents family. Alternate translation: "Both I and my family" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+NEH	1	8	brz7			0	Connecting Statement:	Nehemiah continues praying to God.
+NEH	1	8	pv64	figs-idiom		0	Please call to mind	To "call to mind" is an idiom that means to remember. Alternate translation: "Please remember" (See: [[rc://en/ta/man/translate/figs-idiom]])
+NEH	1	8	y5jp	figs-you		0	the word you commanded your servant Moses	The pronouns "you" and "your" refer to God and so are singular. (See: [[rc://en/ta/man/translate/figs-you]])
+NEH	1	8	b6qh	figs-you		0	If you act unfaithfully ... scatter you	The pronouns "you" and "your" are plural and refer to the Israelite people. (See: [[rc://en/ta/man/translate/figs-you]])
+NEH	1	8	evf5	figs-metaphor		0	I will scatter you among the nations	Yahweh speaks of causing the Israelite people to live in other nations as if he scattered them like one would scatter seeds. Alternate translation: "I will cause you to live among the nations" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+NEH	1	9	dqn5	figs-you		0	if you return ... your people	The pronouns "you" and "your" are plural and refer to the Israelite people. (See: [[rc://en/ta/man/translate/figs-you]])
+NEH	1	9	cnn2	figs-activepassive		0	though your people were scattered	This can be stated in active form. Alternate translation: "though I scattered your people" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	1	9	f8jz	figs-idiom		0	under the farthest skies	Yahweh speaks of places on the earth that are very far away as being "under the farthest skies." Alternate translation: "to places very far away" (See: [[rc://en/ta/man/translate/figs-idiom]])
+NEH	1	9	lgh9	figs-explicit		0	to that place where I have chosen ... remain	This phrase refers to Jerusalem, where the temple was located. Alternate translation: "to Jerusalem, where I have chosen ... remain" (See: [[rc://en/ta/man/translate/figs-explicit]])
+NEH	1	9	g88j	figs-metonymy		0	where I have chosen to make my name remain	Here the word "name" represents Yahweh himself. Alternate translation: "where I have chosen to dwell" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+NEH	1	10	u4a8			0	General Information:	Nehemiah continues his prayer.
+NEH	1	10	w4qw			0	Now	This word is used here to mark a break in Nehemiah's prayer. Here he begins to make his request based on Yahweh's promise.
+NEH	1	10	mjx7			0	they are your servants	The word "they" refers to the Israelite people.
+NEH	1	10	zu4s	figs-metonymy		0	by your great power and by your strong hand	Here "hand" represents strength or power. Together, these two phrases form a doublet that emphasizes the intensity of Yahweh's power. Alternate translation: "by your great power and by your mighty strength" or "by your very powerful strength" (See: [[rc://en/ta/man/translate/figs-metonymy]] and [[rc://en/ta/man/translate/figs-doublet]])
+NEH	1	11	jjm7			0	the prayer of your servant	Here "servant" refers to Nehemiah. This is how a person would address his superior in order to show humility and respect. See how you translated this in [Nehemiah 1:6](../01/06.md).
+NEH	1	11	j433			0	the prayer of your servants	Here "servants" refers to the rest of the Israelite people who would have been praying for Yahweh to act on behalf of his people and on behalf of Jerusalem.
+NEH	1	11	hk3z	figs-metonymy		0	who delight to honor your name	Here "name" represents Yahweh himself. Alternate translation: "who delight to honor you" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+NEH	1	11	kr99			0	grant him mercy in the sight of this man	Here "him" refers to Nehemiah, who refers to himself in the third person to express his humility before God, and "this man" refers to Artaxerxes, the king of Persia.
+NEH	1	11	r7af	figs-metaphor		0	in the sight of this man	Nehemiah speaks of the king's attitude or disposition as if it were how the king viewed something. Alternate translation: "grant that the king will have mercy on me" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+NEH	1	11	h9hl	writing-background		0	I served as cupbearer to the king	This is background information about Nehemiah's role in the king's court. Your language may have a special way to mark background information. (See: [[rc://en/ta/man/translate/writing-background]])
+NEH	2	intro	mj1d			0		# Nehemiah 02 General Notes<br>## Structure and formatting<br><br>This chapter begins the account of the construction of the wall. Many scholars believe these chapters teach valuable lessons on leadership ([Nehemiah 2-6](./01.md)).<br><br>### Special concepts in this chapter<br><br>### Nehemiah's character<br>Apparently, Nehemiah's character made an impression on the king. It was very unusual for a king to be so concerned with one of his servants. (See: [[rc://en/ta/man/translate/figs-explicit]])<br><br>### Cultural Customs<br>In ancient Persia, they thought it was important for their conquered peoples to practice their own cultural customs. It was thought that this independence promoted peace in their vast kingdom. The rebuilding of Jerusalem may have been seen as a way to allow for the Jewish cultural practices.<br><br>### Yahweh's control<br>Yahweh is seen as very powerful. He is able to provide for his people, even through a foreign king. (See: [[rc://en/tw/dict/bible/kt/peopleofgod]])<br>
+NEH	2	1	h3hu	translate-hebrewmonths		0	In the month of Nisan	"Nisan" is the name of the first month of the Hebrew calendar. (See: [[rc://en/ta/man/translate/translate-hebrewmonths]])
+NEH	2	1	l63f	translate-ordinal		0	in the twentieth year of Artaxerxes the king	"in the 20th year that Artaxerxes was king" (See: [[rc://en/ta/man/translate/translate-ordinal]])
+NEH	2	1	k1vf	writing-background		0	Now	This word is used here to mark a break in the main story line. Here Nehemiah tells background information about his demeanor before the king. (See: [[rc://en/ta/man/translate/writing-background]])
+NEH	2	2	n5wy			0	But the king	"So the king"
+NEH	2	2	ue51	figs-synecdoche		0	Why is your face so sad	Here Nehemiah is referred to by his face because the face shows one's emotions. Alternate translation: "Why are you so sad" (See: [[rc://en/ta/man/translate/figs-synecdoche]])
+NEH	2	2	g1k7	figs-synecdoche		0	This must be sadness of heart	This speaks of Nehemiah being sad as if his heart were sad, since the heart is often considered the center of emotions. Alternate translation: "You must be very sad" (See: [[rc://en/ta/man/translate/figs-synecdoche]])
+NEH	2	2	eyt8			0	Then I became very much afraid	As Nehemiah prepares to answer, he is afraid because he does not know how the king will respond.
+NEH	2	3	qz4i	figs-hyperbole		0	May the king live forever	Nehemiah is showing honor to King Artaxerxes. Here "forever" is an exaggeration that refers to a long life. Alternate translation: "Long live the king" or "May the king have a long life" (See: [[rc://en/ta/man/translate/figs-hyperbole]])
+NEH	2	3	klj6	figs-rquestion		0	Why should not my face be sad?	Here Nehemiah uses this rhetorical question to tell the king that he has a reason to be sad. This can be written as a statement. Alternate translation: "I have very good reasons to be sad." (See: [[rc://en/ta/man/translate/figs-rquestion]])
+NEH	2	3	eh23			0	the place of my fathers' tombs	"the place where my ancestors are buried"
+NEH	2	3	g7f4	figs-activepassive		0	its gates have been destroyed by fire	This can be stated in active form. Alternate translation: "fire has destroyed its gates" or "our enemy has burned its gates" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	2	5	uv1p			0	I replied to the king	"Then I replied to the king"
+NEH	2	5	u2zy			0	your servant	Nehemiah refers to himself this way to show his submission to the king.
+NEH	2	5	ae4b	figs-metaphor		0	in your sight	Here sight represents judgment or evaluation. Alternate translation: "in your judgment" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+NEH	2	5	df8l			0	the city of my fathers' tombs	"the city where my ancestors are buried"
+NEH	2	5	l6nj	figs-synecdoche		0	that I may rebuild it	Nehemiah does not plan to do all of the building himself, but he will be the leader of the work. Alternate translation: "that I and my people may rebuild it" (See: [[rc://en/ta/man/translate/figs-synecdoche]])
+NEH	2	7	rgj6	figs-activepassive		0	may letters be given to me	This may be stated in active form. Alternate translation: "may you give letters to me" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	2	7	qp9n			0	the Province Beyond the River	This is the name of the province that was west of the Euphrates River. It was across the river from the city of Susa.
+NEH	2	8	ar5v	translate-names		0	Asaph	This is the name of a man. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	2	8	wl1s	figs-metonymy		0	the good hand of God was on me	God's "good hand" represents his "favor." Alternate translation: "God's favor was upon me" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+NEH	2	10	yz8p	translate-names		0	Sanballat the Horonite	Sanballat is the name of a man, and the Horonites were a people group. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	2	10	eh4c	translate-names		0	Tobiah the Ammonite servant	This man was likely a freed slave now serving as an officer in Ammon. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	2	10	vb3p			0	heard this	"heard that I had arrived"
+NEH	2	12	s7mw	figs-metonymy		0	had put into my heart	Here Nehemiah's "heart" refers to his thoughts and will. Alternate translation: "had inspired me" or "had led me" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+NEH	2	12	wd63			0	There was no animal with me	"There were no animals with me"
+NEH	2	13	g1be	figs-123person		0	General Information:	A few men accompanied Nehemiah on this inspection, but he speaks in the first person because he was the primary person. (See: [[rc://en/ta/man/translate/figs-123person]])
+NEH	2	13	au61			0	I went out by night by the Valley Gate	"At night, I went out through the Valley Gate"
+NEH	2	13	pt1h			0	Jackal	a wild dog
+NEH	2	13	mif3			0	Dung Gate	Presumably, refuse was removed from the city through this gate.
+NEH	2	13	a8u1	figs-activepassive		0	which had been broken open, and the wooden gates were destroyed by fire	This can be stated in active form. Alternate translation: "which Israel's enemies had broken open, and the wooden gates which their enemies had destroyed with fire" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	2	15	l39v	figs-synecdoche		0	So I went up ... and I turned back	The other men with Nehemiah also followed him. Alternate translation: "So we went up ... and we turned back" (See: [[rc://en/ta/man/translate/figs-synecdoche]])
+NEH	2	15	b637			0	by the Valley Gate	"through the Valley Gate"
+NEH	2	16	xd75	figs-explicit		0	the rest who did the work	This refers to the men who would later rebuild the walls. Alternate translation: "the others who would later do the work of rebuilding the walls" (See: [[rc://en/ta/man/translate/figs-explicit]])
+NEH	2	17	we6m	figs-you		0	You see the trouble	Here "you" is plural, referring to all the people mentioned in [Nehemiah 2:16](../02/16.md). (See: [[rc://en/ta/man/translate/figs-you]])
+NEH	2	17	f468	figs-activepassive		0	its gates have been destroyed by fire	This can be stated in active form. Alternate translation: "how our enemies destroyed its gates by fire" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	2	17	ll6y			0	so we will no longer be in disgrace	"so we will no longer be ashamed"
+NEH	2	18	twi7	figs-metonymy		0	the good hand of my God was on me	God's "good hand" represents his "favor." Alternate translation: "my God's favor was upon me" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+NEH	2	18	h3cj	figs-idiom		0	rise up and build	This is an idiom. Alternate translation: "begin building" (See: [[rc://en/ta/man/translate/figs-idiom]])
+NEH	2	18	y6ui	figs-idiom		0	So they strengthened their hands for the good work	The phrase "strengthened their hands" means to prepare to do something. Alternate translation: "So they prepared do this good work" (See: [[rc://en/ta/man/translate/figs-idiom]])
+NEH	2	19	et87	translate-names		0	Sanballat ... Tobiah	These are the names of men. See how you translated this in [Nehemiah 2:10](./10.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	2	19	cxe8	translate-names		0	Geshem	This is the name of a man. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	2	19	ww1k	figs-rquestion		0	What are you doing? Are you rebelling against the king?	These rhetorical questions are used to mock Nehemiah. These can be written as statements. Alternate translation: "You are acting foolishly! You should not be rebelling against the king!" (See: [[rc://en/ta/man/translate/figs-rquestion]])
+NEH	2	19	u8ri			0	the king	This refers to Artaxerses, the king of Persia.
+NEH	2	20	iv9x	figs-idiom		0	will arise and build	This is an idiom. Alternate translation: "will begin rebuilding" (See: [[rc://en/ta/man/translate/figs-idiom]])
+NEH	2	20	a4e6			0	But you have no share, no right, and no historic claim in Jerusalem	"But you have no share, legal right, or religious claim to Jerusalem"
+NEH	3	intro	dfw6			0		# Nehemiah 03 General Notes<br>## Special concepts in this chapter<br><br>### Priests<br>The priests worked on rebuilding the city. Normally, the priests were exempt from this type of work. Because they helped, it emphasizes that this is a holy work and something done for Yahweh. (See: [[rc://en/tw/dict/bible/kt/priest]] and [[rc://en/tw/dict/bible/kt/holy]] and [[rc://en/ta/man/translate/figs-explicit]])<br><br>### Cooperation<br>Everyone worked on this project. Many names are mentioned to emphasize the cooperation between the different families. Each was given a section of the wall to rebuild.<br>
+NEH	3	1	ald8			0	Then Eliashib the high priest rose up with his brother priests	"Then Eliashib the high priest came forward with his brothers, the priests"
+NEH	3	1	g9az	translate-names		0	Eliashib	This is the name of a man. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	1	r9wn	translate-numbers		0	Tower of the Hundred	"Tower of the 100" (See: [[rc://en/ta/man/translate/translate-numbers]])
+NEH	3	1	e1th	translate-names		0	Tower of Hananel	This is the name of a tower. It is likely named after a man named "Hananel." (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	2	q84s	translate-names		0	Zaccur son of Imri	This is the name of a man. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	2	qf25	figs-possession		0	men of Jericho	This means that the men were from Jericho. Alternate translation: "men from Jericho" (See: [[rc://en/ta/man/translate/figs-possession]])
+NEH	3	3	bbm9	translate-names		0	Hassenaah	This is the name of a man. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	3	kxd6			0	set its doors	"installed its doors" or "put its doors in place"
+NEH	3	3	kc48			0	its bolts, and its bars	"its locks and bars." These locked the gates securely.
+NEH	3	4	c8hi	translate-names		0	Meremoth ... Uriah ... Hakkoz ... Meshullam ... Berechiah ... Meshezabel ... Zadok ... Baana	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	4	inh2	figs-ellipsis		0	Meremoth repaired the next section ... Meshullam repaired ... Zadok repaired	These phrases refer to repairing the wall. Alternate translation: "Meremoth repaired the next section of the wall ... Meshullam repaired the wall ... Zadok repaired the wall" (See: [[rc://en/ta/man/translate/figs-ellipsis]])
+NEH	3	5	nn6j	figs-ellipsis		0	Tekoites repaired	These phrases refer to repairing the wall. Alternate translation: "Tekoites repaired the wall" (See: [[rc://en/ta/man/translate/figs-ellipsis]])
+NEH	3	5	j3k4	translate-names		0	the Tekoites	These are people from the town of Tekoa. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	5	r94d	figs-activepassive		0	ordered by their supervisors	This can be stated in active form. Alternate translation: "that their supervisors had ordered them to do" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	3	6	i43m	translate-names		0	Joiada ... Paseah and Meshullam ... Besodeiah	These are all names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	6	n1wi			0	set its doors	"installed its doors" or "put its doors in place"
+NEH	3	6	ykz8			0	its bolts, and its bars	"its locks and bars." These locked the gates securely.
+NEH	3	7	hu9u	translate-names		0	Melatiah ... Jadon	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	7	ipe7	translate-names		0	Gibeonite ... Meronothite	Gibeonites and Meronothites are people groups. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	7	n6xg	translate-names		0	Gibeon and Mizpah	These are names of places. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	7	mj92	translate-names		0	the Province Beyond the River	This is the name of the province that was west of the Euphrates River. It was across the river from the city of Susa. See how you translated this in [Nehemiah 2:7](../02/07.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	8	b2yh	translate-names		0	Uzziel ... Harhaiah ... Hananiah	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	8	f4p5			0	goldsmiths	A goldsmith is a person who makes gold jewelry and other gold objects.
+NEH	3	8	mx88	figs-ellipsis		0	goldsmiths, repaired	These phrases refer to repairing the wall. Alternate translation: "goldsmiths, repaired the wall" (See: [[rc://en/ta/man/translate/figs-ellipsis]])
+NEH	3	8	mm1q	figs-ellipsis		0	next to him was Hananiah, a maker of perfumes	Hananiah repaired the wall as well. Alternate translation: "next to him Hananiah, a maker of perfumes, repaired the wall" (See: [[rc://en/ta/man/translate/figs-ellipsis]])
+NEH	3	8	y25y			0	perfumes	liquid substances that people put on their body in small amounts to smell pleasant
+NEH	3	9	m5at	translate-names		0	Rephaiah ... Hur	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	9	s3jz	figs-ellipsis		0	Hur repaired	Hur repaired the wall. Alternate translation: "Hur repaired the wall" (See: [[rc://en/ta/man/translate/figs-ellipsis]])
+NEH	3	9	avu2			0	ruler	leader or chief administrator
+NEH	3	9	rd4i	translate-fraction		0	half the district	"Half" means one part out of two equal parts. (See: [[rc://en/ta/man/translate/translate-fraction]])
+NEH	3	10	k6g1	translate-names		0	Jedaiah ... Harumaph ... Hattush ... Hashabneiah	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	10	v3be	figs-ellipsis		0	Harumaph repaired ... Hashabneiah repaired	These phrases refer to repairing the wall. Alternate translation: "Harumaph repaired the wall ... Hashabneiah repaired the wall" (See: [[rc://en/ta/man/translate/figs-ellipsis]])
+NEH	3	11	g61e	translate-names		0	Malkijah ... Harim ... Hasshub ... Pahath-Moab	These are all names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	11	jy16	figs-ellipsis		0	repaired another section	These words refer to repairing the wall. Alternate translation: "repaired another section of the wall" (See: [[rc://en/ta/man/translate/figs-ellipsis]])
+NEH	3	12	e9p4	translate-names		0	Shallum ... Hallohesh	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	12	wml3	figs-ellipsis		0	repaired, along with his daughters	These phrase refer to repairing the wall. Alternate translation: "repaired another section of the wall ... repaired the wall, along with his daughters" (See: [[rc://en/ta/man/translate/figs-ellipsis]])
+NEH	3	12	b7iq			0	Shallum son of Hallohesh, the ruler	Shallum was the ruler, not Hallohesh.
+NEH	3	12	l1db			0	ruler	leader or chief administrator. See how you translated this in [Nehemiah 3:9](../03/09.md).
+NEH	3	12	b6fx	translate-fraction		0	half the district	"Half" means one part out of two equal parts. (See: [[rc://en/ta/man/translate/translate-fraction]])
+NEH	3	13	itt7	translate-names		0	Hanun	This is the name of a man. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	13	w5le			0	the inhabitants of Zanoah	"the people from Zanoah"
+NEH	3	13	ek5q	translate-names		0	Zanoah	This is the name of a place. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	13	i9v2			0	the Valley Gate	"the Gate of the Valley" or "the Gate that Leads to the Valley." Try to translate this expression as a name, not just as a description.
+NEH	3	13	d3h9			0	set its doors	"installed its doors" or "put its doors in place"
+NEH	3	13	nsg3			0	its bolts, and its bars	"its locks and bars." These locked the gates securely.
+NEH	3	13	l7zc	figs-explicit		0	They repaired a thousand cubits as far as the Dung Gate	They repaired the portion of the wall between the Valley Gate and the Dung Gate. Alternate translation: "They repaired a thousand cubits of the wall, from the Valley Gate to the Dung Gate" (See: [[rc://en/ta/man/translate/figs-explicit]])
+NEH	3	13	x484	figs-explicit		0	They repaired a thousand cubits	It is understood that they were repaing the wall of Jerusalem. Alternate translation: "They repaired a thousand cubits of the wall" or "They repaired another thousand cubits of the wall beyond the Valley Gate" (See: [[rc://en/ta/man/translate/figs-explicit]])
+NEH	3	13	kw6h	translate-bdistance		0	a thousand cubits	"1,000 cubits." This may be written in modern measurements. Alternate translation: "460 meters" (See: [[rc://en/ta/man/translate/translate-bdistance]] and [[rc://en/ta/man/translate/translate-numbers]])
+NEH	3	13	r9e4			0	the Dung Gate	Presumably, refuse was removed from the city through this gate. Try to translate this expression as a name, not just as a description.
+NEH	3	14	w494	translate-names		0	Malkijah ... Recab	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	14	u2dk			0	Malkijah son of Recab, the ruler	Malkijah was the ruler, not Recab.
+NEH	3	14	d9dt			0	ruler	leader or chief administrator. See how you translated this in [Nehemiah 3:9](../03/09.md).
+NEH	3	14	d8sa	translate-names		0	Beth Hakkerem	This is the name of a place. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	14	xn3i			0	He ... set its doors	"He installed its doors" or "He put its doors in place"
+NEH	3	14	if44			0	its bolts, and its bars	"its locks, and its bars." These locked the gates securely.
+NEH	3	15	bd9j	translate-names		0	Shallun ... Kol-Hozeh	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	15	l7wu			0	Shallun son of Kol-Hozeh, the ruler	Shallun was the ruler, not Kol-Hozeh.
+NEH	3	15	c8rt	figs-possession		0	the wall of the Pool of Siloam	This means that the wall was beside the Pool of Siloam. Alternate translation: "the wall that surrounded the Pool of Siloam" (See: [[rc://en/ta/man/translate/figs-possession]])
+NEH	3	16	x774	translate-names		0	Nehemiah	This is the name of a man. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	16	shf9			0	Nehemiah son of Azbuk, the ruler	Nehemiah was the ruler, not Azbuk.
+NEH	3	16	l3hf			0	Nehemiah	This is a different man named Nehemiah from the person who authored this book.
+NEH	3	16	kmx6			0	ruler	leader or chief administrator. See how you translated this in [Nehemiah 3:9](../03/09.md).
+NEH	3	16	sc4c	translate-fraction		0	half the district	"Half" means one part out of two equal parts. (See: [[rc://en/ta/man/translate/translate-fraction]])
+NEH	3	16	ngr2	translate-names		0	Beth Zur	These are names of places. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	16	c5bs	figs-ellipsis		0	repaired to the place	These phrases refer to repairing the wall. Alternate translation: "repaired the wall up to the place" (See: [[rc://en/ta/man/translate/figs-ellipsis]])
+NEH	3	16	u2s6			0	mighty men	"warriors"
+NEH	3	17	str7	translate-names		0	Rehum ... Bani ... Hashabiah	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	17	l6vw	translate-names		0	Keilah	This is the name of a place. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	17	a88s	figs-ellipsis		0	Levites repaired	These phrases refer to repairing the wall. Alternate translation: "Levites repaired the wall" (See: [[rc://en/ta/man/translate/figs-ellipsis]])
+NEH	3	17	y3tu			0	for his district	"representing his district" or "on behalf of his district"
+NEH	3	18	h5qz	figs-ellipsis		0	After him their countrymen repaired	These words refer to repairing the wall. Alternate translation: "Next to him their countrymen repaired the wall" (See: [[rc://en/ta/man/translate/figs-ellipsis]])
+NEH	3	18	b6sj			0	After him	"Next to him"
+NEH	3	18	gc2h	translate-names		0	Binnui ... Henadad	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	18	ca6t			0	Binnui son of Henadad, the ruler	Binnui was the ruler, not Henadad.
+NEH	3	18	yh3z	translate-names		0	Keilah	This is the name of a place. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	19	yt87	figs-ellipsis		0	repaired another section	These words refer to repairing the wall. Alternate translation: "repaired another section of the wall" (See: [[rc://en/ta/man/translate/figs-ellipsis]])
+NEH	3	19	f6if	translate-names		0	Ezer ... Jeshua	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	19	g2y6	translate-names		0	Mizpah	This is the name of a place. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	19	gcc6			0	Ezer son of Jeshua, the ruler	Ezer was the ruler, not Jeshua.
+NEH	3	19	c8s5			0	that faced the ascent to the armory	"in front of the steps that went up to the armory"
+NEH	3	19	xtj9			0	armory	the place where weapons are kept
+NEH	3	20	a7k9			0	After him	"Next to him"
+NEH	3	20	r638	translate-names		0	Baruch ... Zabbai ... Eliashib	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	20	i7kj	figs-ellipsis		0	repaired another section	This refers to repairing the wall. Alternate translation: "repaired another section of the wall" (See: [[rc://en/ta/man/translate/figs-ellipsis]])
+NEH	3	21	z4b7	translate-names		0	Meremoth ... Uriah ... Hakkoz	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	22	m3ey	figs-ellipsis		0	around Jerusalem, repaired	These phrases refer to repairing the wall. Alternate translation: "around Jerusalem, repaired the wall" (See: [[rc://en/ta/man/translate/figs-ellipsis]])
+NEH	3	23	q2zh	figs-ellipsis		0	Benjamin and Hasshub repaired ... Azariah ... repaired	These phrases refer to repairing the wall. Alternate translation: "Benjamin and Hasshub repaired the wall ... Azariah ... repaired the wall" (See: [[rc://en/ta/man/translate/figs-ellipsis]])
+NEH	3	23	v3fr	translate-names		0	Benjamin ... Hasshub ... Azariah	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	23	z8p6			0	After them	"Next to them"
+NEH	3	23	gv74			0	opposite their own house	"in front of their own house"
+NEH	3	24	c3eh	figs-ellipsis		0	Binnui ... repaired	These phrases refer to repairing the wall. Alternate translation: "Binnui ... repaired the wall" (See: [[rc://en/ta/man/translate/figs-ellipsis]])
+NEH	3	24	ajs6	translate-names		0	Binnui ... Henadad	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	24	k7tj			0	After him	"Next to him"
+NEH	3	25	l8jv			0	Palal ... repaired ... Parosh repaired	These phrases refer to repairing the wall. Alternate translation: "Palal ... repaired the wall ... Parosh repaired the wall"
+NEH	3	25	q3r3	translate-names		0	Palal ... Uzai ... Pedaiah ... Parosh	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	25	dae6			0	the tower that extends upward	"the tower that rises up"
+NEH	3	25	pt6e			0	upper house of the king	"higher palace of the leader of Israel"
+NEH	3	25	isu9			0	the courtyard of the guard	This is the place where the guards stayed.
+NEH	3	25	d1jm			0	After him	"Next to him"
+NEH	3	26	l5q4			0	servants ... repaired	These words refer to repairing the wall. Alternate translation: "servants ... repaired the wall"
+NEH	3	26	b53g	translate-names		0	Ophel	This is the name of a place. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	26	ah1b			0	opposite the Water Gate	"in front of the Water Gate"
+NEH	3	26	mz47			0	the projecting tower	"the tall tower." The phrase "the projecting tower" means a tall tower that juts out from the wall.
+NEH	3	27	d719			0	Tekoites repaired another section	These phrases refer to repairing the wall. Alternate translation: "the Tekoites repaired another section of the wall"
+NEH	3	27	mgm7	translate-names		0	the Tekoites	These are people from the town of Tekoa. See how you translated this in [Nehemiah 3:5](../03/05.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	27	j6gz			0	the great projecting tower	"the tall tower." The phrase "the projecting tower" means a tall tower that juts out from the wall. It is likely that this phrase refers to the same tower as "the tall tower" in verse 26.
+NEH	3	28	wt87	figs-ellipsis		0	priests repaired	These words refer to repairing the wall. Alternate translation: "priests repaired the wall" (See: [[rc://en/ta/man/translate/figs-ellipsis]])
+NEH	3	28	d5qa			0	above the Horse Gate	The word "above" is used here because the priests' houses were likely located at a higher elevation than the Horse Gate.
+NEH	3	28	d5uv			0	opposite his own house	"in front of his own house"
+NEH	3	29	q9qb	figs-ellipsis		0	repaired the section ... east gate, repaired	These phrases refer to repairing the wall. Alternate translation: "repaired the section of the wall ... east gate, repaired the wall" (See: [[rc://en/ta/man/translate/figs-ellipsis]])
+NEH	3	29	rvu2			0	After them	"Next to them"
+NEH	3	29	n271	translate-names		0	Zadok ... Immer ... Shemaiah ... Shecaniah	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	29	f74e			0	Shemaiah son of Shecaniah, the keeper of the east gate	Shemaiah was the keeper of the east gate, not Shecaniah.
+NEH	3	29	e9mh			0	the keeper of the east gate	"the person who looked after the east gate" or "the person who opened and closed the east gate"
+NEH	3	30	x9q4	figs-ellipsis		0	repaired another section ... repaired opposite	These phrases refer to repairing the wall. Alternate translation: "priests repaired the wall ... repaired the section of the wall ... east gate, repaired the wall ... repaired another section of the wall ... repaired the wall opposite" (See: [[rc://en/ta/man/translate/figs-ellipsis]])
+NEH	3	30	s2s5			0	After him	"Next to him"
+NEH	3	30	r5y4	translate-names		0	Hananiah ... Shelemiah ... Hanun ... Zalaph ... Meshullam ... Berechiah	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	30	nn44	translate-ordinal		0	the sixth son	"son 6" or "son number 6" (See: [[rc://en/ta/man/translate/translate-ordinal]])
+NEH	3	30	bv3t			0	opposite his living chambers	"in front of the rooms where he stayed." The word "his" refers to Meshullam.
+NEH	3	31	ifp5			0	After him	"Next to him"
+NEH	3	31	d33p	translate-names		0	Malkijah	This is the name of a man. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	3	31	uuc7			0	goldsmiths	A goldsmith is a person who makes gold jewelry and other gold objects.
+NEH	3	31	lb9z	figs-ellipsis		0	repaired to the house	These words refer to repairing the wall. Alternate translation: "repaired the wall to the house" (See: [[rc://en/ta/man/translate/figs-ellipsis]])
+NEH	3	31	ye2u			0	merchants	"sellers" or "traders"
+NEH	3	31	r6sv			0	upper living chambers	the higher-level rooms where people stayed
+NEH	3	32	p1kr	figs-ellipsis		0	merchants repaired	These words refer to repairing the wall. Alternate translation: "merchants repaired the wall" (See: [[rc://en/ta/man/translate/figs-ellipsis]])
+NEH	3	32	x1tq			0	Sheep Gate	This is the name of an entranceway in the wall.
+NEH	4	intro	tlj9			0		# Nehemiah 04 General Notes<br>## Special concepts in this chapter<br><br>### Dedication<br>The people were so dedicated to rebuilding the walls that they worked with their weapons ready for battle right next to them. Even when they were threatened with an attack, they continued to trust in Yahweh. (See: [[rc://en/tw/dict/bible/kt/trust]])<br><br>## Important figures of speech in this chapter<br><br>### Rhetorical Questions<br><br>Sanballat uses a series of rhetorical questions. These are intended to show his intense anger against the Israelites. (See: [[rc://en/ta/man/translate/figs-rquestion]])<br>
+NEH	4	1	rnw3			0	Now when Sanballat	Here Nehemiah uses the word "now" to signal a new part of the story.
+NEH	4	1	vfu4	translate-names		0	Sanballat	This is a man's name. See how you translated this in [Nehemiah 2:10](../02/10.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	4	1	s6td	figs-metaphor		0	it burned within him, and he was furiously angry	Here "it" refers to Sanballat's realization that the Jews are rebuilding the walls. This speaks of Sanballat becoming very angry as if his anger were a burning fire. Alternate translation: "he became furiously angry" or "he became very angry" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+NEH	4	2	v3qv			0	In the presence of his brothers	"In the presence of his kinsmen" or "In the presence of his clan"
+NEH	4	2	d5n2	figs-rquestion		0	What are these feeble ... Will they restore ... Will they offer ... Will they finish the work in a day?	Sanballat poses these questions to mock the Jews. These can be written as statements. Alternate translation: "These feeble Jews can accomplish nothing. They will never restore the city for themselves. They will not offer sacrifices. They will not finish the work in a day." (See: [[rc://en/ta/man/translate/figs-rquestion]])
+NEH	4	2	r9lb			0	feeble Jews	"weak Jews"
+NEH	4	2	uk3w	figs-metaphor		0	in a day	This speaks of not finishing something quickly by saying that it cannot be accomplished in a day. Alternate translation: "quickly" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+NEH	4	2	ps9n	figs-rquestion		0	Will they bring to life the stones from the piles of rubble after they were burned?	Sanballat also poses this question to mock the Jews. This can be written as a statement. Alternate translation: "They will not bring to life again the stones from piles of rubble that were burned." (See: [[rc://en/ta/man/translate/figs-rquestion]])
+NEH	4	2	hr7v	figs-metaphor		0	bring to life the stones from the piles of rubble after they were burned	This speaks of the people rebuilding the city as if they were bring it back to life. Alternate translation: "restore the city and rebuild its walls from the useless stones that were burned and turned into rubble" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+NEH	4	2	b96n	figs-activepassive		0	from the piles of rubble after they were burned	This can be stated in active form. Alternate translation: "from piles of rubble that someone had burned" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	4	3	alw5	translate-names		0	Tobiah	This is a man's name. See how you translated this in [Nehemiah 2:10](../02/10.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	4	3	da2t	figs-hyperbole		0	If only a fox went up on what they are building, it would break down their stone wall	Sanaballat mocks the wall and exaggerates how weak it is by saying that a fox could knock it down. Alternate translation: "That wall they are building is so weak that even if a little fox climbed up on it, their stone wall would fall to the ground" (See: [[rc://en/ta/man/translate/figs-hyperbole]])
+NEH	4	4	b24b			0	Connecting Statement:	Nehemiah begins to pray to God.
+NEH	4	4	buk3	figs-activepassive		0	Hear, our God, for we are despised	Here the word "we" refers to the Jews. This can be stated in active form. Alternate translation: "Hear, our God, for our enemies despise us" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	4	4	pgh8	figs-activepassive		0	give them up to be plundered	This can be stated in active form. Alternate translation: "let their enemies rob them" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	4	4	z6nz	figs-synecdoche		0	Turn back their taunts on their own heads	The phrase "their taunts" refers to Sanballat's and Tobiah's insults. Here the word "heads" refers to the whole people. Alternate translation: "Turn their taunts onto themselves" or "Cause their insulting words to mock themselves" (See: [[rc://en/ta/man/translate/figs-synecdoche]])
+NEH	4	5	ae62			0	Connecting Statement:	Nehemiah contines the prayer he began in verse 4.
+NEH	4	5	mc9p			0	Do ... to anger.	Nehemiah continues the prayer he began with the words "Hear, our God" in verse 4. You may show that this is a prayer by making it a direct quote. "Then I prayed, 'Hear, our God, ... they are prisoners. Do not cover ... the builders to anger.'"
+NEH	4	5	zz8h	figs-metaphor		0	Do not cover over	This speaks of a forgiving a person's sins as if they were a object that could be physically hidden. Alternate translation: "Do not forgive" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+NEH	4	5	k9rw			0	do not erase their sin from before you	This speaks of forgetting a person's sins as if they were something written that could be erased. Alternate translation: "do not forget their sins
+NEH	4	5	mbi1			0	they have provoked the builders to anger	"they have made the builders become angry"
+NEH	4	6	r475			0	So we built the wall	"So we rebuilt the wall"
+NEH	4	6	mhm5	figs-activepassive		0	all the wall was joined together to half its height	This can be stated in active form. Alternate translation: "we joined the wall together and it was half its total height" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	4	6	ef8p	translate-fraction		0	half its height	"Half" means one part out of two equal parts. (See: [[rc://en/ta/man/translate/translate-fraction]])
+NEH	4	7	gsb7	figs-metaphor		0	a great anger burned within them	This speaks of the people being very angry as if their anger were something that burned inside them. Alternate translation: "they became very angry" or "they became enraged" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+NEH	4	8	b6im	figs-metonymy		0	against Jerusalem	Here "Jerusalem" refers to the people who live there. Alternate translation: "against the people of Jerusalem" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+NEH	4	9	vz1d			0	set a guard as protection	"put men around the wall to guard the city"
+NEH	4	10	vc8h			0	There is too much rubble	Rubble is "burned stone" or "broken rock" or "unusable stone."
+NEH	4	11	yuc9			0	They will not know or see until we come among them	"They will not see us coming until we are beside them"
+NEH	4	12	q1mv	figs-hyperbole		0	from all directions	This represents many directions. The word "all" is an exaggeration for represents "many." Alternate translation: "from many directions" (See: [[rc://en/ta/man/translate/figs-hyperbole]])
+NEH	4	12	t8f2	figs-metonymy		0	spoke to us ten times	Here the number 10 is used to represent "many." Alternate translation: "spoke to us many times" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+NEH	4	13	xc8b			0	in the exposed areas	"in the vulnerable areas"
+NEH	4	13	mj33	figs-synecdoche		0	I positioned each family	This refers to several people from each family, this likely does not include the women and children. Alternate translation: "I positioned people from each family" (See: [[rc://en/ta/man/translate/figs-synecdoche]])
+NEH	4	14	hh3w	figs-idiom		0	Call to mind the Lord	the phrase "call to mind" means to remember. Alternate translation: "Remember the Lord" (See: [[rc://en/ta/man/translate/figs-idiom]])
+NEH	4	15	puc1			0	It came about	"It happened that"
+NEH	4	15	qxa7	figs-activepassive		0	their plans were known to us	This can be stated in active form. Alternate translation: "we knew about their plans" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	4	16	gh9g			0	my servants worked	"my young men worked"
+NEH	4	16	f9in	translate-fraction		0	half of my servants ... half of them	"Half" means one part out of two equal parts. (See: [[rc://en/ta/man/translate/translate-fraction]])
+NEH	4	16	gl4t			0	the leaders stood behind all the people	"the leaders positioned themselves behind all the people"
+NEH	4	17	uya2	figs-hyperbole		0	Everyone worked with one hand, and with the other hand he held his weapon	This is an exaggeration. They did not always work with only one hand, but they always had their weapon with them so that they were prepared to protect themselves and those around them. (See: [[rc://en/ta/man/translate/figs-hyperbole]])
+NEH	4	19	yn7h			0	I said	Here "I" refers to Nehemiah.
+NEH	4	19	xi9g			0	the nobles ... the officials	These are the leaders referred to in [Nehemiah 4:16](../04/16.md).
+NEH	4	19	agy3			0	The work is great	Here the word "great" means "large-scale" or "huge."
+NEH	4	20	tm9s	figs-metonymy		0	the trumpet sound	This refers to someone blowing a trumpet. Alternate translation: "someone blowing a trumpet" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+NEH	4	21	ca45	translate-fraction		0	Half of them	Here "Half" means one part out of two equal parts. (See: [[rc://en/ta/man/translate/translate-fraction]])
+NEH	4	21	w4uu			0	from the rising of the dawn until the coming out of the stars	This refers to the whole day, while it is light outside. Alternate translation: "from the first light of day until the very beginning of the night"
+NEH	4	21	jl3h	figs-metonymy		0	the rising of the dawn	It is the point in time that the sun rises that is "dawn." Here the sun rising is spoken of as if the "dawn" rose. Alternate translation: "the rising of the sun" or "dawn" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+NEH	4	22	r87p			0	in the middle of Jerusalem	"within Jerusalem"
+NEH	4	23	v2e1			0	changed our clothes	"took off our clothes"
+NEH	5	intro	k7pb			0		# Nehemiah 05 General Notes<br>## Special concepts in this chapter<br><br>### Equality<br><br>The rich made money from the poor. The rich oppressed the poor by charging interest on loans. Because Nehemiah wanted to treat everyone fairly, he did not collect any taxes from them. This chapter also emphasizes that it was wrong to enslave a fellow Jew. (See: [[rc://en/tw/dict/bible/other/oppress]])<br><br>### Governor<br>Nehemiah was a governmental leader in Jerusalem, but he was not a king. Jerusalem had a great deal of independence, but it  was under the authority of the Persian king. The term "governor" reflects this idea, but a different term may be used in translation.<br>
+NEH	5	1	za4u	figs-explicit		0	Then the men and their wives raised a great outcry against their fellow Jews	Since they were working on the wall, the workers did not have enough time to work to buy and grow food for their families. The full meaning of this statement can be made clear. (See: [[rc://en/ta/man/translate/figs-explicit]])
+NEH	5	1	czx5			0	the men and their wives	This refers to the men who were working on building the wall.
+NEH	5	1	zmb8	figs-abstractnouns		0	raised a great outcry	The word "outcry" can be expressed as a verb. Alternate translation: "cried out loudly" (See: [[rc://en/ta/man/translate/figs-abstractnouns]])
+NEH	5	3	dt2m			0	We are mortgaging our fields	"We are having to pledge" or "We are having to give in pledge"
+NEH	5	5	z4ru	figs-explicit		0	Yet now our flesh and blood is the same as our brothers, and our children are the same as their children	Here the Jews are implying that they are of the same Jewish descent as the other Jews and that they of the same importance as the others. The meaning of this can be made clear. Alternate translation: "Yet our families are Jews just like the other Jew's families, and our children are just as important to us as their children are to them" (See: [[rc://en/ta/man/translate/figs-explicit]])
+NEH	5	5	k19b	figs-idiom		0	our flesh and blood	This is an idiom which refers to their family members. Alternate translation: "our family" (See: [[rc://en/ta/man/translate/figs-idiom]])
+NEH	5	5	rdp9	figs-activepassive		0	Some of our daughters have already been enslaved	This can be stated in active form. Alternate translation: "We have already sold some of our daughters into slavery" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	5	5	z783	figs-explicit		0	But it is not in our power to help it because other men now own our fields and our vineyards	Since the mens' fields and vineyards are not in their possession, they are unable to produce the money they need to support their families. The full meaning of this can be made clear. Alternate translation: "But we are unable to change this situation because other men now own our fields and our vineyards which we need to support our lives" (See: [[rc://en/ta/man/translate/figs-explicit]])
+NEH	5	5	jr7j	figs-idiom		0	it is not in our power	This is an idiom which means that they do not have the resources to do something. Alternate translation: "we are unable" (See: [[rc://en/ta/man/translate/figs-idiom]])
+NEH	5	6	ryx1	figs-abstractnouns		0	when I heard their outcry	The word "outcry" can be expressed as a verb. Alternate translation: "when I heard them cry out" (See: [[rc://en/ta/man/translate/figs-abstractnouns]])
+NEH	5	7	sn56	figs-explicit		0	You are exacting interest, each from his own brother	Every Jew would have known that it is wrong under the Law to charge interest to another Jew. The full meaning of this can be made clear. Alternate translation: "Each of you is charging interest to your own brother, and that is wrong under the Law" (See: [[rc://en/ta/man/translate/figs-explicit]])
+NEH	5	7	r7yl	figs-explicit		0	I held a great assembly against them	This means that he brought together a large group of people and brought these charges against them. The meaning of statement this can be made clear. Alternate translation: "I held a great assembly and brought these charges against them" or "I held them on trial in front of the assembly" (See: [[rc://en/ta/man/translate/figs-explicit]])
+NEH	5	8	pzy8	figs-explicit		0	but you even sell your brothers that they may be sold back to us	This means that they are selling their family members, both men and women, as slaves to their fellow Jews. The full meaning of this statement can be made clear. Alternate translation: "Now you are selling your own people to be slaves of your fellow Jews, so that they might later sell them back to us" (See: [[rc://en/ta/man/translate/figs-explicit]])
+NEH	5	8	kn82	figs-activepassive		0	who had been sold to the nations	This can be stated in active form. Alternate translation: "who people had sold as slaves to the nations" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	5	9	lm7c			0	Also I said	The pronoun "I" refers to Nehemiah.
+NEH	5	9	ecd1			0	What you are doing	"You" here refers to the Jewish nobles.
+NEH	5	9	kr1t	figs-rquestion		0	Should you not walk in the fear of our God to prevent the taunts of the nations that are our enemies?	This is a rhetorical question that Nehemiah is using to scold the nobles. It can be translated as a statement. Alternate translation: "You should walk in the fear of our God to prevent the taunts of the nations that are our enemies." (See: [[rc://en/ta/man/translate/figs-rquestion]])
+NEH	5	9	v6ux	figs-idiom		0	walk in the fear of our God	This is and idiom. Here "walk" refers to a person's behavior and the way he lives. Alternate translation: "live your life in a way that honors God" (See: [[rc://en/ta/man/translate/figs-idiom]])
+NEH	5	9	s7qt	figs-abstractnouns		0	the taunts of the nations that are our enemies	The word "taunt" means "slander" or "mockery" and it can be expressed as a verb. Alternate translation: "the nations who are our enemies from taunting us" or "the enemy nations from mocking us" (See: [[rc://en/ta/man/translate/figs-abstractnouns]])
+NEH	5	10	xbp5			0	lending	borrowing or giving something to someone expecting repayment
+NEH	5	10	j3dq			0	loans	This is any money, food, or property that one person could let another person borrow in order to repay debts. The borrower would then be indebted to the lender.
+NEH	5	11	vkz7			0	percentage	A part of the value of the loan that the borrower was charged in interest.
+NEH	5	11	dim5			0	you exacted from them	"you charged them" or "you made them pay"
+NEH	5	12	e9y2			0	Then they said	Here "they" refers to the Jewish leaders.
+NEH	5	12	q7t5			0	We will return what we took from them	The Jewish leaders are saying they will return the money which the poorer Jews paid in interest charges.
+NEH	5	12	i1gi			0	made them swear	Here the word "them" refers to the Jewish leaders.
+NEH	5	12	e2yv			0	Then I called	"I" refers to Nehemiah.
+NEH	5	13	neg1	translate-symaction		0	I shook out the fold of my robe	"I shook out the pockets of my robe." Many times in the Old Testament, oaths were physically demonstrated as a witness to what was promised. Nehemiah is demonstrating to the Jewish leaders what will happen if they break the promise they had made. (See: [[rc://en/ta/man/translate/translate-symaction]])
+NEH	5	13	f5p4	figs-metaphor		0	So may God shake out of his house ... So may he be shaken out and emptied	Here Nehemiah speaks of God taking away all of a man's possessions as if God were shaking him out of his home and possessions like Nehemiah shook out his robe. Alternate translation: "So may God take away from every man who does not keep his promise all of his possessions and his home like I have taken everything out of the fold of my robe" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+NEH	5	14	zur1			0	from the time I was appointed	Here "I" refers to Nehemiah.
+NEH	5	14	ri8l	translate-ordinal		0	from the twentieth year until the thirty-second year	"from the 20th year until the 32 year" (See: [[rc://en/ta/man/translate/translate-ordinal]])
+NEH	5	14	i31d			0	of Artaxerxes the king	"that Artaxerxes was king"
+NEH	5	14	ga6u	translate-numbers		0	twelve years	"12 years" or "during those 12 years." Nehemiah is restating the number of years to emphasize that he did this continually for the full time he was governor. (See: [[rc://en/ta/man/translate/translate-numbers]])
+NEH	5	14	nqt2			0	the food provided for the governor	This can be stated in active form. Alternate translation: "ate the food that the people provided for the governor"
+NEH	5	15	iv6q			0	for their daily	"every day for their"
+NEH	5	15	uu9k			0	former governors	"previous governors" or "governors from the past." Nehemiah was not the first governor of Judah.
+NEH	5	15	w4zk	translate-numbers		0	forty shekels	"40 shekels" or "40 silver coins" (See: [[rc://en/ta/man/translate/translate-numbers]] and [[rc://en/ta/man/translate/translate-bmoney]])
+NEH	5	15	egg7			0	But I did not do so because of the fear of God	"But because my fear of God I did not take the food" or "But I did not take the food because I feared God"
+NEH	5	16	gx42			0	I also continued	"I" refers to Nehemiah.
+NEH	5	16	lm7t			0	we bought	The word "we" refers to Nehemiah and his servants.
+NEH	5	16	xpb3	figs-activepassive		0	all my servants were gathered	This can be stated in active form. Alternate translation: "I gathered all of my servants there" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	5	16	m3s9			0	for the work	"to work on the wall"
+NEH	5	17	a1g4	translate-numbers		0	150 men	"one hundred and fifty men" (See: [[rc://en/ta/man/translate/translate-numbers]])
+NEH	5	17	q9x7	figs-explicit		0	At my table were the Jews ... from among the nations who were around us	Nehemiah was responsible for providing food for all of these people. This can be stated clearly. Alternate translation: "Also, every day I was responsible to feed at our table the Jews and the officials, 150 people; and we also fed the visitors who came from other countries around us (See: [[rc://en/ta/man/translate/figs-explicit]])
+NEH	5	17	w7i4			0	my table	This refers to the governor's table. It was a communal table for the community and for discussion of issues.
+NEH	5	17	j2af			0	officials	government leaders
+NEH	5	18	fa32	figs-activepassive		0	Now what was prepared each day was	This can be stated in active form. Alternate translation: "Each day I told my servants to prepare" or "Each day I told my servants to serve us the meat from" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	5	18	l6ma	translate-numbers		0	six choice ... ten days	"6 choice ... 10 days" (See: [[rc://en/ta/man/translate/translate-numbers]])
+NEH	5	18	gqe2			0	wine in abundance	"enough wine for everyone"
+NEH	5	18	sp6n			0	yet for all this I did not demand the food allowance of the governor	"yet I never asked for the governor's food allowance"
+NEH	5	19	ny8l	figs-idiom		0	Call me to mind	This is an idiom. It is a request for God to think about him and remember him. Alternate translation: "Remember me" (See: [[rc://en/ta/man/translate/figs-idiom]])
+NEH	5	19	mil3	figs-idiom		0	for good	This idiom is a request for God to reward him with good things because of the good that he has done for the people. Alternate translation: "and reward me" or "cause good to happen to me" (See: [[rc://en/ta/man/translate/figs-idiom]])
+NEH	6	intro	k4df			0		# Nehemiah 06 General Notes<br>## Structure and formatting<br><br>The building of the wall is completed in this chapter.<br><br>The ULT sets the lines in 6:6-7 farther to the right on the page than the rest of the text because they are part of a long quotation.<br><br>## Special concepts in this chapter<br><br>### Miracle<br><br>Completing this city wall in only fifty-two days was considered proof that God had helped the Jews, especially given the opposition that they had experienced from the people in surrounding areas.<br>
+NEH	6	1	gd7c	translate-names		0	Sanballat ... Tobiah	These are the names of men. See how you translated them in [Nehemiah 2:10](../02/10.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	6	1	bxn2	translate-names		0	Geshem	This is the name of a man. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	6	1	vi6v	figs-synecdoche		0	I had rebuilt the wall ... I had not yet	Nehemiah supervised the rebuilding of the wall and did not build it by himself. Alternate translation: "we had rebuilt the wall ... we had not yet" (See: [[rc://en/ta/man/translate/figs-synecdoche]])
+NEH	6	1	ap2q	figs-ellipsis		0	any sections	This refers to sections of the wall. Alternate translation: "any sections of the wall" or "any gaps in the city wall" (See: [[rc://en/ta/man/translate/figs-ellipsis]])
+NEH	6	2	n5nu	figs-idiom		0	sent to me	This means that they sent a messenger with a message. Alternate translation: "sent a messenger to me" (See: [[rc://en/ta/man/translate/figs-idiom]])
+NEH	6	2	rbv9	translate-names		0	Ono	This is the name of a place. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	6	3	d84v	figs-synecdoche		0	I am doing a great work	Nehemiah supervised the rebuilding of the wall. He did not build it by himself. Alternate translation: "We are doing a great work" (See: [[rc://en/ta/man/translate/figs-synecdoche]])
+NEH	6	3	ee8i	figs-rquestion		0	Why should the work stop while I leave it and come down to you?	This rhetorical question is used to challenge Sanballat's request. This can be written as a statement. Alternate translation: "I cannot let the work stop and come down to you" (See: [[rc://en/ta/man/translate/figs-rquestion]])
+NEH	6	3	t9gf			0	down to you	The word "down" is used here because the plain of Ono where they were requesting Nehemiah to come is at a lower elevation than Jerusalem.
+NEH	6	5	r8xc	translate-ordinal		0	Sanballat sent his servant to me in the same way the fifth time	Identifying this message separately means it is distinct in some way from the previous four messages and, therefore, should be noted. Alternate translation: " Sanballat sent his servant to me in the same way yet again" or "Sanballat sent his servant to me to deliver a fifth message" (See: [[rc://en/ta/man/translate/translate-ordinal]])
+NEH	6	5	s6ag			0	an open letter	The letter was an unsealed diplomatic communication. This was an insult to the recipient because the courier was free to read it and spread its contents among the people of the region.
+NEH	6	5	rx5j	figs-metonymy		0	in his hand	This means he had the letter in his possession, but he did not necessarily carry it in his hand at all times. Alternate translation: "in his possession" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+NEH	6	6	wy84	figs-activepassive		0	It is reported among the nations	This can be stated in active form. Alternate translation: "The rumor in the region is" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	6	6	z81q	figs-explicit		0	are planning to rebel	This means that they are planning to rebel against Artaxerxes, the Persian king, who was currently ruling the Jews. Alternate translation: "are planning to rebel against Artaxerxes" (See: [[rc://en/ta/man/translate/figs-explicit]])
+NEH	6	7	n1rj			0	the king will hear	"King Artaxerxes will hear"
+NEH	6	7	u185			0	Therefore come	"Therefore come meet with us"
+NEH	6	8	ei6j			0	Then I sent word to him	Here "I" refers to Nehemiah and "him" to Sanballat.
+NEH	6	8	ab7x			0	No such things have occurred as you say	"None of the things you have written have occurred"
+NEH	6	8	ds1y	figs-metonymy		0	for within your heart you invented them	Here the "heart" refers to the "mind," that is, to one's desires and thoughts. Alternate translation: "for within your mind you invented them" or "for you have made this up in your own imagination" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+NEH	6	9	p45k			0	For they all wanted to make us afraid	Here "they" refers to Nehemiah's enemies, Sanballat, Tobiah, Geshem, and their followers. The word "us" refers to the Jews.
+NEH	6	9	b5ij	figs-explicit		0	They will drop their hands from doing the work	This is a descriptive phrase that means that they are stopping their work on the wall. Alternate translation: "The workers on the wall will stop doing the work" (See: [[rc://en/ta/man/translate/figs-explicit]])
+NEH	6	9	j1dj	figs-synecdoche		0	strengthen my hands	Here Nehemiah requests for God to strengthen him by asking him to strengthen his "hands." Alternate translation: "strengthen me" or "give me courage" (See: [[rc://en/ta/man/translate/figs-synecdoche]])
+NEH	6	10	ybj6	translate-names		0	Shemaiah ... Delaiah ... Mehetabel	These are men's names. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	6	10	k8xd	figs-activepassive		0	who was confined in his home	The writer does not give the reason for him being confined, so it is best to say that he was staying at home using the most general words possible. Alternate translation: "who could not leave his house" or "whom the authorities had ordered to stay in his house" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	6	11	syw3	figs-rquestion		0	Would a man like me run away? Would a man like me go into the temple just so he could save his own life?	Nehemiah uses these rhetorical questions to emphasize that he will not do what Shemaiah has suggested. These questions may be written as statements. Alternate translation: "A man like me would not run away. A man like me would not go into the temple just to hide to stay alive." (See: [[rc://en/ta/man/translate/figs-rquestion]])
+NEH	6	12	s2sf			0	but that he had prophesied against me	"but that he had prophesied in order to oppose me"
+NEH	6	13	b27k			0	and sin	Using the temple as a place to hide was sinful. It may be helpful to make this explicit. Alternate translation: "and sin by misusing the temple"
+NEH	6	13	ji1g	figs-idiom		0	a bad name	This is an idiom. Alternate translation: "so that they could give me a bad reputation" or "so that they could give a bad report about me" (See: [[rc://en/ta/man/translate/figs-idiom]])
+NEH	6	14	nau4			0	Call to mind	This is an idiom. Alternate translation: "Remember"
+NEH	6	14	g3ch	translate-names		0	Noadiah	This is the name of a woman. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	6	15	m52s	figs-activepassive		0	So the wall was finished	This can be stated in active form. Alternate translation: "We finished the wall" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	6	15	g17x	translate-hebrewmonths		0	the twenty-fifth day of the month of Elul	"day 25 of the month of Elul." Elul is the sixth month of the Hebrew calendar. (See: [[rc://en/ta/man/translate/translate-hebrewmonths]] and [[rc://en/ta/man/translate/translate-ordinal]])
+NEH	6	15	ara3	translate-numbers		0	fifty-two days	"52 days" (See: [[rc://en/ta/man/translate/translate-numbers]])
+NEH	6	16	t54c			0	they fell greatly in their own eyes	"they thought much less of themselves" or "they lost confidence in themselves"
+NEH	6	16	py4c	figs-activepassive		0	the work was done with the help of our God	This can be stated in active form. Alternate translation: "it was our God who helped us complete this work" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	6	17	zw37	figs-metonymy		0	sent many letters	The nobles sent messengers to bring these letters to Tobiah. Alternate translation: "sent many messengers with letters" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+NEH	6	17	rx81	figs-personification		0	Tobiah's letters came	Here Tobiah's letters are personified as coming by themselves, when they were actually brought by messengers. Alternate translation: "Tobiah sent letters" or "Tobiah sent many messengers with letters" (See: [[rc://en/ta/man/translate/figs-personification]])
+NEH	6	17	rcx8	translate-names		0	Tobiah	See how you translated this man's name in [Nehemiah 2:10](../02/10.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	6	18	z2uq	figs-metaphor		0	who were bound by an oath to him	This speaks of people being loyal to Tobiah because they had pledged an oath to him as if their oath were a rope that bound their bodies. Alternate translation: "who had sworn an oath to him" or "who had made an oath and were loyal to him" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+NEH	6	18	rn1q	translate-names		0	he was the son-in-law of Shecaniah	This means that Tobiah was married to the daughter of Shecaniah. See how you translated "Shecaniah" in [Nehemiah 3:29](../03/29.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	6	18	id1x	translate-names		0	Arah ... Jehohanan	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	6	18	y3lg	translate-names		0	Meshullam ... Berechiah	These are the names of men. See how you translated this in [Nehemiah 3:4](../03/04.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	6	19	mj72			0	They also spoke to me about his good deeds and reported my words back to him	"The Jewish nobles told me about Tobiah's good deeds and then told him about my responses"
+NEH	6	19	e3zt	figs-activepassive		0	Letters were sent to me from Tobiah	This can be stated in active form. Tobiah sent messengers to bring the letters to Nehemiah. Alternate translation: "Tobiah sent letters to me" or "Tobiah sent messengers to bring letters to me" (See: [[rc://en/ta/man/translate/figs-activepassive]] and [[rc://en/ta/man/translate/figs-metonymy]])
+NEH	7	intro	qk4v			0		# Nehemiah 07 General Notes<br>## Special concepts in this chapter<br><br>### Genealogy<br><br>The people who returned from Persia were counted according to their families. Nehemiah ensured that those who lived in Jerusalem had a completely Jewish ancestry.<br><br>### Different lists<br>This list is paralleled in [Ezra 2](../../ezr/02/01.md). The lists do contain some differences in numbers. This is probably due to the timing of their counting. They were likely counted at different times.<br>
+NEH	7	1	g3zz	figs-activepassive		0	When the wall was finished	This can be stated in active form. Alternate translation: "When we had finished the wall" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	7	1	fk6l	figs-synecdoche		0	I had set up the doors in place	This was done with help. Alternate translation: "I and others hung the doors" (See: [[rc://en/ta/man/translate/figs-synecdoche]])
+NEH	7	1	wkp3	figs-activepassive		0	the gatekeepers and singers and Levites had been appointed	This can be stated in active form. Possible meanings are: 1) Nehemiah appointed them. Alternate translation: "I assigned the gatekeepers and singers and Levites to their tasks" or 2) Someone else appointed them. Alternate translation: "they assigned the gatekeepers and singers and Levites to their tasks" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	7	1	lk9v			0	gatekeepers	people assigned to each gate, responsible to control access to the city or temple, as well as to open and close the gates at times and for reasons set by the administrator
+NEH	7	1	f8ks			0	singers	vocal musicians who led in worship, in processions, and ceremonies, producing music and chants that emphasized and enhanced the occasion
+NEH	7	2	ykr9	translate-names		0	Hanani ... Hananiah	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	2	zy5q			0	I gave my brother Hanani charge	"I gave the order for my brother Hanani to be the manager"
+NEH	7	2	iqf3			0	who had oversight of the fortress	"who was in charge of the fortress"
+NEH	7	2	dx6d			0	feared God more than many	"feared God more than many other people"
+NEH	7	3	y2jk			0	I said to them	The word "them" refers to Hanani and Hananiah.
+NEH	7	3	n55g			0	Do not open the gates of Jerusalem until the sun is hot. While the gatekeepers are on guard, you may shut the doors and bar them	Possible meanings are 1) these actions were done by Hanani and Hananiah or 2) these actions were done by Hanani and Hananiah with the help of the gatekeepers or 3) the gatekeepers did these actions under the direction of Hanani and Hananiah.
+NEH	7	3	w3hi			0	the sun is hot	"the sun is high in the sky"
+NEH	7	3	b2es			0	While the gatekeepers are on guard, you may shut the doors and bar them	"Shut the doors and bar them while the gatekeepers are still on guard"
+NEH	7	3	mir9			0	gatekeepers	See how you translated this in [Nehemiah 7:1](../07/01.md)
+NEH	7	3	ed9m			0	shut the doors and bar them	"close the gates and lock them"
+NEH	7	3	he4e			0	Appoint guards from those who live in Jerusalem	"Assign guards from those people who live in Jerusalem"
+NEH	7	3	wf26			0	guard station	"guard post" or "guard duty place"
+NEH	7	4	y6y8	figs-activepassive		0	no houses had yet been rebuilt	This can be stated in active form. Alternate translation: "the people had not yet rebuilt the houses" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	7	5	wjd3	figs-metonymy		0	put into my heart	Here Nehemiah's "heart" refers to his thoughts and will. See how you translated this in [Nehemiah 2:12](../02/12.md). Alternate translation: "inspired me" or "led me" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+NEH	7	5	pzu6			0	to enroll them	"to list and register them"
+NEH	7	5	avw2			0	the book of the genealogy	This was a book that no longer exists.
+NEH	7	5	bz2p	figs-activepassive		0	found the following written in it	This can be expressed in active form. Alternate translation: "found that someone had written the following in it" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	7	6	ud5m			0	These are the people of the province	"These are the descendants of this region"
+NEH	7	6	vx13			0	went up out of	"returned from" or "came back from"
+NEH	7	6	r578	figs-idiom		0	went up	This is an idiom that refers to traveling toward Jerusalem, which was on higher ground than the surrounding area. (See: [[rc://en/ta/man/translate/figs-idiom]])
+NEH	7	6	hb7v	figs-metonymy		0	whom Nebuchadnezzar the king of Babylon took into exile	"whom Nebuchadnezzar, ruler of Babylon, took away from their home country." The army of Babylon did this under the command of Nebuchadnezzar. (See: [[rc://en/ta/man/translate/figs-metonymy]])
+NEH	7	7	mu5h	translate-names		0	Zerubbabel ... Jeshua ... Nehemiah ... Azariah ... Raamiah ... Nahamani ... Mordecai ... Bilshan ... Mispereth ... Bigvai ... Nehum ... Baanah	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	7	fz51			0	The number of the men	A census had been taken when the Israelites first returned to Jerusalem after the exile. The numbers represent how many men belonged to each family group. This sentence introduces the information in the following verses.
+NEH	7	8	r3xa	translate-numbers		0		Nehemiah is recounting the number of people who returned from exile. The people were grouped by families according to the name of their patriarchs. The number represents the number of men in each family. (See: [[rc://en/ta/man/translate/translate-numbers]])
+NEH	7	8	l98v	translate-names		0	Parosh	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	9	gy8k	translate-names		0	Shephatiah	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	10	nq9e	translate-names		0	Arah	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	11	jc4a	translate-numbers		0		Nehemiah is continuing to recount the number of people who returned from exile. (See: [[rc://en/ta/man/translate/translate-numbers]])
+NEH	7	11	v6jn	translate-names		0	Pahath-Moab ... Jeshua ... Joab	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	11	my8s			0	through the descendants of Jeshua and Joab	"that is, the descendants of Jeshua and Joab"
+NEH	7	12	d7wf	translate-names		0	Elam	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	13	sbz7	translate-names		0	Zattu	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	14	v5zr	translate-names		0	Zakkai	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	15	a26a	translate-numbers		0		Nehemiah is continuing to recount the number of people who returned from exile. (See: [[rc://en/ta/man/translate/translate-numbers]])
+NEH	7	15	x1bd	translate-names		0	Binnui	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	16	ay45	translate-names		0	Bebai	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	17	h84y	translate-names		0	Azgad	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	18	b95k	translate-names		0	Adonikam	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	19	lhq4	translate-numbers		0		Nehemiah is continuing to recount the number of people who returned from exile. (See: [[rc://en/ta/man/translate/translate-numbers]])
+NEH	7	19	iy74	translate-names		0	Bigvai	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	20	d5wk	translate-names		0	Adin	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	21	mxg1	translate-names		0	Ater	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	21	l797	figs-ellipsis		0	The descendants of Ater, of Hezekiah	The writer has shortened this sentence. Alternate translation: "the descendants of Ater, who is a descendant of Hezekiah" (See: [[rc://en/ta/man/translate/figs-ellipsis]])
+NEH	7	22	r3ee	translate-names		0	Hashum	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	23	yyf7	translate-numbers		0		Nehemiah is continuing to recount the number of people who returned from exile. (See: [[rc://en/ta/man/translate/translate-numbers]])
+NEH	7	23	v6eh	translate-names		0	Bezai	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	24	j9rb	translate-names		0	Hariph	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	25	sj6p	translate-names		0	Gibeon	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	26	sde6	translate-names		0	Bethlehem and Netophah	These are the names of places in Judah. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	27	xmr1	translate-numbers		0		Nehemiah is continuing to recount the number of people who returned from exile. (See: [[rc://en/ta/man/translate/translate-numbers]])
+NEH	7	27	v2tb	translate-names		0	Anathoth	This is the name of a place. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	28	b1sd	translate-names		0	Beth Azmaveth	This is the name of a place. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	29	y9ek	translate-names		0	Kiriath Jearim, Kephirah, and Beeroth	This is the name of a place. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	30	ncc2	translate-names		0	Ramah and Geba	These are the names of places. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	31	i39d	translate-numbers		0		Nehemiah is continuing to recount the number of people who returned from exile. (See: [[rc://en/ta/man/translate/translate-numbers]])
+NEH	7	31	ty2q	translate-names		0	Michmas	This is the name of a place. (See [[rc://en/ta/man/translate/translate-names]])
+NEH	7	32	b4qw	translate-names		0	Bethel and Ai	This is the name of a place. (See [[rc://en/ta/man/translate/translate-names]])
+NEH	7	33	dbu1	translate-names		0	Nebo	This is the name of a place. (See [[rc://en/ta/man/translate/translate-names]])
+NEH	7	34	d1vy	translate-names		0	Elam	This is the name of a place. (See [[rc://en/ta/man/translate/translate-names]])
+NEH	7	35	wz53	translate-numbers		0		Nehemiah is continuing to recount the number of people who returned from exile. (See: [[rc://en/ta/man/translate/translate-numbers]])
+NEH	7	35	s9ek	translate-names		0	Harim	This is the name of a place. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	36	avk6	translate-names		0	Jericho	This is the name of a place. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	37	b9f2	translate-names		0	Lod, Hadid, and Ono	This is the name of a place. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	38	rla1	translate-names		0	Senaah	This is the name of a place. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	39	x7hb	translate-numbers		0		Nehemiah is continuing to recount the number of people who returned from exile. (See: [[rc://en/ta/man/translate/translate-numbers]])
+NEH	7	39	xwy8	translate-names		0	Jedaiah ... Jeshua	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	39	mk8g	figs-metonymy		0	of the house of Jeshua	The word "house" is a metonym for family. Alternate translation: "from the family of Jeshua" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+NEH	7	40	kd29	translate-names		0	Immer	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	41	xd2z	translate-names		0	Pashhur	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	42	ias1	translate-names		0	Harim	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	43	h37e	translate-numbers		0		Nehemiah is continuing to recount the number of people who returned from exile. (See: [[rc://en/ta/man/translate/translate-numbers]])
+NEH	7	43	v5s3	translate-names		0	Jeshua ... Kadmiel ... Binnui ... Hodevah	These are all names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	44	ht7l	translate-names		0	Asaph	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	44	v68g			0	singers	See how you translated this in [Nehemiah 7:1](../07/01.md).
+NEH	7	45	wy4p	translate-names		0	Shallum ... Ater ... Talmon ... Akkub ... Hatita ... Shobai	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	45	b7ne			0	gatekeepers	See how you translated this in [Nehemiah 7:1](../07/01.md).
+NEH	7	46	t2j5			0	General Information:	These verses continue the names of people whose descendants returned from the exile.
+NEH	7	46	st75	translate-names		0	Ziha ... Hasupha ... Tabbaoth	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	47	d6np	translate-names		0	Keros ... Sia ... Padon	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	47	mn22			0	Sia	This is the same man known by the name Siaha in Ezra 2:44.
+NEH	7	48	ln8l	translate-names		0	Lebana, ... Hagaba ... Shalmai	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	49	zpn7	translate-names		0	Hanan ... Giddel ... Gahar	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	50	s8hz			0	General Information:	These verses continue the names of people whose descendants returned from the exile.
+NEH	7	50	cd4k	translate-names		0	Reaiah ... Rezin ... Nekoda	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	51	u8ea	translate-names		0	Gazzam ... Uzza ... Paseah	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	52	i1dd	translate-names		0	Besai ... Meunim ... Nephushesim	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	53	h78b			0	General Information:	These verses continue the names of people whose descendants returned from the exile.
+NEH	7	53	u7qn	translate-names		0	Bakbuk ... Hakupha ... Harhur	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	54	jat5	translate-names		0	Bazluth ... Mehida ... Harsha	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	55	w15p	translate-names		0	Barkos ... Sisera ... Temah	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	56	i1b4	translate-names		0	Neziah ... Hatipha	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	57	w9sx	translate-numbers		0		Nehemiah is continuing to recount the number of people who returned from exile. (See: [[rc://en/ta/man/translate/translate-numbers]])
+NEH	7	57	ma7v	translate-names		0	Sotai ... Sophereth ... Perida	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	57	xb5j			0	Sophereth	This is the name of a man who is called Hassophereth in Ezra 2:55.
+NEH	7	57	ei9x			0	Perida	This is the name of a man who is also called Peruda in Ezra 2:55.
+NEH	7	58	y1jl	translate-names		0	Jaala ... Darkon ... Giddel	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	59	vwg5	translate-names		0	Shephatiah ... Hattil ... Pochereth Hazzebaim ... Amon	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	61	a15h	translate-numbers		0		Nehemiah is continuing to recount the number of people who returned from exile. (See: [[rc://en/ta/man/translate/translate-numbers]])
+NEH	7	61	bgx3	figs-idiom		0	went up	This is an idiom that refers to traveling toward Jerusalem, which was on higher ground than the surrounding area. Alternate translation: "returned" or "came back" (See: [[rc://en/ta/man/translate/figs-idiom]])
+NEH	7	61	c7ta	translate-names		0	Tel Melah ... Tel Harsha ... Kerub ... Addon ... Immer	These are names of places. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	62	np4h	translate-names		0	Delaiah ... Tobiah ... Nekoda	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	63	i59a	translate-names		0	Habaiah ... Hakkoz ... Barzillai	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	7	64	m2qd			0	These sought their records among those enrolled by their genealogy	"They sought their written genealogical records" or "They searched their written genealogical records"
+NEH	7	64	n9vy			0	These sought	"These" refers to the descendants of Hobaiah, Hakkoz and Barzillai ([Nehemiah 7:63](../07/63.md)).
+NEH	7	64	bl4n	figs-activepassive		0	but they could not be found	This can be expressed in active form. Alternate translation: "but they could not find their records" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	7	64	iyy1	figs-activepassive		0	they were excluded from the priesthood as unclean	This can be translated in active form. The abstract noun "priesthood" can be translated as the verb "work as priests." Alternate translation: "the governor treated them as if they were unclean and did not allow them to work as priests" (See: [[rc://en/ta/man/translate/figs-activepassive]] and [[rc://en/ta/man/translate/figs-abstractnouns]])
+NEH	7	65	qnn2	figs-activepassive		0	until there rose up a priest with Urim and Thummim	This can be stated in active form. Alternate translation: "until a priest with Urim and Thummim approved" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	7	65	cij9	translate-unknown		0	Urim and Thummim	These were sacred stones that the high priest carried on his breastplate and used at times to determine God's will. (See: [[rc://en/ta/man/translate/translate-unknown]])
+NEH	7	66	t4xj	translate-numbers		0		Nehemiah is continuing to recount the number of people who returned from exile. (See: [[rc://en/ta/man/translate/translate-numbers]])
+NEH	7	66	j9fe			0	The whole assembly together	"The whole group together"
+NEH	7	66	av51			0	was 42,360	"was 42,360 people"
+NEH	7	67	se3x			0	singing men and women	"male singers and female singers"
+NEH	7	68	hmw2	translate-numbers		0	736 ... 245	"seven hundred and thirty-six ... two hundred and forty-five." These are numbers of animals brought back. (See: [[rc://en/ta/man/translate/translate-numbers]])
+NEH	7	69	d72q	translate-numbers		0	435 ... 6,720	"four hundred and thirty-five ... six thousand seven hundred and twenty." These are numbers of animals brought back. (See: [[rc://en/ta/man/translate/translate-numbers]])
+NEH	7	70	e1e9			0	the heads of ancestors' families	"the chief patriarchs" or "the leaders of the clans"
+NEH	7	70	le3g			0	gave to the treasury	"put into the treasury"
+NEH	7	70	wf3a	translate-numbers		0	one thousand darics	"1,000 darics" (See: [[rc://en/ta/man/translate/translate-numbers]])
+NEH	7	70	c7ug	translate-bmoney		0	darics of gold	A daric was a small gold coin that people in the Persian Empire used. (See: [[rc://en/ta/man/translate/translate-bmoney]])
+NEH	7	70	bu8p	translate-numbers		0	50 basins	"fifty basins." These are large bowls. (See: [[rc://en/ta/man/translate/translate-numbers]])
+NEH	7	70	bu22	translate-numbers		0	530 priestly garments	"five hundred thirty priestly garments." These are items of clothing worn by the priests. (See: [[rc://en/ta/man/translate/translate-numbers]])
+NEH	7	71	kzg2	translate-numbers		0	twenty thousand darics	"20,000 darics" (See: [[rc://en/ta/man/translate/translate-numbers]])
+NEH	7	71	jxn7	translate-numbers		0	2,200 minas of silver	"two thousand two hundred minas of silver." A mina is about one half of a kilogram in weight. (See: [[rc://en/ta/man/translate/translate-numbers]] and [[rc://en/ta/man/translate/translate-bweight]])
+NEH	7	72	zg2v	translate-numbers		0	two thousand minas	"2,000 minas" (See: [[rc://en/ta/man/translate/translate-numbers]])
+NEH	7	72	g529	translate-numbers		0	sixty-seven priestly garments	"67 priestly garments" (See: [[rc://en/ta/man/translate/translate-numbers]])
+NEH	7	73	e7np			0	gatekeepers	See how you translated this in [Nehemiah 7:1](../07/01.md).
+NEH	7	73	a2ub			0	singers	See how you translated this in [Nehemiah 7:1](../07/01.md).
+NEH	7	73	jaj3	figs-explicit		0	some of the people	The implied information is that this refers to some of the Israelites who were not priests or other temple workers. (See: [[rc://en/ta/man/translate/figs-explicit]])
+NEH	7	73	znc4			0	all Israel	Possible meanings are: 1) all the groups of Israelites that are listed in this verse or 2) the rest of the Israelites who did not work in the temple.
+NEH	7	73	n26r	translate-ordinal		0	the seventh month	"month 7." This is the seventh month of the Hebrew calendar. It is during the last part of September and the first part of October on Western calendars. (See: [[rc://en/ta/man/translate/translate-ordinal]] and [[rc://en/ta/man/translate/translate-hebrewmonths]])
+NEH	7	73	gdj2			0	were settled in their cities	"lived in their own cities"
+NEH	8	intro	w38v			0		# Nehemiah 08 General Notes<br>## Special concepts in this chapter<br><br>### Reading of the law<br><br>During the exile, the Hebrew language was no longer spoken. Only the priests and Levites still understood it. Ezra read the book of the law to the people in Hebrew and the Levites walked among the crowd translating it into Aramaic for the people to understand. (See: [[rc://en/tw/dict/bible/kt/priest]] and [[rc://en/tw/dict/bible/kt/lawofmoses]])<br><br>### Festival of Shelters<br><br>After they heard Ezra read the law of Moses, the people obeyed it by making temporary shelters for themselves with tree branches. They did this to remember that their ancestors slept in shelters when they came out of slavery in Egypt.<br>
+NEH	8	1	q5ih	figs-hyperbole		0	All the people gathered as one man	The word "all" is a generalization that indicates the people as a whole came together. Alternate translation: "The people gathered all together" (See: [[rc://en/ta/man/translate/figs-hyperbole]])
+NEH	8	1	f6t8			0	Water Gate	This was the name of a large opening or doorway in the wall.
+NEH	8	1	fdh4			0	the book of the law of Moses	This would have been all or part of the first five books of the Old Testament.
+NEH	8	2	id7q	translate-hebrewmonths		0	On the first day of the seventh month	This is the seventh month of the Hebrew calendar. The first day of the seventh month is near the middle of September on Western calendars. Alternate translation: "On day 1 of month 7" (See: [[rc://en/ta/man/translate/translate-hebrewmonths]] and [[rc://en/ta/man/translate/translate-ordinal]])
+NEH	8	2	e89a			0	brought the law	"brought The Book of the Law"
+NEH	8	2	j8yl			0	all who could hear and understand	This would include children who were old enough to understand what was being read.
+NEH	8	3	iv9y			0	He faced the open area	"He turned towards the open area"
+NEH	8	3	pkz7			0	he read from it	Here "it" refers to the Book of the law of Moses.
+NEH	8	4	lk8k	translate-names		0	Mattithiah, Shema, Anaiah, Uriah, Hilkiah, and Maaseiah ... Pedaiah, Mishael, Malkijah, Hashum, Hashbaddanah, Zechariah, and Meshullam	These are all names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	8	5	t5lf	figs-abstractnouns		0	Ezra opened the book in the sight of all the people	The abstract noun "sight" can be expressed with the verb "see." Alternate translation: "Everyone saw Ezra open the book" (See: [[rc://en/ta/man/translate/figs-abstractnouns]])
+NEH	8	5	wqg8			0	the book	"The Book of the Law"
+NEH	8	5	ln1z			0	he was standing above the people	"he was standing higher than the people"
+NEH	8	5	yv2u	figs-explicit		0	when he opened it all the people stood up	The people stood up out of respect for God's word. (See: [[rc://en/ta/man/translate/figs-explicit]])
+NEH	8	6	x9v8	figs-abstractnouns		0	Ezra gave thanks to Yahweh	The abstract noun "thanks" can be translated as a verb. Alternate translation: "Ezra thanked Yahweh" (See: [[rc://en/ta/man/translate/figs-abstractnouns]])
+NEH	8	8	s5er			0	They read in the book	The word "They" here refers to the Levites.
+NEH	8	8	vsq9	figs-abstractnouns		0	making it clear with interpretation and giving the meaning	The abstract nouns "interpretation" and "meaning" can be translated as verbs. Alternate translation: "clearly interpreting and explaining it" (See: [[rc://en/ta/man/translate/figs-abstractnouns]])
+NEH	8	8	iw1y			0	the reading	"what was read"
+NEH	8	9	wky3	figs-hyperbole		0	For all the people wept	This is a generalization that indicates there was great weeping among the people. Alternate translation: "For the people wept greatly" (See: [[rc://en/ta/man/translate/figs-hyperbole]])
+NEH	8	10	smq2	figs-explicit		0	eat the fat and have something sweet to drink	The implied information is that the people were told to feast on rich food and sweet drinks. Alternate translation: "eat rich food and drink something sweet" (See: [[rc://en/ta/man/translate/figs-explicit]])
+NEH	8	10	ach1	figs-activepassive		0	Do not be grieved	This can be stated in active form. Alternate translation: "Do not grieve" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	8	10	sni7	figs-abstractnouns		0	for the joy of Yahweh is your strength	The abstract nouns "joy" and "strength" can be expressed as verbs or adjectives. Alternate translation: "rejoicing in Yahweh will protect you" or "being joyful in Yahweh will be your strong refuge" (See: [[rc://en/ta/man/translate/figs-abstractnouns]])
+NEH	8	11	sxx6			0	Hush!	"Be quiet!" or "Be silent!"
+NEH	8	11	fjz6	figs-activepassive		0	Do not be grieved	This can be stated in active form. Alternate translation: "Do not grieve" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	8	12	z1gc	figs-abstractnouns		0	celebrate with great joy	The abstract noun "joy" can be expressed as a verb. Alternate translation: "rejoice greatly" (See: [[rc://en/ta/man/translate/figs-abstractnouns]])
+NEH	8	12	xsf5	figs-activepassive		0	the words that were made known to them	This can be stated in active form. Alternate translation: "the words that he declared to them" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	8	13	uj5j	translate-ordinal		0	On the second day	"On day 2" or "On the next day" (See: [[rc://en/ta/man/translate/translate-ordinal]])
+NEH	8	13	y48u	figs-abstractnouns		0	to gain insight from	The abstract noun "insight" can be expressed as a verb. Alternate translation: "to understand" (See: [[rc://en/ta/man/translate/figs-abstractnouns]])
+NEH	8	14	ur1h			0	should live in shelters	These were temporary shelters that people made out of branches and leaves.
+NEH	8	14	efg4	translate-ordinal		0	the seventh month	"month 7." This is the seventh month of the Hebrew calendar. It is during the last part of September and the first part of October on Western calendars. (See: [[rc://en/ta/man/translate/translate-ordinal]] and [[rc://en/ta/man/translate/translate-hebrewmonths]])
+NEH	8	15	rq6s			0	They should make a proclamation	"They should announce"
+NEH	8	15	f9c2	translate-unknown		0	myrtle	a kind of small tree with colorful flowers (See: [[rc://en/ta/man/translate/translate-unknown]])
+NEH	8	15	es8r			0	shade trees	"leafy trees"
+NEH	8	15	jb2s	figs-activepassive		0	as it is written	This can be translated in active form. Alternate translation: "as Moses wrote about it" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	8	16	dl2y			0	made themselves shelters	"each built their own shelters"
+NEH	8	16	krx4			0	Water Gate ... Gate of Ephraim	These are names of large openings or doorways in the wall.
+NEH	8	16	b74m			0	in the square at the Gate of Ephraim	"in the open place by the Gate of Ephraim"
+NEH	8	17	n31n			0	For since the days of Joshua	"From the days of Joshua"
+NEH	8	17	e32u	translate-names		0	son of Nun	"Nun" here is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	8	17	wyd6	figs-abstractnouns		0	their joy was very great	The abstract noun "joy" can be expressed as an adjective. Alternate translation: "the people were very joyful" (See: [[rc://en/ta/man/translate/figs-abstractnouns]])
+NEH	8	18	g9rl	figs-idiom		0	day by day	This idiom means "each day." (See: [[rc://en/ta/man/translate/figs-idiom]])
+NEH	8	18	j9aj	figs-explicit		0	from the first day to the last	The implied information is that it was during the entire week of the festival. Alternate translation: "from the first day to the last day of the week" (See: [[rc://en/ta/man/translate/figs-explicit]])
+NEH	8	18	c1cp			0	They kept the festival	"They made a feast" or "They celebrated the festival"
+NEH	8	18	er1u	translate-ordinal		0	on the eighth day	"on day 8" (See: [[rc://en/ta/man/translate/translate-ordinal]])
+NEH	8	18	sfx4			0	solemn assembly	This was a special religious gathering.
+NEH	8	18	cey3	figs-explicit		0	in obedience to the decree	The implied information is that "the decree" was the command of Yahweh about how the Festival of Shelters was to end. Alternate translation: "as God had commanded" (See: [[rc://en/ta/man/translate/figs-explicit]])
+NEH	9	intro	sj1h			0		# Nehemiah 09 General Notes<br>## Structure and formatting<br><br>This chapter and the next one form a single section.<br><br>## Special concepts in this chapter<br><br>### Prayer to God<br><br>The people prayed and thanked God for his care for them and the blessings he gave to them. They also confessed their sin of disobeying him. (See: [[rc://en/tw/dict/bible/kt/bless]] and [[rc://en/tw/dict/bible/kt/confess]] and [[rc://en/tw/dict/bible/kt/sin]])<br><br>### Learning from their ancestor's mistakes<br>This chapter teaches that the Jews learned from the mistakes of their ancestors. They became determined to worship Yahweh alone, to not intermarry with other peoples, and to worship Yahweh as the law of Moses instructed them. (See: [[rc://en/tw/dict/bible/kt/lawofmoses]])<br><br>### Recalling the great power of God<br>It was common to recall the great things God did for Israel. This is a reminder to Israel of God's power. It is intended to bring the people to repentance and proper worship of Yahweh. (See: [[rc://en/tw/dict/bible/kt/repent]])<br>
+NEH	9	1	w8w8	translate-hebrewmonths		0	the twenty-fourth day of the same month	"the twenty-fourth day of the seventh month" This is near the middle of October on Western calendars. (See: [[rc://en/ta/man/translate/translate-hebrewmonths]] and [[rc://en/ta/man/translate/translate-ordinal]])
+NEH	9	1	lm7m			0	the people of Israel were assembled	"the people of Israel came together"
+NEH	9	1	irv4	figs-explicit		0	they were wearing sackcloth, and they put dust on their heads	This was in order to show how sorry they were for the wrong things they and their ancestors had done. (See: [[rc://en/ta/man/translate/figs-explicit]])
+NEH	9	2	xbs1			0	The descendants of Israel	"The Israelites"
+NEH	9	2	qx58			0	separated themselves from all the foreigners	"no longer had anything to do with those who were not Israelites"
+NEH	9	2	vhc6			0	They stood and confessed their own sins and the evil actions of their ancestors	"They admitted the wrong things that they had done and also the wrong things their forefathers had done"
+NEH	9	3	q5p1			0	They stood up	All the Israelites stood up
+NEH	9	3	je9t			0	they were confessing	"they were admitting the wrong things they had done"
+NEH	9	3	qe6e			0	bowing down before	"worshiping" or "praising"
+NEH	9	4	bc94			0	The Levites, Jeshua, Bani ... stood on the stairs	Some versions translate, "Jeshua, Bani ... stood on the stairs built for the Levites"
+NEH	9	4	zl5j	translate-names		0	Jeshua, Bani, Kadmiel, Shebaniah, Bunni, Sherebiah, Bani, and Kenani	men's names (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	9	5	j96x			0	Then the Levites ... said, "Stand up ... ever."	Here the Levites are speaking to the people of Israel.
+NEH	9	5	u4pu			0	give praise to Yahweh	"bless Yahweh"
+NEH	9	5	yk5b	translate-names		0	Jeshua ... Kadmiel ... Bani ... Sherebiah ... Shebaniah	These are the names of men. See how you translated them in [Nehemiah 9:4](./04.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	9	5	m3eu	translate-names		0	Hashabneiah ... Hodiah ... Pethahiah	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	9	5	tve4			0	May they bless your glorious name	the Levites are speaking to Yahweh. "May the people of Judah bless your glorious name, Yahweh"
+NEH	9	6	k5l3	figs-metaphor		0	the highest heavens, with all their host ... the host of heaven worship you	A host is an army. The "host of heaven" speaks in a metaphor of the many stars as if they were an army. The stars in turn are a metaphor for the many angels. The stars worshiping Yahweh is a metaphor for the angels worshiping Yahweh. (See: [[rc://en/ta/man/translate/figs-metaphor]])
+NEH	9	7	id6f			0	Connecting Statement:	The Levites continue their prayer before all the people.
+NEH	9	7	us45			0	Ur of the Chaldees	"Ur, where the Chaldean people group lived"
+NEH	9	8	ej7e	figs-synecdoche		0	You found his heart was faithful before you	The heart, the inner being of the person, represents the person. Alternate translation: "You saw that he was completely faithful to you" (See: [[rc://en/ta/man/translate/figs-synecdoche]])
+NEH	9	8	vbx8	translate-names		0	Canaanites ... Hittites ... Amorites ... Perizzites ... Jebusites ... Girgashites	people group names (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	9	9	p3f4			0	Connecting Statement:	In these verses, the Levites continue to praise Yahweh in the presence of the people of Israel.
+NEH	9	9	vp1y			0	You saw	Yahweh saw
+NEH	9	9	j256	figs-explicit		0	you heard their cry	The implied information is that God was moved to action because of the Israelites' cries for help. (See: [[rc://en/ta/man/translate/figs-explicit]])
+NEH	9	10	ge61	figs-explicit		0	signs and wonders against Pharaoh	The plagues tested Pharaoh's heart, and they became a witness against his hardness of heart. Alternate translation: "signs and wonders that testified against Pharaoh" or "signs and wonders that condemned Pharaoh" (See: [[rc://en/ta/man/translate/figs-explicit]])
+NEH	9	10	i7c3			0	all the people of his land	"all the Egyptians"
+NEH	9	10	s54a			0	acted with arrogance against them	"were arrogant toward the Israelites" or "mistreated God's chosen people"
+NEH	9	10	m6zr	figs-metonymy		0	you made a name for yourself which stands to this day	Here "name" represents a reputation. Alternate translation: "you made yourself famous and even now people still remember" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+NEH	9	11	n7jm			0	Connecting Statement:	In these verses, the Levites continue to praise Yahweh in the presence of the people of Israel.
+NEH	9	11	d1kp			0	you divided the sea	God divided
+NEH	9	11	l5ar	figs-simile		0	you ... threw those who pursued them into the depths, as a stone into deep waters	In this simile, the writer describes God throwing the Egyptians into the sea as easily as a person would throw a stone into water, and the stone would disappear under the water completely. (See: [[rc://en/ta/man/translate/figs-simile]])
+NEH	9	12	n4i2			0	Connecting Statement:	In these verses, the Levites continue to praise Yahweh in the presence of the people of Israel.
+NEH	9	12	m7vx			0	You led them	Yahweh led the Israelites.
+NEH	9	13	z2ds	figs-idiom		0	you came down	When God talks with his people, he is often described as "coming down" or "coming down from heaven." This is a descriptive way of saying that God appeared to that person. Alternate translation: "you appeared" or "you came down from heaven" (See: [[rc://en/ta/man/translate/figs-idiom]] and [[rc://en/ta/man/translate/figs-explicit]])
+NEH	9	13	zut5	figs-parallelism		0	righteous decrees and true laws, good statutes and commandments	Both of these double phrases describe the same thing, the law of Moses. (See: [[rc://en/ta/man/translate/figs-parallelism]])
+NEH	9	14	w3q6			0	Connecting Statement:	In these verses, the Levites continue to praise Yahweh in the presence of the people of Israel.
+NEH	9	14	h9f4	figs-doublet		0	commandments ... statutes ... law	Each of these three words refers to the law of Moses. (See: [[rc://en/ta/man/translate/figs-doublet]])
+NEH	9	16	g6tt			0	Connecting Statement:	In these verses, the Levites continue to praise Yahweh in the presence of the people of Israel.
+NEH	9	16	m753			0	they and our ancestors	the Israelites at the time of Moses and the people of Israel after the time of Moses
+NEH	9	16	t1he	figs-idiom		0	they were stiff-necked	This is an idiom that means that they were stubborn. (See: [[rc://en/ta/man/translate/figs-idiom]])
+NEH	9	17	v9ib	figs-idiom		0	were stiff-necked	This is an idiom that means that they were stubborn. (See: [[rc://en/ta/man/translate/figs-idiom]])
+NEH	9	17	f1m1			0	the wonders that you had done among them	"the miracles that you had done among them"
+NEH	9	17	gd2b	figs-explicit		0	they appointed a leader to return to their slavery	The Israelites would know that this referred to their ancestors wanting to return to Egypt. Alternate translation: "they appointed a leader to take them back to Egypt where they had been slaves" (See: [[rc://en/ta/man/translate/figs-explicit]])
+NEH	9	17	p6nm	figs-metaphor		0	who is full of forgiveness	The desire to forgive is spoken of as if it were a liquid that could fill a container. Alternate translation: "who is ready to forgive" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+NEH	9	17	c986	figs-metaphor		0	abounding in steadfast love	Love is spoken of as if it were a food crop that Yahweh could share with people. Alternate translation: "loves his people very much" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+NEH	9	18	hw32			0	Connecting Statement:	In these verses, the Levites continue to praise Yahweh in the presence of the people of Israel.
+NEH	9	18	ind6			0	cast a calf out of molten metal	melted metal and molded it in the shape of a calf
+NEH	9	19	eqh4			0	you ... did not abandon them	Yahweh did not abandon the Israelites.
+NEH	9	19	x6bf			0	The pillar of cloud ... the pillar of fire	See how you translated this in [Nehemiah 9:12](../09/12.md).
+NEH	9	20	buh1			0	Connecting Statement:	In these verses, the Levites continue to praise Yahweh in the presence of the people of Israel.
+NEH	9	20	e7m4			0	Your good Spirit ... your manna ... water	The writer changes the usual word order to emphasize the good things Yahweh gave his people. Your language may have another way of emphasizing these items.
+NEH	9	20	ncd6			0	instruct	teach
+NEH	9	20	gyd6	figs-litotes		0	your manna you did not withhold from their mouths	This litotes can be expressed positively. Alternate translation: "you generously gave them manna" (See: [[rc://en/ta/man/translate/figs-litotes]])
+NEH	9	20	qka1	figs-synecdoche		0	from their mouths	The mouth is a synecdoche for the whole person. Alternate translation: "from them" (See: [[rc://en/ta/man/translate/figs-synecdoche]])
+NEH	9	22	f462			0	Connecting Statement:	In these verses, the Levites continue to praise Yahweh in the presence of the people of Israel.
+NEH	9	22	xc6v			0	You gave them kingdoms	Yahweh gave the Israelites kingdoms.
+NEH	9	22	kgg1			0	gave them kingdoms and peoples	"enabled them to conquer kingdoms and peoples"
+NEH	9	22	zt5p			0	assigning to them every corner of the land	"enabling them to possess every part of the land"
+NEH	9	22	xf4v	translate-names		0	Sihon ... Og	These are the names of kings. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	9	22	bkk3	translate-names		0	Heshbon ... Bashan	These are names of places. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	9	23	w96j			0	Connecting Statement:	In these verses, the Levites continue to praise Yahweh in the presence of the people of Israel.
+NEH	9	23	t5pb			0	You made their children	Yahweh made the descendants of the Israelites at the time of Moses
+NEH	9	24	vz5v	figs-metaphor		0	gave them into their hands	The Canaanites are spoken of as if they were small objects that a person could place in the hand of another person. To give something into a person's hand is to give that person complete control over that thing. Alternate translation: "enabled the Israelites to have complete control over them" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+NEH	9	25	v454			0	Connecting Statement:	In these verses, the Levites continue to praise Yahweh in the presence of the people of Israel.
+NEH	9	25	yzu6			0	They captured	The Israelites at the time of Moses captured
+NEH	9	25	gs7a			0	a productive land	"a fertile land"
+NEH	9	25	ke4u			0	cisterns	holes in the ground where people store water
+NEH	9	25	s544	figs-metaphor		0	grew fat	This might be a metaphor for "stopped thinking about Yahweh" or "became complacent." (See: [[rc://en/ta/man/translate/figs-metaphor]])
+NEH	9	26	t19v			0	Connecting Statement:	In these verses, the Levites continue to praise Yahweh in the presence of the people of Israel.
+NEH	9	26	q9sz	figs-metaphor		0	They threw your law behind their backs	The law is spoken of as if it were a worthless item that a person could throw away. Alternate translation: "They considered your law worthless and paid no attention to it" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+NEH	9	26	vbj5			0	They threw your law	The Israelites threw Yahweh's law.
+NEH	9	27	v5lz	figs-metonymy		0	you gave them into the hand of their enemies, who made them suffer	Here "hand" represents power or control. Alternate translation: "you allowed their enemies to defeat them and cause them to suffer" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+NEH	9	27	z213	figs-metonymy		0	you sent them rescuers who rescued them out of the hand of their enemies	Here "hand" represents power or control. Alternate translation: "you sent people to stop their enemies from harming them" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+NEH	9	28	u77m			0	Connecting Statement:	In these verses, the Levites continue to praise Yahweh in the presence of the people of Israel.
+NEH	9	28	ds4w			0	they had rest, they did evil again before you	Here "they" refers to the Israelites and "you" to Yahweh.
+NEH	9	28	puz2	figs-metonymy		0	you abandoned them to the hand of their enemies	Here "hand" represents power or control. Alternate translation: "you abandoned them and allow their enemies to defeat them" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+NEH	9	29	pm9h			0	did not listen to your commands	If your language has a word for "listen" that also means "obey," use it here.
+NEH	9	29	una2	figs-metonymy		0	your decrees which give life to anyone who obeys them	Yahweh himself is spoken of as if he were the decrees themselves. Alternate translation: "you even though you give life to everyone who obeys your decrees" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+NEH	9	29	k1ew	figs-metaphor		0	They gave the stubborn shoulder-blade and stiffened their neck	These are images of an ox refusing to allow its owner to put a yoke on its shoulders. Here they are a metaphor that represents the people being stubborn. Alternate translation: "They became stubborn" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+NEH	9	30	sj6k			0	Connecting Statement:	In these verses, the Levites continue to praise Yahweh in the presence of the people of Israel.
+NEH	9	30	tqa5	figs-metonymy		0	you gave them into the hand of the neighboring peoples	Here "hand" represents power or control. See how you translated these words in [Nehemiah 9:27](../09/27.md). Alternate translation: "you allowed the neighboring peoples to defeat them" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+NEH	9	30	ym8i			0	you gave	Yahweh gave
+NEH	9	31	cl3n			0	you did not make a complete end of them	"you did not destroy them"
+NEH	9	32	j1rz			0	Connecting Statement:	In these verses, the Levites continue to praise Yahweh in the presence of the people of Israel.
+NEH	9	32	j5fk			0	do not let all this hardship seem little to you that has come on us ... until today	It is possible to divide this into two sentences. "Do not let all this hardship seem little to you. The hardship has come upon us ... until today"
+NEH	9	32	u6i9	figs-personification		0	hardship ... has come on us	The phrase "come on us" speaks of bad things that happen as if they are people who cause harm. Alternate translation: "harm ... we have suffered" (See: [[rc://en/ta/man/translate/figs-personification]])
+NEH	9	33	pl1f	figs-personification		0	everything that has come on us	The phrase "come on us" speaks of bad things that happen as if they are people who cause harm. Alternate translation: "everything we have suffered" (See: [[rc://en/ta/man/translate/figs-personification]])
+NEH	9	35	af8m			0	Connecting Statement:	In these verses, the Levites continue to praise Yahweh in the presence of the people of Israel.
+NEH	9	35	nxv9			0	while they enjoyed your great goodness to them	"while they enjoyed the good things you gave them"
+NEH	9	35	ibf9			0	they did not serve you	"they were not obedient to your law or teaching"
+NEH	9	36	q7xj			0	Connecting Statement:	In these verses, the Levites continue to praise Yahweh in the presence of the people of Israel.
+NEH	9	36	qh7f			0	its good gifts	"all the good things in it" or "all the good things we can get from it"
+NEH	9	37	q3dz			0	The rich yield from our land goes to the kings	"We pay tribute to kings for working our own land"
+NEH	9	37	x15l			0	They rule	The kings rule.
+NEH	9	38	g7s3			0	Connecting Statement:	In these verses, the Levites continue to praise Yahweh in the presence of the people of Israel.
+NEH	9	38	t4ag			0	Because of all this	because the people had disobeyed and Yahweh had punished them
+NEH	9	38	xee9			0	On the sealed document are the names	The reader should understand that the men wrote their names on the document before it was sealed.
+NEH	10	intro	m17y			0		# Nehemiah 10 General Notes<br>## Structure and formatting<br><br>This chapter concludes the passage beginning in chapter 9.<br><br>## Special concepts in this chapter<br><br>### The vow<br><br>By signing this document, the people vowed or agreed to obey God, not to buy things on the Sabbath and to pay their temple tax. (See: [[rc://en/tw/dict/bible/kt/vow]] and [[rc://en/tw/dict/bible/kt/sabbath]] and [[rc://en/tw/dict/bible/kt/temple]])<br>
+NEH	10	1	ijh7			0	Connecting Statement:	Here begins a list of the people whose names were on the sealed document.
+NEH	10	1	jc8x	figs-explicit		0	On the sealed documents were Nehemiah ... Zedekiah	The names of these people were written on the documents. This can be stated clearly. Alternate translation: "On the sealed documents were the names of Nehemiah ... Zedekiah" or "On the sealed documents were the names of the following people: Nehemiah ... Zedekiah" (See: [[rc://en/ta/man/translate/figs-explicit]])
+NEH	10	1	j4ny			0	sealed documents	The documents were sealed after the names had been signed on the documents.
+NEH	10	1	mu7u	figs-pronouns		0	Nehemiah	Some people believe that Nehemiah wrote this book and is speaking of himself as if he were someone else because this is an official list. (See: [[rc://en/ta/man/translate/figs-pronouns]])
+NEH	10	1	r4sg	translate-names		0	Hakaliah	This is a man's name. See how you translated this in [Nehemiah 1:1](../01/01.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	2	wj7b			0	Connecting Statement:	The list of men whose names appear on the sealed documents (verse 1) continues.
+NEH	10	2	l6qa	translate-names		0	Seraiah ... Jeremiah	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	2	huw8	translate-names		0	Azariah	This is a man's name. See how you translated this in [Nehemiah 3:23](../03/23.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	3	b2lc			0	Connecting Statement:	The list of men whose names appear on the sealed documents (verse 1) continues.
+NEH	10	3	d5cr	translate-names		0	Pashhur, Amariah	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	3	lw6u	translate-names		0	Malkijah	This is a man's name. See how you translated this in [Nehemiah 3:11](../03/11.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	4	uqt4			0	Connecting Statement:	The list of men whose names appear on the sealed documents [Nehemiah 10:1](../10/01.md) continues.
+NEH	10	4	g6hs	translate-names		0	Hattush	See how you translated this man's name in [Nehemiah 3:10](../03/10.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	4	bdr6	translate-names		0	Shebaniah	See how you translated this man's name in [Nehemiah 9:4](../09/04.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	4	xzc8	translate-names		0	Malluk	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	5	qbj9			0	Connecting Statement:	The list of men whose names appear on the sealed documents [Nehemiah 10:1](../10/01.md) continues.
+NEH	10	5	qai2	translate-names		0	Harim	This is a man's name. See how you translated this in [Nehemiah 3:11](../03/11.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	5	z9wl	translate-names		0	Meremoth	This is a man's name. See how you translated this in [Nehemiah 3:4](../03/04.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	5	gdm7	translate-names		0	Obadiah	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	6	del4			0	Connecting Statement:	The list of men whose names appear on the sealed documents [Nehemiah 10:1](../10/01.md) continues.
+NEH	10	6	z2vd	translate-names		0	Daniel, Ginnethon	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	6	h9n5	translate-names		0	Baruch	This is a man's name. See how you translated this in [Nehemiah 3:20](../03/20.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	7	yd6r	translate-names		0	Meshullam	This is a man's name. See how you translated it in [Nehemiah 9:4](../09/04.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	7	x4lc	translate-names		0	Abijah, Mijamin	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	8	mt1s	translate-names		0	Maaziah, Bilgai	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	8	iv3c	translate-names		0	Shemaiah	This is a man's name. See how you translated this in [Nehemiah 3:29](../03/29.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	8	ppp7	figs-explicit		0	These were the priests	This refers to the previous list of men who signed the document. Alternate translation: "These were the names of the priests who signed the document" (See: [[rc://en/ta/man/translate/figs-explicit]])
+NEH	10	9	b29e			0	Connecting Statement:	The list of men whose names appear on the sealed documents [Nehemiah 10:1](../10/01.md) continues. Nehemiah begins here to list the names of the Levies who signed the sealed document.
+NEH	10	9	i6e3	figs-ellipsis		0	The Levites were	This refers to those who put their names on the sealed documents. Alternate translation: "The Levites who put their names on the sealed documents were" (See: [[rc://en/ta/man/translate/figs-ellipsis]])
+NEH	10	9	si66	translate-names		0	Jeshua ... Henadad	These are the names of men. See how you translated them in [Nehemiah 3:18-19](../03/18.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	9	pi28	translate-names		0	Azaniah	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	9	j952	translate-names		0	Binnui	This is a man's name. See how you translated it in [Nehemiah 3:24](../03/24.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	9	km8e	translate-names		0	Kadmiel	This is a man's name. See how you translated it in [Nehemiah 7:43](../07/43.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	10	yg6h	translate-names		0	Shebaniah	This is a man's name. See how you translated this in [Nehemiah 9:4](../09/04.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	10	cfy7	translate-names		0	Hodiah ... Kelita ... Pelaiah	These are the names of men. See how you translated this in [Nehemiah 8:7](../08/07.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	10	z9gd	translate-names		0	Hanan	This is a man's name. See how you translated this in [Nehemiah 7:49](../07/49.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	11	x5wd			0	Connecting Statement:	The list of men whose names appear on the sealed documents [Nehemiah 10:1](../10/01.md) continues.
+NEH	10	11	fh22	translate-names		0	Rehob	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	11	w8h1	translate-names		0	Mika	This is a man's name. See how you translated this in [Nehemiah 10:11](../10/11.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	11	z3i5	translate-names		0	Hashabiah	This is a man's name. See how you translated this in [Nehemiah 3:17](../03/17.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	12	vuf7			0	Connecting Statement:	The list of men whose names appear on the sealed documents [Nehemiah 10:1](../10/01.md) continues.
+NEH	10	12	ac1s	translate-names		0	Zaccur	This is a man's name. See how you translated this in [Nehemiah 3:2](../03/02.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	12	ctq5	translate-names		0	Sherebiah	This is a man's name. See how you translated this in [Nehemiah 8:7](../08/07.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	12	r5ha	translate-names		0	Shebaniah	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	13	t4nx			0	Connecting Statement:	The list of men whose names appear on the sealed documents [Nehemiah 10:1](../10/01.md) continues.
+NEH	10	13	q7fm	translate-names		0	Hodiah ... Beninu	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	13	f7a5	translate-names		0	Bani	This is a man's name. See how you translated this in [Nehemiah 3:17](../03/17.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	14	uar6	figs-ellipsis		0	The leaders of the people were	This refers to those who put their names on the sealed documents. Alternate translation: "The leaders of the people who put their names on the sealed documents were" (See: [[rc://en/ta/man/translate/figs-ellipsis]])
+NEH	10	14	c75b	translate-names		0	Parosh	This is a man's name. See how you translated this in [Nehemiah 3:25](../03/25.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	14	d729	translate-names		0	Pahath-Moab	This is a man's name. See how you translated this in [Nehemiah 3:11](../03/11.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	14	ta8y	translate-names		0	Elam ... Zattu	These are the names of men. See how you translated this in [Nehemiah 7:12](../07/12.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	15	nkt2			0	General Information:	In these verses, Nehemiah continues to list the names of the people who signed the sealed document.
+NEH	10	15	r379	translate-names		0	Bunni	This is a man's name. See how you translated this in [Nehemiah 9:4](../09/04.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	15	d4hq	translate-names		0	Azgad, Bebai	These are the names of men. See how you translated them in [Nehemiah 7:16-17](../07/16.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	16	dda2			0	Connecting Statement:	The list of men whose names appear on the sealed documents [Nehemiah 10:1](../10/01.md) continues.
+NEH	10	16	m4l9	translate-names		0	Adonijah ... Adin	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	16	xk1s	translate-names		0	Bigvai	This is a man's name. See how you translated this in [Nehemiah 7:7](../07/07.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	17	ybp4			0	Connecting Statement:	The list of men whose names appear on the sealed documents [Nehemiah 10:1](../10/01.md) continues.
+NEH	10	17	neh8	translate-names		0	Azzur	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	17	l7xw	translate-names		0	Ater, Hezekiah	These are the names of men. See how you translated this in [Nehemiah 7:20](../07/20.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	18	ssa2			0	Connecting Statement:	The list of men whose names appear on the sealed documents [Nehemiah 10:1](../10/01.md) continues.
+NEH	10	18	n169	translate-names		0	Hodiah	This is a man's name. See how you translated this in [Nehemiah 8:7](../08/07.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	18	k9y7	translate-names		0	Hashum	These are the names of men. See how you translated this in [Nehemiah 7:20](../07/20.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	18	f3le	translate-names		0	Bezai	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	19	rbs7			0	Connecting Statement:	The list of men whose names appear on the sealed documents [Nehemiah 10:1](../10/01.md) continues.
+NEH	10	19	qpd4	translate-names		0	Nebai	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	19	it8a	translate-names		0	Hariph	This is a man's name. See how you translated this in [Nehemiah 7:23](../07/23.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	19	l77q	translate-names		0	Anathoth	This is a man's name. See how you translated this in [Nehemiah 7:27](../07/27.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	20	xbs6			0	Connecting Statement:	The list of men whose names appear on the sealed documents [Nehemiah 10:1](../10/01.md) continues.
+NEH	10	20	gf8r	translate-names		0	Magpiash ... Hezir	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	20	hbe9	translate-names		0	Meshullam	These are the names of men. See how you translated this in [Nehemiah 3:4](../03/04.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	21	bjm2			0	Connecting Statement:	The list of men whose names appear on the sealed documents [Nehemiah 10:1](../10/01.md) continues.
+NEH	10	21	gh1m	translate-names		0	Jaddua	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	21	x7ep	translate-names		0	Meshezabel, Zadok	These are the names of men. See how you translated this in [Nehemiah 3:4](../03/04.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	22	rm3j			0	General Information:	In these verses, Nehemiah continues to list the names of the people who signed the sealed document.
+NEH	10	22	n3zk	translate-names		0	Pelatiah	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	22	e4dt	translate-names		0	Hanan	This is a man's name. See how you translated this in [Nehemiah 7:49](../07/49.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	22	un5i	translate-names		0	Anaiah	This is a man's name. See how you translated this in [Nehemiah 8:4](../08/04.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	22	l1pz	translate-names		0	Anaiah	This is a man's name. See how you translated this in [Nehemiah 3:8](../03/08.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	23	kcs6			0	Connecting Statement:	The list of men whose names appear on the sealed documents [Nehemiah 10:1](../10/01.md) continues.
+NEH	10	23	ku2m	translate-names		0	Hoshea ... Hananiah	These are the name of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	23	rr76	translate-names		0	Hasshub	This is a man's name. See how you translated this in [Nehemiah 3:11](../03/11.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	24	p99a			0	Connecting Statement:	The list of men whose names appear on the sealed documents [Nehemiah 10:1](../10/01.md) continues.
+NEH	10	24	t9wx	translate-names		0	Hallohesh	These are the names of men. See how you translated this in [Nehemiah 3:11](../03/11.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	24	y9f7	translate-names		0	Pilha ... Shobek	These are the name of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	25	t6u9			0	Connecting Statement:	The list of men whose names appear on the sealed documents [Nehemiah 10:1](../10/01.md) continues.
+NEH	10	25	ml8w	translate-names		0	Rehum	This is a man's name. See how you translated this in [Nehemiah 3:17](../03/17.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	25	s2tc	translate-names		0	Hashabnah	These are the name of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	25	tz5a	translate-names		0	Maaseiah	This is a man's name. See how you translated this in [Nehemiah 3:23](../03/23.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	26	ab18	translate-names		0	Ahiah ... Anan	These are the name of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	26	k998	translate-names		0	Hanan	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	27	w9x4			0	Connecting Statement:	The list of men whose names appear on the sealed documents [Nehemiah 10:1](../10/01.md) continues.
+NEH	10	27	ac3r	translate-names		0	Malluk, Harim	These are the names of men. See how you translated this in [Nehemiah 10:4](../10/04.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	27	y6gx	translate-names		0	Baanah	This is a man's name. See how you translated this in [Nehemiah 7:6](../07/06.md). (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	10	28	w2rt			0	gatekeepers	This refers to the people assigned to each gate, responsible to control access to the city or temple, as well as to open and close the gates at times and for reasons set by the administrator. See how you translated this in [Nehemiah 7:1](../07/01.md).
+NEH	10	28	f1n8	figs-explicit		0	singers	You may need to make explicit that these are those who sang in the temple. Alternate translation: "temple singers" (See: [[rc://en/ta/man/translate/figs-explicit]])
+NEH	10	28	qej9	figs-explicit		0	all who have knowledge and understanding	This phrase can be made explicit. Alternate translation: "all who were old enough to understand what promising to obey God meant" (See: [[rc://en/ta/man/translate/figs-explicit]])
+NEH	10	29	l6ns			0	their brothers, their nobles	"their fellow brothers the nobles" or "their brothers the leaders." These phrases refer to the same people.
+NEH	10	29	x6i9	figs-metaphor		0	bound themselves with both a curse and an oath	This speaks of the people taking an oath and a curse as if the oath and the curse were a rope that physically bound them. Alternate translation: "swore themselves to an oath and a curse" or "they took an oath and called for a curse to come on themselves if they failed to keep it" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+NEH	10	29	k971	figs-idiom		0	to walk in God's law	This is an idiom. Alternate translation: "to live by God's law" or "to obey God's law" (See: [[rc://en/ta/man/translate/figs-idiom]])
+NEH	10	29	p6ry	figs-activepassive		0	which was given by Moses the servant of God	This can be stated in active form. Alternate translation: "which Moses the servant of God had given to Israel" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	10	29	ny6b			0	to observe	"to follow"
+NEH	10	30	t8sp			0	General Information:	In these verses, the people describe the content of the oath they were making in [Nehemiah 10:29](../10/29.md).
+NEH	10	30	s4sx	figs-explicit		0	would not give our daughters to the people of the land or take their daughters for our sons	This means that they would not allow their sons and daughters to marry them. Alternate translation: "would not give our daughters to marry the people of the land, and we would not take their daughters to marry our sons" (See: [[rc://en/ta/man/translate/figs-explicit]])
+NEH	10	30	iqq1	figs-explicit		0	the people of the land	This refers to the people who live in their land who do not worship Yahweh. Alternate translation: "the people of this land who do not worship Yahweh" (See: [[rc://en/ta/man/translate/figs-explicit]])
+NEH	10	30	lx8c	figs-exclusive		0	We promised ... we would not give ...  or take	The pronoun "we" here includes Nehemiah and the Jewish people, but not the reader of this book. (See: [[rc://en/ta/man/translate/figs-exclusive]])
+NEH	10	31	m39f	figs-exclusive		0	We also promised ... we would not buy ... we will let ... we will cancel	The pronoun "we" here includes Nehemiah and the Jewish people, but not the reader of this book. (See: [[rc://en/ta/man/translate/figs-exclusive]])
+NEH	10	31	ek18	translate-ordinal		0	seventh year	"year 7" (See: [[rc://en/ta/man/translate/translate-ordinal]])
+NEH	10	31	hf7z	figs-idiom		0	we will let our fields rest	This is an idiom. Alternate translation: "we will not plow our fields" or "we will not grow anything in our fields" (See: [[rc://en/ta/man/translate/figs-idiom]])
+NEH	10	31	ur3t			0	we will cancel all debts	This means that they will not require that people pay them what they owe. Alternate translation: "we will cancel all debts that people owe us" or "we will tell people that they no longer have to pay us back"
+NEH	10	32	bh3h			0	General Information:	In these verses, the people continue describing the content of the oath they were making in [Nehemiah 10:29](../10/29.md).
+NEH	10	32	h9gt			0	We accepted the commands	"We promised to obey the command"
+NEH	10	32	ljm2	figs-exclusive		0	We accepted	The pronoun "we" here includes all the Israelites including Nehemiah except for the priest and Levites, and does not include the reader of this book (See: [[rc://en/ta/man/translate/figs-exclusive]])
+NEH	10	32	ad47	translate-bmoney		0	a third of a shekel	"1/3 of a shekel." "A third" means one part out of three equal parts. This can be written in modern measurements. Alternate translation: "5 grams of sliver" (See: [[rc://en/ta/man/translate/translate-bmoney]] and [[rc://en/ta/man/translate/translate-fraction]])
+NEH	10	32	pw6w			0	for the service of	"to pay for the care of"
+NEH	10	33	ehf4			0	the bread of the presence	This refers to the 12 loaves of bread baked without yeast kept in the temple and used to symbolize God's presence with His people.
+NEH	10	33	xu3y			0	the new moon festivals	These were celebrations held when the moon was just a small crescent in the sky.
+NEH	10	34	s6yz			0	General Information:	In these verses, the people continue describing the content of the oath they were making in [Nehemiah 10:29](../10/29.md).
+NEH	10	34	l42k	figs-activepassive		0	to be burned	This can be stated in active form. Alternate translation: "for the Levites to burn" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	10	34	ph9q	figs-activepassive		0	as it is written	This can be stated in active form. Alternate translation: "as it states" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	10	35	vp1p			0	from our soil	"in our soil" or "on our land"
+NEH	10	37	j9sj			0	General Information:	In these verses, the people continue describing the content of the oath they were making in [Nehemiah verse 29](./28.md).
+NEH	10	37	s7s2	figs-exclusive		0	We will bring ... We will bring	The pronoun "we" here includes Nehemiah and the Israelites except for the priests and the Levites, and also does not include the reader of this book (See: [[rc://en/ta/man/translate/figs-exclusive]])
+NEH	10	37	rk7x			0	our dough	Possible meanings are that this refers to 1) dough made from coarse flour, 2) coarse flour, or 3) ground grain.
+NEH	10	37	uc2w	figs-ellipsis		0	the new wine and the oil	The words "first of" are understood from the begininng of the sentnces. They can be repeated. Alternate translation: "the first of the new wine and of the oil" or "the best of the new wine and of the oil" (See: [[rc://en/ta/man/translate/figs-ellipsis]])
+NEH	10	37	e92l			0	the storerooms of the house of our God	"the places where things are stored in the temple"
+NEH	10	37	r776	figs-synecdoche		0	the tithes from our soil	Here "our soil" refers to everything that is grown in the ground. Alternate translation: "the tithes of what we grow in the ground" (See: [[rc://en/ta/man/translate/figs-synecdoche]])
+NEH	10	38	by9z	figs-activepassive		0	they receive the tithes	This can be stated in active form. Alternate translation: "the people give them the tithes" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	10	38	eb51	translate-fraction		0	a tenth	This means one part out of ten equal parts. (See: [[rc://en/ta/man/translate/translate-fraction]])
+NEH	10	38	zl4a			0	the storerooms of the treasury	"the storerooms in the temple"
+NEH	10	39	qzf8			0	General Information:	In these verses, the people finish describing the content of the oath they were making in [Nehemiah 10:29](../10/29.md).
+NEH	10	39	ss5h	figs-activepassive		0	the storerooms where the articles of the sanctuary are kept	This can be stated in active form. Alternate translation: "the rooms where the priests keep the things that are used in the temple" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	10	39	u1sq			0	We will not neglect the house of our God	This can be stated in positive form. Alternate translation: "We will care for the temple"
+NEH	10	39	b23h	figs-exclusive		0	We will	The pronoun "we" here includes Nehemiah and all the people of Israel but does not include the reader of this book. (See: [[rc://en/ta/man/translate/figs-exclusive]])
+NEH	11	intro	xja1			0		# Nehemiah 11 General Notes<br>## Special concepts in this chapter<br><br>### The places where the Jews lived<br><br>Some people lived in Jerusalem, but most people lived in villages and towns away from Jerusalem. They lived there in order to farm the land raise their animals. The city with its walls was there to provide all of the people with protection if enemies attacked them.<br>
+NEH	11	1	e2yg			0	the people cast lots	"the people threw marked stones"
+NEH	11	1	beq5			0	to bring one of ten	"to bring one family out of every ten families"
+NEH	11	3	l7mb			0	on his own land, including some Israelites	"on his own land: Israelites"
+NEH	11	4	n2a7			0	some of the descendants of Judah and some of the descendants of Benjamin	"some of the people of Judah and some of the people of Benjamin"
+NEH	11	4	nm8y			0	The people from Judah included:	"From the descendants of Judah:"
+NEH	11	4	wl7r	translate-names		0	Judah ... Benjamin ... Athaiah ... Uzziah ... Zechariah ... Amariah ... Shephatiah ... Mahalalel ... Perez	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	11	4	vx6k			0	a descendant of Perez	"from the descendants of Perez"
+NEH	11	5	l727			0	Connecting Statement:	In these verses, Nehemiah continues to list the provincial officers who lived in Jerusalem.
+NEH	11	5	ml8b	translate-names		0	Maaseiah ... Baruch ... Kol-Hozeh ... Hazaiah ... Adaiah ... Joiarib ... Zechariah	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	11	5	dxb8			0	Shilonite	This refers to a person who comes from the town of Shiloh.
+NEH	11	6	y8t2	translate-names		0	Perez	This is a man's name. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	11	6	hcr6	translate-numbers		0	All ... were 468	"All ... were four hundred and sixty-eight." Perez had 468 descendants who lived in Jerusalem. (See: [[rc://en/ta/man/translate/translate-numbers]])
+NEH	11	6	ej3g			0	They were outstanding men	"They were courageous men" or "They were valiant men"
+NEH	11	7	m8mp			0	Connecting Statement:	In these verses, Nehemiah continues to list the provincial officers who lived in Jerusalem.
+NEH	11	7	md67			0	These are the descendants	"These are some of the descendants." Your language may need to specify that this is not a list of every descendant.
+NEH	11	7	w8c5	translate-names		0	Benjamin ... Sallu ... Meshullam ... Joed ... Pedaiah ... Kolaiah ... Maaseiah ... Ithiel ... Jeshaiah	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	11	8	bzh9	translate-names		0	Gabbai ... Sallai	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	11	8	z37g	translate-numbers		0	928 men	"nine hundred and twenty-eight men." (See: [[rc://en/ta/man/translate/translate-numbers]])
+NEH	11	9	z3xl	translate-names		0	Joel ... Zichri ... Judah ... Hassenuah	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	11	10	ft7m	translate-names		0	Jedaiah ... Joiarib ... Jakin	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	11	11	d8ph	translate-names		0	Seraiah ... Hilkiah ... Meshullam ... Zadok	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	11	12	j7vp	translate-names		0	Adaiah ... Jeroham ... Pelaliah ... Amzi ... Zechariah ... Pashhur ... Malkijah	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	11	12	nl7h			0	their associates	"their brothers" or "their kinsmen"
+NEH	11	12	z6pc			0	who did the work for the house	"who worked in the temple." The "house" referred to here is the "house of God" mentioned in the previous verse.
+NEH	11	12	kq8y	translate-numbers		0	822 men	"eight hundred and twenty-two men" (See: [[rc://en/ta/man/translate/translate-numbers]])
+NEH	11	13	wd9q			0	His brothers	the brothers of Adaiah, the son of Jeroham ([Nehemiah 11:12](../11/12.md)).
+NEH	11	13	u4gn	figs-metaphor		0	brothers	This word is a metaphor for 1) fellow Israelites or 2) people who did the same work. Alternate translation: "associates" or "fellow workers" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+NEH	11	13	gd6g	translate-numbers		0	242 men	"two hundred and forty-two men" (See: [[rc://en/ta/man/translate/translate-numbers]])
+NEH	11	13	l51b	translate-names		0	Amashsai ... Azarel ... Ahzai ... Meshillemoth ... Immer	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	11	14	jrq7	translate-names		0	Zabdiel ... Haggedolim	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	11	14	p9qw	translate-numbers		0	128 courageous fighting men	"one hundred and twenty-eight courageous fighting men." These were "valiant warriors" or "courageous warriors." (See: [[rc://en/ta/man/translate/translate-numbers]])
+NEH	11	15	f71n	translate-names		0	Shemaiah ... Hasshub ... Azrikam ... Hashabiah ... Bunni	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	11	16	q6zj	translate-names		0	Shabbethai ... Jozabad	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	11	16	if3q			0	who were from the leaders of the Levites and were in charge	"from the leaders of the Levites, were in charge"
+NEH	11	17	ix77	translate-names		0	Mattaniah ... Mika ... Zabdi ... Asaph ... Bakbukiah ... Abda ... Shammua ... Galal ... Jeduthun	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	11	17	sm9t			0	who began the thanksgiving in prayer	That is, who directed the singers.
+NEH	11	17	djg7			0	Bakbukiah, the second among his brothers	Possible meanings are 1) Bakbukiah was Mattaniah's kinsman and second in authority to Mattaniah or 2) "Bakbukiah, who led a second group of singers."
+NEH	11	17	dy1v			0	brothers	Another possible meaning is "associates" or "fellow workers."
+NEH	11	18	di19			0	the holy city	This expression refers to the city of Jerusalem.
+NEH	11	18	hk8i	translate-numbers		0	numbered 284	"numbered two hundred and eighty-four." There were 284 Levites in Jerusalem. (See: [[rc://en/ta/man/translate/translate-numbers]])
+NEH	11	19	i92r			0	gatekeepers	people assigned to each gate, responsible to control access to the city or temple, as well as to open and close the gates at times and for reasons set by the administrator. See how you translated this in [Nehemiah 7:1](../07/01.md).
+NEH	11	19	j7b3	translate-names		0	Akkub ... Talmon	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	11	19	kaz4	translate-numbers		0	172 men	"one hundred and seventy-two men" (See: [[rc://en/ta/man/translate/translate-numbers]])
+NEH	11	21	eu4g	translate-names		0	Ziha ... Gishpa	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	11	21	vct4	translate-names		0	Ophel	This is the name of a place. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	11	22	l3ba			0	The chief officer over	"The overseer of"
+NEH	11	22	rr5e	translate-names		0	Uzzi ... Bani ... Hashabiah ... Mattaniah ... Mika ... Asaph	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	11	23	km8l			0	They were under orders from the king	"The king had told them what to do"
+NEH	11	23	a9fz	figs-activepassive		0	firm orders were given for the singers	This can be translated in active form. Alternate translation: "the king had told them specifically what to do about the singers" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	11	24	aee9	translate-names		0	Pethahiah ... Meshezabel ... Zerah ... Judah	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	11	24	dqa4			0	at the king's side in all matters concerning the people	"at the Persian king's side as an adviser in all matters concerning the Jewish people"
+NEH	11	25	rg1f	translate-names		0	Kiriath Arba ... Dibon ... Jekabzeel	These are the names of places. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	11	26	d9f4	translate-names		0	Jeshua ... Moladah ... Beth Pelet	These are the names of places. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	11	27	nu5z	translate-names		0	Hazar Shual ... Beersheba	These are the names of places. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	11	28	dl5v	translate-names		0	Ziklag ... Mekonah	These are the names of places. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	11	29	t41a	translate-names		0	Enrimmon ... Zorah ... Jarmuth	These are the names of places. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	11	30	vn2z	translate-names		0	Zanoah ... Adullam ... Lachish ... Azekah ... Beersheba ... Valley of Hinnom	These are the names of places. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	11	30	mzq1			0	they lived	Here "they" refers to the people of Judah.
+NEH	11	31	n61t			0	The people of Benjamin also lived from Geba onward, at Mikmash and Aija	"The people of Benjamin lived in Geba, Mikmash and Aija"
+NEH	11	31	uha3	translate-names		0	Geba ... Mikmash ... Aija ... Bethel	These are the names of places. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	11	31	lm1q			0	Aija	This is possibly another name for the town of Ai.
+NEH	11	32	ucv8	translate-names		0	Anathoth, Nob, Ananiah	These are the names of places. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	11	33	jwf7	translate-names		0	Hazor, Ramah, Gittaim	These are the names of places. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	11	34	e1ls	translate-names		0	Hadid, Zeboim, Neballat	These are the names of places. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	11	35	qu5n	translate-names		0	the valley of craftsmen	Possible meanings are 1) this is a description of Ono or 2) it is "Craftsmen's Valley" or "the Valley of Craftsmen," another name for Ono, or 3) it is a different place from Ono, "and the Valley of Craftsmen." (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	11	36	y212	figs-activepassive		0	Some of the Levites who lived in Judah were assigned to the people of Benjamin	It is not clear who assigned these Levites to live with the people of Benjamin. Alternate translation: "They assigned some of the Levites who lived in Judah to serve the people of Benjamin" or "The officials assigned some of the Levites who lived in Judah to serve the people of Benjamin" (See: [[rc://en/ta/man/translate/figs-activepassive]] and [[rc://en/ta/man/translate/figs-ellipsis]])
+NEH	12	intro	xmt3			0		# Nehemiah 12 General Notes<br>## Special concepts in this chapter<br><br>### Dedication of the wall<br><br>In the ancient Near East, it was common to dedicate an important structure to a god. When it was completed, the wall was dedicated to Yahweh. Long lists of people are present, indicating that "everyone" was present for this and praised Yahweh. (See: [[rc://en/tw/dict/bible/kt/falsegod]])<br>
+NEH	12	1	ixs5			0	who came up	"who arrived from Babylonia"
+NEH	12	1	b4x7			0	with Zerubbabel	"under the leadership of Zerubbabel"
+NEH	12	1	b8ry	translate-names		0	Zerubbabel ... Shealtiel ... Jeshua ... Seraiah ... Jeremiah ... Ezra	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	1	myj6	figs-explicit		0	Jeshua	The original readers would have understood that Jeshua was the high priest. Alternate translation: "Jeshua the high priest" (See: [[rc://en/ta/man/translate/figs-explicit]])
+NEH	12	2	p4ml	translate-names		0	Amariah ... Malluk ... Hattush	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	3	gwk1	translate-names		0	Shecaniah ... Rehum ... Meremoth	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	4	cd2t			0	Connecting Statement:	The list that began in [Nehemiah 12:1](../12/01.md) continues.
+NEH	12	4	k1zn			0	There were	These words have been added for this translation. If you continue the list that began in [Nehemiah 12:1](../12/01.md), you can omit these words.
+NEH	12	4	qt5n	translate-names		0	Iddo ... Ginnethon ... Abijah	These are all names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	5	x3ri	translate-names		0	Mijamin ... Moadiah ... Bilgah	These are all names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	6	udm2	translate-names		0	Shemaiah ... Joiarib ... Jedaiah	These are all names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	7	g43p	translate-names		0	Sallu ... Amok ... Hilkiah ... Jedaiah ... Jeshua	These are all names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	8	xy1h	translate-names		0	Jeshua, Binnui, Kadmiel, Sherebiah, Judah, ... Mattaniah	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	9	nnn1	translate-names		0	Bakbukiah ... Unni	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	9	nhn4			0	stood opposite them during the service	Possible meanings are 1) this was during a worship service and these were two groups of singers or other worshipers, or 2) these groups guarded the temple at different times, or "took turns guarding the temple."
+NEH	12	10	ri33	translate-names		0	Jeshua ... Joiakim ... Eliashib ... Joiada	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	10	xd69	figs-explicit		0	Jeshua was the father of Joiakim	This is the same Jeshua named in [Nehemiah 12:1](../12/01.md). The original readers would have understood that Jeshua was the high priest. Alternate translation: "Jeshua the high priest was the father of Joiakim" (See: [[rc://en/ta/man/translate/figs-explicit]])
+NEH	12	11	a7yv	translate-names		0	Joiada ... Jonathan ... Jaddua	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	12	j9qv	translate-names		0	Joiakim ... Meraiah ... Hananiah	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	12	vv32	translate-names		0	Seraiah ... Jeremiah	These are names of families named after men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	13	uwn8	translate-names		0	Meshullam ... Jehohanan	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	13	hm77	translate-names		0	Ezra ... Amariah	These are names of families named after men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	14	vig4	translate-names		0	Jonathan ... Joseph	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	14	tum7	translate-names		0	Malluk ... Shebaniah	These are names of families named after men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	15	l4u9			0	Connecting Statement:	The list that began in [Nehemiah 12:12](../12/12.md) continues.
+NEH	12	15	z68b	translate-names		0	Adna ... Helkai	These are all names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	15	a64p	translate-names		0	Harim ... Meremoth	These are all names of families that are named after men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	15	hw8d			0	was the leader of	"was the leader of the family of" or "was the leader of the descendants of"
+NEH	12	16	hb4y	translate-names		0	Zechariah ... Meshullam	These are all names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	16	u64u	translate-names		0	Iddo ... Ginnethon	These are all names of families that are named after men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	16	uae6			0	Meshullam was the leader of Ginnethon	Ginnethon may be another form of the name Ginnethoi.
+NEH	12	17	pa3k	translate-names		0	Zichri ... Piltai	These are all names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	17	em6c	translate-names		0	Abijah ... Miniamin ... Moadiah	These are all names of families that are named after men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	17	e7rx			0	... of Miniamin	The people who made the copies of Hebrew text mistakenly left out the name of the leader of the family of Miniamin. Translators may supply a footnote explaining this. The ULT uses "..." to show that the name of the leader is missing. Alternate translation: "Someone was the leader of Miniamin"
+NEH	12	17	h3jl			0	Moadiah	Maadiah may be another form of the name Moadiah.
+NEH	12	18	zd3p	translate-names		0	Shammua ... Jehonathan	These are all names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	18	t8yy	translate-names		0	Bilgah ... Shemaiah	These are all names of families that are named after men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	19	u373	translate-names		0	Mattenai ... Uzzi	These are all names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	19	s8n3	translate-names		0	Joiarib ... Jedaiah	These are all names of families that are named after men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	20	y23c	translate-names		0	Kallai ... Eber	These are all names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	20	p8dg	translate-names		0	Sallu ... Amok	These are all names of families that are named after men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	21	v16d	translate-names		0	Hashabiah ... Nethanel	These are all names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	21	vwp6	translate-names		0	Hilkiah ... Jedaiah	These are all names of families that are named after men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	22	snj3	translate-names		0	Eliashib ... Joiada, Johanan ... Jaddua	names of men (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	22	cr6d			0	during the reign of Darius	Another possible meaning is "until the reign of Darius"
+NEH	12	23	q9hz			0	recorded in the book of the annals	This may refer to the Book of Chronicles. The scribes wrote the words in the verses above in a book that recorded the events of each day.
+NEH	12	23	d2rp			0	up to the days of Johanan son of Eliashib	The records in the temple recorded only up until Johanan.
+NEH	12	24	kx4z	translate-names		0	Hashabiah, Sherebiah ... Jeshua ... Kadmiel	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	24	d373			0	who stood opposite them to give praise and to give thanks, responding section by section	This refers to how they sang some of their songs in worship. A leader or one group would sing a phrase, then one or two groups that "stood opposite them" would sing a phrase in response.
+NEH	12	24	dl8r			0	obedience to the command of David	King David had commanded the Levites how they were to organize and lead worship.
+NEH	12	25	p55l	translate-names		0	Mattaniah, Bakbukiah, Obadiah, Meshullam, Talmon, and Akkub	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	26	wk2z	translate-names		0	Joiakim ... Jeshua ... Jozadak ... Nehemiah ... Ezra	These are names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	26	k9bk			0	in the days of Joiakim ... Jozadak, and in the days of Nehemiah the governor and of Ezra ... scribe	The date was fixed by listing those who were leading the Jews at the time. "when Joiakim ... Jozadak was high priest, and when Nehemiah was governor and Ezra ... was the scribe"
+NEH	12	27	e63y			0	At the dedication of the wall of Jerusalem	Possible meanings are 1) "At the time when they dedicated the wall of Jerusalem" or 2) "So that the dedication of Jerusalem's wall could take place."
+NEH	12	27	s6xv	translate-unknown		0	cymbals	two thin, round metal plates that are hit together to make a loud sound (See: [[rc://en/ta/man/translate/translate-unknown]])
+NEH	12	29	lnm1	translate-names		0	Beth Gilgal ... Geba and Azmaveth	These are the names of places. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	31	zsj6			0	the leaders of Judah	the leaders of the people who lived in the region of Judah
+NEH	12	32	ni9q	translate-names		0	Hoshaiah	These are the names of males. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	33	x16d	translate-names		0	Azariah, Ezra, Meshullam	These are the names of males. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	33	sjp8			0	after them went	"behind them followed"
+NEH	12	34	t5un	translate-names		0	Judah, Benjamin, Shemaiah, Jeremiah	These are the names of males. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	35	h1hm	translate-names		0	Zechariah ... Jonathan ... Shemaiah ... Mattaniah ... Micaiah ... Zaccur ... Asaph	These are the names of males. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	35	cp3q			0	some of the priests' sons with trumpets, and Zechariah	Some versions read, "from among the priests with trumpets, Zechariah"
+NEH	12	35	q33v			0	Zechariah son of Jonathan son of Shemaiah son of Mattaniah son of Micaiah son of Zaccur son of Asaph	All of the names after "Zechariah" are the ancestors of Zechariah. This list connects Zechariah with the famous singer Asaph. "Zechariah who was the son of Jonathan, who was the son of Shemaiah, who was the son of Mattaniah, who was the son of Micaiah, who was the son of Zaccur son of Asaph"
+NEH	12	36	h9u7			0	There also were	"Along with them were"
+NEH	12	36	kmk3	translate-names		0	Zechariah ... Shemaiah, Azarel, Milalai, Gilalai, Maai, Nethanel, Judah, Hanani ... David ... Ezra	These are the names of males. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	36	n2tl			0	Ezra the scribe was in front of them	"Ezra the scribe was leading them"
+NEH	12	37	c38r			0	Fountain Gate ... Water Gate	These are the names of openings in the wall.
+NEH	12	38	fbi3			0	choir	group of singers
+NEH	12	38	t11k			0	I followed them	Nehemiah followed them.
+NEH	12	38	j2zn	translate-names		0	Tower of Ovens	This is the name of a tall structure where people kept watch for danger. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	38	a5ww			0	Broad Wall	This is a name for part of the wall.
+NEH	12	39	v1ni	translate-names		0	Tower of Hananel ... Tower of the Hundred	These are the names of tall structures where people kept watch for danger. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	39	v264			0	Gate of Ephraim ... Old Gate ... Fish Gate ... Sheep Gate ... Gate of the Guard	These are the names of openings in the wall.
+NEH	12	40	ai1v			0	I also took my place	Nehemiah is speaking here. Alternate translation: "I, Nehemiah, also took my place"
+NEH	12	41	s4t8	translate-names		0	Eliakim ... Maaseiah ... Miniamin ... Micaiah ... Elioenai ... Zechariah ... Hananiah	These are the names of males who were the priests at that time. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	41	bnz5			0	with the trumpets	Possible meanings are 1) only the first seven priests listed from Eliakim to Hananiah carried trumpets or 2) all 15 priests listed from Eliakim to Ezer carried trumpets.
+NEH	12	42	gqe1	translate-names		0	Maaseiah ... Shemaiah ... Eleazar ... Uzzi ... Jehohanan ... Malkijah ... Elam ... Ezer	These are the names of males who were the priests at that time. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	12	42	tdc8			0	Jezrahiah	This is the name of a male who was the leader of the singers.
+NEH	12	42	y2qj			0	made themselves heard	"sang loudly"
+NEH	12	43	jgp9			0	rejoice with great joy	"rejoice greatly"
+NEH	12	43	p5fe	figs-metonymy		0	So the joy of Jerusalem could be heard far away	"The joy of Jerusalem" here is a metonym for "the sound that the people of Jerusalem made." This can be translated in active form. Alternate translation: "people far away from Jerusalem could hear the sound that the people of Jerusalem made as they celebrated" (See: [[rc://en/ta/man/translate/figs-metonymy]] and [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	12	44	fsb6	figs-activepassive		0	men were appointed to be in charge	This can be stated in active form. It is not clear who appointed the men. Alternate translation: "they appointed men to be in charge" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	12	44	bnw2			0	the contributions	things the people gave to the priests
+NEH	12	44	g347			0	For Judah rejoiced over the priests and the Levites	It seems that the people appointed the men because the people of Judah were grateful for the priests and Levites who were serving.
+NEH	12	44	g9pg	figs-explicit		0	who were standing before them	The Levites and priests were not just standing, they were serving in their roles. The meaning can be made explicit. Alternate translation: "who were standing before them serving God" (See: [[rc://en/ta/man/translate/figs-explicit]])
+NEH	12	45	lm4j			0	gatekeepers	These were people assigned to each gate, responsible to control access to the city or temple, as well as to open and close the gates at times and for reasons set by the administrator. See how you translated this in [Nehemiah 7:1](../07/01.md).
+NEH	12	46	py1c			0	there were directors of singers	This sentence tells why the people did what they did in [Nehemiah 12:45](../12/45.md) and gives us more information about the time when David told people how to worship at the temple.
+NEH	12	47	flz7			0	In the days of Zerubbabel	Zerubbabel was a descendant of King David and one of the governors in the region of Judah.
+NEH	12	47	mu9s			0	They set aside the portion	"All Israel set aside the portion"
+NEH	12	47	e72p			0	the descendants of Aaron	the priests in Israel, who descended from Aaron, the brother of Moses
+NEH	13	intro	tm5a			0		# Nehemiah 13 General Notes<br>## Special concepts in this chapter<br><br>### Nehemiah returns to Jerusalem<br><br>Nehemiah was eager to make sure that the Jews kept their promise to obey the law. When he returned from Persia, he found many things wrong: one of the store rooms in the temple had been converted into a guest room for Tobiah, the Levites had not received their portions for working in the temple, people were working on the Sabbath, and many had married heathen wives. (See: [[rc://en/tw/dict/bible/kt/promise]], [[rc://en/tw/dict/bible/kt/lawofmoses]] and [[rc://en/tw/dict/bible/kt/temple]] and [[rc://en/tw/dict/bible/kt/sabbath]])<br>
+NEH	13	1	k9za			0	in the hearing of the people	"so that the people could hear it"
+NEH	13	1	j6si			0	should come into the assembly of God, forever	"should ever come into the assembly of God"
+NEH	13	2	tf8z			0	This was because	"They could not come into the assembly because"
+NEH	13	4	bq8k	figs-activepassive		0	Eliashib the priest was appointed	This can be translated in active form. Alternate translation: "they appointed Eliashib the priest" or "the leaders appointed Eliashib the priest" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	13	4	adq9			0	He was related to Tobiah	"Eliashib and Tobiah worked closely together"
+NEH	13	4	c9hf			0	Eliashib ... Tobiah	These are the names of men.
+NEH	13	5	xi14			0	Eliashib prepared for Tobiah a large storeroom	"Eliashib prepared a large storeroom for Tobiah to use"
+NEH	13	5	v2in			0	gatekeepers	people assigned to each gate, responsible to control access to the city or temple, as well as to open and close the gates at times and for reasons set by the administrator. See how you translated this in [Nehemiah 7:1](../07/01.md).
+NEH	13	6	hxp8			0	But in all this time I was not in Jerusalem	"During the time all this was happening, I was away from Jerusalem"
+NEH	13	6	dpk4			0	I was not	Here "I" refers to Nehemiah.
+NEH	13	7	up8j			0	a storeroom in the courts of the house of God	This was a room which had previously been purified to store offering supplies ([Nehemiah 13:5](../13/05.md)).
+NEH	13	10	k9k6	figs-explicit		0	the Levites' portions had not been given to them	The full meaning of this statement can be made clear. This can also be translated in active form. Alternate translation: "the people had not been bringing into the storerooms their tithes and offerings of food for the temple priests" (See: [[rc://en/ta/man/translate/figs-explicit]] and [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	13	10	f2ng			0	they had run away, each to his own field, the Levites and the singers who did the work	"the Levites and the singers who did the work had left the temple, each one going to his own field"
+NEH	13	11	mx4v	figs-rquestion		0	Why is the house of God neglected?	Nehemiah uses a rhetorical question to challenge or even ridicule the officials who had not done their work. This question can be translated as a statement. Alternate translation: "You have neglected the house of God!" (See: [[rc://en/ta/man/translate/figs-rquestion]])
+NEH	13	12	a9ux	figs-metonymy		0	all Judah	The name of the land is a metonym for the people of the land. This is probably a generalization. Alternate translation: "all the people who lived in Judah" (See: [[rc://en/ta/man/translate/figs-metonymy]] and [[rc://en/ta/man/translate/figs-hyperbole]])
+NEH	13	13	mu7f	translate-names		0	Shelemiah ... Zadok ... Pedaiah ... Hanan ... Zaccur ... Mattaniah	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	13	13	e8x3	figs-activepassive		0	they were counted as trustworthy	This can be translated in active form. The abstract noun "trustworthy" can be translated as a verb. Alternate translation: "I knew that I could trust them" (See: [[rc://en/ta/man/translate/figs-activepassive]] and [[rc://en/ta/man/translate/figs-abstractnouns]])
+NEH	13	14	v861			0	Call me to mind, my God, concerning this	"My God, remember me concerning this"
+NEH	13	15	cp44	figs-metonymy		0	treading winepresses	The word "winepresses" is a metonym for the grapes that were in the winepresses. The people were walking on grapes to get the juice out of them to make wine. Alternate translation: "walking on grapes in winepresses" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+NEH	13	15	z3xh			0	treading	walking on something to crush or press it
+NEH	13	16	yvh1	translate-names		0	Tyre	This is the name of a city. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	13	17	w5nr	figs-rquestion		0	What is this evil thing you are doing, profaning the Sabbath day?	Nehemiah is using a rhetorical question to scold the leaders of Judah. This can be translated as a statement. Alternate translation: "You are doing an evil thing by profaning the Sabbath day." or "God will punish you for doing this evil thing, for profaning the Sabbath day." (See: [[rc://en/ta/man/translate/figs-rquestion]])
+NEH	13	18	ge49	figs-rquestion		0	Did not your fathers do this? Did not our God bring all this evil on us and on this city?	Nehemiah is using these rhetorical questions to scold the leaders of Judah. These questions can be combined and translated as a statement. Alternate translation: "You know that your fathers did this, and that is why God brought all this evil on us and on this city." (See: [[rc://en/ta/man/translate/figs-rquestion]])
+NEH	13	19	p31h			0	As soon as it became dark ... before the Sabbath	"When the sun went down ... and it was time for the Sabbath to begin"
+NEH	13	19	vk4t	figs-activepassive		0	that the doors be shut and that they should not be opened until	This can be translated in active form. Alternate translation: "that the guards shut the doors and not open them until" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	13	19	wy3q	figs-activepassive		0	no load could be brought in	This can be translated in active form. Alternate translation: "no one could bring in things they wanted to sell" (See: [[rc://en/ta/man/translate/figs-activepassive]])
+NEH	13	20	s2hv			0	sellers of all kinds of wares	"people who had brought many different things they wanted to sell"
+NEH	13	21	hi84	figs-rquestion		0	Why do you camp outside the wall?	Nehemiah uses a rhetorical question to rebuke merchants and to emphasize his command. This question can be translated as a statement. The full meaning of this statement can also be made explicit. Alternate translation: "You are camping outside the wall against what I commanded." (See: [[rc://en/ta/man/translate/figs-rquestion]] and [[rc://en/ta/man/translate/figs-explicit]])
+NEH	13	21	hfv7	figs-metonymy		0	I will lay hands on you!	The word "hands" is a metonym for forceful action. Alternate translation: "I will send you away by force!" or "I will remove you by force!" (See: [[rc://en/ta/man/translate/figs-metonymy]])
+NEH	13	22	mis6			0	Call me to mind for this also, my God	"My God, remember me concerning this also." See how you translated a similar phrase in [Nehemiah 13:14](../13/14.md).
+NEH	13	23	zxc2			0	Connecting Statement:	These verses introduce the action that follows.
+NEH	13	23	jp2w	figs-explicit		0	Jews that had married women of Ashdod, Ammon, and Moab	"Jews that had married foreign women." God had forbidden intermarriage. The full meaning of this statement can be made clear. (See: [[rc://en/ta/man/translate/figs-explicit]])
+NEH	13	23	l9c2	translate-names		0	Ashdod	This is the name of a city. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	13	23	b4nt	translate-names		0	Ammon ... Moab	These are the names of nations. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	13	24	w247			0	Half of their children	"As a result, half of their children"
+NEH	13	25	dzu5			0	I confronted them	"I spoke directly to them about what they had done"
+NEH	13	25	hg44			0	I hit some of them	Nehemiah hit some of them with his hands.
+NEH	13	25	gzx6			0	I made them swear by God	"I made them say a promise before God"
+NEH	13	26	l9xm	figs-rquestion		0	Did not Solomon king of Israel sin on account of these women?	Nehemiah uses a rhetorical question to scold the men. This can be translated as a statement. Alternate translation: "You know that Solomon king of Israel sinned on account of these women." (See: [[rc://en/ta/man/translate/figs-rquestion]])
+NEH	13	27	vp56	figs-rquestion		0	Should we then listen to you and do all this great evil, and act treacherously against our God by marrying foreign women?	Nehemiah uses a rhetorical question to scold the men. This can be translated as a statement. Alternate translation: "We will not listen to you or do this great evil or act treacherously against our God by marrying foreign women." (See: [[rc://en/ta/man/translate/figs-rquestion]])
+NEH	13	28	dft4	translate-names		0	Joiada ... Eliashib ... Sanballat	These are the names of men. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	13	28	f8ak	translate-names		0	the Horonite	This refers to a person from the city of Beth Horon. (See: [[rc://en/ta/man/translate/translate-names]])
+NEH	13	28	rhs8			0	I caused him to flee from my presence	"I chased him away" or "I made him leave Jerusalem"
+NEH	13	29	pa21			0	Call them to mind	"Think about them" or "Remember what they have done." See how you translated a similar phrase in [Nehemiah 13:14](../13/14.md).
+NEH	13	29	mn8k	figs-metaphor		0	they have defiled the priesthood, and the covenant of the priesthood and the Levites	Causing the priesthood to be dishonored and breaking the covenant is spoken of as if they made the priesthood and covenant physically unclean. Alternate translation: "they have dishonored the priesthood and broken the covenant you made with the priests and Levites" (See: [[rc://en/ta/man/translate/figs-metaphor]])
+NEH	13	30	gd16			0	Thus I cleansed them	"In this way I purified them"
+NEH	13	30	s3y9			0	established the duties of the priests and the Levites	"told the priests and Levites what they were to do"
+NEH	13	31	vl4a			0	I provided for the wood offering	"I arranged for a supply of wood for the wood offerings"
+NEH	13	31	sh91			0	for the firstfruits	"for the offering of firstfruits at harvest time"
+NEH	13	31	ae94			0	Call me to mind, my God, for good	"Think about all I have done, my God, and bless me because of the good things I have done." See how you translated a similar phrase in [Nehemiah 13:14](../13/14.md).
