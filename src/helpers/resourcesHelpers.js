@@ -197,7 +197,7 @@ export async function processResource(resource, sourcePath) {
   const manifest = getResourceManifest(sourcePath);
   if (!getResourceManifest(processedFilesPath) && manifest) {
     manifest.catalog_modified_time = resource.remoteModifiedTime;
-    fs.writeFileSync(path.join(processedFilesPath, 'manifest.json'), JSON.stringify(manifest, null, 2));
+    fs.outputJsonSync(path.join(processedFilesPath, 'manifest.json'), manifest);
   }
   return processedFilesPath;
 }
