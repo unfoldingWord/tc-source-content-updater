@@ -10,6 +10,7 @@ import {
 } from 'tsv-groupdata-parser';
 // helpers
 import * as resourcesHelpers from '../resourcesHelpers';
+import {delay} from '../utils';
 // constants
 import * as errors from '../../resources/errors';
 import * as bibleUtils from '../../resources/bible';
@@ -53,21 +54,23 @@ export async function processTranslationNotes(resource, sourcePath, outputPath) 
     formatAndSaveGroupData(groupData, outputPath, bookId);
   });
 
+  await delay(200);
 
-  setTimeout(function() {
-    // Generate groupsIndex using tN groupData & tA articles.
-    const translationAcademyPath = path.join(
-      ospath.home(),
-      'translationCore',
-      'resources',
-      resource.languageId,
-      'translationHelps',
-      'translationAcademy'
-    );
+  // Generate groupsIndex using tN groupData & tA articles.
+  const translationAcademyPath = path.join(
+    ospath.home(),
+    'translationCore',
+    'resources',
+    resource.languageId,
+    'translationHelps',
+    'translationAcademy'
+  );
 
-    const taCategoriesPath = resourcesHelpers.getLatestVersionInPath(translationAcademyPath);
-    const categorizedGroupsIndex = generateGroupsIndex(outputPath, taCategoriesPath);
+  const taCategoriesPath = resourcesHelpers.getLatestVersionInPath(translationAcademyPath);
+  const categorizedGroupsIndex = generateGroupsIndex(outputPath, taCategoriesPath);
 
-    saveGroupsIndex(categorizedGroupsIndex, outputPath);
-  }, 3000);
+  console.log('====================================');
+  console.log(taCategoriesPath, categorizedGroupsIndex);
+  console.log('====================================');
+  saveGroupsIndex(categorizedGroupsIndex, outputPath);
 }
