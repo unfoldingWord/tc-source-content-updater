@@ -1,7 +1,13 @@
 import fs from 'fs-extra';
 import path from 'path-extra';
 import {isObject} from 'util';
-import {tsvToGroupData, formatAndSaveGroupData} from 'tsv-groupdata-parser';
+import ospath from 'ospath';
+import {
+  tsvToGroupData,
+  formatAndSaveGroupData,
+  generateGroupsIndex,
+  saveGroupsIndex,
+} from 'tsv-groupdata-parser';
 // helpers
 import * as resourcesHelpers from '../resourcesHelpers';
 // constants
@@ -13,7 +19,7 @@ import * as bibleUtils from '../../resources/bible';
  * structure and produce the index.js file for the language with the title of each article.
  * @param {Object} resource - Resource object
  * @param {String} sourcePath - Path to the extracted files that came from the zip file from the catalog
- * @param {String} outputPath - Path to place the processed resource files WIHTOUT the version in the path
+ * @param {String} outputPath - Path to place the processed resource files WITHOUT the version in the path
  */
 export async function processTranslationNotes(resource, sourcePath, outputPath) {
   if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId) {
@@ -46,4 +52,19 @@ export async function processTranslationNotes(resource, sourcePath, outputPath) 
 
     formatAndSaveGroupData(groupData, outputPath, bookId);
   });
+
+  // Generate groupsIndex using tN groupData & tA articles.
+  const translationAcademyPath = path.join(
+    ospath.home(),
+    'translationCore',
+    'resources',
+    resource.languageId,
+    'translationHelps',
+    'translationAcademy'
+  );
+
+  const taCategoriesPath = resourcesHelpers.getLatestVersionInPath(translationAcademyPath);
+  const categorizedGroupsIndex = generateGroupsIndex(outputPath, taCategoriesPath);
+
+  saveGroupsIndex(categorizedGroupsIndex, outputPath);
 }
