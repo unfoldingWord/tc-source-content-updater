@@ -53,18 +53,21 @@ export async function processTranslationNotes(resource, sourcePath, outputPath) 
     formatAndSaveGroupData(groupData, outputPath, bookId);
   });
 
-  // Generate groupsIndex using tN groupData & tA articles.
-  const translationAcademyPath = path.join(
-    ospath.home(),
-    'translationCore',
-    'resources',
-    resource.languageId,
-    'translationHelps',
-    'translationAcademy'
-  );
 
-  const taCategoriesPath = resourcesHelpers.getLatestVersionInPath(translationAcademyPath);
-  const categorizedGroupsIndex = generateGroupsIndex(outputPath, taCategoriesPath);
+  setTimeout(function() {
+    // Generate groupsIndex using tN groupData & tA articles.
+    const translationAcademyPath = path.join(
+      ospath.home(),
+      'translationCore',
+      'resources',
+      resource.languageId,
+      'translationHelps',
+      'translationAcademy'
+    );
 
-  saveGroupsIndex(categorizedGroupsIndex, outputPath);
+    const taCategoriesPath = resourcesHelpers.getLatestVersionInPath(translationAcademyPath);
+    const categorizedGroupsIndex = generateGroupsIndex(outputPath, taCategoriesPath);
+
+    saveGroupsIndex(categorizedGroupsIndex, outputPath);
+  }, 3000);
 }
