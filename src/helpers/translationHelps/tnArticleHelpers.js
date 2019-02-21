@@ -69,8 +69,5 @@ export async function processTranslationNotes(resource, sourcePath, outputPath) 
   const taCategoriesPath = resourcesHelpers.getLatestVersionInPath(translationAcademyPath);
   const categorizedGroupsIndex = generateGroupsIndex(outputPath, taCategoriesPath);
 
-  console.log('====================================');
-  console.log(taCategoriesPath, categorizedGroupsIndex);
-  console.log('====================================');
   saveGroupsIndex(categorizedGroupsIndex, outputPath);
 }
