@@ -55,7 +55,7 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-es2015": "^6.24.1",
     "eslint": "^5.11.1",
-    "eslint-config-google": "^0.11.0",
+    "eslint-config-google": "^0.12.0",
     "eslint-plugin-jest": "^22.1.2",
     "jest": "^23.6.0",
     "nock": "^10.0.6",
