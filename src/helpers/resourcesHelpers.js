@@ -6,6 +6,7 @@ import {isObject} from 'util';
 // helpers
 import * as zipFileHelpers from './zipFileHelpers';
 import * as twArticleHelpers from './translationHelps/twArticleHelpers';
+import * as tnArticleHelpers from './translationHelps/tnArticleHelpers';
 import * as taArticleHelpers from './translationHelps/taArticleHelpers';
 import * as twGroupDataHelpers from './translationHelps/twGroupDataHelpers';
 import * as packageParseHelpers from './packageParseHelpers';
@@ -160,24 +161,26 @@ export function getSubdirOfUnzippedResource(extractedFilesPath) {
  * @param {String} sourcePath Path the the source dictory of the resource
  * @return {String} Path to the directory of the processed files
  */
-export function processResource(resource, sourcePath) {
+export async function processResource(resource, sourcePath) {
   if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId) {
-throw Error(formatError(resource, errors.RESOURCE_NOT_GIVEN))
-;
-}
+    throw Error(formatError(resource, errors.RESOURCE_NOT_GIVEN));
+  }
   if (!sourcePath) {
-throw Error(formatError(resource, errors.SOURCE_PATH_NOT_GIVEN))
-;
-}
+    throw Error(formatError(resource, errors.SOURCE_PATH_NOT_GIVEN));
+  }
   if (!fs.pathExistsSync(sourcePath)) {
-throw Error(formatError(resource, errors.SOURCE_PATH_NOT_EXIST))
-;
-}
+    throw Error(formatError(resource, errors.SOURCE_PATH_NOT_EXIST));
+  }
+
   const processedFilesPath = sourcePath + '_processed';
   fs.ensureDirSync(processedFilesPath);
+
   switch (resource.subject) {
     case 'Translation_Words':
       twArticleHelpers.processTranslationWords(resource, sourcePath, processedFilesPath);
+      break;
+    case 'TSV_Translation_Notes':
+      await tnArticleHelpers.processTranslationNotes(resource, sourcePath, processedFilesPath);
       break;
     case 'Translation_Academy':
       taArticleHelpers.processTranslationAcademy(resource, sourcePath, processedFilesPath);
@@ -191,11 +194,14 @@ throw Error(formatError(resource, errors.SOURCE_PATH_NOT_EXIST))
     default:
       fs.copySync(sourcePath, processedFilesPath);
   }
+
   const manifest = getResourceManifest(sourcePath);
+
   if (!getResourceManifest(processedFilesPath) && manifest) {
     manifest.catalog_modified_time = resource.remoteModifiedTime;
-    fs.writeFileSync(path.join(processedFilesPath, 'manifest.json'), JSON.stringify(manifest, null, 2));
+    fs.outputJsonSync(path.join(processedFilesPath, 'manifest.json'), manifest, {spaces: 2});
   }
+
   return processedFilesPath;
 }
 
