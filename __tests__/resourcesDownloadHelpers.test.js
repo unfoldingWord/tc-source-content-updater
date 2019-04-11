@@ -37,8 +37,8 @@ describe('Tests for resourcesDownloadHelpers.downloadResources()', function() {
     expect(resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources)).resolves.toHaveLength(expectedLength);
   });
 
-  it('Test resourcesDownloadHelpers.downloadResources() for "grc" should download, process and deploy the Bible and the tW Group Data', async () => {
-    const languageList = ['grc'];
+  it('Test resourcesDownloadHelpers.downloadResources() for "el-x-koine" should download, process and deploy the Bible and the tW Group Data', async () => {
+    const languageList = ['el-x-koine'];
     const expectedLength = 1;
     expect(resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources)).resolves.toHaveLength(expectedLength);
   });
@@ -73,7 +73,7 @@ describe('Tests for resourcesDownloadHelpers.downloadAndProcessResource()', () =
 
   it('Test resourcesDownloadHelpers.downloadAndProcessResource() for GRC UGNT', () => {
     const resource = {
-      languageId: 'grc',
+      languageId: 'el-x-koine',
       resourceId: 'ugnt',
       remoteModifiedTime: '0001-01-01T00:00:00+00:00',
       downloadUrl: 'https://cdn.door43.org/el-x-koine/ugnt/v0.2/ugnt.zip',

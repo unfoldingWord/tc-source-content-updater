@@ -10,6 +10,7 @@ import * as downloadHelpers from './downloadHelpers';
 import * as moveResourcesHelpers from './moveResourcesHelpers';
 // constants
 import * as errors from '../resources/errors';
+import * as Bible from '../resources/bible';
 
 /**
  * @description Downloads the resources that need to be updated for a given language using the DCS API
@@ -28,13 +29,11 @@ import * as errors from '../resources/errors';
  */
 export const downloadAndProcessResource = async (resource, resourcesPath) => {
   if (!resource) {
-throw Error(errors.RESOURCE_NOT_GIVEN)
-;
-}
+    throw Error(errors.RESOURCE_NOT_GIVEN);
+  }
   if (!resourcesPath) {
-throw Error(formatError(resource, errors.RESOURCES_PATH_NOT_GIVEN))
-;
-}
+    throw Error(formatError(resource, errors.RESOURCES_PATH_NOT_GIVEN));
+  }
   fs.ensureDirSync(resourcesPath);
   const importsPath = path.join(resourcesPath, 'imports');
   fs.ensureDirSync(importsPath);
@@ -58,8 +57,8 @@ throw Error(formatError(resource, errors.RESOURCES_PATH_NOT_GIVEN))
     const processedFilesPath = await processResource(resource, importSubdirPath);
     if (processedFilesPath) {
       // Extra step if the resource is the Greek UGNT or Hebrew UHB
-      if ((resource.languageId === 'grc' && resource.resourceId === 'ugnt') ||
-        (resource.languageId === 'hbo' && resource.resourceId === 'uhb')) {
+      if ((resource.languageId === Bible.NT_ORIG_LANG && resource.resourceId === Bible.NT_ORIG_LANG_BIBLE) ||
+          (resource.languageId === Bible.OT_ORIG_LANG && resource.resourceId === Bible.OT_ORIG_LANG_BIBLE)) {
         const twGroupDataPath = makeTwGroupDataResource(resource, processedFilesPath);
         const twGroupDataResourcesPath = path.join(resourcesPath, resource.languageId, 'translationHelps', 'translationWords', 'v' + resource.version);
         try {

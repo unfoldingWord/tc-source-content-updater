@@ -1329,3 +1329,7 @@ export const BOOK_CHAPTER_VERSES = {
     '22': '21',
   },
 };
+export const NT_ORIG_LANG = 'el-x-koine';
+export const NT_ORIG_LANG_BIBLE = 'ugnt';
+export const OT_ORIG_LANG = 'hbo';
+export const OT_ORIG_LANG_BIBLE = 'uhb';
