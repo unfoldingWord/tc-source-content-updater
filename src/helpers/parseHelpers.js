@@ -209,8 +209,7 @@ export function parseCatalogResources(catalog, ignoreObsResources = true, subjec
     for (let i = 0, len = catalog.subjects.length; i < len; i++) {
       const catSubject = catalog.subjects[i];
       const subject = catSubject.identifier;
-      const isGreekOL = (catSubject.language === 'el-x-koine');
-      const languageId = isGreekOL ? 'grc' : (catSubject.language).toLowerCase(); // we use grc internally for Greek Original language
+      const languageId = catSubject.language.toLowerCase();
       const resources = getValidArray(catSubject.resources);
       for (let j = 0, rLen = resources.length; j < rLen; j++) {
         const resource = resources[j];

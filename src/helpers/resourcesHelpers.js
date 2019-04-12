@@ -12,6 +12,7 @@ import * as twGroupDataHelpers from './translationHelps/twGroupDataHelpers';
 import * as packageParseHelpers from './packageParseHelpers';
 // constants
 import * as errors from '../resources/errors';
+import * as Bible from '../resources/bible';
 
 const translationHelps = {
   ta: 'translationAcademy',
@@ -241,15 +242,13 @@ export function getActualResourcePath(resource, resourcesPath) {
  */
 export function makeTwGroupDataResource(resource, sourcePath) {
   if (!resource) {
-throw Error(formatError(resource, errors.RESOURCE_NOT_GIVEN))
-;
-}
+    throw Error(formatError(resource, errors.RESOURCE_NOT_GIVEN));
+  }
   if (!fs.pathExistsSync(sourcePath)) {
-throw Error(formatError(resource, errors.SOURCE_PATH_NOT_EXIST))
-;
-}
-  if ((resource.languageId === 'grc' && resource.resourceId === 'ugnt') ||
-      (resource.languageId === 'hbo' && resource.resourceId === 'uhb')) {
+    throw Error(formatError(resource, errors.SOURCE_PATH_NOT_EXIST));
+  }
+  if ((resource.languageId === Bible.NT_ORIG_LANG && resource.resourceId === Bible.NT_ORIG_LANG_BIBLE) ||
+      (resource.languageId === Bible.OT_ORIG_LANG && resource.resourceId === Bible.OT_ORIG_LANG_BIBLE)) {
     const twGroupDataPath = path.join(sourcePath + '_tw_group_data_' + resource.languageId + '_v' + resource.version);
     const result = twGroupDataHelpers.generateTwGroupDataFromAlignedBible(resource, sourcePath, twGroupDataPath);
     if (result) {
