@@ -7,7 +7,16 @@ Array [
     "contextId": Object {
       "groupId": "inchrist",
       "occurrence": 1,
-      "quote": "ἐν Χριστῷ",
+      "quote": Array [
+        Object {
+          "occurrence": 1,
+          "word": "ἐν",
+        },
+        Object {
+          "occurrence": 1,
+          "word": "Χριστῷ",
+        },
+      ],
       "reference": Object {
         "bookId": "phm",
         "chapter": 1,
@@ -29,7 +38,16 @@ Array [
     "contextId": Object {
       "groupId": "inchrist",
       "occurrence": 1,
-      "quote": "ἐν Κυρίῳ",
+      "quote": Array [
+        Object {
+          "occurrence": 1,
+          "word": "ἐν",
+        },
+        Object {
+          "occurrence": 1,
+          "word": "Κυρίῳ",
+        },
+      ],
       "reference": Object {
         "bookId": "phm",
         "chapter": 1,
@@ -51,7 +69,16 @@ Array [
     "contextId": Object {
       "groupId": "inchrist",
       "occurrence": 1,
-      "quote": "ἐν Κυρίῳ",
+      "quote": Array [
+        Object {
+          "occurrence": 1,
+          "word": "ἐν",
+        },
+        Object {
+          "occurrence": 1,
+          "word": "Κυρίῳ",
+        },
+      ],
       "reference": Object {
         "bookId": "phm",
         "chapter": 1,
@@ -73,7 +100,16 @@ Array [
     "contextId": Object {
       "groupId": "inchrist",
       "occurrence": 1,
-      "quote": "ἐν Χριστῷ",
+      "quote": Array [
+        Object {
+          "occurrence": 2,
+          "word": "ἐν",
+        },
+        Object {
+          "occurrence": 1,
+          "word": "Χριστῷ",
+        },
+      ],
       "reference": Object {
         "bookId": "phm",
         "chapter": 1,
@@ -95,7 +131,20 @@ Array [
     "contextId": Object {
       "groupId": "inchrist",
       "occurrence": 1,
-      "quote": "ἐν Χριστῷ Ἰησοῦ",
+      "quote": Array [
+        Object {
+          "occurrence": 1,
+          "word": "ἐν",
+        },
+        Object {
+          "occurrence": 1,
+          "word": "Χριστῷ",
+        },
+        Object {
+          "occurrence": 1,
+          "word": "Ἰησοῦ",
+        },
+      ],
       "reference": Object {
         "bookId": "phm",
         "chapter": 1,
