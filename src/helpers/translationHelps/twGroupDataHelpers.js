@@ -10,7 +10,7 @@ import * as errors from '../../resources/errors';
 
 /**
  * @description Generates the tW Group Data files from the given aligned Bible
- * @param {Objecd} resource Resource object
+ * @param {Object} resource Resource object
  * @param {String} sourcePath Path to the Bible with aligned data
  * @param {String} outputPath Path where the translationWords group data is to be placed WITHOUT version
  * @return {Boolean} true if success
@@ -101,7 +101,8 @@ function populateGroupDataFromVerseObject(groupData, verseObject, words, isMiles
     quote: [],
     strong: [],
   };
-  if (verseObject.type === 'milestone' || (verseObject.type === 'word' && (verseObject.tw || isMilestone))) {
+  const isWord = (verseObject.type === 'word');
+  if (verseObject.type === 'milestone' || (isWord && (verseObject.tw || isMilestone))) {
     if (verseObject.type === 'milestone') {
       if (verseObject.text) {
         myGroupData.text.push(verseObject.text);
@@ -114,10 +115,9 @@ function populateGroupDataFromVerseObject(groupData, verseObject, words, isMiles
           myGroupData.strong = myGroupData.strong.concat(childGroupData.strong);
         }
       }
-    } else if (verseObject.type === 'word') {
+    } else if (isWord) {
       myGroupData.quote.push({word: verseObject.text, occurrence: getWordOccurrence(words, verseObject)});
       myGroupData.strong.push(verseObject.strong);
-      words.push(verseObject.text);
     }
     if (myGroupData.quote.length) {
       if (verseObject.tw) {
@@ -136,6 +136,9 @@ function populateGroupDataFromVerseObject(groupData, verseObject, words, isMiles
         });
       }
     }
+  }
+  if (isWord && verseObject.text) {
+    words.push(verseObject.text); // keep track of words found so far in verse
   }
   return myGroupData;
 }

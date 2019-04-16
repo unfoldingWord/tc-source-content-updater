@@ -26,6 +26,22 @@ describe('Test twGroupDataHelpers.generateTwGroupDataFromAlignedBible()', functi
     fs.__resetMockFS();
   });
 
+  it('Test that milestones are properly constructed using 12tribesofisrael for mat', () => {
+    // given
+    const expectedItems = 1;
+
+    // when
+    const result = twGroupDataHelpers.generateTwGroupDataFromAlignedBible(resource, sourcePath, outputPath);
+
+    // then
+    const jsonFile = path.join(outputPath, 'other', 'groups', 'mat', '12tribesofisrael.json');
+    expect(result).toBeTruthy();
+    expect(fs.existsSync(jsonFile)).toBeTruthy();
+    const data = JSON.parse(fs.readFileSync(jsonFile));
+    expect(data).toMatchSnapshot();
+    expect(data.length).toEqual(expectedItems);
+  });
+
   it('Test that milestones are properly constructed using inchrist for phm', () => {
     // when
     const result = twGroupDataHelpers.generateTwGroupDataFromAlignedBible(resource, sourcePath, outputPath);
