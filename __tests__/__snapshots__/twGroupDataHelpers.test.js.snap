@@ -1,5 +1,51 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Test twGroupDataHelpers.generateTwGroupDataFromAlignedBible() Test that milestones are properly constructed using 12tribesofisrael for mat 1`] = `
+Array [
+  Object {
+    "comments": false,
+    "contextId": Object {
+      "groupId": "12tribesofisrael",
+      "occurrence": 1,
+      "quote": Array [
+        Object {
+          "occurrence": 2,
+          "word": "δώδεκα",
+        },
+        Object {
+          "occurrence": 1,
+          "word": "φυλὰς",
+        },
+        Object {
+          "occurrence": 2,
+          "word": "τοῦ",
+        },
+        Object {
+          "occurrence": 1,
+          "word": "Ἰσραήλ",
+        },
+      ],
+      "reference": Object {
+        "bookId": "mat",
+        "chapter": 19,
+        "verse": 28,
+      },
+      "strong": Array [
+        "G14270",
+        "G54430",
+        "G35880",
+        "G24740",
+      ],
+      "tool": "translationWords",
+    },
+    "priority": 1,
+    "reminders": false,
+    "selections": false,
+    "verseEdits": false,
+  },
+]
+`;
+
 exports[`Test twGroupDataHelpers.generateTwGroupDataFromAlignedBible() Test that milestones are properly constructed using inchrist for phm 1`] = `
 Array [
   Object {
@@ -7,7 +53,16 @@ Array [
     "contextId": Object {
       "groupId": "inchrist",
       "occurrence": 1,
-      "quote": "ἐν Χριστῷ",
+      "quote": Array [
+        Object {
+          "occurrence": 1,
+          "word": "ἐν",
+        },
+        Object {
+          "occurrence": 1,
+          "word": "Χριστῷ",
+        },
+      ],
       "reference": Object {
         "bookId": "phm",
         "chapter": 1,
@@ -29,7 +84,16 @@ Array [
     "contextId": Object {
       "groupId": "inchrist",
       "occurrence": 1,
-      "quote": "ἐν Κυρίῳ",
+      "quote": Array [
+        Object {
+          "occurrence": 2,
+          "word": "ἐν",
+        },
+        Object {
+          "occurrence": 1,
+          "word": "Κυρίῳ",
+        },
+      ],
       "reference": Object {
         "bookId": "phm",
         "chapter": 1,
@@ -51,7 +115,16 @@ Array [
     "contextId": Object {
       "groupId": "inchrist",
       "occurrence": 1,
-      "quote": "ἐν Κυρίῳ",
+      "quote": Array [
+        Object {
+          "occurrence": 1,
+          "word": "ἐν",
+        },
+        Object {
+          "occurrence": 1,
+          "word": "Κυρίῳ",
+        },
+      ],
       "reference": Object {
         "bookId": "phm",
         "chapter": 1,
@@ -73,7 +146,16 @@ Array [
     "contextId": Object {
       "groupId": "inchrist",
       "occurrence": 1,
-      "quote": "ἐν Χριστῷ",
+      "quote": Array [
+        Object {
+          "occurrence": 2,
+          "word": "ἐν",
+        },
+        Object {
+          "occurrence": 1,
+          "word": "Χριστῷ",
+        },
+      ],
       "reference": Object {
         "bookId": "phm",
         "chapter": 1,
@@ -95,7 +177,20 @@ Array [
     "contextId": Object {
       "groupId": "inchrist",
       "occurrence": 1,
-      "quote": "ἐν Χριστῷ Ἰησοῦ",
+      "quote": Array [
+        Object {
+          "occurrence": 1,
+          "word": "ἐν",
+        },
+        Object {
+          "occurrence": 1,
+          "word": "Χριστῷ",
+        },
+        Object {
+          "occurrence": 1,
+          "word": "Ἰησοῦ",
+        },
+      ],
       "reference": Object {
         "bookId": "phm",
         "chapter": 1,
