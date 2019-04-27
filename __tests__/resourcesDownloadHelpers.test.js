@@ -65,13 +65,13 @@ describe('Tests for resourcesDownloadHelpers.downloadAndProcessResource()', () =
       catalogEntry: {
         subject: {},
         resource: {},
-        format: {}
-      }
+        format: {},
+      },
     };
     expect(resourcesDownloadHelpers.downloadAndProcessResource(resource, resourcesPath)).resolves.toEqual(resource);
   });
 
-  it('Test resourcesDownloadHelpers.downloadAndProcessResource() for GRC UGNT', () => {
+  it('Test resourcesDownloadHelpers.downloadAndProcessResource() for el-x-koine UGNT', () => {
     const resource = {
       languageId: 'el-x-koine',
       resourceId: 'ugnt',
@@ -82,8 +82,8 @@ describe('Tests for resourcesDownloadHelpers.downloadAndProcessResource()', () =
       catalogEntry: {
         subject: {},
         resource: {},
-        format: {}
-      }
+        format: {},
+      },
     };
     expect(resourcesDownloadHelpers.downloadAndProcessResource(resource, resourcesPath)).resolves.toEqual(resource);
   });

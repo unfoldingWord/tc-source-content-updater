@@ -11,11 +11,11 @@ describe('Test twGroupDataHelpers.generateTwGroupDataFromAlignedBible()', functi
   const resource = {
     languageId: 'el-x-koine',
     resourceId: 'ugnt',
-    version: '0.2'
+    version: '0.2',
   };
   const bibleRealPath = path.join(__dirname, 'fixtures/resources/el-x-koine/bibles/ugnt/v0.2');
-  const sourcePath = path.join(ospath.home(), 'translationCore/resources/imports/grc_ugnt_processed');
-  const outputPath = path.join(ospath.home(), 'translationCore/resources/imports/grc_tw_processed');
+  const sourcePath = path.join(ospath.home(), 'translationCore/resources/imports/el-x-koine_ugnt_processed');
+  const outputPath = path.join(ospath.home(), 'translationCore/resources/imports/el-x-koine_tw_processed');
 
   beforeEach(() => {
     fs.__resetMockFS();
@@ -24,22 +24,6 @@ describe('Test twGroupDataHelpers.generateTwGroupDataFromAlignedBible()', functi
 
   afterEach(() => {
     fs.__resetMockFS();
-  });
-
-  it('Test that milestones are properly constructed using 12tribesofisrael for mat', () => {
-    // given
-    const expectedItems = 1;
-
-    // when
-    const result = twGroupDataHelpers.generateTwGroupDataFromAlignedBible(resource, sourcePath, outputPath);
-
-    // then
-    const jsonFile = path.join(outputPath, 'other', 'groups', 'mat', '12tribesofisrael.json');
-    expect(result).toBeTruthy();
-    expect(fs.existsSync(jsonFile)).toBeTruthy();
-    const data = JSON.parse(fs.readFileSync(jsonFile));
-    expect(data).toMatchSnapshot();
-    expect(data.length).toEqual(expectedItems);
   });
 
   it('Test that milestones are properly constructed using inchrist for phm', () => {
