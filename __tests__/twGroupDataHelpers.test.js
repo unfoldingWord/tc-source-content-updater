@@ -11,11 +11,11 @@ describe('Test twGroupDataHelpers.generateTwGroupDataFromAlignedBible()', functi
   const resource = {
     languageId: 'el-x-koine',
     resourceId: 'ugnt',
-    version: '0.2'
+    version: '0.2',
   };
   const bibleRealPath = path.join(__dirname, 'fixtures/resources/el-x-koine/bibles/ugnt/v0.2');
-  const sourcePath = path.join(ospath.home(), 'translationCore/resources/imports/grc_ugnt_processed');
-  const outputPath = path.join(ospath.home(), 'translationCore/resources/imports/grc_tw_processed');
+  const sourcePath = path.join(ospath.home(), 'translationCore/resources/imports/el-x-koine_ugnt_processed');
+  const outputPath = path.join(ospath.home(), 'translationCore/resources/imports/el-x-koine_tw_processed');
 
   beforeEach(() => {
     fs.__resetMockFS();
