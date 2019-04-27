@@ -26,8 +26,8 @@ describe('Updater.downloadResources', () => {
     expect(hebrewSubject.subject).toEqual(resources[0].subject);
   });
 
-  it('should resolve for grc', async () => {
-    const resources = await updater.downloadResources(['grc'], resourcesPath);
+  it('should resolve for el-x-koine', async () => {
+    const resources = await updater.downloadResources(['el-x-koine'], resourcesPath);
     expect(resources.length).toEqual(1);
   });
 
@@ -43,7 +43,7 @@ describe('Updater.downloadResources', () => {
   });
 
   it('should resolve for multiple languages being downloaded', async () => {
-    const languageList = ['grc', 'en', 'hi', 'ceb'];
+    const languageList = ['el-x-koine', 'en', 'hi', 'ceb'];
     const resources = await updater.downloadResources(languageList, resourcesPath);
     expect(resources.length).toEqual(14);
     expect(fs.readdirSync(resourcesPath)).toContain(...languageList);
@@ -51,7 +51,7 @@ describe('Updater.downloadResources', () => {
 
   it('should reject for a download url that does not exist', async () => {
     const prevResources = [{
-      languageId: 'grc',
+      languageId: 'el-x-koine',
       resourceId: 'ugnt',
       remoteModifiedTime: '2018-08-02T17:46:25+00:00',
       downloadUrl: 'a/url/that/should/fail',
@@ -59,7 +59,7 @@ describe('Updater.downloadResources', () => {
       subject: 'Greek_New_Testament',
       catalogEntry: {}
     }];
-    await updater.downloadResources(['grc'], resourcesPath, prevResources).catch(err => {
+    await updater.downloadResources(['el-x-koine'], resourcesPath, prevResources).catch(err => {
       expect(err).toBeTruthy();
     });
   });

@@ -10,6 +10,7 @@ import * as downloadHelpers from './downloadHelpers';
 import * as moveResourcesHelpers from './moveResourcesHelpers';
 // constants
 import * as errors from '../resources/errors';
+import * as Bible from '../resources/bible';
 
 /**
  * @description Downloads the resources that need to be updated for a given language using the DCS API
@@ -28,13 +29,11 @@ import * as errors from '../resources/errors';
  */
 export const downloadAndProcessResource = async (resource, resourcesPath) => {
   if (!resource) {
-throw Error(errors.RESOURCE_NOT_GIVEN)
-;
-}
+    throw Error(errors.RESOURCE_NOT_GIVEN);
+  }
   if (!resourcesPath) {
-throw Error(formatError(resource, errors.RESOURCES_PATH_NOT_GIVEN))
-;
-}
+    throw Error(formatError(resource, errors.RESOURCES_PATH_NOT_GIVEN));
+  }
   fs.ensureDirSync(resourcesPath);
   const importsPath = path.join(resourcesPath, 'imports');
   fs.ensureDirSync(importsPath);
@@ -55,11 +54,11 @@ throw Error(formatError(resource, errors.RESOURCES_PATH_NOT_GIVEN))
       throw Error(appendError(errors.UNABLE_TO_UNZIP_RESOURCES, err));
     }
     const importSubdirPath = getSubdirOfUnzippedResource(importPath);
-    const processedFilesPath = processResource(resource, importSubdirPath);
+    const processedFilesPath = await processResource(resource, importSubdirPath);
     if (processedFilesPath) {
       // Extra step if the resource is the Greek UGNT or Hebrew UHB
-      if ((resource.languageId === 'grc' && resource.resourceId === 'ugnt') ||
-        (resource.languageId === 'hbo' && resource.resourceId === 'uhb')) {
+      if ((resource.languageId === Bible.NT_ORIG_LANG && resource.resourceId === Bible.NT_ORIG_LANG_BIBLE) ||
+          (resource.languageId === Bible.OT_ORIG_LANG && resource.resourceId === Bible.OT_ORIG_LANG_BIBLE)) {
         const twGroupDataPath = makeTwGroupDataResource(resource, processedFilesPath);
         const twGroupDataResourcesPath = path.join(resourcesPath, resource.languageId, 'translationHelps', 'translationWords', 'v' + resource.version);
         try {
@@ -155,7 +154,8 @@ export const downloadResources = (languageList, resourcesPath, resources) => {
     }
 
     const errorList = [];
-    downloadableResources = downloadableResources.filter((resource) => resource);
+    downloadableResources = sortDownloableResources(downloadableResources.filter((resource) => resource));
+
     const queue = downloadableResources.map((resource) =>
       () => downloadAndProcessResourceWithCatch(resource, resourcesPath, errorList));
     Throttle.all(queue, {maxInProgress: 2})
@@ -173,5 +173,22 @@ export const downloadResources = (languageList, resourcesPath, resources) => {
         rimraf.sync(importsDir, fs);
         reject(err);
       });
+  });
+};
+
+/**
+ * Sorts the list of downloadable resources. Specifically moves tA
+ * to the front of the array in order to be downloaded before tN
+ * since it will use tA articles to generate the groupsIndex.
+ * @param {array} downloadableResources list of downloadable resources.
+ * @return {array} sorted list of downloadable resources.
+ */
+const sortDownloableResources = (downloadableResources) => {
+  return downloadableResources.sort((resourceA, resourceB) => {
+    const firstResource = 'ta';// move ta to the front of the array so that it is downloaded before tn.
+    const idA = resourceA.resourceId.toLowerCase();
+    const idB = resourceB.resourceId.toLowerCase();
+
+    return idA == firstResource ? -1 : idB == firstResource ? 1 : 0;
   });
 };

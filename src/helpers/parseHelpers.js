@@ -1,15 +1,18 @@
 /* eslint-disable camelcase,no-empty,no-negated-condition */
 import * as ERROR from '../resources/errors';
 
+// the following are the subject found in the door43 catalog.
+// if a subject isnt found in this list then it will be ignored by the source content updater
 export const TC_RESOURCES = [
   'Bible',
   'Aligned_Bible',
   'Greek_New_Testament',
   'Hebrew_Old_Testament',
-  'Translator_Notes',
+  'TSV_Translation_Notes',
   'Bible_translation_comprehension_questions',
   'Translation_Words',
-  'Translation_Academy'];
+  'Translation_Academy',
+];
 
 export const RESOURCE_ID_MAP = {
   translationWords: 'tw',
@@ -127,7 +130,9 @@ export function getLatestResources(catalog, localResourceList) {
       resourceId = RESOURCE_ID_MAP[resourceId] || resourceId; // map resource names to ids
       const index = tCoreResources.findIndex((remoteResource) =>
         ((localResource.languageId.toLowerCase() === remoteResource.languageId.toLowerCase()) &&
-          (remoteResource.resourceId === resourceId)));
+          (remoteResource.resourceId === resourceId))
+      );
+
       if (index >= 0) {
         const catalogResource = tCoreResources[index];
         const isNewer = !localResource.modifiedTime ||
@@ -140,6 +145,7 @@ export function getLatestResources(catalog, localResourceList) {
       }
     }
   }
+
   return tCoreResources.sort((a, b) =>
     ((a.languageId > b.languageId) ? 1 : -1)); // resources that are already up to date have been removed, sort by language
 }
@@ -203,8 +209,7 @@ export function parseCatalogResources(catalog, ignoreObsResources = true, subjec
     for (let i = 0, len = catalog.subjects.length; i < len; i++) {
       const catSubject = catalog.subjects[i];
       const subject = catSubject.identifier;
-      const isGreekOL = (catSubject.language === 'el-x-koine');
-      const languageId = isGreekOL ? 'grc' : (catSubject.language).toLowerCase(); // we use grc internally for Greek Original language
+      const languageId = catSubject.language.toLowerCase();
       const resources = getValidArray(catSubject.resources);
       for (let j = 0, rLen = resources.length; j < rLen; j++) {
         const resource = resources[j];

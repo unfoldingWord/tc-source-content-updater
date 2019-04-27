@@ -64,13 +64,14 @@
   },
   "dependencies": {
     "adm-zip": "^0.4.11",
-    "agentkeepalive": "4.0.0",
+    "agentkeepalive": "4.0.2",
     "follow-redirects": "^1.6.1",
     "fs-extra": "^4.0.3",
     "ospath": "^1.2.2",
     "path-extra": "^4.2.1",
     "promise-parallel-throttle": "^3.3.0",
     "request": "^2.87.0",
+    "tsv-groupdata-parser": "0.8.0",
     "url": "^0.11.0",
     "usfm-js": "2.0.1",
     "yamljs": "^0.3.0"

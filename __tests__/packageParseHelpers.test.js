@@ -33,7 +33,7 @@ const enUltResource = {
 };
 
 const grcUgntResource = {
-  languageId: 'grc',
+  languageId: 'el-x-koine',
   resourceId: 'ugnt',
   remoteModifiedTime: '2018-08-02T17:46:25+00:00',
   downloadUrl: 'https://cdn.door43.org/el-x-koine/ugnt/v0.2/ugnt.zip',
