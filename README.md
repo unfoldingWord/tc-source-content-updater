@@ -1,9 +1,10 @@
+# tc-source-content-updater
+
 [![Build Status](https://api.travis-ci.org/translationCoreApps/tc-source-content-updater.svg?branch=master)](https://travis-ci.org/translationCoreApps/tc-source-content-updater) ![npm](https://img.shields.io/npm/dt/tc-source-content-updater.svg)
 
-# tc-source-content-updater
 Module that updates source content for the desktop application translationCore.
 
-# Development
+## Development
 
 Use the separate helper files (as best you can) for each story.
 
@@ -17,10 +18,12 @@ the **catalog** property of the Updater object
 `Check __tests__/fixtures/catalog.json
 for example metadata return from DCS`
 
-# Usage
+## Usage
+
 To use this module you must first create a new instance of the object.
 i.e.
-```
+
+```js
 //es6
 import updater from 'tc-source-content-updater';
 const Updater = new updater();
@@ -33,13 +36,16 @@ const Updater = new updater();
 Note: In order to limit the amount of API calls the door43 repo, the Updater object uses the same catalog resource throughout its lifetime, without having to continuosly do requests to door43 API on each function call.
 
 ## Workflow
+
 1. Create instance
 2. Fetch latest resources
 3. Download the resources that are not updated
 
 ## Updater Object
-**`getLatestResources(localResourceList)`**: 
-- **description** -
+
+**`getLatestResources(localResourceList)`**:
+
+- **Description**
 Used to initiate a load of the latest resource so that the user can then select which ones
 they would like to update.
 Note: This function only returns the resources that are not up to date on the user machine
@@ -48,37 +54,48 @@ before the request
 - @return {Promise} - Array of languages that have updates in catalog (returns null on error)
 
 **`updateCatalog()`**:
+
 - **description** - Method to manually fetch the latest catalog for the current
 Updater instance. This function has no return value
 
 **`downloadResources(resourceList)`**:
+
 - **description** - Downloads the resources from the specified list using the DCS API
 - @param {Array} **resourceList** - list of resources that you would like to download
 - @return {Promise} Promise that resolves to success or rejects if a resource failed to download
 
-
 **`parseBiblePackage(resourceEntry, extractedFilesPath, resultsPath)`**:
+
 - **description** - Parses the bible package to generate json bible contents, manifest, and index
 - @param {String} **extractedFilesPath** - path to unzipped files from bible package
 - @param {String} **resultsPath** - path to store processed bible
 - @return {Boolean} true if success
- 
- 
+
 **`processTranslationAcademy(extractedFilesPath, outputPath)`**:
+
 - **description** - Processes the extracted files for translationAcademy to create a single file for each article
 - @param {String} **extractedFilesPath** - Path to the extracted files that came from the zip file in the catalog
 - @param {String} **outputPath** - Path to place the processed files WITHOUT version in the path
 - @return {String} The path to the processed translationAcademy files with version
- 
- 
+
  **`processTranslationWords(extractedFilesPath, outputPath)`**:
+
 - **description** - Processes the extracted files for translationWord to cerate the folder structure and produce the index.js file for the language with the title of each article.
 - @param {String} **extractedFilesPath** - Path to the extracted files that came from the zip file from the catalog
 - @param {String} **outputPath** - Path to place the processed resource files WIHTOUT the version in the path
 - @return {String} Path to the processed translationWords files with version
 
  **`generateTwGroupDataFromAlignedBible(biblePath, outputPath)`**:
+
 - **description** - Generates the tW Group Data files from the given aligned Bible
 - @param {string} **biblePath** Path to the Bible with aligned data
 - @param {string} **outputPath** Path where the translationWords group data is to be placed WITHOUT version
 - @return {string} Path where tW was generated with version
+
+## Testing your changes without publishing new version
+
+- Create your feature/bugfix/enhancement (my-feature-branch)branch off of master.
+- Make your changes in the new branch (my-feature-branch).
+- Push your changes.
+- Run `npm i translationCoreApps/tc-source-content-updater#my-feature-branch` in your translationCore root directory.
+- Run `rm -rf node_modules/tc-source-content-updater; npm i tc-source-content-updater;` to get subsequent changes.
