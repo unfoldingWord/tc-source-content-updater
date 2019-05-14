@@ -97,4 +97,4 @@ Updater instance. This function has no return value
 - Create your feature/bugfix/enhancement (my-feature-branch)branch off of master.
 - Make your changes in the new branch (my-feature-branch).
 - Push your changes.
-- Run `npm i translationCoreApps/tsv-groupdata-parser#my-feature-branch` in your translationCore root directory.
+- Run `npm i translationCoreApps/tc-source-content-updater#my-feature-branch` in your translationCore root directory.
