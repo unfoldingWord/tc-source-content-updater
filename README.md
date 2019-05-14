@@ -98,3 +98,4 @@ Updater instance. This function has no return value
 - Make your changes in the new branch (my-feature-branch).
 - Push your changes.
 - Run `npm i translationCoreApps/tc-source-content-updater#my-feature-branch` in your translationCore root directory.
+- Run `rm -rf node_modules/tc-source-content-updater; npm i tc-source-content-updater;` to get subsequent changes.
