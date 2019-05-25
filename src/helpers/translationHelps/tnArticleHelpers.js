@@ -41,15 +41,28 @@ export async function processTranslationNotes(resource, sourcePath, outputPath) 
 
   const tsvFiles = fs.readdirSync(sourcePath).filter((filename) => path.extname(filename) === '.tsv');
 
-  tsvFiles.forEach(async(fileName) => {
-    const filepath = path.join(sourcePath, fileName);
-    const bookId = fileName.split('-')[1].toLowerCase().replace('.tsv', '');
+  tsvFiles.forEach(async(filename) => {
+    const filepath = path.join(sourcePath, filename);
+    const bookId = filename.split('-')[1].toLowerCase().replace('.tsv', '');
 
     if (!bibleUtils.BOOK_CHAPTER_VERSES[bookId]) {
       console.error(`${bookId} is not a valid book id.`);
     }
 
-    const groupData = await tsvToGroupData(filepath, 'translationNotes', {categorized: true});
+    const bookNumberAndId = path.parse('en_tn_01-GEN.tsv'.replace('en_tn_', '')).name;
+    const isNewTestament = bibleUtils.BIBLE_LIST_NT.includes(bookNumberAndId);
+    const originalLanguageId = isNewTestament ? bibleUtils.NT_ORIG_LANG : bibleUtils.OT_ORIG_LANG;
+    const originalLanguageBibleId = isNewTestament ? bibleUtils.NT_ORIG_LANG_BIBLE : bibleUtils.OT_ORIG_LANG_BIBLE;
+    const originalBiblePath = path.join(
+      ospath.home(),
+      'translationCore',
+      'resources',
+      originalLanguageId,
+      'bibles',
+      originalLanguageBibleId
+    );
+    const latestOriginalBiblePath = resourcesHelpers.getLatestVersionInPath(originalBiblePath);
+    const groupData = await tsvToGroupData(filepath, 'translationNotes', {categorized: true}, latestOriginalBiblePath);
 
     formatAndSaveGroupData(groupData, outputPath, bookId);
   });
