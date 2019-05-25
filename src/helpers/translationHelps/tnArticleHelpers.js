@@ -49,7 +49,7 @@ export async function processTranslationNotes(resource, sourcePath, outputPath) 
       console.error(`${bookId} is not a valid book id.`);
     }
 
-    const bookNumberAndId = path.parse('en_tn_01-GEN.tsv'.replace('en_tn_', '')).name;
+    const bookNumberAndId = path.parse(filename.replace('en_tn_', '')).name;
     const isNewTestament = bibleUtils.BIBLE_LIST_NT.includes(bookNumberAndId);
     const originalLanguageId = isNewTestament ? bibleUtils.NT_ORIG_LANG : bibleUtils.OT_ORIG_LANG;
     const originalLanguageBibleId = isNewTestament ? bibleUtils.NT_ORIG_LANG_BIBLE : bibleUtils.OT_ORIG_LANG_BIBLE;
