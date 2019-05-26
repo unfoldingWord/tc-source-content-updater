@@ -179,7 +179,7 @@ export const downloadResources = (languageList, resourcesPath, resources) => {
 /**
  * Sorts the list of downloadable resources. Specifically moves tA
  * to the front of the array in order to be downloaded before tN
- * since it will use tA articles to generate the groupsIndex.
+ * since tN will use tA articles to generate the groupsIndex files.
  * @param {array} downloadableResources list of downloadable resources.
  * @return {array} sorted list of downloadable resources.
  */
