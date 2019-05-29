@@ -71,7 +71,7 @@
     "path-extra": "^4.2.1",
     "promise-parallel-throttle": "^3.3.0",
     "request": "^2.87.0",
-    "tsv-groupdata-parser": "github:translationCoreApps/tsv-groupdata-parser",
+    "tsv-groupdata-parser": "github:translationCoreApps/tsv-groupdata-parser#bugfix-mannycolon-5982",
     "url": "^0.11.0",
     "usfm-js": "2.0.1",
     "yamljs": "^0.3.0"
