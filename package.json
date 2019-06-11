@@ -1,6 +1,6 @@
 {
   "name": "tc-source-content-updater",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "Module that updates source content for the desktop application translationCore.",
   "main": "lib/index.js",
   "display": "library",
@@ -71,7 +71,7 @@
     "path-extra": "^4.2.1",
     "promise-parallel-throttle": "^3.3.0",
     "request": "^2.87.0",
-    "tsv-groupdata-parser": "0.9.2",
+    "tsv-groupdata-parser": "0.9.3",
     "url": "^0.11.0",
     "usfm-js": "2.0.1",
     "yamljs": "^0.3.0"
