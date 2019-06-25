@@ -178,6 +178,7 @@ function populateTwDataFromGroupData(twData, groupData, bookId, chapter, verse) 
           reminders: false,
           selections: false,
           verseEdits: false,
+          nothingToSelect: false,
           contextId: {
             reference: {
               bookId: bookId,
