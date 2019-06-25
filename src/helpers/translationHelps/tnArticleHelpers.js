@@ -20,6 +20,7 @@ import * as bibleUtils from '../../resources/bible';
  * structure and produce the index.js file for the language with the title of each article.
  * @param {Object} resource - Resource object
  * @param {String} sourcePath - Path to the extracted files that came from the zip file from the catalog
+ * e.g. /Users/mannycolon/translationCore/resources/imports/en_tn_v16/en_tn
  * @param {String} outputPath - Path to place the processed resource files WITHOUT the version in the path
  */
 export async function processTranslationNotes(resource, sourcePath, outputPath) {
@@ -39,12 +40,10 @@ export async function processTranslationNotes(resource, sourcePath, outputPath) 
     fs.removeSync(outputPath);
   }
 
-  // const tsvManifestPath = path.join(sourcePath);
-console.log('sourcePath', sourcePath);//  /Users/mannycolon/translationCore/resources/imports/en_tn_v16/en_tn
-  const tsvFiles = fs.readdirSync(sourcePath).filter((filename) => {
-    console.log('filename', filename);
-    return path.extname(filename) === '.tsv';
-  });
+  const tsvManifest = resourcesHelpers.getResourceManifestFromYaml(sourcePath);
+  console.log('tsvManifest', tsvManifest);
+
+  const tsvFiles = fs.readdirSync(sourcePath).filter((filename) => path.extname(filename) === '.tsv');
 
   tsvFiles.forEach(async(filename) => {
     const filepath = path.join(sourcePath, filename);
