@@ -39,6 +39,8 @@ export async function processTranslationNotes(resource, sourcePath, outputPath) 
     fs.removeSync(outputPath);
   }
 
+  // const tsvManifestPath = path.join(sourcePath);
+console.log('sourcePath', sourcePath);
   const tsvFiles = fs.readdirSync(sourcePath).filter((filename) => path.extname(filename) === '.tsv');
 
   tsvFiles.forEach(async(filename) => {
