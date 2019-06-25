@@ -40,8 +40,11 @@ export async function processTranslationNotes(resource, sourcePath, outputPath) 
   }
 
   // const tsvManifestPath = path.join(sourcePath);
-console.log('sourcePath', sourcePath);
-  const tsvFiles = fs.readdirSync(sourcePath).filter((filename) => path.extname(filename) === '.tsv');
+console.log('sourcePath', sourcePath);//  /Users/mannycolon/translationCore/resources/imports/en_tn_v16/en_tn
+  const tsvFiles = fs.readdirSync(sourcePath).filter((filename) => {
+    console.log('filename', filename);
+    return path.extname(filename) === '.tsv';
+  });
 
   tsvFiles.forEach(async(filename) => {
     const filepath = path.join(sourcePath, filename);
