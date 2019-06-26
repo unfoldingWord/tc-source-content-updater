@@ -28,13 +28,14 @@ import * as Bible from '../resources/bible';
  * @return {Promise} Download promise
  */
 export const downloadAndProcessResource = async (resource, resourcesPath) => {
-  console.log('resource', resource);
   if (!resource) {
     throw Error(errors.RESOURCE_NOT_GIVEN);
-  }
-  if (!resourcesPath) {
+  } else if (!resourcesPath) {
     throw Error(formatError(resource, errors.RESOURCES_PATH_NOT_GIVEN));
   }
+  // Resource is the Greek UGNT or Hebrew UHB
+  const isGreekOrHebrew = (resource.languageId === Bible.NT_ORIG_LANG && resource.resourceId === Bible.NT_ORIG_LANG_BIBLE) ||
+    (resource.languageId === Bible.OT_ORIG_LANG && resource.resourceId === Bible.OT_ORIG_LANG_BIBLE);
   fs.ensureDirSync(resourcesPath);
   const importsPath = path.join(resourcesPath, 'imports');
   fs.ensureDirSync(importsPath);
@@ -58,13 +59,12 @@ export const downloadAndProcessResource = async (resource, resourcesPath) => {
     const processedFilesPath = await processResource(resource, importSubdirPath);
     if (processedFilesPath) {
       // Extra step if the resource is the Greek UGNT or Hebrew UHB
-      if ((resource.languageId === Bible.NT_ORIG_LANG && resource.resourceId === Bible.NT_ORIG_LANG_BIBLE) ||
-          (resource.languageId === Bible.OT_ORIG_LANG && resource.resourceId === Bible.OT_ORIG_LANG_BIBLE)) {
+      if (isGreekOrHebrew) {
         const twGroupDataPath = makeTwGroupDataResource(resource, processedFilesPath);
         const twGroupDataResourcesPath = path.join(resourcesPath, resource.languageId, 'translationHelps', 'translationWords', 'v' + resource.version);
         try {
           await moveResourcesHelpers.moveResources(twGroupDataPath, twGroupDataResourcesPath);
-          // removeAllButLatestVersion(path.dirname(twGroupDataResourcesPath));
+          removeAllButLatestVersion(path.dirname(twGroupDataResourcesPath));
         } catch (err) {
           throw Error(appendError(errors.UNABLE_TO_CREATE_TW_GROUP_DATA, err));
         }
@@ -75,7 +75,10 @@ export const downloadAndProcessResource = async (resource, resourcesPath) => {
       } catch (err) {
         throw Error(appendError(errors.UNABLE_TO_MOVE_RESOURCE_INTO_RESOURCES, err));
       }
-      // removeAllButLatestVersion(path.dirname(resourcePath));
+      // Only remove older version of resources if its not a Greek or Hebrew bible resource
+      if (!isGreekOrHebrew) {
+        removeAllButLatestVersion(path.dirname(resourcePath));
+      }
     } else {
       throw Error(errors.FAILED_TO_PROCESS_RESOURCE);
     }
