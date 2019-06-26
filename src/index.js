@@ -49,6 +49,7 @@ Updater.prototype.updateCatalog = async function() {
  */
 Updater.prototype.getLatestResources = async function(localResourceList) {
   await this.updateCatalog();
+  console.log('this.remoteCatalog', this.remoteCatalog);
   this.updatedCatalogResources = parseHelpers.getLatestResources(this.remoteCatalog, localResourceList);
   return parseHelpers.getUpdatedLanguageList(this.updatedCatalogResources);
 };
