@@ -75,7 +75,7 @@ export const downloadAndProcessResource = async (resource, resourcesPath) => {
       } catch (err) {
         throw Error(appendError(errors.UNABLE_TO_MOVE_RESOURCE_INTO_RESOURCES, err));
       }
-      removeAllButLatestVersion(path.dirname(resourcePath));
+      // removeAllButLatestVersion(path.dirname(resourcePath));
     } else {
       throw Error(errors.FAILED_TO_PROCESS_RESOURCE);
     }
