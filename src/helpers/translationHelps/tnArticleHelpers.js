@@ -10,7 +10,7 @@ import {
 } from 'tsv-groupdata-parser';
 // helpers
 import * as resourcesHelpers from '../resourcesHelpers';
-import {delay} from '../utils';
+import {delay, getQueryStringForBibleId, getQueryVariable} from '../utils';
 // constants
 import * as errors from '../../resources/errors';
 import * as bibleUtils from '../../resources/bible';
@@ -40,25 +40,16 @@ export async function processTranslationNotes(resource, sourcePath, outputPath) 
     fs.removeSync(outputPath);
   }
 
-
-  /**
-   * function getQueryVariable(variable)
-{
-       var query = window.location.search.substring(1);
-       var vars = query.split("&");
-       for (var i=0;i<vars.length;i++) {
-               var pair = vars[i].split("=");
-               if(pair[0] == variable){return pair[1];}
-       }
-       return(false);
-}
-   */
-
   const tsvManifest = resourcesHelpers.getResourceManifestFromYaml(sourcePath);
   // array of related resources used to generated the tsv.
   const tsvRelations = tsvManifest.dublin_core.relation;
+  const OT_ORIG_LANG_QUERY = getQueryStringForBibleId(tsvRelations, bibleUtils.OT_ORIG_LANG);
+  const NT_ORIG_LANG_QUERY = getQueryStringForBibleId(tsvRelations, bibleUtils.NT_ORIG_LANG);
+  const OT_ORIG_LANG_VERSION = getQueryVariable(OT_ORIG_LANG_QUERY, 'v');
+  const NT_ORIG_LANG_VERSION = getQueryVariable(NT_ORIG_LANG_QUERY, 'v');
 
-  console.log('tsvRelations', tsvRelations);
+  console.log('OT_ORIG_LANG_VERSION', OT_ORIG_LANG_VERSION);
+  console.log('NT_ORIG_LANG_VERSION', NT_ORIG_LANG_VERSION);
 
   const tsvFiles = fs.readdirSync(sourcePath).filter((filename) => path.extname(filename) === '.tsv');
 
