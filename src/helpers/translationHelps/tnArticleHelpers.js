@@ -47,24 +47,17 @@ export async function processTranslationNotes(resource, sourcePath, outputPath) 
   const NT_ORIG_LANG_QUERY = getQueryStringForBibleId(tsvRelations, bibleUtils.NT_ORIG_LANG);
   const OT_ORIG_LANG_VERSION = getQueryVariable(OT_ORIG_LANG_QUERY, 'v');
   const NT_ORIG_LANG_VERSION = getQueryVariable(NT_ORIG_LANG_QUERY, 'v');
-
-  console.log('OT_ORIG_LANG_VERSION', OT_ORIG_LANG_VERSION);
-  console.log('NT_ORIG_LANG_VERSION', NT_ORIG_LANG_VERSION);
-
   const tsvFiles = fs.readdirSync(sourcePath).filter((filename) => path.extname(filename) === '.tsv');
 
   tsvFiles.forEach(async(filename) => {
-    const filepath = path.join(sourcePath, filename);
     const bookId = filename.split('-')[1].toLowerCase().replace('.tsv', '');
-
-    if (!bibleUtils.BOOK_CHAPTER_VERSES[bookId]) {
-      console.error(`${bookId} is not a valid book id.`);
-    }
-
+    if (!bibleUtils.BOOK_CHAPTER_VERSES[bookId]) console.error(`${bookId} is not a valid book id.`);
     const bookNumberAndId = path.parse(filename.replace('en_tn_', '')).name;
     const isNewTestament = bibleUtils.BIBLE_LIST_NT.includes(bookNumberAndId);
     const originalLanguageId = isNewTestament ? bibleUtils.NT_ORIG_LANG : bibleUtils.OT_ORIG_LANG;
     const originalLanguageBibleId = isNewTestament ? bibleUtils.NT_ORIG_LANG_BIBLE : bibleUtils.OT_ORIG_LANG_BIBLE;
+    const version = 'v' + (isNewTestament ? NT_ORIG_LANG_VERSION : OT_ORIG_LANG_VERSION);
+    const filepath = path.join(sourcePath, filename);
     const originalBiblePath = path.join(
       ospath.home(),
       'translationCore',
@@ -73,7 +66,11 @@ export async function processTranslationNotes(resource, sourcePath, outputPath) 
       'bibles',
       originalLanguageBibleId
     );
+
     const latestOriginalBiblePath = resourcesHelpers.getLatestVersionInPath(originalBiblePath);
+    // if (!fs.existsSync(originalBiblePath)) {
+
+    // }
     const groupData = await tsvToGroupData(filepath, 'translationNotes', {categorized: true}, latestOriginalBiblePath);
 
     formatAndSaveGroupData(groupData, outputPath, bookId);
