@@ -260,7 +260,7 @@ return twGroupDataPath
 
 /**
  * Removes all version directories except the latest
- * @param {String} resourcePath Path to the reosurce dirctory that has subdirs of versions
+ * @param {String} resourcePath Path to the resource directory that has subdirs of versions
  * @return {Boolean} True if versions were deleted, false if nothing was touched
  */
 export function removeAllButLatestVersion(resourcePath) {

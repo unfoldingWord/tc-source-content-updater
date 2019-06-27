@@ -68,10 +68,15 @@ export async function processTranslationNotes(resource, sourcePath, outputPath) 
       version
     );
 
-
-    const latestOriginalBiblePath = resourcesHelpers.getLatestVersionInPath(originalBiblePath.replace(version, ''));
+    const versionsSubdirectory = originalBiblePath.replace(version, '');
+    const latestOriginalBiblePath = resourcesHelpers.getLatestVersionInPath(versionsSubdirectory);
     console.log('originalBiblePath', originalBiblePath);
     console.log('latestOriginalBiblePath', latestOriginalBiblePath);
+    // if latest version if the version needed delete older versions
+    if (latestOriginalBiblePath === originalBiblePath) {
+      console.log('versionsSubdirectory', versionsSubdirectory);
+      resourcesHelpers.removeAllButLatestVersion(versionsSubdirectory);
+    }
     if (!fs.existsSync(originalBiblePath)) {
       // download orig. lang. resource
     }
