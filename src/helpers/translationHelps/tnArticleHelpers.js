@@ -64,14 +64,17 @@ export async function processTranslationNotes(resource, sourcePath, outputPath) 
       'resources',
       originalLanguageId,
       'bibles',
-      originalLanguageBibleId
+      originalLanguageBibleId,
+      version
     );
 
-    const latestOriginalBiblePath = resourcesHelpers.getLatestVersionInPath(originalBiblePath);
-    // if (!fs.existsSync(originalBiblePath)) {
+    console.log('originalBiblePath', originalBiblePath);
 
-    // }
-    const groupData = await tsvToGroupData(filepath, 'translationNotes', {categorized: true}, latestOriginalBiblePath);
+    // const latestOriginalBiblePath = resourcesHelpers.getLatestVersionInPath(originalBiblePath);
+    if (!fs.existsSync(originalBiblePath)) {
+      // download orig. lang. resource
+    }
+    const groupData = await tsvToGroupData(filepath, 'translationNotes', {categorized: true}, originalBiblePath);
 
     formatAndSaveGroupData(groupData, outputPath, bookId);
   });
