@@ -70,12 +70,9 @@ export async function processTranslationNotes(resource, sourcePath, outputPath) 
 
     const versionsSubdirectory = originalBiblePath.replace(version, '');
     const latestOriginalBiblePath = resourcesHelpers.getLatestVersionInPath(versionsSubdirectory);
-    console.log('originalBiblePath', originalBiblePath);
-    console.log('latestOriginalBiblePath', latestOriginalBiblePath);
     // if latest version is the version needed delete older versions
     if (latestOriginalBiblePath === originalBiblePath) {
       // Old versions of the orginal language resource bible will be deleted because the tn uses the latest version and not an older version
-      console.log('versionsSubdirectory', versionsSubdirectory);
       resourcesHelpers.removeAllButLatestVersion(versionsSubdirectory);
     }
     if (!fs.existsSync(originalBiblePath)) {
