@@ -68,9 +68,10 @@ export async function processTranslationNotes(resource, sourcePath, outputPath) 
       version
     );
 
-    console.log('originalBiblePath', originalBiblePath);
 
-    // const latestOriginalBiblePath = resourcesHelpers.getLatestVersionInPath(originalBiblePath);
+    const latestOriginalBiblePath = resourcesHelpers.getLatestVersionInPath(originalBiblePath.replace(version, ''));
+    console.log('originalBiblePath', originalBiblePath);
+    console.log('latestOriginalBiblePath', latestOriginalBiblePath);
     if (!fs.existsSync(originalBiblePath)) {
       // download orig. lang. resource
     }
