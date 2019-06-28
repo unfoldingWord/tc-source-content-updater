@@ -80,6 +80,7 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
         resourcesHelpers.removeAllButLatestVersion(versionsSubdirectory);
       }
       console.log('originalBiblePath', originalBiblePath);
+      console.log('originalBiblePath exists', fs.existsSync(originalBiblePath));
       // If version needed is not in the user resources download it.
       if (!fs.existsSync(originalBiblePath)) {
         // Download orig. lang. resource
