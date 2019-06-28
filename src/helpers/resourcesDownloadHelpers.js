@@ -28,6 +28,7 @@ import * as Bible from '../resources/bible';
  * @return {Promise} Download promise
  */
 export const downloadAndProcessResource = async (resource, resourcesPath) => {
+  console.log('downloadAndProcessResource() resourcesPath', resourcesPath);
   if (!resource) {
     throw Error(errors.RESOURCE_NOT_GIVEN);
   } else if (!resourcesPath) {

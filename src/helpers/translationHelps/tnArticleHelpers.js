@@ -10,6 +10,7 @@ import {
 } from 'tsv-groupdata-parser';
 // helpers
 import * as resourcesHelpers from '../resourcesHelpers';
+import {downloadAndProcessResource} from '../resourcesDownloadHelpers';
 import {delay, getQueryStringForBibleId, getQueryVariable} from '../utils';
 // constants
 import * as errors from '../../resources/errors';
@@ -75,9 +76,28 @@ export async function processTranslationNotes(resource, sourcePath, outputPath) 
       // Old versions of the orginal language resource bible will be deleted because the tn uses the latest version and not an older version
       resourcesHelpers.removeAllButLatestVersion(versionsSubdirectory);
     }
-    if (!fs.existsSync(originalBiblePath)) {
+    // add description
+    // if (!fs.existsSync(originalBiblePath)) {
       // download orig. lang. resource
-    }
+      // https://cdn.door43.org/el-x-koine/ugnt/v0.9/ugnt.zip
+      console.log('version without v?', version.replace('v', ''));
+      const downloadUrl = `https://cdn.door43.org/${originalLanguageId}/${originalLanguageBibleId}/${version}/${originalLanguageBibleId}.zip`;
+      const resource = {
+        languageId: originalLanguageId,
+        resourceId: originalLanguageBibleId,
+        remoteModifiedTime: '0001-01-01T00:00:00+00:00',
+        downloadUrl,
+        version: version.replace('v', ''),
+        subject: 'Bible',
+        catalogEntry: {
+          subject: {},
+          resource: {},
+          format: {},
+        },
+      };
+      console.log('tn - resource', resource);
+      // await downloadAndProcessResource(resource);
+    // }
     const groupData = await tsvToGroupData(filepath, 'translationNotes', {categorized: true}, originalBiblePath);
 
     formatAndSaveGroupData(groupData, outputPath, bookId);
