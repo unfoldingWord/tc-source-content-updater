@@ -97,6 +97,8 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
       };
       console.log('tn - resource', resource);
       try {
+        // Delay to try to avoid Socket timeout
+        await delay(1000);
         await downloadAndProcessResource(resource, resourcesPath);
       } catch (error) {
         throw Error(error);
