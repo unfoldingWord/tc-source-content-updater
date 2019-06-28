@@ -86,6 +86,7 @@ export function download(uri, dest, progressCallback) {
 
       response.pipe(file);
       file.on('finish', () => {
+        req.end();
         resolve({
           uri,
           dest,
@@ -97,6 +98,7 @@ export function download(uri, dest, progressCallback) {
     req.on('error', (error) => {
       file.end();
       rimraf.sync(dest);
+      req.end();
       reject(error);
     });
 
