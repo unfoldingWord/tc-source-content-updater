@@ -23,8 +23,9 @@ import * as bibleUtils from '../../resources/bible';
  * @param {String} sourcePath - Path to the extracted files that came from the zip file from the catalog
  * e.g. /Users/mannycolon/translationCore/resources/imports/en_tn_v16/en_tn
  * @param {String} outputPath - Path to place the processed resource files WITHOUT the version in the path
+ * @param {String} resourcesPath Path to user resources folder
  */
-export async function processTranslationNotes(resource, sourcePath, outputPath) {
+export async function processTranslationNotes(resource, sourcePath, outputPath, resourcesPath) {
   if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId) {
     throw Error(resourcesHelpers.formatError(resource, errors.RESOURCE_NOT_GIVEN));
   }
@@ -47,7 +48,8 @@ export async function processTranslationNotes(resource, sourcePath, outputPath) 
   const OT_ORIG_LANG_QUERY = getQueryStringForBibleId(tsvRelations, bibleUtils.OT_ORIG_LANG);
   const NT_ORIG_LANG_QUERY = getQueryStringForBibleId(tsvRelations, bibleUtils.NT_ORIG_LANG);
   const OT_ORIG_LANG_VERSION = getQueryVariable(OT_ORIG_LANG_QUERY, 'v');
-  const NT_ORIG_LANG_VERSION = getQueryVariable(NT_ORIG_LANG_QUERY, 'v');
+  const NT_ORIG_LANG_VERSION = 0.7;
+  // getQueryVariable(NT_ORIG_LANG_QUERY, 'v');
   const tsvFiles = fs.readdirSync(sourcePath).filter((filename) => path.extname(filename) === '.tsv');
 
   tsvFiles.forEach(async(filename) => {
@@ -76,11 +78,9 @@ export async function processTranslationNotes(resource, sourcePath, outputPath) 
       // Old versions of the orginal language resource bible will be deleted because the tn uses the latest version and not an older version
       resourcesHelpers.removeAllButLatestVersion(versionsSubdirectory);
     }
-    // add description
-    // if (!fs.existsSync(originalBiblePath)) {
+    // If version needed is not in the user resources download it.
+    if (!fs.existsSync(originalBiblePath)) {
       // download orig. lang. resource
-      // https://cdn.door43.org/el-x-koine/ugnt/v0.9/ugnt.zip
-      console.log('version without v?', version.replace('v', ''));
       const downloadUrl = `https://cdn.door43.org/${originalLanguageId}/${originalLanguageBibleId}/${version}/${originalLanguageBibleId}.zip`;
       const resource = {
         languageId: originalLanguageId,
@@ -96,8 +96,8 @@ export async function processTranslationNotes(resource, sourcePath, outputPath) 
         },
       };
       console.log('tn - resource', resource);
-      // await downloadAndProcessResource(resource);
-    // }
+      await downloadAndProcessResource(resource, resourcesPath);
+    }
     const groupData = await tsvToGroupData(filepath, 'translationNotes', {categorized: true}, originalBiblePath);
 
     formatAndSaveGroupData(groupData, outputPath, bookId);

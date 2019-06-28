@@ -159,10 +159,11 @@ export function getSubdirOfUnzippedResource(extractedFilesPath) {
 /**
  * @description Processes a resource in the imports directory as needed
  * @param {Object} resource Resource object
- * @param {String} sourcePath Path the the source dictory of the resource
+ * @param {String} sourcePath Path to the source dictory of the resource
+ * @param {String} resourcesPath Path to user resources folder
  * @return {String} Path to the directory of the processed files
  */
-export async function processResource(resource, sourcePath) {
+export async function processResource(resource, sourcePath, resourcesPath = null) {
   if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId) {
     throw Error(formatError(resource, errors.RESOURCE_NOT_GIVEN));
   }
@@ -181,7 +182,7 @@ export async function processResource(resource, sourcePath) {
       twArticleHelpers.processTranslationWords(resource, sourcePath, processedFilesPath);
       break;
     case 'TSV_Translation_Notes':
-      await tnArticleHelpers.processTranslationNotes(resource, sourcePath, processedFilesPath);
+      await tnArticleHelpers.processTranslationNotes(resource, sourcePath, processedFilesPath, resourcesPath);
       break;
     case 'Translation_Academy':
       taArticleHelpers.processTranslationAcademy(resource, sourcePath, processedFilesPath);

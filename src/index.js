@@ -86,8 +86,6 @@ export function getResourcesForLanguage(languageId) {
  * @return {Promise} Promise that resolves to return all the resources updated or rejects if a resource failed to download
  */
 Updater.prototype.downloadResources = async function(languageList, resourcesPath, resources = this.updatedCatalogResources) {
-  console.log('this.remoteCatalog', this.remoteCatalog);
-
   // call this.getResourcesForLanguage(lang) for each language in list to get all resources to update
   if (!resources) {
     await this.getLatestResources([]);

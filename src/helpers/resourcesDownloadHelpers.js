@@ -24,11 +24,10 @@ import * as Bible from '../resources/bible';
  *             subject: String,
  *             catalogEntry: {langResource, bookResource, format}
  *           }>} resource - resource to download
- * @param {String} resourcesPath Path to the resources directory
+ * @param {String} resourcesPath Path to the user resources directory
  * @return {Promise} Download promise
  */
 export const downloadAndProcessResource = async (resource, resourcesPath) => {
-  console.log('downloadAndProcessResource() resourcesPath', resourcesPath);
   if (!resource) {
     throw Error(errors.RESOURCE_NOT_GIVEN);
   } else if (!resourcesPath) {
@@ -57,7 +56,7 @@ export const downloadAndProcessResource = async (resource, resourcesPath) => {
       throw Error(appendError(errors.UNABLE_TO_UNZIP_RESOURCES, err));
     }
     const importSubdirPath = getSubdirOfUnzippedResource(importPath);
-    const processedFilesPath = await processResource(resource, importSubdirPath);
+    const processedFilesPath = await processResource(resource, importSubdirPath, resourcesPath);
     if (processedFilesPath) {
       // Extra step if the resource is the Greek UGNT or Hebrew UHB
       if (isGreekOrHebrew) {
