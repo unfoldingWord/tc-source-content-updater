@@ -164,47 +164,52 @@ export function getSubdirOfUnzippedResource(extractedFilesPath) {
  * @return {String} Path to the directory of the processed files
  */
 export async function processResource(resource, sourcePath, resourcesPath = null) {
-  if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId) {
-    throw Error(formatError(resource, errors.RESOURCE_NOT_GIVEN));
-  }
-  if (!sourcePath) {
-    throw Error(formatError(resource, errors.SOURCE_PATH_NOT_GIVEN));
-  }
-  if (!fs.pathExistsSync(sourcePath)) {
-    throw Error(formatError(resource, errors.SOURCE_PATH_NOT_EXIST));
-  }
+  try {
+    if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId) {
+      throw Error(formatError(resource, errors.RESOURCE_NOT_GIVEN));
+    }
+    if (!sourcePath) {
+      throw Error(formatError(resource, errors.SOURCE_PATH_NOT_GIVEN));
+    }
+    if (!fs.pathExistsSync(sourcePath)) {
+      throw Error(formatError(resource, errors.SOURCE_PATH_NOT_EXIST));
+    }
 
-  const processedFilesPath = sourcePath + '_processed';
-  fs.ensureDirSync(processedFilesPath);
+    const processedFilesPath = sourcePath + '_processed';
+    fs.ensureDirSync(processedFilesPath);
 
-  switch (resource.subject) {
-    case 'Translation_Words':
-      twArticleHelpers.processTranslationWords(resource, sourcePath, processedFilesPath);
-      break;
-    case 'TSV_Translation_Notes':
-      await tnArticleHelpers.processTranslationNotes(resource, sourcePath, processedFilesPath, resourcesPath);
-      break;
-    case 'Translation_Academy':
-      taArticleHelpers.processTranslationAcademy(resource, sourcePath, processedFilesPath);
-      break;
-    case 'Bible':
-    case 'Aligned_Bible':
-    case 'Greek_New_Testament':
-    case 'Hebrew_Old_Testament':
-      packageParseHelpers.parseBiblePackage(resource, sourcePath, processedFilesPath);
-      break;
-    default:
-      fs.copySync(sourcePath, processedFilesPath);
+    switch (resource.subject) {
+      case 'Translation_Words':
+        twArticleHelpers.processTranslationWords(resource, sourcePath, processedFilesPath);
+        break;
+      case 'TSV_Translation_Notes':
+        await tnArticleHelpers.processTranslationNotes(resource, sourcePath, processedFilesPath, resourcesPath);
+        break;
+      case 'Translation_Academy':
+        taArticleHelpers.processTranslationAcademy(resource, sourcePath, processedFilesPath);
+        break;
+      case 'Bible':
+      case 'Aligned_Bible':
+      case 'Greek_New_Testament':
+      case 'Hebrew_Old_Testament':
+        packageParseHelpers.parseBiblePackage(resource, sourcePath, processedFilesPath);
+        break;
+      default:
+        fs.copySync(sourcePath, processedFilesPath);
+    }
+
+    const manifest = getResourceManifest(sourcePath);
+
+    if (!getResourceManifest(processedFilesPath) && manifest) {
+      manifest.catalog_modified_time = resource.remoteModifiedTime;
+      fs.outputJsonSync(path.join(processedFilesPath, 'manifest.json'), manifest, {spaces: 2});
+    }
+
+    return processedFilesPath;
+  } catch (error) {
+    console.log('error', error);
+    throw Error(appendError(errors.UNABLE_TO_DOWNLOAD_RESOURCES, error));
   }
-
-  const manifest = getResourceManifest(sourcePath);
-
-  if (!getResourceManifest(processedFilesPath) && manifest) {
-    manifest.catalog_modified_time = resource.remoteModifiedTime;
-    fs.outputJsonSync(path.join(processedFilesPath, 'manifest.json'), manifest, {spaces: 2});
-  }
-
-  return processedFilesPath;
 }
 
 /**
