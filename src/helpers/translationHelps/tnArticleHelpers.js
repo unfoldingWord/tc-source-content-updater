@@ -96,7 +96,11 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
         },
       };
       console.log('tn - resource', resource);
-      await downloadAndProcessResource(resource, resourcesPath);
+      try {
+        await downloadAndProcessResource(resource, resourcesPath);
+      } catch (error) {
+        throw Error(error);
+      }
     }
     const groupData = await tsvToGroupData(filepath, 'translationNotes', {categorized: true}, originalBiblePath);
 
