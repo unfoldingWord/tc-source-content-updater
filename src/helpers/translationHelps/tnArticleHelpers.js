@@ -55,8 +55,8 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
     const tsvRelations = tsvManifest.dublin_core.relation;
     const OT_ORIG_LANG_QUERY = getQueryStringForBibleId(tsvRelations, OT_ORIG_LANG);
     const NT_ORIG_LANG_QUERY = getQueryStringForBibleId(tsvRelations, NT_ORIG_LANG);
-    const OT_ORIG_LANG_VERSION = getQueryVariable(OT_ORIG_LANG_QUERY, 'v');
-    const NT_ORIG_LANG_VERSION = 0.7;
+    const OT_ORIG_LANG_VERSION = 'v' + getQueryVariable(OT_ORIG_LANG_QUERY, 'v');
+    const NT_ORIG_LANG_VERSION = 'v' + 0.7;
     // getQueryVariable(NT_ORIG_LANG_QUERY, 'v');
     await getMissingOriginalResource(resourcesPath, OT_ORIG_LANG, OT_ORIG_LANG_BIBLE, OT_ORIG_LANG_VERSION);
     await getMissingOriginalResource(resourcesPath, NT_ORIG_LANG, NT_ORIG_LANG_BIBLE, NT_ORIG_LANG_VERSION);
