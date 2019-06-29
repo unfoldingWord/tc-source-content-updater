@@ -69,7 +69,7 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
       const isNewTestament = BIBLE_LIST_NT.includes(bookNumberAndId);
       const originalLanguageId = isNewTestament ? NT_ORIG_LANG : OT_ORIG_LANG;
       const originalLanguageBibleId = isNewTestament ? NT_ORIG_LANG_BIBLE : OT_ORIG_LANG_BIBLE;
-      const version = 'v' + (isNewTestament ? NT_ORIG_LANG_VERSION : OT_ORIG_LANG_VERSION);
+      const version = isNewTestament ? NT_ORIG_LANG_VERSION : OT_ORIG_LANG_VERSION;
       const originalBiblePath = path.join(
         ospath.home(),
         'translationCore',
