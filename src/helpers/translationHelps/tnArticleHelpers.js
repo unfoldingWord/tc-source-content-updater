@@ -14,7 +14,14 @@ import {downloadAndProcessResource} from '../resourcesDownloadHelpers';
 import {delay, getQueryStringForBibleId, getQueryVariable} from '../utils';
 // constants
 import * as errors from '../../resources/errors';
-import * as bibleUtils from '../../resources/bible';
+import {
+  OT_ORIG_LANG,
+  NT_ORIG_LANG,
+  OT_ORIG_LANG_BIBLE,
+  NT_ORIG_LANG_BIBLE,
+  BOOK_CHAPTER_VERSES,
+  BIBLE_LIST_NT,
+} from '../../resources/bible';
 
 /**
  * @description Processes the extracted files for translationNotes to separate the folder
@@ -46,22 +53,70 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
     const tsvManifest = resourcesHelpers.getResourceManifestFromYaml(sourcePath);
     // array of related resources used to generated the tsv.
     const tsvRelations = tsvManifest.dublin_core.relation;
-    const OT_ORIG_LANG_QUERY = getQueryStringForBibleId(tsvRelations, bibleUtils.OT_ORIG_LANG);
-    const NT_ORIG_LANG_QUERY = getQueryStringForBibleId(tsvRelations, bibleUtils.NT_ORIG_LANG);
+    const OT_ORIG_LANG_QUERY = getQueryStringForBibleId(tsvRelations, OT_ORIG_LANG);
+    const NT_ORIG_LANG_QUERY = getQueryStringForBibleId(tsvRelations, NT_ORIG_LANG);
     const OT_ORIG_LANG_VERSION = getQueryVariable(OT_ORIG_LANG_QUERY, 'v');
     const NT_ORIG_LANG_VERSION = 0.7;
     // getQueryVariable(NT_ORIG_LANG_QUERY, 'v');
+    await getMissingOriginalResource(resourcesPath, OT_ORIG_LANG, OT_ORIG_LANG_BIBLE, OT_ORIG_LANG_VERSION);
+    await getMissingOriginalResource(resourcesPath, NT_ORIG_LANG, NT_ORIG_LANG_BIBLE, NT_ORIG_LANG_VERSION);
     const tsvFiles = fs.readdirSync(sourcePath).filter((filename) => path.extname(filename) === '.tsv');
 
     tsvFiles.forEach(async(filename) => {
       const bookId = filename.split('-')[1].toLowerCase().replace('.tsv', '');
-      if (!bibleUtils.BOOK_CHAPTER_VERSES[bookId]) console.error(`${bookId} is not a valid book id.`);
+      if (!BOOK_CHAPTER_VERSES[bookId]) console.error(`${bookId} is not a valid book id.`);
       const bookNumberAndId = path.parse(filename.replace('en_tn_', '')).name;
-      const isNewTestament = bibleUtils.BIBLE_LIST_NT.includes(bookNumberAndId);
-      const originalLanguageId = isNewTestament ? bibleUtils.NT_ORIG_LANG : bibleUtils.OT_ORIG_LANG;
-      const originalLanguageBibleId = isNewTestament ? bibleUtils.NT_ORIG_LANG_BIBLE : bibleUtils.OT_ORIG_LANG_BIBLE;
+      const isNewTestament = BIBLE_LIST_NT.includes(bookNumberAndId);
+      const originalLanguageId = isNewTestament ? NT_ORIG_LANG : OT_ORIG_LANG;
+      const originalLanguageBibleId = isNewTestament ? NT_ORIG_LANG_BIBLE : OT_ORIG_LANG_BIBLE;
       const version = 'v' + (isNewTestament ? NT_ORIG_LANG_VERSION : OT_ORIG_LANG_VERSION);
+      const originalBiblePath = path.join(
+        ospath.home(),
+        'translationCore',
+        'resources',
+        originalLanguageId,
+        'bibles',
+        originalLanguageBibleId,
+        version
+      );
       const filepath = path.join(sourcePath, filename);
+      const groupData = await tsvToGroupData(filepath, 'translationNotes', {categorized: true}, originalBiblePath);
+
+      formatAndSaveGroupData(groupData, outputPath, bookId);
+    });
+
+    await delay(200);
+
+    // Generate groupsIndex using tN groupData & tA articles.
+    const translationAcademyPath = path.join(
+      ospath.home(),
+      'translationCore',
+      'resources',
+      resource.languageId,
+      'translationHelps',
+      'translationAcademy'
+    );
+
+    const taCategoriesPath = resourcesHelpers.getLatestVersionInPath(translationAcademyPath);
+    const categorizedGroupsIndex = generateGroupsIndex(outputPath, taCategoriesPath);
+
+    saveGroupsIndex(categorizedGroupsIndex, outputPath);
+  } catch (error) {
+    throw Error(error);
+  }
+}
+
+/**
+ * Get missing original language resource
+ * @param {String} resourcesPath - resources Path
+ * @param {String} originalLanguageId - original language Id
+ * @param {String} originalLanguageBibleId - original language bible Id
+ * @param {String} version - version number
+ * @return {Promise}
+ */
+function getMissingOriginalResource(resourcesPath, originalLanguageId, originalLanguageBibleId, version) {
+  return new Promise(async (resolve, reject) => {
+    try {
       const originalBiblePath = path.join(
         ospath.home(),
         'translationCore',
@@ -101,30 +156,13 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
         console.log('tn - resource', resource);
         // Delay to try to avoid Socket timeout
         await delay(1000);
-        await downloadAndProcessResource(resource, resourcesPath);
+        const result = await downloadAndProcessResource(resource, resourcesPath);
+        resolve(result);
+      } else {
+        resolve();
       }
-      const groupData = await tsvToGroupData(filepath, 'translationNotes', {categorized: true}, originalBiblePath);
-
-      formatAndSaveGroupData(groupData, outputPath, bookId);
-    });
-
-    await delay(200);
-
-    // Generate groupsIndex using tN groupData & tA articles.
-    const translationAcademyPath = path.join(
-      ospath.home(),
-      'translationCore',
-      'resources',
-      resource.languageId,
-      'translationHelps',
-      'translationAcademy'
-    );
-
-    const taCategoriesPath = resourcesHelpers.getLatestVersionInPath(translationAcademyPath);
-    const categorizedGroupsIndex = generateGroupsIndex(outputPath, taCategoriesPath);
-
-    saveGroupsIndex(categorizedGroupsIndex, outputPath);
-  } catch (error) {
-    throw Error(error);
-  }
+    } catch (error) {
+      reject(error);
+    }
+  });
 }

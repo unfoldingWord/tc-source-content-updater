@@ -60,7 +60,6 @@ export function read(uri) {
  * @return {Promise.<{}|Error>} the status code or an error
  */
 export function download(uri, dest, progressCallback) {
-  console.log('download()');
   progressCallback = progressCallback || function() {};
   const parsedUrl = url.parse(uri, false, true);
   const makeRequest = parsedUrl.protocol === 'https:' ? https.request.bind(https) : http.request.bind(http);

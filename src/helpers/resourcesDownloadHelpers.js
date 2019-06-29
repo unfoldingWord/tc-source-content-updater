@@ -27,77 +27,75 @@ import * as Bible from '../resources/bible';
  * @param {String} resourcesPath Path to the user resources directory
  * @return {Promise} Download promise
  */
-export const downloadAndProcessResource = (resource, resourcesPath) => {
-  return new Promise(async (resolve, reject) => {
-    if (!resource) {
-      throw Error(errors.RESOURCE_NOT_GIVEN);
-    } else if (!resourcesPath) {
-      throw Error(formatError(resource, errors.RESOURCES_PATH_NOT_GIVEN));
-    }
-    // Resource is the Greek UGNT or Hebrew UHB
-    const isGreekOrHebrew = (resource.languageId === Bible.NT_ORIG_LANG && resource.resourceId === Bible.NT_ORIG_LANG_BIBLE) ||
-      (resource.languageId === Bible.OT_ORIG_LANG && resource.resourceId === Bible.OT_ORIG_LANG_BIBLE);
-    fs.ensureDirSync(resourcesPath);
-    const importsPath = path.join(resourcesPath, 'imports');
-    fs.ensureDirSync(importsPath);
-    let importPath = null;
-    let zipFilePath = null;
+export const downloadAndProcessResource = async (resource, resourcesPath) => {
+  if (!resource) {
+    throw Error(errors.RESOURCE_NOT_GIVEN);
+  } else if (!resourcesPath) {
+    throw Error(formatError(resource, errors.RESOURCES_PATH_NOT_GIVEN));
+  }
+  // Resource is the Greek UGNT or Hebrew UHB
+  const isGreekOrHebrew = (resource.languageId === Bible.NT_ORIG_LANG && resource.resourceId === Bible.NT_ORIG_LANG_BIBLE) ||
+    (resource.languageId === Bible.OT_ORIG_LANG && resource.resourceId === Bible.OT_ORIG_LANG_BIBLE);
+  fs.ensureDirSync(resourcesPath);
+  const importsPath = path.join(resourcesPath, 'imports');
+  fs.ensureDirSync(importsPath);
+  let importPath = null;
+  let zipFilePath = null;
+  try {
     try {
-      try {
-        const zipFileName = resource.languageId + '_' + resource.resourceId + '_v' + resource.version + '.zip';
-        zipFilePath = path.join(importsPath, zipFileName);
-        console.log('Downloading: ' + resource.downloadUrl);
-        await downloadHelpers.download(resource.downloadUrl, zipFilePath);
-      } catch (err) {
-        throw Error(appendError(errors.UNABLE_TO_DOWNLOAD_RESOURCES, err));
-      }
-      try {
-        importPath = await unzipResource(resource, zipFilePath, resourcesPath);
-      } catch (err) {
-        throw Error(appendError(errors.UNABLE_TO_UNZIP_RESOURCES, err));
-      }
-      const importSubdirPath = getSubdirOfUnzippedResource(importPath);
-      const processedFilesPath = await processResource(resource, importSubdirPath, resourcesPath);
-      if (processedFilesPath) {
-        // Extra step if the resource is the Greek UGNT or Hebrew UHB
-        if (isGreekOrHebrew) {
-          const twGroupDataPath = makeTwGroupDataResource(resource, processedFilesPath);
-          const twGroupDataResourcesPath = path.join(resourcesPath, resource.languageId, 'translationHelps', 'translationWords', 'v' + resource.version);
-          try {
-            await moveResourcesHelpers.moveResources(twGroupDataPath, twGroupDataResourcesPath);
-            removeAllButLatestVersion(path.dirname(twGroupDataResourcesPath));
-          } catch (err) {
-            throw Error(appendError(errors.UNABLE_TO_CREATE_TW_GROUP_DATA, err));
-          }
-        }
-        const resourcePath = getActualResourcePath(resource, resourcesPath);
-        try {
-          await moveResourcesHelpers.moveResources(processedFilesPath, resourcePath);
-        } catch (err) {
-          throw Error(appendError(errors.UNABLE_TO_MOVE_RESOURCE_INTO_RESOURCES, err));
-        }
-        // Only remove older version of resources if its not a Greek or Hebrew bible resource
-        if (!isGreekOrHebrew) {
-          removeAllButLatestVersion(path.dirname(resourcePath));
-        }
-      } else {
-        throw Error(errors.FAILED_TO_PROCESS_RESOURCE);
-      }
+      const zipFileName = resource.languageId + '_' + resource.resourceId + '_v' + resource.version + '.zip';
+      zipFilePath = path.join(importsPath, zipFileName);
+      console.log('Downloading: ' + resource.downloadUrl);
+      await downloadHelpers.download(resource.downloadUrl, zipFilePath);
     } catch (err) {
-      const errorMessage = getErrorMessage(err);
-      console.log('Error getting ' + resource.downloadUrl + ': ' + errorMessage);
-      reject(formatError(resource, errorMessage));
-    } finally {
-      if (zipFilePath) {
-        rimraf.sync(zipFilePath, fs);
-      }
-      if (importPath) {
-        rimraf.sync(importPath, fs);
-      }
+      throw Error(appendError(errors.UNABLE_TO_DOWNLOAD_RESOURCES, err));
     }
-    console.log('Processed: ' + resource.downloadUrl);
-    resolve(resource);
-  });
+    try {
+      importPath = await unzipResource(resource, zipFilePath, resourcesPath);
+    } catch (err) {
+      throw Error(appendError(errors.UNABLE_TO_UNZIP_RESOURCES, err));
+    }
+    const importSubdirPath = getSubdirOfUnzippedResource(importPath);
+    const processedFilesPath = await processResource(resource, importSubdirPath, resourcesPath);
+    if (processedFilesPath) {
+      // Extra step if the resource is the Greek UGNT or Hebrew UHB
+      if (isGreekOrHebrew) {
+        const twGroupDataPath = makeTwGroupDataResource(resource, processedFilesPath);
+        const twGroupDataResourcesPath = path.join(resourcesPath, resource.languageId, 'translationHelps', 'translationWords', 'v' + resource.version);
+        try {
+          await moveResourcesHelpers.moveResources(twGroupDataPath, twGroupDataResourcesPath);
+          removeAllButLatestVersion(path.dirname(twGroupDataResourcesPath));
+        } catch (err) {
+          throw Error(appendError(errors.UNABLE_TO_CREATE_TW_GROUP_DATA, err));
+        }
+      }
+      const resourcePath = getActualResourcePath(resource, resourcesPath);
+      try {
+        await moveResourcesHelpers.moveResources(processedFilesPath, resourcePath);
+      } catch (err) {
+        throw Error(appendError(errors.UNABLE_TO_MOVE_RESOURCE_INTO_RESOURCES, err));
+      }
+      // Only remove older version of resources if its not a Greek or Hebrew bible resource
+      if (!isGreekOrHebrew) {
+        removeAllButLatestVersion(path.dirname(resourcePath));
+      }
+    } else {
+      throw Error(errors.FAILED_TO_PROCESS_RESOURCE);
+    }
+  } catch (err) {
+    const errorMessage = getErrorMessage(err);
+    console.log('Error getting ' + resource.downloadUrl + ': ' + errorMessage);
+    throw Error(formatError(resource, errorMessage));
+  } finally {
+    if (zipFilePath) {
+      rimraf.sync(zipFilePath, fs);
+    }
+    if (importPath) {
+      rimraf.sync(importPath, fs);
+    }
+  }
+  console.log('Processed: ' + resource.downloadUrl);
+  return resource;
 };
 
 /**
