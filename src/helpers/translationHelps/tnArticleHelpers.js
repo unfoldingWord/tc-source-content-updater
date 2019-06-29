@@ -55,7 +55,8 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
     const tsvRelations = tsvManifest.dublin_core.relation;
     const OT_ORIG_LANG_QUERY = getQueryStringForBibleId(tsvRelations, OT_ORIG_LANG);
     const NT_ORIG_LANG_QUERY = getQueryStringForBibleId(tsvRelations, NT_ORIG_LANG);
-    const OT_ORIG_LANG_VERSION = 'v' + getQueryVariable(OT_ORIG_LANG_QUERY, 'v');
+    const OT_ORIG_LANG_VERSION = 'v' + '2.1.6';
+    // getQueryVariable(OT_ORIG_LANG_QUERY, 'v');
     const NT_ORIG_LANG_VERSION = 'v' + 0.7;
     // getQueryVariable(NT_ORIG_LANG_QUERY, 'v');
     await getMissingOriginalResource(resourcesPath, OT_ORIG_LANG, OT_ORIG_LANG_BIBLE, OT_ORIG_LANG_VERSION);
@@ -134,8 +135,6 @@ function getMissingOriginalResource(resourcesPath, originalLanguageId, originalL
         // Old versions of the orginal language resource bible will be deleted because the tn uses the latest version and not an older version
         resourcesHelpers.removeAllButLatestVersion(versionsSubdirectory);
       }
-      console.log('originalBiblePath', originalBiblePath);
-      console.log('originalBiblePath exists', fs.existsSync(originalBiblePath));
       // If version needed is not in the user resources download it.
       if (!fs.existsSync(originalBiblePath)) {
         // Download orig. lang. resource
@@ -153,11 +152,10 @@ function getMissingOriginalResource(resourcesPath, originalLanguageId, originalL
             format: {},
           },
         };
-        console.log('tn - resource', resource);
         // Delay to try to avoid Socket timeout
         await delay(1000);
-        const result = await downloadAndProcessResource(resource, resourcesPath);
-        resolve(result);
+        await downloadAndProcessResource(resource, resourcesPath);
+        resolve();
       } else {
         resolve();
       }
