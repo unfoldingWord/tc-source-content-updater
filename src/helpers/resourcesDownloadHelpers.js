@@ -112,7 +112,7 @@ export const downloadAndProcessResourceWithCatch = async (resource, resourcesPat
     console.log('Download Success: ' + resource.downloadUrl);
   } catch (e) {
     console.log('Download Error:');
-    console.log(e);
+    console.error(e);
     errorList.push(e);
   }
   return result;
