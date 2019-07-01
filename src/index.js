@@ -1,6 +1,7 @@
 /* eslint-disable curly, no-invalid-this */
 import path from 'path';
 import ospath from 'ospath';
+import fs from 'fs-extra';
 // helpers
 import * as apiHelpers from './helpers/apiHelpers';
 import * as parseHelpers from './helpers/parseHelpers';
@@ -165,7 +166,7 @@ Updater.prototype.generateTwGroupDataFromAlignedBible = function(biblePath, outp
  * @param {string} resourcesPath - Path to the resources directory where each resource will be placed
  * @return {Promise} Promise that resolves to return all the resources updated or rejects if a resource failed to download.
  */
-Updater.prototype.downloadAndProcessResource = function(resourceDetails, resourcesPath) {
+Updater.prototype.downloadAndProcessResource = async function(resourceDetails, resourcesPath) {
   const {languageId, resourceId, version} = resourceDetails;
   const downloadUrl = `https://cdn.door43.org/${languageId}/${resourceId}/v${version}/${resourceId}.zip`;
   const resource = {
@@ -181,7 +182,11 @@ Updater.prototype.downloadAndProcessResource = function(resourceDetails, resourc
       format: {},
     },
   };
-  return resourcesDownloadHelpers.downloadAndProcessResource(resource, resourcesPath);
+  const result = await resourcesDownloadHelpers.downloadAndProcessResource(resource, resourcesPath);
+  // Remove imports folder
+  const importsPath = path.join(resourcesPath, 'imports');
+  fs.removeSync(importsPath);
+  return result;
 };
 
 export default Updater;
