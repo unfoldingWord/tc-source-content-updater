@@ -178,15 +178,18 @@ function getOtherTnsOLVersions(languageIds, originalLanguageId, versionsToNotDel
     console.log('languageId', languageId);
     const tnHelpsPath = path.join(USER_RESOURCES_PATH, languageId, 'translationHelps', 'translationNotes');
     console.log('tnHelpsPath', tnHelpsPath);
-    const tnHelpsVersionPath = resourcesHelpers.getLatestVersionInPath(tnHelpsPath);
-    const tnManifestPath = path.join(tnHelpsVersionPath, 'manifest.json');
-    if (fs.existsSync(tnManifestPath)) {
-      const manifest = fs.readJsonSync(tnManifestPath);
-      const {relation} = manifest.dublin_core || {};
-      const query = getQueryStringForBibleId(relation, originalLanguageId);
-      if (query) {
-        const version = 'v' + getQueryVariable(query, 'v');
-        versionsToNotDelete.push(version);
+    if (fs.existsSync(tnHelpsPath)) {
+      const tnHelpsVersionPath = resourcesHelpers.getLatestVersionInPath(tnHelpsPath);
+      console.log('tnHelpsVersionPath', tnHelpsVersionPath);
+      const tnManifestPath = path.join(tnHelpsVersionPath, 'manifest.json');
+      if (fs.existsSync(tnManifestPath)) {
+        const manifest = fs.readJsonSync(tnManifestPath);
+        const {relation} = manifest.dublin_core || {};
+        const query = getQueryStringForBibleId(relation, originalLanguageId);
+        if (query) {
+          const version = 'v' + getQueryVariable(query, 'v');
+          versionsToNotDelete.push(version);
+        }
       }
     }
   });
