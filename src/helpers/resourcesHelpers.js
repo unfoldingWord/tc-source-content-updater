@@ -159,51 +159,57 @@ export function getSubdirOfUnzippedResource(extractedFilesPath) {
 /**
  * @description Processes a resource in the imports directory as needed
  * @param {Object} resource Resource object
- * @param {String} sourcePath Path the the source dictory of the resource
+ * @param {String} sourcePath Path to the source dictory of the resource
+ * @param {String} resourcesPath Path to user resources folder
  * @return {String} Path to the directory of the processed files
  */
-export async function processResource(resource, sourcePath) {
-  if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId) {
-    throw Error(formatError(resource, errors.RESOURCE_NOT_GIVEN));
-  }
-  if (!sourcePath) {
-    throw Error(formatError(resource, errors.SOURCE_PATH_NOT_GIVEN));
-  }
-  if (!fs.pathExistsSync(sourcePath)) {
-    throw Error(formatError(resource, errors.SOURCE_PATH_NOT_EXIST));
-  }
+export async function processResource(resource, sourcePath, resourcesPath = null) {
+  try {
+    if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId) {
+      throw Error(formatError(resource, errors.RESOURCE_NOT_GIVEN));
+    }
+    if (!sourcePath) {
+      throw Error(formatError(resource, errors.SOURCE_PATH_NOT_GIVEN));
+    }
+    if (!fs.pathExistsSync(sourcePath)) {
+      throw Error(formatError(resource, errors.SOURCE_PATH_NOT_EXIST));
+    }
 
-  const processedFilesPath = sourcePath + '_processed';
-  fs.ensureDirSync(processedFilesPath);
+    const processedFilesPath = sourcePath + '_processed';
+    fs.ensureDirSync(processedFilesPath);
 
-  switch (resource.subject) {
-    case 'Translation_Words':
-      twArticleHelpers.processTranslationWords(resource, sourcePath, processedFilesPath);
-      break;
-    case 'TSV_Translation_Notes':
-      await tnArticleHelpers.processTranslationNotes(resource, sourcePath, processedFilesPath);
-      break;
-    case 'Translation_Academy':
-      taArticleHelpers.processTranslationAcademy(resource, sourcePath, processedFilesPath);
-      break;
-    case 'Bible':
-    case 'Aligned_Bible':
-    case 'Greek_New_Testament':
-    case 'Hebrew_Old_Testament':
-      packageParseHelpers.parseBiblePackage(resource, sourcePath, processedFilesPath);
-      break;
-    default:
-      fs.copySync(sourcePath, processedFilesPath);
+    switch (resource.subject) {
+      case 'Translation_Words':
+        twArticleHelpers.processTranslationWords(resource, sourcePath, processedFilesPath);
+        break;
+      case 'TSV_Translation_Notes':
+        await tnArticleHelpers.processTranslationNotes(resource, sourcePath, processedFilesPath, resourcesPath);
+        break;
+      case 'Translation_Academy':
+        taArticleHelpers.processTranslationAcademy(resource, sourcePath, processedFilesPath);
+        break;
+      case 'Bible':
+      case 'Aligned_Bible':
+      case 'Greek_New_Testament':
+      case 'Hebrew_Old_Testament':
+        packageParseHelpers.parseBiblePackage(resource, sourcePath, processedFilesPath);
+        break;
+      default:
+        fs.copySync(sourcePath, processedFilesPath);
+    }
+
+    const manifest = getResourceManifest(sourcePath);
+
+    if (!getResourceManifest(processedFilesPath) && manifest) {
+      manifest.catalog_modified_time = resource.remoteModifiedTime;
+      fs.outputJsonSync(path.join(processedFilesPath, 'manifest.json'), manifest, {spaces: 2});
+    }
+
+    return processedFilesPath;
+  } catch (error) {
+    console.error(error);
+    throw Error(appendError(errors.UNABLE_TO_DOWNLOAD_RESOURCES, error));
   }
-
-  const manifest = getResourceManifest(sourcePath);
-
-  if (!getResourceManifest(processedFilesPath) && manifest) {
-    manifest.catalog_modified_time = resource.remoteModifiedTime;
-    fs.outputJsonSync(path.join(processedFilesPath, 'manifest.json'), manifest, {spaces: 2});
-  }
-
-  return processedFilesPath;
 }
 
 /**
@@ -260,16 +266,17 @@ return twGroupDataPath
 
 /**
  * Removes all version directories except the latest
- * @param {String} resourcePath Path to the reosurce dirctory that has subdirs of versions
+ * @param {String} resourcePath Path to the resource directory that has subdirs of versions
+ * @param {array} versionsToNotDelete List of versions not to be deleted.
  * @return {Boolean} True if versions were deleted, false if nothing was touched
  */
-export function removeAllButLatestVersion(resourcePath) {
+export function removeAllButLatestVersion(resourcePath, versionsToNotDelete = []) {
   // Remove the previoius verison(s)
   const versionDirs = getVersionsInPath(resourcePath);
   if (versionDirs && versionDirs.length > 1) {
     const lastVersion = versionDirs[versionDirs.length - 1];
     versionDirs.forEach((versionDir) => {
-      if (versionDir !== lastVersion) {
+      if (versionDir !== lastVersion && !versionsToNotDelete.includes(versionDir)) {
         fs.removeSync(path.join(resourcePath, versionDir));
       }
     });
@@ -312,3 +319,14 @@ export function getErrorMessage(error) {
 export function appendError(str, err) {
   return str + ': ' + getErrorMessage(err);
 }
+
+/**
+ * Determines if the rootpath plus a filename is a directory.
+ * @param {string} rootPath
+ * @param {string} filename
+ * @return {bool} - Whether the path is a directory or not.
+ */
+export const isDirectory = (rootPath, filename) => {
+  const fullPath = path.join(rootPath, filename);
+  return fs.lstatSync(fullPath).isDirectory();
+};

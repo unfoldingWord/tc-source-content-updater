@@ -24,16 +24,18 @@ import * as Bible from '../resources/bible';
  *             subject: String,
  *             catalogEntry: {langResource, bookResource, format}
  *           }>} resource - resource to download
- * @param {String} resourcesPath Path to the resources directory
+ * @param {String} resourcesPath Path to the user resources directory
  * @return {Promise} Download promise
  */
 export const downloadAndProcessResource = async (resource, resourcesPath) => {
   if (!resource) {
     throw Error(errors.RESOURCE_NOT_GIVEN);
-  }
-  if (!resourcesPath) {
+  } else if (!resourcesPath) {
     throw Error(formatError(resource, errors.RESOURCES_PATH_NOT_GIVEN));
   }
+  // Resource is the Greek UGNT or Hebrew UHB
+  const isGreekOrHebrew = (resource.languageId === Bible.NT_ORIG_LANG && resource.resourceId === Bible.NT_ORIG_LANG_BIBLE) ||
+    (resource.languageId === Bible.OT_ORIG_LANG && resource.resourceId === Bible.OT_ORIG_LANG_BIBLE);
   fs.ensureDirSync(resourcesPath);
   const importsPath = path.join(resourcesPath, 'imports');
   fs.ensureDirSync(importsPath);
@@ -54,11 +56,10 @@ export const downloadAndProcessResource = async (resource, resourcesPath) => {
       throw Error(appendError(errors.UNABLE_TO_UNZIP_RESOURCES, err));
     }
     const importSubdirPath = getSubdirOfUnzippedResource(importPath);
-    const processedFilesPath = await processResource(resource, importSubdirPath);
+    const processedFilesPath = await processResource(resource, importSubdirPath, resourcesPath);
     if (processedFilesPath) {
       // Extra step if the resource is the Greek UGNT or Hebrew UHB
-      if ((resource.languageId === Bible.NT_ORIG_LANG && resource.resourceId === Bible.NT_ORIG_LANG_BIBLE) ||
-          (resource.languageId === Bible.OT_ORIG_LANG && resource.resourceId === Bible.OT_ORIG_LANG_BIBLE)) {
+      if (isGreekOrHebrew) {
         const twGroupDataPath = makeTwGroupDataResource(resource, processedFilesPath);
         const twGroupDataResourcesPath = path.join(resourcesPath, resource.languageId, 'translationHelps', 'translationWords', 'v' + resource.version);
         try {
@@ -74,7 +75,10 @@ export const downloadAndProcessResource = async (resource, resourcesPath) => {
       } catch (err) {
         throw Error(appendError(errors.UNABLE_TO_MOVE_RESOURCE_INTO_RESOURCES, err));
       }
-      removeAllButLatestVersion(path.dirname(resourcePath));
+      // Only remove older version of resources if its not a Greek or Hebrew bible resource
+      if (!isGreekOrHebrew) {
+        removeAllButLatestVersion(path.dirname(resourcePath));
+      }
     } else {
       throw Error(errors.FAILED_TO_PROCESS_RESOURCE);
     }
@@ -108,7 +112,7 @@ export const downloadAndProcessResourceWithCatch = async (resource, resourcesPat
     console.log('Download Success: ' + resource.downloadUrl);
   } catch (e) {
     console.log('Download Error:');
-    console.log(e);
+    console.error(e);
     errorList.push(e);
   }
   return result;
