@@ -124,11 +124,9 @@ function getMissingOriginalResource(resourcesPath, originalLanguageId, originalL
 
       const languageIds = fs.readdirSync(USER_RESOURCES_PATH)
         .filter((filename) => resourcesHelpers.isDirectory(USER_RESOURCES_PATH, filename));
-
-      console.log('languageIds', languageIds);
       const versionsToNotDelete = [];
+      // Get the version of the other Tns orginal language to determine versions that should not be deleted.
       getOtherTnsOLVersions(languageIds, originalLanguageId, versionsToNotDelete);
-      console.log('versionsToNotDelete', versionsToNotDelete);
 
       const versionsSubdirectory = originalBiblePath.replace(version, '');
       const latestOriginalBiblePath = resourcesHelpers.getLatestVersionInPath(versionsSubdirectory);
@@ -175,12 +173,9 @@ function getMissingOriginalResource(resourcesPath, originalLanguageId, originalL
  */
 function getOtherTnsOLVersions(languageIds, originalLanguageId, versionsToNotDelete) {
   languageIds.forEach((languageId) => {
-    console.log('languageId', languageId);
     const tnHelpsPath = path.join(USER_RESOURCES_PATH, languageId, 'translationHelps', 'translationNotes');
-    console.log('tnHelpsPath', tnHelpsPath);
     if (fs.existsSync(tnHelpsPath)) {
       const tnHelpsVersionPath = resourcesHelpers.getLatestVersionInPath(tnHelpsPath);
-      console.log('tnHelpsVersionPath', tnHelpsVersionPath);
       const tnManifestPath = path.join(tnHelpsVersionPath, 'manifest.json');
       if (fs.existsSync(tnManifestPath)) {
         const manifest = fs.readJsonSync(tnManifestPath);
