@@ -271,14 +271,11 @@ return twGroupDataPath
  * @return {Boolean} True if versions were deleted, false if nothing was touched
  */
 export function removeAllButLatestVersion(resourcePath, versionsToNotDelete = []) {
-  console.log('versionsToNotDelete', versionsToNotDelete);
-
   // Remove the previoius verison(s)
   const versionDirs = getVersionsInPath(resourcePath);
   if (versionDirs && versionDirs.length > 1) {
     const lastVersion = versionDirs[versionDirs.length - 1];
     versionDirs.forEach((versionDir) => {
-      console.log('versionDir', versionDir);
       if (versionDir !== lastVersion && !versionsToNotDelete.includes(versionDir)) {
         fs.removeSync(path.join(resourcePath, versionDir));
       }
