@@ -175,7 +175,9 @@ function getMissingOriginalResource(resourcesPath, originalLanguageId, originalL
  */
 function getOtherTnsOLVersions(languageIds, originalLanguageId, versionsToNotDelete) {
   languageIds.forEach((languageId) => {
+    console.log('languageId', languageId);
     const tnHelpsPath = path.join(USER_RESOURCES_PATH, languageId, 'translationHelps', 'translationNotes');
+    console.log('tnHelpsPath', tnHelpsPath);
     const tnHelpsVersionPath = resourcesHelpers.getLatestVersionInPath(tnHelpsPath);
     const tnManifestPath = path.join(tnHelpsVersionPath, 'manifest.json');
     if (fs.existsSync(tnManifestPath)) {

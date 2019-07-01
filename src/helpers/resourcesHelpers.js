@@ -270,7 +270,7 @@ return twGroupDataPath
  * @param {array} versionsToNotDelete List of versions not to be deleted.
  * @return {Boolean} True if versions were deleted, false if nothing was touched
  */
-export function removeAllButLatestVersion(resourcePath, versionsToNotDelete) {
+export function removeAllButLatestVersion(resourcePath, versionsToNotDelete = []) {
   console.log('versionsToNotDelete', versionsToNotDelete);
 
   // Remove the previoius verison(s)
