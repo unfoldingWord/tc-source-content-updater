@@ -182,8 +182,10 @@ function getOtherTnsOLVersions(languageIds, originalLanguageId, versionsToNotDel
       const manifest = fs.readJsonSync(tnManifestPath);
       const {relation} = manifest.dublin_core || {};
       const query = getQueryStringForBibleId(relation, originalLanguageId);
-      const version = 'v' + getQueryVariable(query, 'v');
-      versionsToNotDelete.push(version);
+      if (query) {
+        const version = 'v' + getQueryVariable(query, 'v');
+        versionsToNotDelete.push(version);
+      }
     }
   });
 }

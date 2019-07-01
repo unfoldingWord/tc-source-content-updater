@@ -11,9 +11,7 @@ export const delay = (ms) => {
  * @return {string} found value.
  */
 export function getQueryStringForBibleId(queries, value) {
-  return queries.find((query) => {
-    return query.includes(value);
-  });
+  return queries.find((query) => query.includes(value));
 }
 
 /**
