@@ -156,4 +156,32 @@ Updater.prototype.generateTwGroupDataFromAlignedBible = function(biblePath, outp
   return twGroupDataHelpers.generateTwGroupDataFromAlignedBible(biblePath, outputPath);
 };
 
+/**
+ * @param {object} resourceDetails - Details about the resource.
+ * { languageId: 'en', resourceId: 'ult', version: 0.8 }
+ * @param {string} resourceDetails.languageId The language Id of the resource.
+ * @param {string} resourceDetails.resourceId The resource Id of the resource.
+ * @param {number} resourceDetails.version The version of the resource.
+ * @param {string} resourcesPath - Path to the resources directory where each resource will be placed
+ * @return {Promise} Promise that resolves to return all the resources updated or rejects if a resource failed to download.
+ */
+Updater.prototype.downloadAndProcessResource = function(resourceDetails, resourcesPath) {
+  const {languageId, resourceId, version} = resourceDetails;
+  const downloadUrl = `https://cdn.door43.org/${languageId}/${resourceId}/v${version}/${resourceId}.zip`;
+  const resource = {
+    languageId,
+    resourceId,
+    version,
+    downloadUrl,
+    remoteModifiedTime: '0001-01-01T00:00:00+00:00',
+    subject: 'Bible',
+    catalogEntry: {
+      subject: {},
+      resource: {},
+      format: {},
+    },
+  };
+  return resourcesDownloadHelpers.downloadAndProcessResource(resource, resourcesPath);
+};
+
 export default Updater;
