@@ -15,7 +15,6 @@ const httpsAgent = new HttpsAgent();
  * @return {Promise.<string>} the url contents
  */
 export function read(uri) {
-  console.log('read(uri)');
   const parsedUrl = url.parse(uri, false, true);
   const makeRequest = parsedUrl.protocol === 'https:' ? https.request.bind(https) : http.request.bind(http);
   const serverPort = parsedUrl.port ? parsedUrl.port : parsedUrl.protocol === 'https:' ? 443 : 80;
