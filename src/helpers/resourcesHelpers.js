@@ -267,15 +267,19 @@ return twGroupDataPath
 /**
  * Removes all version directories except the latest
  * @param {String} resourcePath Path to the resource directory that has subdirs of versions
+ * @param {array} versionsToNotDelete List of versions not to be deleted.
  * @return {Boolean} True if versions were deleted, false if nothing was touched
  */
-export function removeAllButLatestVersion(resourcePath) {
+export function removeAllButLatestVersion(resourcePath, versionsToNotDelete) {
+  console.log('versionsToNotDelete', versionsToNotDelete);
+
   // Remove the previoius verison(s)
   const versionDirs = getVersionsInPath(resourcePath);
   if (versionDirs && versionDirs.length > 1) {
     const lastVersion = versionDirs[versionDirs.length - 1];
     versionDirs.forEach((versionDir) => {
-      if (versionDir !== lastVersion) {
+      console.log('versionDir', versionDir);
+      if (versionDir !== lastVersion && !versionsToNotDelete.includes(versionDir)) {
         fs.removeSync(path.join(resourcePath, versionDir));
       }
     });
@@ -318,3 +322,14 @@ export function getErrorMessage(error) {
 export function appendError(str, err) {
   return str + ': ' + getErrorMessage(err);
 }
+
+/**
+ * Determines if the rootpath plus a filename is a directory.
+ * @param {string} rootPath
+ * @param {string} filename
+ * @return {bool} - Whether the path is a directory or not.
+ */
+export const isDirectory = (rootPath, filename) => {
+  const fullPath = path.join(rootPath, filename);
+  return fs.lstatSync(fullPath).isDirectory();
+};
