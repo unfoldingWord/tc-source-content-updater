@@ -166,7 +166,7 @@ function getMissingOriginalResource(resourcesPath, originalLanguageId, originalL
  * @param {string} originalLanguageId - original Language Id.
  * @return {array}
  */
-function getOtherTnsOLVersions(originalLanguageId) {
+export function getOtherTnsOLVersions(originalLanguageId) {
   const languageIds = fs.readdirSync(USER_RESOURCES_PATH)
         .filter((filename) => resourcesHelpers.isDirectory(USER_RESOURCES_PATH, filename));
   const versionsToNotDelete = [];
