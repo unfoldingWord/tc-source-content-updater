@@ -122,12 +122,8 @@ function getMissingOriginalResource(resourcesPath, originalLanguageId, originalL
         version
       );
 
-      const languageIds = fs.readdirSync(USER_RESOURCES_PATH)
-        .filter((filename) => resourcesHelpers.isDirectory(USER_RESOURCES_PATH, filename));
-      const versionsToNotDelete = [];
       // Get the version of the other Tns orginal language to determine versions that should not be deleted.
-      getOtherTnsOLVersions(languageIds, originalLanguageId, versionsToNotDelete);
-
+      const versionsToNotDelete = getOtherTnsOLVersions(originalLanguageId);
       const versionsSubdirectory = originalBiblePath.replace(version, '');
       const latestOriginalBiblePath = resourcesHelpers.getLatestVersionInPath(versionsSubdirectory);
       // if latest version is the version needed delete older versions
@@ -167,11 +163,14 @@ function getMissingOriginalResource(resourcesPath, originalLanguageId, originalL
 
 /**
  * Get the version of the other Tns orginal language.
- * @param {array} languageIds - List of language ids.
  * @param {string} originalLanguageId - original Language Id.
- * @param {array} versionsToNotDelete - Empty array to push results to.
+ * @return {array}
  */
-function getOtherTnsOLVersions(languageIds, originalLanguageId, versionsToNotDelete) {
+function getOtherTnsOLVersions(originalLanguageId) {
+  const languageIds = fs.readdirSync(USER_RESOURCES_PATH)
+        .filter((filename) => resourcesHelpers.isDirectory(USER_RESOURCES_PATH, filename));
+  const versionsToNotDelete = [];
+
   languageIds.forEach((languageId) => {
     const tnHelpsPath = path.join(USER_RESOURCES_PATH, languageId, 'translationHelps', 'translationNotes');
     if (fs.existsSync(tnHelpsPath)) {
@@ -188,4 +187,6 @@ function getOtherTnsOLVersions(languageIds, originalLanguageId, versionsToNotDel
       }
     }
   });
+
+  return versionsToNotDelete;
 }
