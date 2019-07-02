@@ -3,11 +3,21 @@ import path from 'path-extra';
 import rimraf from 'rimraf';
 import * as Throttle from 'promise-parallel-throttle';
 // helpers
-import {formatError, unzipResource, getSubdirOfUnzippedResource, processResource, makeTwGroupDataResource,
-  getActualResourcePath, removeAllButLatestVersion, appendError, getErrorMessage} from './resourcesHelpers';
+import {
+  formatError,
+  unzipResource,
+  getSubdirOfUnzippedResource,
+  processResource,
+  makeTwGroupDataResource,
+  getActualResourcePath,
+  removeAllButLatestVersion,
+  appendError,
+  getErrorMessage,
+} from './resourcesHelpers';
 import * as parseHelpers from './parseHelpers';
 import * as downloadHelpers from './downloadHelpers';
 import * as moveResourcesHelpers from './moveResourcesHelpers';
+import {getOtherTnsOLVersions} from './translationHelps/tnArticleHelpers';
 // constants
 import * as errors from '../resources/errors';
 import * as Bible from '../resources/bible';
@@ -75,10 +85,10 @@ export const downloadAndProcessResource = async (resource, resourcesPath) => {
       } catch (err) {
         throw Error(appendError(errors.UNABLE_TO_MOVE_RESOURCE_INTO_RESOURCES, err));
       }
-      // Only remove older version of resources if its not a Greek or Hebrew bible resource
-      if (!isGreekOrHebrew) {
-        removeAllButLatestVersion(path.dirname(resourcePath));
-      }
+      let versionsToNotDelete = [];
+      // Get the version numbers of the orginal language used by other tNs so that needed versions are not deleted.
+      if (isGreekOrHebrew) versionsToNotDelete = getOtherTnsOLVersions(resource.languageId);
+      removeAllButLatestVersion(path.dirname(resourcePath), versionsToNotDelete);
     } else {
       throw Error(errors.FAILED_TO_PROCESS_RESOURCE);
     }
