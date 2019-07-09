@@ -91,7 +91,7 @@ export const downloadAndProcessResource = async (resource, resourcesPath) => {
       console.log('resource.version', resource.version);
       console.log('versionsToNotDelete', versionsToNotDelete);
       // Make sure that the resource currently being downloaded its not deleted
-      versionsToNotDelete.push(resource.version);
+      versionsToNotDelete.push('v' + resource.version);
       console.log('versionsToNotDelete', versionsToNotDelete);
       removeAllButLatestVersion(path.dirname(resourcePath), versionsToNotDelete);
     } else {

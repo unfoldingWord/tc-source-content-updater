@@ -276,6 +276,7 @@ export function removeAllButLatestVersion(resourcePath, versionsToNotDelete = []
   if (versionDirs && versionDirs.length > 1) {
     const lastVersion = versionDirs[versionDirs.length - 1];
     versionDirs.forEach((versionDir) => {
+      console.log('versionDir', versionDir);
       if (versionDir !== lastVersion && !versionsToNotDelete.includes(versionDir)) {
         fs.removeSync(path.join(resourcePath, versionDir));
       }
