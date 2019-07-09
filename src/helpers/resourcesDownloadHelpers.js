@@ -88,13 +88,15 @@ export const downloadAndProcessResource = async (resource, resourcesPath) => {
       let versionsToNotDelete = [];
       // Get the version numbers of the orginal language used by other tNs so that needed versions are not deleted.
       if (isGreekOrHebrew) versionsToNotDelete = getOtherTnsOLVersions(resource.languageId);
+      // Make sure that the resource currently being downloaded is not deleted
+      versionsToNotDelete.push('v' + resource.version);
       removeAllButLatestVersion(path.dirname(resourcePath), versionsToNotDelete);
     } else {
       throw Error(errors.FAILED_TO_PROCESS_RESOURCE);
     }
   } catch (err) {
     const errorMessage = getErrorMessage(err);
-    console.log('Error getting ' + resource.downloadUrl + ': ' + errorMessage);
+    console.error('Error getting ' + resource.downloadUrl + ': ' + errorMessage);
     throw Error(formatError(resource, errorMessage));
   } finally {
     if (zipFilePath) {
