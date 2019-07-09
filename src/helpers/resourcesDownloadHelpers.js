@@ -88,6 +88,10 @@ export const downloadAndProcessResource = async (resource, resourcesPath) => {
       let versionsToNotDelete = [];
       // Get the version numbers of the orginal language used by other tNs so that needed versions are not deleted.
       if (isGreekOrHebrew) versionsToNotDelete = getOtherTnsOLVersions(resource.languageId);
+      console.log('resource.version', resource.version);
+      console.log('versionsToNotDelete', versionsToNotDelete);
+      versionsToNotDelete.push(resource.version);
+      console.log('versionsToNotDelete', versionsToNotDelete);
       removeAllButLatestVersion(path.dirname(resourcePath), versionsToNotDelete);
     } else {
       throw Error(errors.FAILED_TO_PROCESS_RESOURCE);
