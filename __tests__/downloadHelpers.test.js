@@ -30,12 +30,22 @@ describe('Download Helpers Test', () => {
     });
   });
 
-  it('should download a resource with 1 retries', () => {
+  it('should download a resource with 2 retries', () => {
     const url = 'https://retry.org/2';
     const dest = path.join(destDir, 'tit.zip');
     return helpers.download(url, dest).then(() => {
       const filesDownloaded = fs.readdirSync(destDir).filter((name) => !name.includes('.DS_Store'));
       expect(filesDownloaded).toHaveLength(1);
+    });
+  });
+
+  it('should not download a resource if retries more than 3 times', () => {
+    const url = 'https://retry.org/4';
+    const dest = path.join(destDir, 'tit.zip');
+    return helpers.download(url, dest).catch((e) => {
+      expect(e.code).toBe('ERR_SOCKET_TIMEOUT');
+      const filesDownloaded = fs.readdirSync(destDir).filter((name) => !name.includes('.DS_Store'));
+      expect(filesDownloaded).toHaveLength(0);
     });
   });
 });

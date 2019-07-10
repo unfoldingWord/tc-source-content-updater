@@ -120,3 +120,32 @@ nock('https://retry.org:443', {'encodedQueryParams': true})
 'LAX3-C2',
 'X-Amz-Cf-Id',
 '7zStlxLnQnaogQdaQty72Z_qsAiXe0Ho4TBpaUkIF8y03XEJp_UmFw==']);
+
+
+nock('https://retry.org:443', {'encodedQueryParams': true})
+.get('/4')
+.replyWithError({
+  message: 'There was a socket timeout',
+  code: 'ERR_SOCKET_TIMEOUT',
+});
+
+nock('https://retry.org:443', {'encodedQueryParams': true})
+.get('/4')
+.replyWithError({
+  message: 'There was a socket timeout',
+  code: 'ERR_SOCKET_TIMEOUT',
+});
+
+nock('https://retry.org:443', {'encodedQueryParams': true})
+.get('/4')
+.replyWithError({
+  message: 'There was a socket timeout',
+  code: 'ERR_SOCKET_TIMEOUT',
+});
+
+nock('https://retry.org:443', {'encodedQueryParams': true})
+.get('/4')
+.replyWithError({
+  message: 'There was a socket timeout',
+  code: 'ERR_SOCKET_TIMEOUT',
+});
