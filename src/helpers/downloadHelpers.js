@@ -105,7 +105,7 @@ export function download(uri, dest, progressCallback, retries = 0) {
       file.end();
       rimraf.sync(dest);
       req.end();
-      if (error.code && error.code === 'ERR_SOCKET_TIMEOUT' && retries + 1 < MAX_RETRIES) {
+      if (error.code && error.code === 'ERR_SOCKET_TIMEOUT' && retries < MAX_RETRIES) {
         console.warn(`socket timeout on resource ${uri} retrying`);
         setTimeout(() => {
           download(uri, dest, progressCallback, retries + 1).then(resolve).catch(reject);
