@@ -1,7 +1,7 @@
 import * as helpers from '../src/helpers/downloadHelpers';
 import fs from 'fs-extra';
 import path from 'path-extra';
-// constants
+import './__nocks__';
 jest.unmock('../src/helpers/downloadHelpers');
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 
@@ -12,8 +12,26 @@ describe('Download Helpers Test', () => {
     fs.ensureDirSync(destDir);
   });
 
-  it('should test retries of socket timeout', () => {
+  it('should download a resource without retries', () => {
     const url = 'https://cdn.door43.org/hi/irv/v1/tit.zip';
+    const dest = path.join(destDir, 'tit.zip');
+    return helpers.download(url, dest).then(() => {
+      const filesDownloaded = fs.readdirSync(destDir).filter((name) => !name.includes('.DS_Store'));
+      expect(filesDownloaded).toHaveLength(1);
+    });
+  });
+
+  it('should download a resource with 1 retries', () => {
+    const url = 'https://retry.org/1';
+    const dest = path.join(destDir, 'tit.zip');
+    return helpers.download(url, dest).then(() => {
+      const filesDownloaded = fs.readdirSync(destDir).filter((name) => !name.includes('.DS_Store'));
+      expect(filesDownloaded).toHaveLength(1);
+    });
+  });
+
+  it('should download a resource with 1 retries', () => {
+    const url = 'https://retry.org/2';
     const dest = path.join(destDir, 'tit.zip');
     return helpers.download(url, dest).then(() => {
       const filesDownloaded = fs.readdirSync(destDir).filter((name) => !name.includes('.DS_Store'));

@@ -77,6 +77,9 @@ export function download(uri, dest, progressCallback, retries = 0) {
     method: 'GET',
     timeout: 120000,
   };
+  if (process.env.NODE_ENV === 'development') {
+    options.rejectUnauthorized = false;
+  }
 
   return new Promise((resolve, reject) => {
     const req = makeRequest(options, (response) => {
