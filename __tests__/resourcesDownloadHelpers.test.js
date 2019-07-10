@@ -6,6 +6,7 @@ import * as resourcesDownloadHelpers from '../src/helpers/resourcesDownloadHelpe
 import * as parseHelpers from '../src/helpers/parseHelpers';
 // constants
 import * as errors from '../src/resources/errors';
+jest.mock('../src/helpers/downloadHelpers');
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 const catalog = require('./fixtures/api.door43.org/v3/subjects/pivoted.json');
@@ -33,7 +34,7 @@ describe('Tests for resourcesDownloadHelpers.downloadResources()', function() {
 
   it('Test resourcesDownloadHelpers.downloadResources() for "hi" should download, process and deploy all resources', async () => {
     const languageList = ['hi'];
-    const expectedLength = 3;
+    const expectedLength = 4;
     expect(resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources)).resolves.toHaveLength(expectedLength);
   });
 

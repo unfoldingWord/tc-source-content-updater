@@ -9,6 +9,8 @@ const HttpsAgent = require('agentkeepalive').HttpsAgent;
 const httpAgent = new HttpAgent();
 const httpsAgent = new HttpsAgent();
 
+const MAX_RETRIES = 3;
+
 /**
  * @description Reads the contents of a url as a string.
  * @param {String} uri the url to read
@@ -56,9 +58,10 @@ export function read(uri) {
  * @param {String} uri the uri to download
  * @param {String} dest the file to download the uri to
  * @param {Function} progressCallback receives progress updates
+ * @param {number} retries the amount of retries for socket timeouts
  * @return {Promise.<{}|Error>} the status code or an error
  */
-export function download(uri, dest, progressCallback) {
+export function download(uri, dest, progressCallback, retries = 0) {
   progressCallback = progressCallback || function() {};
   const parsedUrl = url.parse(uri, false, true);
   const makeRequest = parsedUrl.protocol === 'https:' ? https.request.bind(https) : http.request.bind(http);
@@ -72,6 +75,7 @@ export function download(uri, dest, progressCallback) {
     agent: agent,
     port: serverPort,
     method: 'GET',
+    timeout: 120000,
   };
 
   return new Promise((resolve, reject) => {
@@ -97,7 +101,16 @@ export function download(uri, dest, progressCallback) {
     req.on('error', (error) => {
       file.end();
       rimraf.sync(dest);
-      reject(error);
+      req.end();
+      if (error.code && error.code === 'ERR_SOCKET_TIMEOUT' && retries + 1 < MAX_RETRIES) {
+        console.warn(`socket timeout on resource ${uri} retrying`);
+        setTimeout(() => {
+          download(uri, dest, progressCallback, retries + 1).then(resolve).catch(reject);
+        }, 500);
+      } else {
+        console.error(error);
+        reject(error);
+      }
     });
 
     req.end();

@@ -64,24 +64,24 @@ function outputFileSync(filePath, data) {
 
 function __dumpMockFS() {
   const fsList = JSON.stringify(mockFS, null, 2);
-  console.log("mock FS:\n" + fsList);
+  console.log('mock FS:\n' + fsList);
 }
 
 /**
- * @description Call this to list out a directory's content of the mockFS. 
+ * @description Call this to list out a directory's content of the mockFS.
  * Can be recursive to list all files and directories under the directoryPath
  * @param {String} directoryPath The root path to list
  * @param {Boolean} recursive If this is to be recursive or not
  */
 function __listMockFS(directoryPath, recursive = true) {
   if (!directoryPath) {
-    directoryPath = path.parse(process.cwd()).root;  // '/' for Unix, C:\ for Windows
+    directoryPath = path.parse(process.cwd()).root; // '/' for Unix, C:\ for Windows
     recursive = true;
   }
   if (mockFS[directoryPath] === undefined) {
-    console.log("mockFS - Does not exist: " + directoryPath);
+    console.log('mockFS - Does not exist: ' + directoryPath);
   } else if (statSync(directoryPath).isFile()) {
-    console.log("mockFS - ls:\n", directoryPath);
+    console.log('mockFS - ls:\n', directoryPath);
   } else {
     console.log(__getListMockFS(directoryPath, recursive));
   }
@@ -94,23 +94,23 @@ function __listMockFS(directoryPath, recursive = true) {
  * @return {String} The list of files
  */
 function __getListMockFS(directoryPath, recursive = true) {
-  let ls = directoryPath + ":\n";
+  let ls = directoryPath + ':\n';
   if (!mockFS[directoryPath] || !mockFS[directoryPath].length) {
-    return "\t<empty>\n";
+    return '\t<empty>\n';
   }
   const content = mockFS[directoryPath].sort();
-  content.forEach(item => {
+  content.forEach((item) => {
     const fullPath = path.join(directoryPath, item);
     const isDir = statSync(path.join(fullPath)).isDirectory();
     if (isDir) {
       item += '/';
     }
     if (mockFS[fullPath])
-      item += "\t" + mockFS[fullPath].length;
-    ls += "\t" + item + "\n";
+      item += '\t' + mockFS[fullPath].length;
+    ls += '\t' + item + '\n';
   });
   if (recursive) {
-    content.forEach(item => {
+    content.forEach((item) => {
       const fullPath = path.join(directoryPath, item);
       const isDir = statSync(path.join(fullPath)).isDirectory();
       if (isDir && mockFS[fullPath] && mockFS[fullPath].length) {
@@ -153,7 +153,7 @@ function outputJsonSync(filePath, data) {
 
 function readJsonSync(filePath) {
   if (!existsSync(filePath)) {
-    throw "File could not be read: " + filePath;
+    throw 'File could not be read: ' + filePath;
   }
   const data = mockFS[filePath];
   // clone data so changes to object do not affect object in file system
@@ -182,7 +182,7 @@ function copySync(srcPath, destinationPath) {
   const isDir = statSync(srcPath).isDirectory();
   if (isDir) {
     const files = readdirSync(srcPath);
-    for (let f of files) {
+    for (const f of files) {
       copySync(path.join(srcPath, f), path.join(destinationPath, f));
     }
   }
@@ -208,7 +208,7 @@ function Stats(path, exists, isDir) {
   this.path = path;
   this.exists = exists;
   this.isDir = isDir;
-  this.atime = "Not-a-real-date";
+  this.atime = 'Not-a-real-date';
   this.isDirectory = () => {
     const isDir = this.exists && this.isDir;
     return isDir;
@@ -263,11 +263,11 @@ function __correctSeparatorsFromLinux(filePath) {
  */
 function __loadFilesIntoMockFs(copyFiles, sourceFolder, mockDestinationFolder) {
   const mockDestinationFolder_ =
-      __correctSeparatorsFromLinux(mockDestinationFolder);
+    __correctSeparatorsFromLinux(mockDestinationFolder);
   const sourceFolder_ = __correctSeparatorsFromLinux(sourceFolder);
-  for (let copyFile of copyFiles) {
+  for (const copyFile of copyFiles) {
     const filePath2 = path.join(sourceFolder_,
-        __correctSeparatorsFromLinux(copyFile));
+      __correctSeparatorsFromLinux(copyFile));
     let fileData = null;
     const isDir = fsActual.statSync(filePath2).isDirectory();
     if (!isDir) {
@@ -288,7 +288,7 @@ function __loadFilesIntoMockFs(copyFiles, sourceFolder, mockDestinationFolder) {
       fs.writeFileSync(filePath, fileData);
     } else {
       __loadDirIntoMockFs(
-          filePath2, path.join(mockDestinationFolder, copyFile));
+        filePath2, path.join(mockDestinationFolder, copyFile));
     }
   }
 }
@@ -300,12 +300,12 @@ function __loadFilesIntoMockFs(copyFiles, sourceFolder, mockDestinationFolder) {
  */
 function __loadDirIntoMockFs(sourceFolder, mockDestinationFolder) {
   const mockDestinationFolder_ =
-      __correctSeparatorsFromLinux(mockDestinationFolder);
+    __correctSeparatorsFromLinux(mockDestinationFolder);
   fs.ensureDirSync(mockDestinationFolder_);
   const sourceFolder_ = __correctSeparatorsFromLinux(sourceFolder);
   // console.log("Copying Directory: " + sourceFolder_);
   const files = fsActual.readdirSync(sourceFolder_);
-  for (let file of files) {
+  for (const file of files) {
     const sourceFilePath = path.join(sourceFolder, file);
     const mockFilePath = path.join(mockDestinationFolder_, file);
     const isDir = fsActual.statSync(sourceFilePath).isDirectory();
@@ -325,6 +325,23 @@ function moveSync(source, destination) {
   removeSync(source);
 }
 
+const stream = require('stream');
+/**
+ * Mock write stream
+ * @param {string} path the path to create the write stream
+ * @return {Function}
+ */
+function createWriteStream(path) {
+  const writable = new stream.Writable({
+    write: function(chunk, encoding, next) {
+      fs.writeFileSync(path, chunk);
+      next();
+    },
+  });
+  return writable;
+}
+
+fs.createWriteStream = createWriteStream;
 fs.__files = () => {
   return mockFS;
 };
