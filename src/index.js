@@ -11,6 +11,7 @@ import * as taArticleHelpers from './helpers/translationHelps/taArticleHelpers';
 import * as twArticleHelpers from './helpers/translationHelps/twArticleHelpers';
 import * as twGroupDataHelpers from './helpers/translationHelps/twGroupDataHelpers';
 import * as resourcesDownloadHelpers from './helpers/resourcesDownloadHelpers';
+export {getOtherTnsOLVersions} from './helpers/translationHelps/tnArticleHelpers';
 
 /**
  * Updater constructor
