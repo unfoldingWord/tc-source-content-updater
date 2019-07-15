@@ -20,7 +20,7 @@ export function getQueryStringForBibleId(queries, value) {
  * @param {string} variable - varibale to be found.
  * @return {string} variable value.
  */
-export function getQueryVariable(resourceUrl, variable) {
+export function getQueryVariable(resourceUrl = '', variable) {
   const query = resourceUrl.substring(1);
   const vars = query.split('&');
   for (let i = 0; i < vars.length; i++) {
