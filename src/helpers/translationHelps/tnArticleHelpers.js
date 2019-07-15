@@ -57,20 +57,32 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
     const tsvRelations = tsvManifest.dublin_core.relation;
     const OT_ORIG_LANG_QUERY = getQueryStringForBibleId(tsvRelations, OT_ORIG_LANG);
     const NT_ORIG_LANG_QUERY = getQueryStringForBibleId(tsvRelations, NT_ORIG_LANG);
-    const OT_ORIG_LANG_VERSION = 'v' + getQueryVariable(OT_ORIG_LANG_QUERY, 'v');
-    const NT_ORIG_LANG_VERSION = 'v' + getQueryVariable(NT_ORIG_LANG_QUERY, 'v');
-    await getMissingOriginalResource(resourcesPath, OT_ORIG_LANG, OT_ORIG_LANG_BIBLE, OT_ORIG_LANG_VERSION);
-    await getMissingOriginalResource(resourcesPath, NT_ORIG_LANG, NT_ORIG_LANG_BIBLE, NT_ORIG_LANG_VERSION);
+
+    const otQuery = getQueryVariable(OT_ORIG_LANG_QUERY, 'v');
+    if (otQuery) {
+      const OT_ORIG_LANG_VERSION = 'v' + otQuery;
+      await getMissingOriginalResource(resourcesPath, OT_ORIG_LANG, OT_ORIG_LANG_BIBLE, OT_ORIG_LANG_VERSION);
+    }
+    const ntQuery = getQueryVariable(NT_ORIG_LANG_QUERY, 'v');
+    if (ntQuery) {
+      const NT_ORIG_LANG_VERSION = 'v' + ntQuery;
+      await getMissingOriginalResource(resourcesPath, NT_ORIG_LANG, NT_ORIG_LANG_BIBLE, NT_ORIG_LANG_VERSION);
+    }
     const tsvFiles = fs.readdirSync(sourcePath).filter((filename) => path.extname(filename) === '.tsv');
 
-    tsvFiles.forEach(async(filename) => {
+    tsvFiles.forEach(async (filename) => {
       const bookId = filename.split('-')[1].toLowerCase().replace('.tsv', '');
       if (!BOOK_CHAPTER_VERSES[bookId]) console.error(`${bookId} is not a valid book id.`);
-      const bookNumberAndId = path.parse(filename.replace('en_tn_', '')).name;
+      const bookNumberAndIdMatch = filename.match(/(\d{2}-\w{3})/ig) || [];
+      const bookNumberAndId = bookNumberAndIdMatch[0];
       const isNewTestament = BIBLE_LIST_NT.includes(bookNumberAndId);
       const originalLanguageId = isNewTestament ? NT_ORIG_LANG : OT_ORIG_LANG;
       const originalLanguageBibleId = isNewTestament ? NT_ORIG_LANG_BIBLE : OT_ORIG_LANG_BIBLE;
-      const version = isNewTestament ? NT_ORIG_LANG_VERSION : OT_ORIG_LANG_VERSION;
+      const version = isNewTestament && ntQuery ? ('v' + ntQuery) : otQuery ? ('v' + otQuery) : null;
+      if (!version) {
+        console.warn('There was a missing version for book ' + bookId + ' of resource ' + originalLanguageBibleId + ' from ' + resource.downloadUrl);
+        return;
+      }
       const originalBiblePath = path.join(
         USER_RESOURCES_PATH,
         originalLanguageId,
@@ -80,7 +92,6 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
       );
       const filepath = path.join(sourcePath, filename);
       const groupData = await tsvToGroupData(filepath, 'translationNotes', {categorized: true}, originalBiblePath);
-
       formatAndSaveGroupData(groupData, outputPath, bookId);
     });
 
@@ -168,7 +179,7 @@ function getMissingOriginalResource(resourcesPath, originalLanguageId, originalL
  */
 export function getOtherTnsOLVersions(originalLanguageId) {
   const languageIds = fs.readdirSync(USER_RESOURCES_PATH)
-        .filter((filename) => resourcesHelpers.isDirectory(USER_RESOURCES_PATH, filename));
+    .filter((filename) => resourcesHelpers.isDirectory(USER_RESOURCES_PATH, filename));
   const versionsToNotDelete = [];
 
   languageIds.forEach((languageId) => {
