@@ -98,7 +98,12 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
     await delay(200);
 
     // Generate groupsIndex using tN groupData & tA articles.
-    const translationAcademyPath = path.join(translationHelpsPath, 'translationAcademy');
+    const translationAcademyPath = path.join(
+      USER_RESOURCES_PATH,
+      resource.languageId,
+      'translationHelps',
+      'translationAcademy'
+    );
 
     const taCategoriesPath = resourcesHelpers.getLatestVersionInPath(translationAcademyPath);
     const categorizedGroupsIndex = generateGroupsIndex(outputPath, taCategoriesPath);
