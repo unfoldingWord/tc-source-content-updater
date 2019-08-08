@@ -91,19 +91,14 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
         version
       );
       const filepath = path.join(sourcePath, filename);
-      const groupData = await tsvToGroupData(filepath, 'translationNotes', {categorized: true}, originalBiblePath);
+      const groupData = await tsvToGroupData(filepath, 'translationNotes', {categorized: true}, originalBiblePath, resourcesPath, resource.languageId);
       formatAndSaveGroupData(groupData, outputPath, bookId);
     });
 
     await delay(200);
 
     // Generate groupsIndex using tN groupData & tA articles.
-    const translationAcademyPath = path.join(
-      USER_RESOURCES_PATH,
-      resource.languageId,
-      'translationHelps',
-      'translationAcademy'
-    );
+    const translationAcademyPath = path.join(translationHelpsPath, 'translationAcademy');
 
     const taCategoriesPath = resourcesHelpers.getLatestVersionInPath(translationAcademyPath);
     const categorizedGroupsIndex = generateGroupsIndex(outputPath, taCategoriesPath);
