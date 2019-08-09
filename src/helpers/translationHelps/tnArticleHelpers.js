@@ -27,7 +27,7 @@ const USER_RESOURCES_PATH = path.join(ospath.home(), 'translationCore', 'resourc
 
 /**
  * @description Processes the extracted files for translationNotes to separate the folder
- * structure and produce the index.js file for the language with the title of each article.
+ * structure and produce the index.json file for the language with the title of each article.
  * @param {Object} resource - Resource object
  * @param {String} sourcePath - Path to the extracted files that came from the zip file from the catalog
  * e.g. /Users/mannycolon/translationCore/resources/imports/en_tn_v16/en_tn
@@ -91,7 +91,7 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
         version
       );
       const filepath = path.join(sourcePath, filename);
-      const groupData = await tsvToGroupData(filepath, 'translationNotes', {categorized: true}, originalBiblePath);
+      const groupData = await tsvToGroupData(filepath, 'translationNotes', {categorized: true}, originalBiblePath, USER_RESOURCES_PATH, resource.languageId);
       formatAndSaveGroupData(groupData, outputPath, bookId);
     });
 
@@ -107,7 +107,6 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
 
     const taCategoriesPath = resourcesHelpers.getLatestVersionInPath(translationAcademyPath);
     const categorizedGroupsIndex = generateGroupsIndex(outputPath, taCategoriesPath);
-
     saveGroupsIndex(categorizedGroupsIndex, outputPath);
   } catch (error) {
     throw Error(error);
