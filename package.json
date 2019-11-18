@@ -71,7 +71,7 @@
     "path-extra": "^4.2.1",
     "promise-parallel-throttle": "^3.3.0",
     "request": "^2.87.0",
-    "tsv-groupdata-parser": "0.9.11",
+    "tsv-groupdata-parser": "0.9.12",
     "url": "^0.11.0",
     "usfm-js": "2.0.2",
     "yamljs": "^0.3.0"
