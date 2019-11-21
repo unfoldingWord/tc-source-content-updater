@@ -109,7 +109,7 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
     const categorizedGroupsIndex = generateGroupsIndex(outputPath, taCategoriesPath);
     saveGroupsIndex(categorizedGroupsIndex, outputPath);
   } catch (error) {
-    console.error('processTranslationNotes()');
+    console.error('processTranslationNotes()', error);
     throw Error(error);
   }
 }
