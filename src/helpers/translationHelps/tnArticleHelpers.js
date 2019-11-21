@@ -69,31 +69,43 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
       await getMissingOriginalResource(resourcesPath, NT_ORIG_LANG, NT_ORIG_LANG_BIBLE, NT_ORIG_LANG_VERSION);
     }
     const tsvFiles = fs.readdirSync(sourcePath).filter((filename) => path.extname(filename) === '.tsv');
+    let error = false;
 
     tsvFiles.forEach(async (filename) => {
-      const bookId = filename.split('-')[1].toLowerCase().replace('.tsv', '');
-      if (!BOOK_CHAPTER_VERSES[bookId]) console.error(`${bookId} is not a valid book id.`);
-      const bookNumberAndIdMatch = filename.match(/(\d{2}-\w{3})/ig) || [];
-      const bookNumberAndId = bookNumberAndIdMatch[0];
-      const isNewTestament = BIBLE_LIST_NT.includes(bookNumberAndId);
-      const originalLanguageId = isNewTestament ? NT_ORIG_LANG : OT_ORIG_LANG;
-      const originalLanguageBibleId = isNewTestament ? NT_ORIG_LANG_BIBLE : OT_ORIG_LANG_BIBLE;
-      const version = isNewTestament && ntQuery ? ('v' + ntQuery) : otQuery ? ('v' + otQuery) : null;
-      if (!version) {
-        console.warn('There was a missing version for book ' + bookId + ' of resource ' + originalLanguageBibleId + ' from ' + resource.downloadUrl);
-        return;
+      try {
+        const bookId = filename.split('-')[1].toLowerCase().replace('.tsv', '');
+        if (!BOOK_CHAPTER_VERSES[bookId]) console.error(`${bookId} is not a valid book id.`);
+        const bookNumberAndIdMatch = filename.match(/(\d{2}-\w{3})/ig) || [];
+        const bookNumberAndId = bookNumberAndIdMatch[0];
+        const isNewTestament = BIBLE_LIST_NT.includes(bookNumberAndId);
+        const originalLanguageId = isNewTestament ? NT_ORIG_LANG : OT_ORIG_LANG;
+        const originalLanguageBibleId = isNewTestament ? NT_ORIG_LANG_BIBLE : OT_ORIG_LANG_BIBLE;
+        const version = isNewTestament && ntQuery ? ('v' + ntQuery) : otQuery ? ('v' + otQuery) : null;
+        if (!version) {
+          console.warn('There was a missing version for book ' + bookId + ' of resource ' + originalLanguageBibleId + ' from ' + resource.downloadUrl);
+          return;
+        }
+        const originalBiblePath = path.join(
+          USER_RESOURCES_PATH,
+          originalLanguageId,
+          'bibles',
+          originalLanguageBibleId,
+          version
+        );
+        const filepath = path.join(sourcePath, filename);
+        const groupData = await tsvToGroupData(filepath, 'translationNotes', {categorized: true}, originalBiblePath, USER_RESOURCES_PATH, resource.languageId);
+        formatAndSaveGroupData(groupData, outputPath, bookId);
+      } catch (e) {
+        console.log(`sourcePath() - error processing ${filename}`);
+        error = true;
       }
-      const originalBiblePath = path.join(
-        USER_RESOURCES_PATH,
-        originalLanguageId,
-        'bibles',
-        originalLanguageBibleId,
-        version
-      );
-      const filepath = path.join(sourcePath, filename);
-      const groupData = await tsvToGroupData(filepath, 'translationNotes', {categorized: true}, originalBiblePath, USER_RESOURCES_PATH, resource.languageId);
-      formatAndSaveGroupData(groupData, outputPath, bookId);
     });
+
+    if (error) { // report that there are caught errors
+      const message = `sourcePath() - error processing ${sourcePath}`;
+      console.log(message);
+      throw new Error(message);
+    }
 
     await delay(200);
 
@@ -109,7 +121,9 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
     const categorizedGroupsIndex = generateGroupsIndex(outputPath, taCategoriesPath);
     saveGroupsIndex(categorizedGroupsIndex, outputPath);
   } catch (error) {
-    throw Error(error);
+    console.error('processTranslationNotes() - error:');
+    console.error(error);
+    throw error;
   }
 }
 
