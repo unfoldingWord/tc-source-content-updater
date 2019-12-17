@@ -52,11 +52,16 @@ export function download(uri, dest, progressCallback, retries = 0) {
       file.on('finish', () => {
         fs.exists(dest, (exists) => {
           if (exists) {
-            resolve({
-              uri,
-              dest,
-              status: response.statusCode,
-            });
+            if (response.statusCode === 200) {
+              resolve({
+                uri,
+                dest,
+                status: response.statusCode,
+              });
+            } else {
+              req.emit('error', `Downloaded did not succeed, code ${response.statusCode}`);
+              fs.removeSync(dest); // remove failed download attempt
+            }
           } else {
             req.emit('error', 'Downloaded file does not exist');
           }
@@ -69,7 +74,7 @@ export function download(uri, dest, progressCallback, retries = 0) {
       rimraf.sync(dest);
       req.end();
       if (retries < MAX_RETRIES) {
-        console.warn(`error on resource ${uri} retrying`);
+        console.warn(`error on resource ${uri} retrying, error: ${error}`);
         setTimeout(() => {
           download(uri, dest, progressCallback, retries + 1).then(resolve).catch(reject);
         }, 500);

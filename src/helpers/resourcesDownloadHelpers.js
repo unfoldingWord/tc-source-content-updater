@@ -74,12 +74,12 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
       zipFilePath = path.join(importsPath, zipFileName);
       console.log('Downloading: ' + resource.downloadUrl);
       const results = await downloadHelpers.download(resource.downloadUrl, zipFilePath);
-      if (results.status !== 200) {
+      if (results.status === 200) {
+        downloadComplete = true;
+      } else {
         const message = `Download ${resource.downloadUrl} error, status: ${results.status}`;
         console.log(message);
         throw message;
-      } else {
-        downloadComplete = true;
       }
     } catch (err) {
       throw Error(appendError(errors.UNABLE_TO_DOWNLOAD_RESOURCES, err));
