@@ -19,6 +19,7 @@ export {getOtherTnsOLVersions} from './helpers/translationHelps/tnArticleHelpers
 function Updater() {
   this.remoteCatalog = null;
   this.updatedCatalogResources = null;
+  this.downloadErrors = [];
 }
 
 Updater.prototype = {};
@@ -29,6 +30,15 @@ Updater.prototype = {};
  */
 Updater.prototype.updateCatalog = async function() {
   this.remoteCatalog = await apiHelpers.getCatalog();
+};
+
+/**
+ * Method to manually fetch the latest remoteCatalog for the current
+ * Updater instance. This function has no return value
+ * @return {Array|null} any download/parse errors from last download attempt
+ */
+Updater.prototype.getLatestDownloadError = function() {
+  return this.downloadErrors;
 };
 
 /**
@@ -91,7 +101,8 @@ Updater.prototype.downloadResources = async function(languageList, resourcesPath
     await this.getLatestResources([]);
     resources = this.updatedCatalogResources;
   }
-  return resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources);
+  this.downloadErrors = [];
+  return resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors);
 };
 
 /**
@@ -159,6 +170,7 @@ Updater.prototype.generateTwGroupDataFromAlignedBible = function(biblePath, outp
 };
 
 /**
+ * Downloads a specific resource
  * @param {object} resourceDetails - Details about the resource.
  * { languageId: 'en', resourceId: 'ult', version: 0.8 }
  * @param {string} resourceDetails.languageId The language Id of the resource.
@@ -183,7 +195,8 @@ Updater.prototype.downloadAndProcessResource = async function(resourceDetails, r
       format: {},
     },
   };
-  const result = await resourcesDownloadHelpers.downloadAndProcessResource(resource, resourcesPath);
+  this.downloadErrors = [];
+  const result = await resourcesDownloadHelpers.downloadAndProcessResource(resource, resourcesPath, this.downloadErrors);
   // Remove imports folder
   const importsPath = path.join(resourcesPath, 'imports');
   fs.removeSync(importsPath);

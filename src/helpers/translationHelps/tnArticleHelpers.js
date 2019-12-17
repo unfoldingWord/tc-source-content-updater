@@ -13,7 +13,6 @@ import * as resourcesHelpers from '../resourcesHelpers';
 import {downloadAndProcessResource} from '../resourcesDownloadHelpers';
 import {delay, getQueryStringForBibleId, getQueryVariable} from '../utils';
 // constants
-import * as errors from '../../resources/errors';
 import {
   OT_ORIG_LANG,
   NT_ORIG_LANG,
@@ -33,8 +32,9 @@ const USER_RESOURCES_PATH = path.join(ospath.home(), 'translationCore', 'resourc
  * e.g. /Users/mannycolon/translationCore/resources/imports/en_tn_v16/en_tn
  * @param {String} outputPath - Path to place the processed resource files WITHOUT the version in the path
  * @param {String} resourcesPath Path to user resources folder
+ * @param {Array} downloadErrors - parsed list of download errors with details such as if the download completed (vs. parsing error), error, and url
  */
-export async function processTranslationNotes(resource, sourcePath, outputPath, resourcesPath) {
+export async function processTranslationNotes(resource, sourcePath, outputPath, resourcesPath, downloadErrors) {
   try {
     if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId) {
       throw Error(resourcesHelpers.formatError(resource, errors.RESOURCE_NOT_GIVEN));
@@ -61,15 +61,15 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
     const otQuery = getQueryVariable(OT_ORIG_LANG_QUERY, 'v');
     if (otQuery) {
       const OT_ORIG_LANG_VERSION = 'v' + otQuery;
-      await getMissingOriginalResource(resourcesPath, OT_ORIG_LANG, OT_ORIG_LANG_BIBLE, OT_ORIG_LANG_VERSION);
+      await getMissingOriginalResource(resourcesPath, OT_ORIG_LANG, OT_ORIG_LANG_BIBLE, OT_ORIG_LANG_VERSION, downloadErrors);
     }
     const ntQuery = getQueryVariable(NT_ORIG_LANG_QUERY, 'v');
     if (ntQuery) {
       const NT_ORIG_LANG_VERSION = 'v' + ntQuery;
-      await getMissingOriginalResource(resourcesPath, NT_ORIG_LANG, NT_ORIG_LANG_BIBLE, NT_ORIG_LANG_VERSION);
+      await getMissingOriginalResource(resourcesPath, NT_ORIG_LANG, NT_ORIG_LANG_BIBLE, NT_ORIG_LANG_VERSION, downloadErrors);
     }
     const tsvFiles = fs.readdirSync(sourcePath).filter((filename) => path.extname(filename) === '.tsv');
-    let error = false;
+    const errors = [];
 
     tsvFiles.forEach(async (filename) => {
       try {
@@ -96,15 +96,16 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
         const groupData = await tsvToGroupData(filepath, 'translationNotes', {categorized: true}, originalBiblePath, USER_RESOURCES_PATH, resource.languageId);
         formatAndSaveGroupData(groupData, outputPath, bookId);
       } catch (e) {
-        console.log(`sourcePath() - error processing ${filename}`);
-        error = true;
+        const message = `sourcePath() - error processing ${filename}:`;
+        console.error(message, e);
+        errors.push(message + e.toString());
       }
     });
 
-    if (error) { // report that there are caught errors
+    if (errors.length) { // report errors
       const message = `sourcePath() - error processing ${sourcePath}`;
-      console.log(message);
-      throw new Error(message);
+      console.error(message);
+      throw new Error(`${message}:\n${errors.join('\n')}`);
     }
 
     await delay(200);
@@ -121,8 +122,7 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
     const categorizedGroupsIndex = generateGroupsIndex(outputPath, taCategoriesPath);
     saveGroupsIndex(categorizedGroupsIndex, outputPath);
   } catch (error) {
-    console.error('processTranslationNotes() - error:');
-    console.error(error);
+    console.error('processTranslationNotes() - error:', error);
     throw error;
   }
 }
@@ -133,9 +133,10 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
  * @param {String} originalLanguageId - original language Id
  * @param {String} originalLanguageBibleId - original language bible Id
  * @param {String} version - version number
+ * @param {Array} downloadErrors - parsed list of download errors with details such as if the download completed (vs. parsing error), error, and url
  * @return {Promise}
  */
-function getMissingOriginalResource(resourcesPath, originalLanguageId, originalLanguageBibleId, version) {
+function getMissingOriginalResource(resourcesPath, originalLanguageId, originalLanguageBibleId, version, downloadErrors) {
   return new Promise(async (resolve, reject) => {
     try {
       const originalBiblePath = path.join(
@@ -159,6 +160,7 @@ function getMissingOriginalResource(resourcesPath, originalLanguageId, originalL
       if (!fs.existsSync(originalBiblePath)) {
         // Download orig. lang. resource
         const downloadUrl = `https://cdn.door43.org/${originalLanguageId}/${originalLanguageBibleId}/${version}/${originalLanguageBibleId}.zip`;
+        console.log(`getMissingOriginalResource() - downloading missing original bible: ${downloadUrl}`);
         const resource = {
           languageId: originalLanguageId,
           resourceId: originalLanguageBibleId,
@@ -174,7 +176,7 @@ function getMissingOriginalResource(resourcesPath, originalLanguageId, originalL
         };
         // Delay to try to avoid Socket timeout
         await delay(1000);
-        await downloadAndProcessResource(resource, resourcesPath);
+        await downloadAndProcessResource(resource, resourcesPath, downloadErrors);
         resolve();
       } else {
         resolve();

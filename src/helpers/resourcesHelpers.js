@@ -162,8 +162,9 @@ export function getSubdirOfUnzippedResource(extractedFilesPath) {
  * @param {String} sourcePath Path to the source dictory of the resource
  * @param {String} resourcesPath Path to user resources folder
  * @return {String} Path to the directory of the processed files
+ * @param {Array} downloadErrors - parsed list of download errors with details such as if the download completed (vs. parsing error), error, and url
  */
-export async function processResource(resource, sourcePath, resourcesPath = null) {
+export async function processResource(resource, sourcePath, resourcesPath, downloadErrors) {
   try {
     if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId) {
       throw Error(formatError(resource, errors.RESOURCE_NOT_GIVEN));
@@ -183,7 +184,7 @@ export async function processResource(resource, sourcePath, resourcesPath = null
         twArticleHelpers.processTranslationWords(resource, sourcePath, processedFilesPath);
         break;
       case 'TSV_Translation_Notes':
-        await tnArticleHelpers.processTranslationNotes(resource, sourcePath, processedFilesPath, resourcesPath);
+        await tnArticleHelpers.processTranslationNotes(resource, sourcePath, processedFilesPath, resourcesPath, downloadErrors);
         break;
       case 'Translation_Academy':
         taArticleHelpers.processTranslationAcademy(resource, sourcePath, processedFilesPath);
@@ -277,7 +278,9 @@ export function removeAllButLatestVersion(resourcePath, versionsToNotDelete = []
     const lastVersion = versionDirs[versionDirs.length - 1];
     versionDirs.forEach((versionDir) => {
       if (versionDir !== lastVersion && !versionsToNotDelete.includes(versionDir)) {
-        fs.removeSync(path.join(resourcePath, versionDir));
+        let versionPath = path.join(resourcePath, versionDir);
+        console.log(`removeAllButLatestVersion() - removing old bible: ${versionPath}`);
+        fs.removeSync(versionPath);
       }
     });
     return true;
