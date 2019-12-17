@@ -33,12 +33,26 @@ Updater.prototype.updateCatalog = async function() {
 };
 
 /**
- * Method to manually fetch the latest remoteCatalog for the current
- * Updater instance. This function has no return value
+ * Method to manually fetch the recent download errors
  * @return {Array|null} any download/parse errors from last download attempt
  */
-Updater.prototype.getLatestDownloadError = function() {
+Updater.prototype.getLatestDownloadErrors = function() {
   return this.downloadErrors;
+};
+
+/**
+ * Method to manually fetch the recent download errors and return as string
+ * @return {String} any download/parse errors from last download attempt
+ */
+Updater.prototype.getLatestDownloadErrorsStr = function() {
+  let errors = '';
+  if (this.downloadErrors && this.downloadErrors.length) {
+    for (const error of this.downloadErrors) {
+      const errType = error.parseError ? 'Parse Error' : 'Download Error';
+      errors += `${errType}: ${error.downloadUrl} - ${error.errorMessage}`;
+    }
+  }
+  return errors;
 };
 
 /**
@@ -102,7 +116,13 @@ Updater.prototype.downloadResources = async function(languageList, resourcesPath
     resources = this.updatedCatalogResources;
   }
   this.downloadErrors = [];
-  return resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors);
+  await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors);
+  const errors = this.getLatestDownloadErrorsStr();
+  if (errors) {
+    console.error('Source Content Update Errors caught!!!\n' + errors);
+  } else {
+    console.log('Source Content Update Successful');
+  }
 };
 
 /**
@@ -200,6 +220,12 @@ Updater.prototype.downloadAndProcessResource = async function(resourceDetails, r
   // Remove imports folder
   const importsPath = path.join(resourcesPath, 'imports');
   fs.removeSync(importsPath);
+  const errors = this.getLatestDownloadErrorsStr();
+  if (errors) {
+    console.error('Source Content Update Errors caught!!!\n' + errors);
+  } else {
+    console.log('Source Content Update Successful');
+  }
   return result;
 };
 

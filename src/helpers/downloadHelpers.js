@@ -59,7 +59,7 @@ export function download(uri, dest, progressCallback, retries = 0) {
                 status: response.statusCode,
               });
             } else {
-              req.emit('error', `Downloaded did not succeed, code ${response.statusCode}`);
+              req.emit('error', `Download did not succeed, code ${response.statusCode}`);
               fs.removeSync(dest); // remove failed download attempt
             }
           } else {
