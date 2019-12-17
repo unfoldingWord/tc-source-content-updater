@@ -144,7 +144,7 @@ export const unzipResource = async (resource, zipFilePath, resourcesPath) => {
 };
 
 /**
- * Gets the single subdirector of an extracted zip file path
+ * Gets the single subdirectory of an extracted zip file path
  * @param {String} extractedFilesPath Extracted files path
  * @return {String} The subdir in the extracted path
  */
@@ -278,7 +278,7 @@ export function removeAllButLatestVersion(resourcePath, versionsToNotDelete = []
     const lastVersion = versionDirs[versionDirs.length - 1];
     versionDirs.forEach((versionDir) => {
       if (versionDir !== lastVersion && !versionsToNotDelete.includes(versionDir)) {
-        let versionPath = path.join(resourcePath, versionDir);
+        const versionPath = path.join(resourcePath, versionDir);
         console.log(`removeAllButLatestVersion() - removing old bible: ${versionPath}`);
         fs.removeSync(versionPath);
       }

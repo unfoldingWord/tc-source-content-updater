@@ -147,7 +147,7 @@ function getMissingOriginalResource(resourcesPath, originalLanguageId, originalL
         version
       );
 
-      // Get the version of the other Tns orginal language to determine versions that should not be deleted.
+      // Get the version of the other Tns original language to determine versions that should not be deleted.
       const versionsToNotDelete = getOtherTnsOLVersions(originalLanguageId);
       const versionsSubdirectory = originalBiblePath.replace(version, '');
       const latestOriginalBiblePath = resourcesHelpers.getLatestVersionInPath(versionsSubdirectory);
