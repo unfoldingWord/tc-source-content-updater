@@ -279,7 +279,7 @@ export function removeAllButLatestVersion(resourcePath, versionsToNotDelete = []
     versionDirs.forEach((versionDir) => {
       if (versionDir !== lastVersion && !versionsToNotDelete.includes(versionDir)) {
         const versionPath = path.join(resourcePath, versionDir);
-        console.log(`removeAllButLatestVersion() - removing old bible: ${versionPath}`);
+        console.log(`removeAllButLatestVersion() - removing old resource: ${versionPath}`);
         fs.removeSync(versionPath);
       }
     });
