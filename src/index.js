@@ -116,13 +116,14 @@ Updater.prototype.downloadResources = async function(languageList, resourcesPath
     resources = this.updatedCatalogResources;
   }
   this.downloadErrors = [];
-  await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors);
+  const results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors);
   const errors = this.getLatestDownloadErrorsStr();
   if (errors) {
     console.error('Source Content Update Errors caught!!!\n' + errors);
   } else {
     console.log('Source Content Update Successful');
   }
+  return results;
 };
 
 /**
