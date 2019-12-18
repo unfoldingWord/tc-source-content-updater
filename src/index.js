@@ -116,12 +116,16 @@ Updater.prototype.downloadResources = async function(languageList, resourcesPath
     resources = this.updatedCatalogResources;
   }
   this.downloadErrors = [];
-  const results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors);
-  const errors = this.getLatestDownloadErrorsStr();
-  if (errors) {
-    let message = `Source Content Update Errors caught!!!\n${errors}`;
-    console.error(message);
-    throw message;
+  let results = null;
+  try {
+    results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors);
+  } catch (e) {
+    const errors = this.getLatestDownloadErrorsStr(); // get detailed errors and log
+    if (errors) {
+      const message = `Source Content Update Errors caught!!!\n${errors}`;
+      console.error(message);
+    }
+    throw e; // return error summary
   }
   console.log('Source Content Update Successful');
   return results;
@@ -218,15 +222,18 @@ Updater.prototype.downloadAndProcessResource = async function(resourceDetails, r
     },
   };
   this.downloadErrors = [];
-  const result = await resourcesDownloadHelpers.downloadAndProcessResource(resource, resourcesPath, this.downloadErrors);
-  // Remove imports folder
-  const importsPath = path.join(resourcesPath, 'imports');
-  fs.removeSync(importsPath);
-  const errors = this.getLatestDownloadErrorsStr();
-  if (errors) {
-    let message = `Source Content Update Errors caught!!!\n${errors}`;
-    console.error(message);
-    throw message;
+  let result = null;
+  try {
+    result = await resourcesDownloadHelpers.downloadAndProcessResource(resource, resourcesPath, this.downloadErrors);
+    const importsPath = path.join(resourcesPath, 'imports'); // Remove imports folder
+    fs.removeSync(importsPath);
+  } catch (e) {
+    const errors = this.getLatestDownloadErrorsStr(); // get detailed errors and log
+    if (errors) {
+      const message = `Source Content Update Errors caught!!!\n${errors}`;
+      console.error(message);
+    }
+    throw e; // return error summary
   }
   console.log('Source Content Update Successful');
   return result;
