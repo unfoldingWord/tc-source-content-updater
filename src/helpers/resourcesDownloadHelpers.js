@@ -64,11 +64,6 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
     (resource.languageId === Bible.OT_ORIG_LANG && resource.resourceId === Bible.OT_ORIG_LANG_BIBLE);
   fs.ensureDirSync(resourcesPath);
   const importsPath = path.join(resourcesPath, 'imports');
-  if (fs.existsSync(importPath)) { // do safe import folder delete
-    const tempPath = importPath + '.temp';
-    fs.moveSync(importPath, tempPath);
-    fs.removeSync(tempPath);
-  }
   fs.ensureDirSync(importsPath);
   let importPath = null;
   let zipFilePath = null;

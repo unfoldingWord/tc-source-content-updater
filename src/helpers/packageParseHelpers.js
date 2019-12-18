@@ -36,10 +36,7 @@ export const parseUsfmOfBook = (usfmPath, outputPath) => {
  */
 export function parseManifest(extractedFilePath, outputPath) {
   const oldManifest = resourcesHelpers.getResourceManifest(extractedFilePath);
-  if (oldManifest) {
-    return generateBibleManifest(oldManifest, outputPath);
-  }
-  return oldManifest;
+  return generateBibleManifest(oldManifest, outputPath);
 }
 
 /**
@@ -75,7 +72,7 @@ export function parseBiblePackage(resource, sourcePath, outputPath) {
   try {
     const isOL = (resource.resourceId === 'ugnt') || (resource.resourceId === 'uhb');
     const manifest = parseManifest(sourcePath, outputPath);
-    if (!manifest || !manifest.projects) {
+    if (!manifest.projects) {
       throw Error(resourcesHelpers.formatError(resource, errors.MANIFEST_MISSING_BOOKS));
     }
     manifest.catalog_modified_time = resource.remoteModifiedTime;
