@@ -109,18 +109,24 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
           originalLanguageBibleId,
           version
         );
-        const filepath = path.join(sourcePath, filename);
-        const groupData = await tsvToGroupData(filepath, 'translationNotes', {categorized: true}, originalBiblePath, resourcesPath, resource.languageId);
-        formatAndSaveGroupData(groupData, outputPath, bookId);
+        if (fs.existsSync(originalBiblePath)) {
+          const filepath = path.join(sourcePath, filename);
+          const groupData = await tsvToGroupData(filepath, 'translationNotes', {categorized: true}, originalBiblePath, resourcesPath, resource.languageId);
+          formatAndSaveGroupData(groupData, outputPath, bookId);
+        } else {
+          const message = `processTranslationNotes() - cannot find original bible ${originalBiblePath}:`;
+          console.error(message);
+          errors.push(message);
+        }
       } catch (e) {
-        const message = `sourcePath() - error processing ${filename}:`;
+        const message = `processTranslationNotes() - error processing ${filename}:`;
         console.error(message, e);
         errors.push(message + e.toString());
       }
     });
 
     if (errors.length) { // report errors
-      const message = `sourcePath() - error processing ${sourcePath}`;
+      const message = `processTranslationNotes() - error processing ${sourcePath}`;
       console.error(message);
       throw new Error(`${message}:\n${errors.join('\n')}`);
     }
