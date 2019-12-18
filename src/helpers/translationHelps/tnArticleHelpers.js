@@ -68,6 +68,8 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
       const NT_ORIG_LANG_VERSION = 'v' + ntQuery;
       await getMissingOriginalResource(resourcesPath, NT_ORIG_LANG, NT_ORIG_LANG_BIBLE, NT_ORIG_LANG_VERSION, downloadErrors);
     }
+
+    console.log(`processTranslationNotes() - have originals for ${sourcePath}, starting processing`);
     const tsvFiles = fs.readdirSync(sourcePath).filter((filename) => path.extname(filename) === '.tsv');
     const errors = [];
 

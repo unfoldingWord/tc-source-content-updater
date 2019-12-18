@@ -85,10 +85,12 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
       throw Error(appendError(errors.UNABLE_TO_DOWNLOAD_RESOURCES, err));
     }
     try {
+      console.log('Unzipping: ' + resource.downloadUrl);
       importPath = await unzipResource(resource, zipFilePath, resourcesPath);
     } catch (err) {
       throw Error(appendError(errors.UNABLE_TO_UNZIP_RESOURCES, err));
     }
+    console.log('Processing: ' + resource.downloadUrl);
     const importSubdirPath = getSubdirOfUnzippedResource(importPath);
     const processedFilesPath = await processResource(resource, importSubdirPath, resourcesPath, downloadErrors);
     if (processedFilesPath) {
@@ -147,9 +149,9 @@ export const downloadAndProcessResourceWithCatch = async (resource, resourcesPat
   let result = null;
   try {
     result = await downloadAndProcessResource(resource, resourcesPath, downloadErrors);
-    console.log('Download Success: ' + resource.downloadUrl);
+    console.log('Update Success: ' + resource.downloadUrl);
   } catch (e) {
-    console.log('Download Error:');
+    console.log('Update Error:');
     console.error(e);
     errorList.push(e);
   }
