@@ -112,8 +112,8 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
         throw Error(appendError(errors.UNABLE_TO_MOVE_RESOURCE_INTO_RESOURCES, err));
       }
       let versionsToNotDelete = [];
-      // Get the version numbers of the orginal language used by other tNs so that needed versions are not deleted.
-      if (isGreekOrHebrew) versionsToNotDelete = getOtherTnsOLVersions(resource.languageId);
+      // Get the version numbers of the original language used by other tNs so that needed versions are not deleted.
+      if (isGreekOrHebrew) versionsToNotDelete = getOtherTnsOLVersions(resourcePath, resource.languageId);
       // Make sure that the resource currently being downloaded is not deleted
       versionsToNotDelete.push('v' + resource.version);
       removeAllButLatestVersion(path.dirname(resourcePath), versionsToNotDelete);
