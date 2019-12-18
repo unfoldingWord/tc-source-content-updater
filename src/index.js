@@ -33,7 +33,7 @@ Updater.prototype.updateCatalog = async function() {
 };
 
 /**
- * Method to manually fetch the recent download errors
+ * Method to manually fetch the detailed error list for recent download
  * @return {Array|null} any download/parse errors from last download attempt
  */
 Updater.prototype.getLatestDownloadErrors = function() {
@@ -41,7 +41,7 @@ Updater.prototype.getLatestDownloadErrors = function() {
 };
 
 /**
- * Method to manually fetch the recent download errors and return as string
+ * Method to manually fetch the detailed error list for recent download and return as string
  * @return {String} any download/parse errors from last download attempt
  */
 Updater.prototype.getLatestDownloadErrorsStr = function() {
