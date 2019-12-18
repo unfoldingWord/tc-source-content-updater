@@ -119,10 +119,11 @@ Updater.prototype.downloadResources = async function(languageList, resourcesPath
   const results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors);
   const errors = this.getLatestDownloadErrorsStr();
   if (errors) {
-    console.error('Source Content Update Errors caught!!!\n' + errors);
-  } else {
-    console.log('Source Content Update Successful');
+    let message = `Source Content Update Errors caught!!!\n${errors}`;
+    console.error(message);
+    throw message;
   }
+  console.log('Source Content Update Successful');
   return results;
 };
 
@@ -223,10 +224,11 @@ Updater.prototype.downloadAndProcessResource = async function(resourceDetails, r
   fs.removeSync(importsPath);
   const errors = this.getLatestDownloadErrorsStr();
   if (errors) {
-    console.error('Source Content Update Errors caught!!!\n' + errors);
-  } else {
-    console.log('Source Content Update Successful');
+    let message = `Source Content Update Errors caught!!!\n${errors}`;
+    console.error(message);
+    throw message;
   }
+  console.log('Source Content Update Successful');
   return result;
 };
 
