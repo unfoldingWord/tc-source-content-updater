@@ -11,6 +11,7 @@ export const makeSureResourceUnzipped = (resourcePath) => {
   for (const content of contentTypes) {
     const compressedFile = path.join(resourcePath, content + '.zip');
     if (fs.existsSync(compressedFile)) {
+      console.log(`makeSureResourceUnzipped() - unzipping ${compressedFile}`);
       const zip = new AdmZip(compressedFile);
       zip.extractAllTo(resourcePath, true);
       fs.removeSync(compressedFile);
