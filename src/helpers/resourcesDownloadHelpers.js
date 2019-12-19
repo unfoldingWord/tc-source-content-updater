@@ -3,13 +3,24 @@ import path from 'path-extra';
 import rimraf from 'rimraf';
 import * as Throttle from 'promise-parallel-throttle';
 // helpers
-import {formatError, unzipResource, getSubdirOfUnzippedResource, processResource, makeTwGroupDataResource,
-  getActualResourcePath, removeAllButLatestVersion, appendError, getErrorMessage} from './resourcesHelpers';
+import {
+  formatError,
+  unzipResource,
+  getSubdirOfUnzippedResource,
+  processResource,
+  makeTwGroupDataResource,
+  getActualResourcePath,
+  removeAllButLatestVersion,
+  appendError,
+  getErrorMessage,
+} from './resourcesHelpers';
 import * as parseHelpers from './parseHelpers';
 import * as downloadHelpers from './downloadHelpers';
 import * as moveResourcesHelpers from './moveResourcesHelpers';
+import {getOtherTnsOLVersions} from './translationHelps/tnArticleHelpers';
 // constants
 import * as errors from '../resources/errors';
+import * as Bible from '../resources/bible';
 
 /**
  * @description Downloads the resources that need to be updated for a given language using the DCS API
@@ -23,14 +34,18 @@ import * as errors from '../resources/errors';
  *             subject: String,
  *             catalogEntry: {langResource, bookResource, format}
  *           }>} resource - resource to download
- * @param {String} resourcesPath Path to the resources directory
+ * @param {String} resourcesPath Path to the user resources directory
  * @return {Promise} Download promise
  */
 export const downloadAndProcessResource = async (resource, resourcesPath) => {
-  if (!resource)
+  if (!resource) {
     throw Error(errors.RESOURCE_NOT_GIVEN);
-  if (!resourcesPath)
+  } else if (!resourcesPath) {
     throw Error(formatError(resource, errors.RESOURCES_PATH_NOT_GIVEN));
+  }
+  // Resource is the Greek UGNT or Hebrew UHB
+  const isGreekOrHebrew = (resource.languageId === Bible.NT_ORIG_LANG && resource.resourceId === Bible.NT_ORIG_LANG_BIBLE) ||
+    (resource.languageId === Bible.OT_ORIG_LANG && resource.resourceId === Bible.OT_ORIG_LANG_BIBLE);
   fs.ensureDirSync(resourcesPath);
   const importsPath = path.join(resourcesPath, 'imports');
   fs.ensureDirSync(importsPath);
@@ -40,7 +55,7 @@ export const downloadAndProcessResource = async (resource, resourcesPath) => {
     try {
       const zipFileName = resource.languageId + '_' + resource.resourceId + '_v' + resource.version + '.zip';
       zipFilePath = path.join(importsPath, zipFileName);
-      console.log("Downloading: " + resource.downloadUrl);
+      console.log('Downloading: ' + resource.downloadUrl);
       await downloadHelpers.download(resource.downloadUrl, zipFilePath);
     } catch (err) {
       throw Error(appendError(errors.UNABLE_TO_DOWNLOAD_RESOURCES, err));
@@ -51,11 +66,10 @@ export const downloadAndProcessResource = async (resource, resourcesPath) => {
       throw Error(appendError(errors.UNABLE_TO_UNZIP_RESOURCES, err));
     }
     const importSubdirPath = getSubdirOfUnzippedResource(importPath);
-    const processedFilesPath = processResource(resource, importSubdirPath);
+    const processedFilesPath = await processResource(resource, importSubdirPath, resourcesPath);
     if (processedFilesPath) {
       // Extra step if the resource is the Greek UGNT or Hebrew UHB
-      if ((resource.languageId === 'grc' && resource.resourceId === 'ugnt') ||
-        (resource.languageId === 'hbo' && resource.resourceId === 'uhb')) {
+      if (isGreekOrHebrew) {
         const twGroupDataPath = makeTwGroupDataResource(resource, processedFilesPath);
         const twGroupDataResourcesPath = path.join(resourcesPath, resource.languageId, 'translationHelps', 'translationWords', 'v' + resource.version);
         try {
@@ -71,13 +85,18 @@ export const downloadAndProcessResource = async (resource, resourcesPath) => {
       } catch (err) {
         throw Error(appendError(errors.UNABLE_TO_MOVE_RESOURCE_INTO_RESOURCES, err));
       }
-      removeAllButLatestVersion(path.dirname(resourcePath));
+      let versionsToNotDelete = [];
+      // Get the version numbers of the orginal language used by other tNs so that needed versions are not deleted.
+      if (isGreekOrHebrew) versionsToNotDelete = getOtherTnsOLVersions(resource.languageId);
+      // Make sure that the resource currently being downloaded is not deleted
+      versionsToNotDelete.push('v' + resource.version);
+      removeAllButLatestVersion(path.dirname(resourcePath), versionsToNotDelete);
     } else {
       throw Error(errors.FAILED_TO_PROCESS_RESOURCE);
     }
   } catch (err) {
     const errorMessage = getErrorMessage(err);
-    console.log("Error getting " + resource.downloadUrl + ': ' + errorMessage);
+    console.error('Error getting ' + resource.downloadUrl + ': ' + errorMessage);
     throw Error(formatError(resource, errorMessage));
   } finally {
     if (zipFilePath) {
@@ -87,7 +106,7 @@ export const downloadAndProcessResource = async (resource, resourcesPath) => {
       rimraf.sync(importPath, fs);
     }
   }
-  console.log("Processed: " + resource.downloadUrl);
+  console.log('Processed: ' + resource.downloadUrl);
   return resource;
 };
 
@@ -102,10 +121,10 @@ export const downloadAndProcessResourceWithCatch = async (resource, resourcesPat
   let result = null;
   try {
     result = await downloadAndProcessResource(resource, resourcesPath);
-    console.log("Download Success: " + resource.downloadUrl);
+    console.log('Download Success: ' + resource.downloadUrl);
   } catch (e) {
-    console.log("Download Error:");
-    console.log(e);
+    console.log('Download Error:');
+    console.error(e);
     errorList.push(e);
   }
   return result;
@@ -141,7 +160,7 @@ export const downloadResources = (languageList, resourcesPath, resources) => {
     fs.ensureDirSync(resourcesPath);
     const importsDir = path.join(resourcesPath, 'imports');
     let downloadableResources = [];
-    languageList.forEach(languageId => {
+    languageList.forEach((languageId) => {
       downloadableResources = downloadableResources.concat(parseHelpers.getResourcesForLanguage(resources, languageId));
     });
 
@@ -151,23 +170,41 @@ export const downloadResources = (languageList, resourcesPath, resources) => {
     }
 
     const errorList = [];
-    downloadableResources = downloadableResources.filter(resource => resource);
-    const queue = downloadableResources.map(resource =>
+    downloadableResources = sortDownloableResources(downloadableResources.filter((resource) => resource));
+
+    const queue = downloadableResources.map((resource) =>
       () => downloadAndProcessResourceWithCatch(resource, resourcesPath, errorList));
     Throttle.all(queue, {maxInProgress: 2})
-      .then(result => {
+      .then((result) => {
         rimraf.sync(importsDir, fs);
         if (!errorList.length) {
           resolve(result);
         } else {
-          const errorMessages = errorList.map(e => (e.message || e));
+          const errorMessages = errorList.map((e) => (e.message || e));
           const returnErrorMessage = errorMessages.join('\n');
           reject(new Error(returnErrorMessage));
         }
       },
-      err => {
+      (err) => {
         rimraf.sync(importsDir, fs);
         reject(err);
       });
+  });
+};
+
+/**
+ * Sorts the list of downloadable resources. Specifically moves tA
+ * to the front of the array in order to be downloaded before tN
+ * since tN will use tA articles to generate the groupsIndex files.
+ * @param {array} downloadableResources list of downloadable resources.
+ * @return {array} sorted list of downloadable resources.
+ */
+const sortDownloableResources = (downloadableResources) => {
+  return downloadableResources.sort((resourceA, resourceB) => {
+    const firstResource = 'ta';// move ta to the front of the array so that it is downloaded before tn.
+    const idA = resourceA.resourceId.toLowerCase();
+    const idB = resourceB.resourceId.toLowerCase();
+
+    return idA == firstResource ? -1 : idB == firstResource ? 1 : 0;
   });
 };

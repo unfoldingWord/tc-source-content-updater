@@ -2,6 +2,7 @@
 /* eslint-disable camelcase,no-empty */
 import * as parseHelpers from '../src/helpers/parseHelpers';
 import * as ERROR from '../src/resources/errors';
+import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
 
 const catalog = require('./fixtures/catalog');
 
@@ -11,10 +12,20 @@ describe('parseCatalogResources()', () => {
     expect(results.length).toEqual(38);
   });
 
+  it('All language Ids are lower case', () => {
+    const results = parseHelpers.parseCatalogResources(catalog, true, ['Bible']);
+    const re = /^[-a-z0-9]*$/; // dash is allowed
+
+    for( let idx = 0; idx < results.length; idx++) {
+      //console.log( "results.languageId: ", results[idx].languageId );
+      expect(results[idx].languageId).toEqual(expect.stringMatching(re));
+    }
+  });
+
   it('should find Greek OL', () => {
     const results = parseHelpers.parseCatalogResources(catalog, false, ['Greek_New_Testament']);
     expect(results.length).toEqual(1);
-    expect(results[0].languageId).toEqual('grc');
+    expect(results[0].languageId).toEqual('el-x-koine');
   });
 
   it('should return everything with no filter', () => {
@@ -44,7 +55,7 @@ describe('getLatestResources()', () => {
     const results = parseHelpers.getLatestResources(catalog, resourceList);
     expect(results.length).toEqual(56);
 
-    const greekResources = getResourcesForLanguageAndResource(results, 'grc');
+    const greekResources = getResourcesForLanguageAndResource(results, 'el-x-koine');
     expect(greekResources.length).toEqual(1);
 
     const frenchResources = getResourcesForLanguageAndResource(results, 'fr');
@@ -58,7 +69,7 @@ describe('getLatestResources()', () => {
     const results = parseHelpers.getLatestResources(catalog, resourceList);
     expect(results.length).toEqual(55);
 
-    const greekResources = getResourcesForLanguageAndResource(results, 'grc');
+    const greekResources = getResourcesForLanguageAndResource(results, 'el-x-koine');
     expect(greekResources.length).toEqual(1);
 
     const frenchResources = getResourcesForLanguageAndResource(results, 'fr', 'f10');
@@ -72,7 +83,7 @@ describe('getLatestResources()', () => {
     const results = parseHelpers.getLatestResources(catalog, resourceList);
     expect(results.length).toEqual(56);
 
-    const greekResources = getResourcesForLanguageAndResource(results, 'grc');
+    const greekResources = getResourcesForLanguageAndResource(results, 'el-x-koine');
     expect(greekResources.length).toEqual(1);
 
     const frenchResources = getResourcesForLanguageAndResource(results, 'fr', 'f10');
@@ -115,7 +126,7 @@ describe('getUpdatedLanguageList()', () => {
 
   it('should succeed', () => {
     const languages = parseHelpers.getUpdatedLanguageList(resources);
-    expect(languages.length).toEqual(32);
+    expect(languages.length).toEqual(31); // ur-deva = ur-Deva
   });
 
   it('should return null on null resources', () => {
@@ -127,8 +138,8 @@ describe('getUpdatedLanguageList()', () => {
 describe('getResourcesForLanguage()', () => {
   const resources = parseHelpers.getLatestResources(catalog, []);
 
-  it('should find grc', () => {
-    const results = parseHelpers.getResourcesForLanguage(resources, 'grc');
+  it('should find el-x-koine', () => {
+    const results = parseHelpers.getResourcesForLanguage(resources, 'el-x-koine');
     expect(results.length).toEqual(1);
   });
 
@@ -156,7 +167,7 @@ describe('getResourcesForLanguage()', () => {
   });
 
   it('should return null if no resources', () => {
-    const results = parseHelpers.getResourcesForLanguage(null, 'grc');
+    const results = parseHelpers.getResourcesForLanguage(null, 'el-x-koine');
     expect(results).toBeNull();
   });
 });

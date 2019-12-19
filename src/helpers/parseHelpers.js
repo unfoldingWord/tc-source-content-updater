@@ -1,20 +1,23 @@
 /* eslint-disable camelcase,no-empty,no-negated-condition */
 import * as ERROR from '../resources/errors';
 
+// the following are the subject found in the door43 catalog.
+// if a subject isnt found in this list then it will be ignored by the source content updater
 export const TC_RESOURCES = [
   'Bible',
   'Aligned_Bible',
   'Greek_New_Testament',
   'Hebrew_Old_Testament',
-  'Translator_Notes',
+  'TSV_Translation_Notes',
   'Bible_translation_comprehension_questions',
   'Translation_Words',
-  'Translation_Academy'];
+  'Translation_Academy',
+];
 
 export const RESOURCE_ID_MAP = {
   translationWords: 'tw',
   translationNotes: 'tn',
-  translationAcademy: 'ta'
+  translationAcademy: 'ta',
 };
 
 /**
@@ -45,7 +48,7 @@ export function getResourcesForLanguage(resources, languageId) {
   if (!Array.isArray(resources)) {
     return null;
   }
-  return resources.filter(resource =>
+  return resources.filter((resource) =>
     (resource.languageId === languageId));
 }
 
@@ -76,14 +79,14 @@ export function getUpdatedLanguageList(updatedRemoteResources) {
     return null;
   }
   const updatedLanguages = [];
-  for (let resource of updatedRemoteResources) {
+  for (const resource of updatedRemoteResources) {
     const languageId = resource.languageId;
     const updatedBible = {
       languageId,
       localModifiedTime: resource.localModifiedTime || '',
-      remoteModifiedTime: resource.remoteModifiedTime
+      remoteModifiedTime: resource.remoteModifiedTime,
     };
-    const dup = updatedLanguages.findIndex(item =>
+    const dup = updatedLanguages.findIndex((item) =>
       (item.languageId === languageId)
     );
     if (dup < 0) {
@@ -121,13 +124,15 @@ export function getLatestResources(catalog, localResourceList) {
   }
   const tCoreResources = parseCatalogResources(catalog, true, TC_RESOURCES);
   // remove resources that are already up to date
-  for (let localResource of localResourceList) {
+  for (const localResource of localResourceList) {
     let resourceId = localResource.resourceId;
     if (localResource.languageId && resourceId) {
       resourceId = RESOURCE_ID_MAP[resourceId] || resourceId; // map resource names to ids
-      const index = tCoreResources.findIndex(remoteResource =>
-        ((localResource.languageId === remoteResource.languageId) &&
-          (remoteResource.resourceId === resourceId)));
+      const index = tCoreResources.findIndex((remoteResource) =>
+        ((localResource.languageId.toLowerCase() === remoteResource.languageId.toLowerCase()) &&
+          (remoteResource.resourceId === resourceId))
+      );
+
       if (index >= 0) {
         const catalogResource = tCoreResources[index];
         const isNewer = !localResource.modifiedTime ||
@@ -140,6 +145,7 @@ export function getLatestResources(catalog, localResourceList) {
       }
     }
   }
+
   return tCoreResources.sort((a, b) =>
     ((a.languageId > b.languageId) ? 1 : -1)); // resources that are already up to date have been removed, sort by language
 }
@@ -168,7 +174,7 @@ export function getFormatsForResource(resource) {
 
   if (Array.isArray(resource.projects)) {
     const formats = [];
-    for (let project of resource.projects) {
+    for (const project of resource.projects) {
       const projectFormats = getFormatsForResource(project);
       formats.push(...projectFormats);
     }
@@ -203,8 +209,7 @@ export function parseCatalogResources(catalog, ignoreObsResources = true, subjec
     for (let i = 0, len = catalog.subjects.length; i < len; i++) {
       const catSubject = catalog.subjects[i];
       const subject = catSubject.identifier;
-      const isGreekOL = (catSubject.language === "el-x-koine");
-      const languageId = isGreekOL ? 'grc' : catSubject.language; // we use grc internally for Greek Original language
+      const languageId = catSubject.language.toLowerCase();
       const resources = getValidArray(catSubject.resources);
       for (let j = 0, rLen = resources.length; j < rLen; j++) {
         const resource = resources[j];
@@ -218,7 +223,7 @@ export function parseCatalogResources(catalog, ignoreObsResources = true, subjec
         for (let k = 0, kLen = formats.length; k < kLen; k++) {
           const format = formats[k];
           try {
-            const isZipFormat = format.format.indexOf("application/zip;") >= 0;
+            const isZipFormat = format.format.indexOf('application/zip;') >= 0;
             const downloadUrl = format.url;
             const remoteModifiedTime = format.modified;
             const isDesiredSubject = !subjectFilters ||
@@ -235,8 +240,8 @@ export function parseCatalogResources(catalog, ignoreObsResources = true, subjec
                 catalogEntry: {
                   subject: catSubject,
                   resource,
-                  format
-                }
+                  format,
+                },
               };
               catalogResources.push(foundResource);
             }

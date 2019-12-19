@@ -6,17 +6,19 @@ import {isObject} from 'util';
 // helpers
 import * as zipFileHelpers from './zipFileHelpers';
 import * as twArticleHelpers from './translationHelps/twArticleHelpers';
+import * as tnArticleHelpers from './translationHelps/tnArticleHelpers';
 import * as taArticleHelpers from './translationHelps/taArticleHelpers';
 import * as twGroupDataHelpers from './translationHelps/twGroupDataHelpers';
 import * as packageParseHelpers from './packageParseHelpers';
 // constants
 import * as errors from '../resources/errors';
+import * as Bible from '../resources/bible';
 
 const translationHelps = {
   ta: 'translationAcademy',
   tn: 'translationNotes',
   tw: 'translationWords',
-  tq: 'translationQuestions'
+  tq: 'translationQuestions',
 };
 
 /**
@@ -86,7 +88,7 @@ export function getVersionsInPath(resourcePath) {
   if (!resourcePath || !fs.pathExistsSync(resourcePath)) {
     return null;
   }
-  const isVersionDirectory = name => {
+  const isVersionDirectory = (name) => {
     const fullPath = path.join(resourcePath, name);
     return fs.lstatSync(fullPath).isDirectory() && name.match(/^v\d/i);
   };
@@ -157,40 +159,57 @@ export function getSubdirOfUnzippedResource(extractedFilesPath) {
 /**
  * @description Processes a resource in the imports directory as needed
  * @param {Object} resource Resource object
- * @param {String} sourcePath Path the the source dictory of the resource
+ * @param {String} sourcePath Path to the source dictory of the resource
+ * @param {String} resourcesPath Path to user resources folder
  * @return {String} Path to the directory of the processed files
  */
-export function processResource(resource, sourcePath) {
-  if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId)
-    throw Error(formatError(resource, errors.RESOURCE_NOT_GIVEN));
-  if (!sourcePath)
-    throw Error(formatError(resource, errors.SOURCE_PATH_NOT_GIVEN));
-  if (!fs.pathExistsSync(sourcePath))
-    throw Error(formatError(resource, errors.SOURCE_PATH_NOT_EXIST));
-  const processedFilesPath = sourcePath + '_processed';
-  fs.ensureDirSync(processedFilesPath);
-  switch (resource.subject) {
-    case 'Translation_Words':
-      twArticleHelpers.processTranslationWords(resource, sourcePath, processedFilesPath);
-      break;
-    case 'Translation_Academy':
-      taArticleHelpers.processTranslationAcademy(resource, sourcePath, processedFilesPath);
-      break;
-    case 'Bible':
-    case 'Aligned_Bible':
-    case 'Greek_New_Testament':
-    case 'Hebrew_Old_Testament':
-      packageParseHelpers.parseBiblePackage(resource, sourcePath, processedFilesPath);
-      break;
-    default:
-      fs.copySync(sourcePath, processedFilesPath);
+export async function processResource(resource, sourcePath, resourcesPath = null) {
+  try {
+    if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId) {
+      throw Error(formatError(resource, errors.RESOURCE_NOT_GIVEN));
+    }
+    if (!sourcePath) {
+      throw Error(formatError(resource, errors.SOURCE_PATH_NOT_GIVEN));
+    }
+    if (!fs.pathExistsSync(sourcePath)) {
+      throw Error(formatError(resource, errors.SOURCE_PATH_NOT_EXIST));
+    }
+
+    const processedFilesPath = sourcePath + '_processed';
+    fs.ensureDirSync(processedFilesPath);
+
+    switch (resource.subject) {
+      case 'Translation_Words':
+        twArticleHelpers.processTranslationWords(resource, sourcePath, processedFilesPath);
+        break;
+      case 'TSV_Translation_Notes':
+        await tnArticleHelpers.processTranslationNotes(resource, sourcePath, processedFilesPath, resourcesPath);
+        break;
+      case 'Translation_Academy':
+        taArticleHelpers.processTranslationAcademy(resource, sourcePath, processedFilesPath);
+        break;
+      case 'Bible':
+      case 'Aligned_Bible':
+      case 'Greek_New_Testament':
+      case 'Hebrew_Old_Testament':
+        packageParseHelpers.parseBiblePackage(resource, sourcePath, processedFilesPath);
+        break;
+      default:
+        fs.copySync(sourcePath, processedFilesPath);
+    }
+
+    const manifest = getResourceManifest(sourcePath);
+
+    if (!getResourceManifest(processedFilesPath) && manifest) {
+      manifest.catalog_modified_time = resource.remoteModifiedTime;
+      fs.outputJsonSync(path.join(processedFilesPath, 'manifest.json'), manifest, {spaces: 2});
+    }
+
+    return processedFilesPath;
+  } catch (error) {
+    console.error(error);
+    throw Error(appendError(errors.UNABLE_TO_DOWNLOAD_RESOURCES, error));
   }
-  let manifest = getResourceManifest(sourcePath);
-  if (!getResourceManifest(processedFilesPath) && manifest) {
-    manifest.catalog_modified_time = resource.remoteModifiedTime;
-    fs.writeFileSync(path.join(processedFilesPath, 'manifest.json'), JSON.stringify(manifest, null, 2));
-  }
-  return processedFilesPath;
 }
 
 /**
@@ -228,31 +247,36 @@ export function getActualResourcePath(resource, resourcesPath) {
  * @return {String} Path to the processed tw Group Data files
  */
 export function makeTwGroupDataResource(resource, sourcePath) {
-  if (!resource)
+  if (!resource) {
     throw Error(formatError(resource, errors.RESOURCE_NOT_GIVEN));
-  if (!fs.pathExistsSync(sourcePath))
+  }
+  if (!fs.pathExistsSync(sourcePath)) {
     throw Error(formatError(resource, errors.SOURCE_PATH_NOT_EXIST));
-  if ((resource.languageId === 'grc' && resource.resourceId === 'ugnt') ||
-      (resource.languageId === 'hbo' && resource.resourceId === 'uhb')) {
+  }
+  if ((resource.languageId === Bible.NT_ORIG_LANG && resource.resourceId === Bible.NT_ORIG_LANG_BIBLE) ||
+      (resource.languageId === Bible.OT_ORIG_LANG && resource.resourceId === Bible.OT_ORIG_LANG_BIBLE)) {
     const twGroupDataPath = path.join(sourcePath + '_tw_group_data_' + resource.languageId + '_v' + resource.version);
     const result = twGroupDataHelpers.generateTwGroupDataFromAlignedBible(resource, sourcePath, twGroupDataPath);
-    if (result)
-      return twGroupDataPath;
+    if (result) {
+return twGroupDataPath
+;
+}
   }
 }
 
 /**
  * Removes all version directories except the latest
- * @param {String} resourcePath Path to the reosurce dirctory that has subdirs of versions
+ * @param {String} resourcePath Path to the resource directory that has subdirs of versions
+ * @param {array} versionsToNotDelete List of versions not to be deleted.
  * @return {Boolean} True if versions were deleted, false if nothing was touched
  */
-export function removeAllButLatestVersion(resourcePath) {
+export function removeAllButLatestVersion(resourcePath, versionsToNotDelete = []) {
   // Remove the previoius verison(s)
   const versionDirs = getVersionsInPath(resourcePath);
   if (versionDirs && versionDirs.length > 1) {
     const lastVersion = versionDirs[versionDirs.length - 1];
-    versionDirs.forEach(versionDir => {
-      if (versionDir !== lastVersion) {
+    versionDirs.forEach((versionDir) => {
+      if (versionDir !== lastVersion && !versionsToNotDelete.includes(versionDir)) {
         fs.removeSync(path.join(resourcePath, versionDir));
       }
     });
@@ -271,7 +295,7 @@ export function formatError(resource, errMessage) {
   if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId) {
     resource = {
       languageId: 'unknown',
-      resourceId: 'unknown'
+      resourceId: 'unknown',
     };
   }
   return resource.languageId + '_' + resource.resourceId + ': ' + errMessage;
@@ -283,7 +307,7 @@ export function formatError(resource, errMessage) {
  * @return {string} concatenated message
  */
 export function getErrorMessage(error) {
-  return ((error && error.message) || error || "UNDEFINED");
+  return ((error && error.message) || error || 'UNDEFINED');
 }
 
 /**
@@ -293,5 +317,16 @@ export function getErrorMessage(error) {
  * @return {string} concatenated message
  */
 export function appendError(str, err) {
-  return str + ": " + getErrorMessage(err);
+  return str + ': ' + getErrorMessage(err);
 }
+
+/**
+ * Determines if the rootpath plus a filename is a directory.
+ * @param {string} rootPath
+ * @param {string} filename
+ * @return {bool} - Whether the path is a directory or not.
+ */
+export const isDirectory = (rootPath, filename) => {
+  const fullPath = path.join(rootPath, filename);
+  return fs.lstatSync(fullPath).isDirectory();
+};

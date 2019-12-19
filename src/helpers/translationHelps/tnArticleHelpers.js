@@ -1,0 +1,216 @@
+import fs from 'fs-extra';
+import path from 'path-extra';
+import {isObject} from 'util';
+import ospath from 'ospath';
+import {
+  tsvToGroupData,
+  formatAndSaveGroupData,
+  generateGroupsIndex,
+  saveGroupsIndex,
+} from 'tsv-groupdata-parser';
+// helpers
+import * as resourcesHelpers from '../resourcesHelpers';
+import {downloadAndProcessResource} from '../resourcesDownloadHelpers';
+import {delay, getQueryStringForBibleId, getQueryVariable} from '../utils';
+// constants
+import * as errors from '../../resources/errors';
+import {
+  OT_ORIG_LANG,
+  NT_ORIG_LANG,
+  OT_ORIG_LANG_BIBLE,
+  NT_ORIG_LANG_BIBLE,
+  BOOK_CHAPTER_VERSES,
+  BIBLE_LIST_NT,
+} from '../../resources/bible';
+// constants
+const USER_RESOURCES_PATH = path.join(ospath.home(), 'translationCore', 'resources');
+
+/**
+ * @description Processes the extracted files for translationNotes to separate the folder
+ * structure and produce the index.json file for the language with the title of each article.
+ * @param {Object} resource - Resource object
+ * @param {String} sourcePath - Path to the extracted files that came from the zip file from the catalog
+ * e.g. /Users/mannycolon/translationCore/resources/imports/en_tn_v16/en_tn
+ * @param {String} outputPath - Path to place the processed resource files WITHOUT the version in the path
+ * @param {String} resourcesPath Path to user resources folder
+ */
+export async function processTranslationNotes(resource, sourcePath, outputPath, resourcesPath) {
+  try {
+    if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId) {
+      throw Error(resourcesHelpers.formatError(resource, errors.RESOURCE_NOT_GIVEN));
+    }
+    if (!sourcePath) {
+      throw Error(resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_GIVEN));
+    }
+    if (!fs.pathExistsSync(sourcePath)) {
+      throw Error(resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_EXIST));
+    }
+    if (!outputPath) {
+      throw Error(resourcesHelpers.formatError(resource, errors.OUTPUT_PATH_NOT_GIVEN));
+    }
+    if (fs.pathExistsSync(outputPath)) {
+      fs.removeSync(outputPath);
+    }
+
+    const tsvManifest = resourcesHelpers.getResourceManifestFromYaml(sourcePath);
+    // array of related resources used to generated the tsv.
+    const tsvRelations = tsvManifest.dublin_core.relation;
+    const OT_ORIG_LANG_QUERY = getQueryStringForBibleId(tsvRelations, OT_ORIG_LANG);
+    const NT_ORIG_LANG_QUERY = getQueryStringForBibleId(tsvRelations, NT_ORIG_LANG);
+
+    const otQuery = getQueryVariable(OT_ORIG_LANG_QUERY, 'v');
+    if (otQuery) {
+      const OT_ORIG_LANG_VERSION = 'v' + otQuery;
+      await getMissingOriginalResource(resourcesPath, OT_ORIG_LANG, OT_ORIG_LANG_BIBLE, OT_ORIG_LANG_VERSION);
+    }
+    const ntQuery = getQueryVariable(NT_ORIG_LANG_QUERY, 'v');
+    if (ntQuery) {
+      const NT_ORIG_LANG_VERSION = 'v' + ntQuery;
+      await getMissingOriginalResource(resourcesPath, NT_ORIG_LANG, NT_ORIG_LANG_BIBLE, NT_ORIG_LANG_VERSION);
+    }
+    const tsvFiles = fs.readdirSync(sourcePath).filter((filename) => path.extname(filename) === '.tsv');
+    let error = false;
+
+    tsvFiles.forEach(async (filename) => {
+      try {
+        const bookId = filename.split('-')[1].toLowerCase().replace('.tsv', '');
+        if (!BOOK_CHAPTER_VERSES[bookId]) console.error(`${bookId} is not a valid book id.`);
+        const bookNumberAndIdMatch = filename.match(/(\d{2}-\w{3})/ig) || [];
+        const bookNumberAndId = bookNumberAndIdMatch[0];
+        const isNewTestament = BIBLE_LIST_NT.includes(bookNumberAndId);
+        const originalLanguageId = isNewTestament ? NT_ORIG_LANG : OT_ORIG_LANG;
+        const originalLanguageBibleId = isNewTestament ? NT_ORIG_LANG_BIBLE : OT_ORIG_LANG_BIBLE;
+        const version = isNewTestament && ntQuery ? ('v' + ntQuery) : otQuery ? ('v' + otQuery) : null;
+        if (!version) {
+          console.warn('There was a missing version for book ' + bookId + ' of resource ' + originalLanguageBibleId + ' from ' + resource.downloadUrl);
+          return;
+        }
+        const originalBiblePath = path.join(
+          USER_RESOURCES_PATH,
+          originalLanguageId,
+          'bibles',
+          originalLanguageBibleId,
+          version
+        );
+        const filepath = path.join(sourcePath, filename);
+        const groupData = await tsvToGroupData(filepath, 'translationNotes', {categorized: true}, originalBiblePath, USER_RESOURCES_PATH, resource.languageId);
+        formatAndSaveGroupData(groupData, outputPath, bookId);
+      } catch (e) {
+        console.log(`sourcePath() - error processing ${filename}`);
+        error = true;
+      }
+    });
+
+    if (error) { // report that there are caught errors
+      const message = `sourcePath() - error processing ${sourcePath}`;
+      console.log(message);
+      throw new Error(message);
+    }
+
+    await delay(200);
+
+    // Generate groupsIndex using tN groupData & tA articles.
+    const translationAcademyPath = path.join(
+      USER_RESOURCES_PATH,
+      resource.languageId,
+      'translationHelps',
+      'translationAcademy'
+    );
+
+    const taCategoriesPath = resourcesHelpers.getLatestVersionInPath(translationAcademyPath);
+    const categorizedGroupsIndex = generateGroupsIndex(outputPath, taCategoriesPath);
+    saveGroupsIndex(categorizedGroupsIndex, outputPath);
+  } catch (error) {
+    console.error('processTranslationNotes() - error:');
+    console.error(error);
+    throw error;
+  }
+}
+
+/**
+ * Get missing original language resource
+ * @param {String} resourcesPath - resources Path
+ * @param {String} originalLanguageId - original language Id
+ * @param {String} originalLanguageBibleId - original language bible Id
+ * @param {String} version - version number
+ * @return {Promise}
+ */
+function getMissingOriginalResource(resourcesPath, originalLanguageId, originalLanguageBibleId, version) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const originalBiblePath = path.join(
+        USER_RESOURCES_PATH,
+        originalLanguageId,
+        'bibles',
+        originalLanguageBibleId,
+        version
+      );
+
+      // Get the version of the other Tns orginal language to determine versions that should not be deleted.
+      const versionsToNotDelete = getOtherTnsOLVersions(originalLanguageId);
+      const versionsSubdirectory = originalBiblePath.replace(version, '');
+      const latestOriginalBiblePath = resourcesHelpers.getLatestVersionInPath(versionsSubdirectory);
+      // if latest version is the version needed delete older versions
+      if (latestOriginalBiblePath === originalBiblePath) {
+        // Old versions of the orginal language resource bible will be deleted because the tn uses the latest version and not an older version
+        resourcesHelpers.removeAllButLatestVersion(versionsSubdirectory, versionsToNotDelete);
+      }
+      // If version needed is not in the user resources download it.
+      if (!fs.existsSync(originalBiblePath)) {
+        // Download orig. lang. resource
+        const downloadUrl = `https://cdn.door43.org/${originalLanguageId}/${originalLanguageBibleId}/${version}/${originalLanguageBibleId}.zip`;
+        const resource = {
+          languageId: originalLanguageId,
+          resourceId: originalLanguageBibleId,
+          remoteModifiedTime: '0001-01-01T00:00:00+00:00',
+          downloadUrl,
+          version: version.replace('v', ''),
+          subject: 'Bible',
+          catalogEntry: {
+            subject: {},
+            resource: {},
+            format: {},
+          },
+        };
+        // Delay to try to avoid Socket timeout
+        await delay(1000);
+        await downloadAndProcessResource(resource, resourcesPath);
+        resolve();
+      } else {
+        resolve();
+      }
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+
+/**
+ * Get the version of the other Tns orginal language.
+ * @param {string} originalLanguageId - original Language Id.
+ * @return {array}
+ */
+export function getOtherTnsOLVersions(originalLanguageId) {
+  const languageIds = fs.readdirSync(USER_RESOURCES_PATH)
+    .filter((filename) => resourcesHelpers.isDirectory(USER_RESOURCES_PATH, filename));
+  const versionsToNotDelete = [];
+
+  languageIds.forEach((languageId) => {
+    const tnHelpsPath = path.join(USER_RESOURCES_PATH, languageId, 'translationHelps', 'translationNotes');
+    if (fs.existsSync(tnHelpsPath)) {
+      const tnHelpsVersionPath = resourcesHelpers.getLatestVersionInPath(tnHelpsPath);
+      const tnManifestPath = path.join(tnHelpsVersionPath, 'manifest.json');
+      if (fs.existsSync(tnManifestPath)) {
+        const manifest = fs.readJsonSync(tnManifestPath);
+        const {relation} = manifest.dublin_core || {};
+        const query = getQueryStringForBibleId(relation, originalLanguageId);
+        if (query) {
+          const version = 'v' + getQueryVariable(query, 'v');
+          versionsToNotDelete.push(version);
+        }
+      }
+    }
+  });
+
+  return versionsToNotDelete;
+}

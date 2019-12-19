@@ -8,6 +8,9 @@
   ],
   "settings": {},
   "rules": {
+    "arrow-parens": "warn",
+    "comma-dangle": "warn",
+    "curly": "off",
     "guard-for-in": "off",
     "indent": "off",
     "linebreak-style": "off",
@@ -25,14 +28,17 @@
     "no-undef": "warn",
     "no-unused-vars": "warn",
     "no-warning-comments": "warn",
-    "quote-props": "warn",
     "padded-blocks": "warn",
+    "prefer-const": "warn",
+    "quotes": "warn",
+    "quote-props": "warn",
     "radix": "off",
     "semi": ["error", "always", {"omitLastInOneLineBlock": true}],
     "space-before-function-paren": "off"
   },
   "parser": "babel-eslint",
   "parserOptions": {
+    "ecmaVersion": 6,
     "ecmaFeatures": {
       "modules": true
     }
