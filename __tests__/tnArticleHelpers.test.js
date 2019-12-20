@@ -52,13 +52,13 @@ describe('Tests for tnArticleHelpers.getMissingResources()', function() {
       {
         "originalLanguageBibleId": "uhb",
         "originalLanguageId": "hbo",
-        "resourcesPath": "/Users/blm/translationCore/resources",
+        "resourcesPath": path.join(ospath.home(), 'translationCore/resources'),
         "version": "v2.1.9",
       },
       {
         "originalLanguageBibleId": "ugnt",
         "originalLanguageId": "el-x-koine",
-        "resourcesPath": "/Users/blm/translationCore/resources",
+        "resourcesPath": path.join(ospath.home(), 'translationCore/resources'),
         "version": "v0.10",
       },
     ];
