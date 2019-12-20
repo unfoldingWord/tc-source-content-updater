@@ -15,11 +15,6 @@ const mockGetMissingOriginalResource = async (resourcesPath, originalLanguageId,
 };
 
 describe('Tests for tnArticleHelpers.getMissingResources()', function() {
-  const resource = {
-    languageId: 'en',
-    resourceId: 'tn',
-    version: '13',
-  };
 
   beforeEach(() => {
     fs.__resetMockFS();
