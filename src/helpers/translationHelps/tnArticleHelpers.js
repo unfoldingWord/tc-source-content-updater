@@ -24,13 +24,50 @@ import {
 import {makeSureResourceUnzipped} from "../unzipFileHelpers";
 
 /**
+ * search to see if we need to get any missing original language dependencies
+ * @param {String} sourcePath - Path to the extracted files that came from the zip file from the catalog
+ * e.g. /Users/mannycolon/translationCore/resources/imports/en_tn_v16/en_tn
+ * @param {String} resourcesPath Path to resources folder
+ * @param {Function} getMissingOriginalResource - function called to fetch missing resources
+ * @param {Array} downloadErrors - parsed list of download errors with details such as if the download completed (vs. parsing error), error, and url
+ * @return {Promise<{otQuery: string, ntQuery: string}>}
+ */
+export async function getMissingResources(sourcePath, resourcesPath, getMissingOriginalResource, downloadErrors) {
+  const tsvManifest = resourcesHelpers.getResourceManifestFromYaml(sourcePath);
+  // array of related resources used to generated the tsv.
+  const tsvRelations = tsvManifest.dublin_core.relation;
+  const OT_ORIG_LANG_QUERY = getQueryStringForBibleId(tsvRelations, OT_ORIG_LANG);
+  const otQuery = getQueryVariable(OT_ORIG_LANG_QUERY, 'v');
+  const NT_ORIG_LANG_QUERY = getQueryStringForBibleId(tsvRelations, NT_ORIG_LANG);
+  const ntQuery = getQueryVariable(NT_ORIG_LANG_QUERY, 'v');
+  for (const isNewTestament of [false, true]) {
+    const query = isNewTestament ? ntQuery : otQuery;
+    if (query) {
+      const origLangVersion = 'v' + query;
+      const origLangId = isNewTestament ? NT_ORIG_LANG : OT_ORIG_LANG;
+      const origLangBibleId = isNewTestament ? NT_ORIG_LANG_BIBLE: OT_ORIG_LANG_BIBLE;
+      await getMissingOriginalResource(resourcesPath, origLangId, origLangBibleId, origLangVersion, downloadErrors);
+      const originalBiblePath = path.join(
+        resourcesPath,
+        origLangId,
+        'bibles',
+        origLangBibleId,
+        origLangVersion
+      );
+      makeSureResourceUnzipped(originalBiblePath);
+    }
+  }
+  return {otQuery, ntQuery};
+}
+
+/**
  * @description Processes the extracted files for translationNotes to separate the folder
  * structure and produce the index.json file for the language with the title of each article.
  * @param {Object} resource - Resource object
  * @param {String} sourcePath - Path to the extracted files that came from the zip file from the catalog
  * e.g. /Users/mannycolon/translationCore/resources/imports/en_tn_v16/en_tn
  * @param {String} outputPath - Path to place the processed resource files WITHOUT the version in the path
- * @param {String} resourcesPath Path to user resources folder
+ * @param {String} resourcesPath Path to resources folder
  * @param {Array} downloadErrors - parsed list of download errors with details such as if the download completed (vs. parsing error), error, and url
  */
 export async function processTranslationNotes(resource, sourcePath, outputPath, resourcesPath, downloadErrors) {
@@ -51,40 +88,8 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
       fs.removeSync(outputPath);
     }
 
-    const tsvManifest = resourcesHelpers.getResourceManifestFromYaml(sourcePath);
-    // array of related resources used to generated the tsv.
-    const tsvRelations = tsvManifest.dublin_core.relation;
-    const OT_ORIG_LANG_QUERY = getQueryStringForBibleId(tsvRelations, OT_ORIG_LANG);
-    const NT_ORIG_LANG_QUERY = getQueryStringForBibleId(tsvRelations, NT_ORIG_LANG);
-
-    const otQuery = getQueryVariable(OT_ORIG_LANG_QUERY, 'v');
-    if (otQuery) {
-      const OT_ORIG_LANG_VERSION = 'v' + otQuery;
-      await getMissingOriginalResource(resourcesPath, OT_ORIG_LANG, OT_ORIG_LANG_BIBLE, OT_ORIG_LANG_VERSION, downloadErrors);
-      const originalBiblePath = path.join(
-        resourcesPath,
-        OT_ORIG_LANG,
-        'bibles',
-        OT_ORIG_LANG_BIBLE,
-        OT_ORIG_LANG_VERSION
-      );
-      makeSureResourceUnzipped(originalBiblePath);
-    }
-    const ntQuery = getQueryVariable(NT_ORIG_LANG_QUERY, 'v');
-    if (ntQuery) {
-      const NT_ORIG_LANG_VERSION = 'v' + ntQuery;
-      await getMissingOriginalResource(resourcesPath, NT_ORIG_LANG, NT_ORIG_LANG_BIBLE, NT_ORIG_LANG_VERSION, downloadErrors);
-      const originalBiblePath = path.join(
-        resourcesPath,
-        NT_ORIG_LANG,
-        'bibles',
-        NT_ORIG_LANG_BIBLE,
-        NT_ORIG_LANG_VERSION
-      );
-      makeSureResourceUnzipped(originalBiblePath);
-    }
-
-    console.log(`processTranslationNotes() - have originals for ${sourcePath}, starting processing`);
+    const {otQuery, ntQuery} = await getMissingResources(sourcePath, resourcesPath, getMissingOriginalResource, downloadErrors);
+    console.log(`processTranslationNotes() - have needed original bibles for ${sourcePath}, starting processing`);
     const tsvFiles = fs.readdirSync(sourcePath).filter((filename) => path.extname(filename) === '.tsv');
     const errors = [];
 
@@ -180,7 +185,7 @@ function getMissingOriginalResource(resourcesPath, originalLanguageId, originalL
         // Old versions of the orginal language resource bible will be deleted because the tn uses the latest version and not an older version
         resourcesHelpers.removeAllButLatestVersion(versionsSubdirectory, versionsToNotDelete);
       }
-      // If version needed is not in the user resources download it.
+      // If version needed is not in the resources download it.
       if (!fs.existsSync(originalBiblePath)) {
         // Download orig. lang. resource
         const downloadUrl = `https://cdn.door43.org/${originalLanguageId}/${originalLanguageBibleId}/${version}/${originalLanguageBibleId}.zip`;

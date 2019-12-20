@@ -34,7 +34,7 @@ describe('makeSureResourceUnzipped()', () => {
     // given
     const resource = 'bibles/maj-rp/v2000';
     const sourceFolder = path.join(__dirname, 'fixtures/compressedResources', resource);
-    const tempFolder = 'output/temp';
+    const tempFolder = 'translationCore/resources/en';
     const resourceFolder = path.join(tempFolder, resource);
     fs.__loadDirIntoMockFs(sourceFolder, resourceFolder);
     mockUnzipFolders = ['col'];
@@ -53,7 +53,7 @@ describe('makeSureResourceUnzipped()', () => {
     // given
     const resource = 'translationHelps/translationAcademy/v11';
     const sourceFolder = path.join(__dirname, 'fixtures/compressedResources', resource);
-    const tempFolder = 'output/temp';
+    const tempFolder = 'translationCore/resources/en';
     const resourceFolder = path.join(tempFolder, resource);
     fs.__loadDirIntoMockFs(sourceFolder, resourceFolder);
     mockUnzipFolders = ['translate'];
