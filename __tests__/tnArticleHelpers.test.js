@@ -34,7 +34,7 @@ describe('Tests for tnArticleHelpers.getMissingResources()', function() {
     const {otQuery, ntQuery} = await tnArticleHelpers.getMissingResources(sourcePath, resourcesPath, mockGetMissingOriginalResource, callLog);
 
     // then
-    expect(callLog).toEqual(expectedCalls);
+    validateCallLog(callLog, expectedCalls);
     expect(otQuery).toBeNull();
     expect(ntQuery).toBeNull();
   });
@@ -70,8 +70,40 @@ describe('Tests for tnArticleHelpers.getMissingResources()', function() {
     const {otQuery, ntQuery} = await tnArticleHelpers.getMissingResources(sourcePath, resourcesPath, mockGetMissingOriginalResource, callLog);
 
     // then
-    expect(callLog).toEqual(expectedCalls);
+    validateCallLog(callLog, expectedCalls);
     expect(ntQuery).toEqual(expectedNtQuery);
     expect(otQuery).toEqual(expectedOtQuery);
   });
 });
+
+//
+// Helpers
+//
+
+/**
+ * replace user specific paths in call log
+ * @param {Array} callLog
+ */
+function cleanUpPaths(callLog) {
+  const newLog = callLog.map(item => {
+    const newItem = {...item};
+    if (item.resourcesPath) {
+      const newPath = item.resourcesPath.replace(ospath.home(), '<HOME>');
+      newItem.resourcesPath = newPath;
+    }
+    return newItem;
+  });
+  return newLog;
+}
+
+/**
+ * validate call log against expected
+ * @param {Array} callLog
+ * @param {Array} expectedCalls
+ */
+function validateCallLog(callLog, expectedCalls) {
+  const newCallLog = cleanUpPaths(callLog);
+  const newExpectedCallLog = cleanUpPaths(expectedCalls);
+  expect(newCallLog).toEqual(newExpectedCallLog);
+}
+
