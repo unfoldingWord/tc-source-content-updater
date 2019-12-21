@@ -4,15 +4,15 @@ import rimraf from 'rimraf';
 import * as Throttle from 'promise-parallel-throttle';
 // helpers
 import {
-  formatError,
-  unzipResource,
-  getSubdirOfUnzippedResource,
-  processResource,
-  makeTwGroupDataResource,
-  getActualResourcePath,
-  removeAllButLatestVersion,
   appendError,
+  formatError,
+  getActualResourcePath,
   getErrorMessage,
+  getSubdirOfUnzippedResource,
+  makeTwGroupDataResource,
+  processResource,
+  removeAllButLatestVersion,
+  unzipResource,
 } from './resourcesHelpers';
 import * as parseHelpers from './parseHelpers';
 import * as downloadHelpers from './downloadHelpers';
@@ -21,6 +21,21 @@ import {getOtherTnsOLVersions} from './translationHelps/tnArticleHelpers';
 // constants
 import * as errors from '../resources/errors';
 import * as Bible from '../resources/bible';
+
+/**
+ * add download error keeping track of error message, download url, and if parse error type (if not parse error, then download error)
+ * @param {Array} downloadErrors - list of download errors
+ * @param {Boolean} parseError
+ * @param {String} errorMessage
+ * @param {String} downloadUrl
+ */
+export function addDownloadError(downloadErrors, parseError, errorMessage, downloadUrl) {
+  downloadErrors.push({
+    parseError,
+    errorMessage,
+    downloadUrl,
+  });
+}
 
 /**
  * @description Downloads the resources that need to be updated for a given language using the DCS API
@@ -35,9 +50,10 @@ import * as Bible from '../resources/bible';
  *             catalogEntry: {langResource, bookResource, format}
  *           }>} resource - resource to download
  * @param {String} resourcesPath Path to the user resources directory
+ * @param {Array} downloadErrors - parsed list of download errors with details such as if the download completed (vs. parsing error), error, and url
  * @return {Promise} Download promise
  */
-export const downloadAndProcessResource = async (resource, resourcesPath) => {
+export const downloadAndProcessResource = async (resource, resourcesPath, downloadErrors) => {
   if (!resource) {
     throw Error(errors.RESOURCE_NOT_GIVEN);
   } else if (!resourcesPath) {
@@ -51,22 +67,32 @@ export const downloadAndProcessResource = async (resource, resourcesPath) => {
   fs.ensureDirSync(importsPath);
   let importPath = null;
   let zipFilePath = null;
+  let downloadComplete = false;
   try {
     try {
       const zipFileName = resource.languageId + '_' + resource.resourceId + '_v' + resource.version + '.zip';
       zipFilePath = path.join(importsPath, zipFileName);
       console.log('Downloading: ' + resource.downloadUrl);
-      await downloadHelpers.download(resource.downloadUrl, zipFilePath);
+      const results = await downloadHelpers.download(resource.downloadUrl, zipFilePath);
+      if (results.status === 200) {
+        downloadComplete = true;
+      } else {
+        const message = `Download ${resource.downloadUrl} error, status: ${results.status}`;
+        console.log(message);
+        throw message;
+      }
     } catch (err) {
       throw Error(appendError(errors.UNABLE_TO_DOWNLOAD_RESOURCES, err));
     }
     try {
+      console.log('Unzipping: ' + resource.downloadUrl);
       importPath = await unzipResource(resource, zipFilePath, resourcesPath);
     } catch (err) {
       throw Error(appendError(errors.UNABLE_TO_UNZIP_RESOURCES, err));
     }
+    console.log('Processing: ' + resource.downloadUrl);
     const importSubdirPath = getSubdirOfUnzippedResource(importPath);
-    const processedFilesPath = await processResource(resource, importSubdirPath, resourcesPath);
+    const processedFilesPath = await processResource(resource, importSubdirPath, resourcesPath, downloadErrors);
     if (processedFilesPath) {
       // Extra step if the resource is the Greek UGNT or Hebrew UHB
       if (isGreekOrHebrew) {
@@ -86,8 +112,8 @@ export const downloadAndProcessResource = async (resource, resourcesPath) => {
         throw Error(appendError(errors.UNABLE_TO_MOVE_RESOURCE_INTO_RESOURCES, err));
       }
       let versionsToNotDelete = [];
-      // Get the version numbers of the orginal language used by other tNs so that needed versions are not deleted.
-      if (isGreekOrHebrew) versionsToNotDelete = getOtherTnsOLVersions(resource.languageId);
+      // Get the version numbers of the original language used by other tNs so that needed versions are not deleted.
+      if (isGreekOrHebrew) versionsToNotDelete = getOtherTnsOLVersions(resourcePath, resource.languageId);
       // Make sure that the resource currently being downloaded is not deleted
       versionsToNotDelete.push('v' + resource.version);
       removeAllButLatestVersion(path.dirname(resourcePath), versionsToNotDelete);
@@ -97,6 +123,7 @@ export const downloadAndProcessResource = async (resource, resourcesPath) => {
   } catch (err) {
     const errorMessage = getErrorMessage(err);
     console.error('Error getting ' + resource.downloadUrl + ': ' + errorMessage);
+    addDownloadError(downloadErrors, downloadComplete, errorMessage, resource.downloadUrl);
     throw Error(formatError(resource, errorMessage));
   } finally {
     if (zipFilePath) {
@@ -115,15 +142,16 @@ export const downloadAndProcessResource = async (resource, resourcesPath) => {
  * @param {Object} resource being downloaded
  * @param {String} resourcesPath - path to save resources
  * @param {Array} errorList - keeps track of errors
+ * @param {Array} downloadErrors - parsed list of download errors with details such as if the download completed (vs. parsing error), error, and url
  * @return {Promise} promise
  */
-export const downloadAndProcessResourceWithCatch = async (resource, resourcesPath, errorList) => {
+export const downloadAndProcessResourceWithCatch = async (resource, resourcesPath, errorList, downloadErrors) => {
   let result = null;
   try {
-    result = await downloadAndProcessResource(resource, resourcesPath);
-    console.log('Download Success: ' + resource.downloadUrl);
+    result = await downloadAndProcessResource(resource, resourcesPath, downloadErrors);
+    console.log('Update Success: ' + resource.downloadUrl);
   } catch (e) {
-    console.log('Download Error:');
+    console.log('Update Error:');
     console.error(e);
     errorList.push(e);
   }
@@ -144,10 +172,11 @@ export const downloadAndProcessResourceWithCatch = async (resource, resourcesPat
  *                   subject: String,
  *                   catalogEntry: {langResource, bookResource, format}
  *                 }>} resources - resources that will be downloaded if the lanugage IDs match
+ * @param {Array} downloadErrors - parsed list of download errors with details such as if the download completed (vs. parsing error), error, and url
  * @return {Promise} Promise that returns a list of all the resources updated, rejects if
  * any fail
  */
-export const downloadResources = (languageList, resourcesPath, resources) => {
+export const downloadResources = (languageList, resourcesPath, resources, downloadErrors) => {
   return new Promise((resolve, reject) => {
     if (!languageList || !languageList.length) {
       reject(errors.LANGUAGE_LIST_EMPTY);
@@ -173,7 +202,7 @@ export const downloadResources = (languageList, resourcesPath, resources) => {
     downloadableResources = sortDownloableResources(downloadableResources.filter((resource) => resource));
 
     const queue = downloadableResources.map((resource) =>
-      () => downloadAndProcessResourceWithCatch(resource, resourcesPath, errorList));
+      () => downloadAndProcessResourceWithCatch(resource, resourcesPath, errorList, downloadErrors));
     Throttle.all(queue, {maxInProgress: 2})
       .then((result) => {
         rimraf.sync(importsDir, fs);

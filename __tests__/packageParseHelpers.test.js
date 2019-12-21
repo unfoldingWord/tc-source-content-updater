@@ -236,7 +236,7 @@ function getBookCode(bookName) {
 }
 
 function verifyCatalogModifiedTimeInManifest(resultsPath, resource) {
-  let manifestPath = path.join(resultsPath, 'manifest.json');
+  const manifestPath = path.join(resultsPath, 'manifest.json');
   const manifest = fs.readJSONSync(manifestPath);
   expect(manifest.catalog_modified_time).toEqual(resource.remoteModifiedTime);
 }
