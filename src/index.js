@@ -191,8 +191,8 @@ Updater.prototype.processTranslationWords = function(extractedFilesPath, outputP
  * @param {string} outputPath Path where the translationWords group data is to be placed WITHOUT version
  * @return {string} Path where tW was generated with version
  */
-Updater.prototype.generateTwGroupDataFromAlignedBible = function(biblePath, outputPath) {
-  return twGroupDataHelpers.generateTwGroupDataFromAlignedBible(biblePath, outputPath);
+Updater.prototype.generateTwGroupDataFromAlignedBible = function(resource, biblePath, outputPath) {
+  return twGroupDataHelpers.generateTwGroupDataFromAlignedBible(resource, biblePath, outputPath);
 };
 
 /**
