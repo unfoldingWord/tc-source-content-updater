@@ -187,6 +187,7 @@ Updater.prototype.processTranslationWords = function(extractedFilesPath, outputP
 
 /**
  * @description Generates the tW Group Data files from the given aligned Bible
+ * @param {Object} resource Resource object
  * @param {string} biblePath Path to the Bible with aligned data
  * @param {string} outputPath Path where the translationWords group data is to be placed WITHOUT version
  * @return {string} Path where tW was generated with version
