@@ -21,7 +21,7 @@ import {
   BOOK_CHAPTER_VERSES,
   BIBLE_LIST_NT,
 } from '../../resources/bible';
-import {makeSureResourceUnzipped} from "../unzipFileHelpers";
+import {makeSureResourceUnzipped} from '../unzipFileHelpers';
 
 /**
  * search to see if we need to get any missing original language dependencies
