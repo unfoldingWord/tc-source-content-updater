@@ -1,7 +1,6 @@
 import fs from 'fs-extra';
 import path from 'path-extra';
 import {isObject} from 'util';
-import ospath from 'ospath';
 import {
   tsvToGroupData,
   formatAndSaveGroupData,

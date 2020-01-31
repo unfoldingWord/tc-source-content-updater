@@ -23,7 +23,7 @@ export const parseUsfmOfBook = (usfmPath, outputPath) => {
   const usfmData = fs.readFileSync(usfmPath, 'UTF-8').toString();
   const converted = usfm.toJSON(usfmData, {convertToInt: ['occurrence', 'occurrences']});
 
-  const { chapters } = converted;
+  const {chapters} = converted;
   Object.keys(chapters).forEach((chapter) => {
     fs.outputFileSync(path.join(outputPath, chapter + '.json'), JSON.stringify(chapters[chapter], null, 2));
   });
