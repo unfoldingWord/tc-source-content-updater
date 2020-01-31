@@ -1,5 +1,6 @@
 /* eslint-disable quotes */
 /* eslint-env jest */
+jest.unmock('fs-extra');
 import fs from 'fs-extra';
 import path from 'path-extra';
 import ospath from 'ospath';
@@ -15,9 +16,20 @@ const mockGetMissingOriginalResource = async (resourcesPath, originalLanguageId,
 };
 
 describe('Tests for tnArticleHelpers.getMissingResources()', function() {
-
   beforeEach(() => {
-    fs.__resetMockFS();
+    // fs.__resetMockFS();
+  });
+
+  it('Test tN', async () => {
+    const resource = {
+      languageId: 'en',
+      resourceId: 'ult',
+      downloadUrl: 'https://test.com',
+    };
+    const resourcesPath = '/Users/richmahn/working/resources';
+    const tnGroupDataPath = path.join(resourcesPath, 'en/translationHelps/translationNotes/v22');
+    const tnRepoPath = '/Users/richmahn/working/en_tn';
+    tnArticleHelpers.processTranslationNotes(resource, tnRepoPath, tnGroupDataPath, resourcesPath);
   });
 
   it('Test for en with no dependencies', async () => {
@@ -85,7 +97,7 @@ describe('Tests for tnArticleHelpers.getMissingResources()', function() {
  * @param {Array} callLog
  */
 function cleanUpPaths(callLog) {
-  const newLog = callLog.map(item => {
+  const newLog = callLog.map((item) => {
     const newItem = {...item};
     if (item.resourcesPath) {
       const newPath = item.resourcesPath.replace(ospath.home(), '<HOME>');

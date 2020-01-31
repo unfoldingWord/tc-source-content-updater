@@ -22,7 +22,8 @@ import * as errors from '../resources/errors';
 export const parseUsfmOfBook = (usfmPath, outputPath) => {
   const usfmData = fs.readFileSync(usfmPath, 'UTF-8').toString();
   const converted = usfm.toJSON(usfmData, {convertToInt: ['occurrence', 'occurrences']});
-  const {chapters} = converted;
+
+  const { chapters } = converted;
   Object.keys(chapters).forEach((chapter) => {
     fs.outputFileSync(path.join(outputPath, chapter + '.json'), JSON.stringify(chapters[chapter], null, 2));
   });
@@ -68,6 +69,9 @@ export function parseBiblePackage(resource, sourcePath, outputPath) {
   }
   if (!outputPath) {
     throw Error(resourcesHelpers.formatError(resource, errors.OUTPUT_PATH_NOT_GIVEN));
+  }
+  if (!fs.pathExistsSync(outputPath)) {
+    fs.mkdirSync(outputPath, {recursive: true});
   }
   try {
     const isOL = (resource.resourceId === 'ugnt') || (resource.resourceId === 'uhb');
