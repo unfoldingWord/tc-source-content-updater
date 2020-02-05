@@ -69,6 +69,7 @@ export function parseBiblePackage(resource, sourcePath, outputPath) {
   if (!outputPath) {
     throw Error(resourcesHelpers.formatError(resource, errors.OUTPUT_PATH_NOT_GIVEN));
   }
+  fs.ensureDirSync(outputPath);
   try {
     const isOL = (resource.resourceId === 'ugnt') || (resource.resourceId === 'uhb');
     const manifest = parseManifest(sourcePath, outputPath);

@@ -1,7 +1,6 @@
 import fs from 'fs-extra';
 import path from 'path-extra';
 import {isObject} from 'util';
-import ospath from 'ospath';
 import {
   tsvToGroupData,
   formatAndSaveGroupData,
@@ -13,6 +12,7 @@ import * as resourcesHelpers from '../resourcesHelpers';
 import {downloadAndProcessResource} from '../resourcesDownloadHelpers';
 import {delay, getQueryStringForBibleId, getQueryVariable} from '../utils';
 // constants
+import * as errors from '../../resources/errors';
 import {
   OT_ORIG_LANG,
   NT_ORIG_LANG,
@@ -21,7 +21,7 @@ import {
   BOOK_CHAPTER_VERSES,
   BIBLE_LIST_NT,
 } from '../../resources/bible';
-import {makeSureResourceUnzipped} from "../unzipFileHelpers";
+import {makeSureResourceUnzipped} from '../unzipFileHelpers';
 
 /**
  * search to see if we need to get any missing original language dependencies
@@ -91,7 +91,7 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
     const {otQuery, ntQuery} = await getMissingResources(sourcePath, resourcesPath, getMissingOriginalResource, downloadErrors);
     console.log(`processTranslationNotes() - have needed original bibles for ${sourcePath}, starting processing`);
     const tsvFiles = fs.readdirSync(sourcePath).filter((filename) => path.extname(filename) === '.tsv');
-    const errors = [];
+    const tnErrors = [];
 
     tsvFiles.forEach(async (filename) => {
       try {
@@ -121,19 +121,19 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
         } else {
           const message = `processTranslationNotes() - cannot find original bible ${originalBiblePath}:`;
           console.error(message);
-          errors.push(message);
+          tnErrors.push(message);
         }
       } catch (e) {
         const message = `processTranslationNotes() - error processing ${filename}:`;
         console.error(message, e);
-        errors.push(message + e.toString());
+        tnErrors.push(message + e.toString());
       }
     });
 
-    if (errors.length) { // report errors
+    if (tnErrors.length) { // report errors
       const message = `processTranslationNotes() - error processing ${sourcePath}`;
       console.error(message);
-      throw new Error(`${message}:\n${errors.join('\n')}`);
+      throw new Error(`${message}:\n${tnErrors.join('\n')}`);
     }
 
     await delay(200);
@@ -231,14 +231,16 @@ export function getOtherTnsOLVersions(resourcesPath, originalLanguageId) {
     const tnHelpsPath = path.join(resourcesPath, languageId, 'translationHelps', 'translationNotes');
     if (fs.existsSync(tnHelpsPath)) {
       const tnHelpsVersionPath = resourcesHelpers.getLatestVersionInPath(tnHelpsPath);
-      const tnManifestPath = path.join(tnHelpsVersionPath, 'manifest.json');
-      if (fs.existsSync(tnManifestPath)) {
-        const manifest = fs.readJsonSync(tnManifestPath);
-        const {relation} = manifest.dublin_core || {};
-        const query = getQueryStringForBibleId(relation, originalLanguageId);
-        if (query) {
-          const version = 'v' + getQueryVariable(query, 'v');
-          versionsToNotDelete.push(version);
+      if (tnHelpsVersionPath) {
+        const tnManifestPath = path.join(tnHelpsVersionPath, 'manifest.json');
+        if (fs.existsSync(tnManifestPath)) {
+          const manifest = fs.readJsonSync(tnManifestPath);
+          const {relation} = manifest.dublin_core || {};
+          const query = getQueryStringForBibleId(relation, originalLanguageId);
+          if (query) {
+            const version = 'v' + getQueryVariable(query, 'v');
+            versionsToNotDelete.push(version);
+          }
         }
       }
     }

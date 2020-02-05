@@ -15,7 +15,6 @@ const mockGetMissingOriginalResource = async (resourcesPath, originalLanguageId,
 };
 
 describe('Tests for tnArticleHelpers.getMissingResources()', function() {
-
   beforeEach(() => {
     fs.__resetMockFS();
   });
@@ -85,7 +84,7 @@ describe('Tests for tnArticleHelpers.getMissingResources()', function() {
  * @param {Array} callLog
  */
 function cleanUpPaths(callLog) {
-  const newLog = callLog.map(item => {
+  const newLog = callLog.map((item) => {
     const newItem = {...item};
     if (item.resourcesPath) {
       const newPath = item.resourcesPath.replace(ospath.home(), '<HOME>');
