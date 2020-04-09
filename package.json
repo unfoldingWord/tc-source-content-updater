@@ -60,7 +60,8 @@
     "jest": "^23.6.0",
     "nock": "^10.0.6",
     "rimraf": "^2.6.3",
-    "tmp": "0.0.33"
+    "tmp": "0.0.33",
+    "tsv-groupdata-parser": "github:unfoldingWord/tsv-groupdata-parser#bugfix-mcleanb-6831"
   },
   "dependencies": {
     "adm-zip": "^0.4.11",
@@ -71,9 +72,11 @@
     "path-extra": "^4.2.1",
     "promise-parallel-throttle": "^3.3.0",
     "request": "^2.87.0",
-    "tsv-groupdata-parser": "github:unfoldingWord/tsv-groupdata-parser#bugfix-mcleanb-6831",
     "url": "^0.11.0",
     "usfm-js": "2.0.2",
     "yamljs": "^0.3.0"
+  },
+  "peerDependencies": {
+    "tsv-groupdata-parser": "^2.0.0"
   }
 }
