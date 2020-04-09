@@ -60,6 +60,7 @@
     "jest": "^23.6.0",
     "nock": "^10.0.6",
     "rimraf": "^2.6.3",
+    "string-punctuation-tokenizer": "2.0.0",
     "tmp": "0.0.33",
     "tsv-groupdata-parser": "0.9.16"
   },
@@ -77,6 +78,7 @@
     "yamljs": "^0.3.0"
   },
   "peerDependencies": {
+    "string-punctuation-tokenizer": "^2.0.0",
     "tsv-groupdata-parser": "^0.9.16"
   }
 }
