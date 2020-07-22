@@ -159,6 +159,19 @@ export const downloadAndProcessResourceWithCatch = async (resource, resourcesPat
 };
 
 /**
+ * searches resources to find item with matching languageId and resourceId
+ * @param {Array} resources
+ * @param {String} languageId
+ * @param {String} resourceId
+ * @return {Object}
+ */
+export const findMatchingResource = (resources, languageId, resourceId) => {
+  const found = resources.find(item =>
+    ((item.languageId === languageId) && (item.resourceId === resourceId)));
+  return found;
+};
+
+/**
  * @description Downloads the resources that need to be updated for the given languages using the DCS API
  * @param {Array} languageList - Array of languages to download the resources for
  * @param {String} resourcesPath - Path to the resources directory where each resource will be placed
@@ -173,25 +186,40 @@ export const downloadAndProcessResourceWithCatch = async (resource, resourcesPat
  *                   catalogEntry: {langResource, bookResource, format}
  *                 }>} resources - resources that will be downloaded if the lanugage IDs match
  * @param {Array} downloadErrors - parsed list of download errors with details such as if the download completed (vs. parsing error), error, and url
+ * @param {Boolean} allAlignedBibles - if true all aligned Bibles are updated
  * @return {Promise} Promise that returns a list of all the resources updated, rejects if
  * any fail
  */
-export const downloadResources = (languageList, resourcesPath, resources, downloadErrors) => {
+export const downloadResources = (languageList, resourcesPath, resources, downloadErrors, allAlignedBibles = false) => {
   return new Promise((resolve, reject) => {
-    if (!languageList || !languageList.length) {
+    if (!allAlignedBibles && (!languageList || !languageList.length)) {
       reject(errors.LANGUAGE_LIST_EMPTY);
       return;
     }
+
     if (!resourcesPath) {
       reject(errors.RESOURCES_PATH_NOT_GIVEN);
       return;
     }
+
     fs.ensureDirSync(resourcesPath);
     const importsDir = path.join(resourcesPath, 'imports');
     let downloadableResources = [];
     languageList.forEach((languageId) => {
       downloadableResources = downloadableResources.concat(parseHelpers.getResourcesForLanguage(resources, languageId));
     });
+
+    if (allAlignedBibles) {
+      console.log('downloadResources() - updating all aligned bibles');
+      resources.forEach((resource) => {
+        if (resource.subject === 'Aligned_Bible') {
+          const duplicate = findMatchingResource(downloadableResources, resource.languageId, resource.resourceId);
+          if (!duplicate) {
+            downloadableResources.push(resource);
+          }
+        }
+      });
+    }
 
     if (!downloadableResources || !downloadableResources.length) {
       resolve([]);

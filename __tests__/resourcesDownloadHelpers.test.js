@@ -50,7 +50,7 @@ describe('Tests for resourcesDownloadHelpers.downloadResources()', function() {
     });
   });
 
-  it('Test resourcesDownloadHelpers.processTranslationAcademy() for populated language list with no resources should pass', async () => {
+  it('Test resourcesDownloadHelpers.downloadResources() for populated language list with no resources should pass', async () => {
     const languageList = ['en', 'hi'];
     const resources = [];
     const expectedResolve = [];
@@ -58,6 +58,31 @@ describe('Tests for resourcesDownloadHelpers.downloadResources()', function() {
       expect(res).toEqual(expectedResolve);
     });
   });
+
+  it('Test resourcesDownloadHelpers.downloadResources() for empty language list and allAlignedBibles should pass', async () => {
+    const languageList = [];
+    const expectedLength = 3;
+    const allAlignedBibles = true;
+    const downloadErrors = [];
+    return resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, downloadErrors, allAlignedBibles).then((res) => {
+      expect(res).toHaveLength(expectedLength);
+    });
+  });
+
+  it('Test resourcesDownloadHelpers.downloadResources() for empty language list and allAlignedBibles should remove duplicates', async () => {
+    const languageList = [];
+    const expectedLength = 3;
+    const allAlignedBibles = true;
+    const downloadErrors = [];
+    const resources_ = [...resources];
+    // eslint-disable-next-line camelcase
+    const en_ult = resourcesDownloadHelpers.findMatchingResource(resources, 'en', 'ult');
+    resources_.push(en_ult);
+    return resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources_, downloadErrors, allAlignedBibles).then((res) => {
+      expect(res).toHaveLength(expectedLength);
+    });
+  });
+
 });
 
 describe('Tests for resourcesDownloadHelpers.downloadAndProcessResource()', () => {
