@@ -108,9 +108,12 @@ export function getResourcesForLanguage(languageId) {
  * If getLatestResources() was never called or resources = null, function will get all resources for the given language(s)
  * (the latter is useful for getting all resources for a set of languages, such as including all resources of
  * 'en' and 'hi' in a build)
+ * @param {Boolean} allAlignedBibles - if true all aligned Bibles from all languages are updated also
  * @return {Promise} Promise that resolves to return all the resources updated or rejects if a resource failed to download
  */
-Updater.prototype.downloadResources = async function(languageList, resourcesPath, resources = this.updatedCatalogResources) {
+Updater.prototype.downloadResources = async function(languageList, resourcesPath,
+                                                     resources = this.updatedCatalogResources,
+                                                     allAlignedBibles = false) {
   // call this.getResourcesForLanguage(lang) for each language in list to get all resources to update
   if (!resources) {
     await this.getLatestResources([]);
@@ -119,7 +122,7 @@ Updater.prototype.downloadResources = async function(languageList, resourcesPath
   this.downloadErrors = [];
   let results = null;
   try {
-    results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors);
+    results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors, allAlignedBibles);
   } catch (e) {
     const errors = this.getLatestDownloadErrorsStr(); // get detailed errors and log
     if (errors) {
