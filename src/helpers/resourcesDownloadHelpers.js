@@ -186,7 +186,7 @@ export const findMatchingResource = (resources, languageId, resourceId) => {
  *                   catalogEntry: {langResource, bookResource, format}
  *                 }>} resources - resources that will be downloaded if the lanugage IDs match
  * @param {Array} downloadErrors - parsed list of download errors with details such as if the download completed (vs. parsing error), error, and url
- * @param {Boolean} allAlignedBibles - if true all aligned Bibles are updated
+ * @param {Boolean} allAlignedBibles - if true all aligned Bibles from all languages are updated also
  * @return {Promise} Promise that returns a list of all the resources updated, rejects if
  * any fail
  */
