@@ -82,6 +82,27 @@ describe('parseBiblePackage()', () => {
     verifyCatalogModifiedTimeInManifest(resultsPath, resource);
   });
 
+  it('en_ult should pass with bible front matter', () => {
+    // given
+    const sourceBible = 'en_ult';
+    const extraBible = 'en_ult_frt';
+    const PROJECTS_PATH = path.join(ospath.home(), 'resources/import');
+    const resultsPath = path.join(ospath.home(), 'resources/results');
+    const sourceFolder = './__tests__/fixtures';
+    fs.__loadFilesIntoMockFs([sourceBible], sourceFolder, PROJECTS_PATH);
+    fs.__loadDirIntoMockFs(path.join(sourceFolder, extraBible), path.join(PROJECTS_PATH, sourceBible));
+    let packagePath = path.join(PROJECTS_PATH, sourceBible);
+    const resource = enUltResource;
+
+    // when
+    const results = packageParseHelpers.parseBiblePackage(resource, packagePath, resultsPath);
+
+    // then
+    expect(results).toBeTruthy();
+    verifyBibleResults(resultsPath, BOOKS_OF_THE_BIBLE);
+    verifyCatalogModifiedTimeInManifest(resultsPath, resource);
+  });
+
   it('en_ult should pass with uppercase book ID', () => {
     // given
     const sourceBible = 'en_ult';
