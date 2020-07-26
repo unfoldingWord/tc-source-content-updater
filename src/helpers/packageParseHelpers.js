@@ -124,7 +124,8 @@ function getWordCount(verseObjects) {
 function indexBook(bookPath, index, bookCode, isOL) {
   const expectedChapters = bible.BOOK_CHAPTER_VERSES[bookCode];
   if (!expectedChapters) {
-    throw new Error(errors.INVALID_BOOK_CODE + ': ' + bookCode);
+    console.warn(errors.INVALID_BOOK_CODE + ': ' + bookCode);
+    return;
   }
   const files = fs.readdirSync(bookPath);
   const chapterCount = Object.keys(expectedChapters).length;

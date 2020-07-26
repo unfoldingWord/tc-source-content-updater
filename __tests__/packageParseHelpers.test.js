@@ -101,19 +101,26 @@ describe('parseBiblePackage()', () => {
     verifyCatalogModifiedTimeInManifest(resultsPath, resource);
   });
 
-  it('en_ult should throw error with invalid book ID', () => {
+  it('en_ult should pass with bible front matter', () => {
     // given
     const sourceBible = 'en_ult';
+    const extraBible = 'en_ult_frt';
     const PROJECTS_PATH = path.join(ospath.home(), 'resources/import');
     const resultsPath = path.join(ospath.home(), 'resources/results');
-    fs.__loadFilesIntoMockFs([sourceBible], './__tests__/fixtures', PROJECTS_PATH);
+    const sourceFolder = './__tests__/fixtures';
+    fs.__loadFilesIntoMockFs([sourceBible], sourceFolder, PROJECTS_PATH);
+    // copy front matter into en_ult folder
+    fs.__loadDirIntoMockFs(path.join(sourceFolder, extraBible), path.join(PROJECTS_PATH, sourceBible));
     let packagePath = path.join(PROJECTS_PATH, sourceBible);
-    modifyFile(packagePath, "manifest.yaml", "identifier: 'gen'", "identifier: 'GE'");
     const resource = enUltResource;
-    const expectedError = resourcesHelpers.formatError(resource, errors.ERROR_PARSING_BIBLE + ": " + errors.INVALID_BOOK_CODE + ": ge");
 
     // when
-    expect(() => packageParseHelpers.parseBiblePackage(resource, packagePath, resultsPath)).toThrowError(expectedError);
+    const results = packageParseHelpers.parseBiblePackage(resource, packagePath, resultsPath);
+
+    // then
+    expect(results).toBeTruthy();
+    verifyBibleResults(resultsPath, BOOKS_OF_THE_BIBLE);
+    verifyCatalogModifiedTimeInManifest(resultsPath, resource);
   });
 
   it('el-x-koine_ugnt should pass', () => {
