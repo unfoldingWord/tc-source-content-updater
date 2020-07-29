@@ -28,9 +28,10 @@ describe('Tests for tnArticleHelpers.getMissingResources()', function() {
     const sourcePath = path.join(importsPath, 'en_tn');
     const expectedCalls = [];
     const callLog = [];
+    fs.writeJsonSync(path.join(resourcesPath, 'en', 'translationHelps/translationAcademy', 'v1', 'manifest.json'), {}); // make dummy manifest for tA
 
     // when
-    const {otQuery, ntQuery} = await tnArticleHelpers.getMissingResources(sourcePath, resourcesPath, mockGetMissingOriginalResource, callLog);
+    const {otQuery, ntQuery} = await tnArticleHelpers.getMissingResources(sourcePath, resourcesPath, mockGetMissingOriginalResource, callLog, 'en');
 
     // then
     validateCallLog(callLog, expectedCalls);
@@ -64,9 +65,10 @@ describe('Tests for tnArticleHelpers.getMissingResources()', function() {
     const callLog = [];
     const expectedNtQuery = '0.10';
     const expectedOtQuery = '2.1.9';
+    fs.writeJsonSync(path.join(resourcesPath, 'en', 'translationHelps/translationAcademy', 'v1', 'manifest.json'), {}); // make dummy manifest for tA
 
     // when
-    const {otQuery, ntQuery} = await tnArticleHelpers.getMissingResources(sourcePath, resourcesPath, mockGetMissingOriginalResource, callLog);
+    const {otQuery, ntQuery} = await tnArticleHelpers.getMissingResources(sourcePath, resourcesPath, mockGetMissingOriginalResource, callLog, 'en');
 
     // then
     validateCallLog(callLog, expectedCalls);
