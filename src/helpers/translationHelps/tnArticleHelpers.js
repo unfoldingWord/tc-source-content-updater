@@ -24,15 +24,16 @@ import {
 import {makeSureResourceUnzipped} from '../unzipFileHelpers';
 
 /**
- * search to see if we need to get any missing original language dependencies
+ * search to see if we need to get any missing resources needed for tN processing
  * @param {String} sourcePath - Path to the extracted files that came from the zip file from the catalog
  * e.g. /Users/mannycolon/translationCore/resources/imports/en_tn_v16/en_tn
  * @param {String} resourcesPath Path to resources folder
  * @param {Function} getMissingOriginalResource - function called to fetch missing resources
  * @param {Array} downloadErrors - parsed list of download errors with details such as if the download completed (vs. parsing error), error, and url
+ * @param {String} languageId - language ID for tA
  * @return {Promise<{otQuery: string, ntQuery: string}>}
  */
-export async function getMissingResources(sourcePath, resourcesPath, getMissingOriginalResource, downloadErrors) {
+export async function getMissingResources(sourcePath, resourcesPath, getMissingOriginalResource, downloadErrors, languageId) {
   const tsvManifest = resourcesHelpers.getResourceManifestFromYaml(sourcePath);
   // array of related resources used to generated the tsv.
   const tsvRelations = tsvManifest.dublin_core.relation;
@@ -56,6 +57,19 @@ export async function getMissingResources(sourcePath, resourcesPath, getMissingO
       );
       makeSureResourceUnzipped(originalBiblePath);
     }
+  }
+
+  // make sure tA is unzipped
+  const tAPath = path.join(
+    resourcesPath,
+    languageId,
+    'translationHelps/translationAcademy'
+  );
+  const taVersionPath = resourcesHelpers.getLatestVersionInPath(tAPath);
+  if (taVersionPath) {
+    makeSureResourceUnzipped(taVersionPath);
+  } else {
+    throw new Error(`getMissingResources() - cannot find tA at ${tAPath}`);
   }
   return {otQuery, ntQuery};
 }
@@ -88,7 +102,7 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
       fs.removeSync(outputPath);
     }
 
-    const {otQuery, ntQuery} = await getMissingResources(sourcePath, resourcesPath, getMissingOriginalResource, downloadErrors);
+    const {otQuery, ntQuery} = await getMissingResources(sourcePath, resourcesPath, getMissingOriginalResource, downloadErrors, resource.languageId);
     console.log(`processTranslationNotes() - have needed original bibles for ${sourcePath}, starting processing`);
     const tsvFiles = fs.readdirSync(sourcePath).filter((filename) => path.extname(filename) === '.tsv');
     const tnErrors = [];
