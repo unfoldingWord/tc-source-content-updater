@@ -63,7 +63,7 @@ export async function getMissingResources(sourcePath, resourcesPath, getMissingO
   const tAPath = path.join(
     resourcesPath,
     languageId,
-    'translationHelps/translationsAcademy'
+    'translationHelps/translationAcademy'
   );
   const taVersionPath = resourcesHelpers.getLatestVersionInPath(tAPath);
   if (taVersionPath) {
