@@ -1,5 +1,3 @@
----
-
 dublin_core:
   conformsto: 'rc0.2'
   contributor:
@@ -32,16 +30,16 @@ dublin_core:
     - 'Nicholas Alsop'
     - 'Michael Francis'
     - 'Door43 World Missions Community'
-  creator: 'Door43 World Missions Community'
+  creator: 'unfoldingWord'
   description: "An open-licensed update of the ASV, intended to provide a 'form-centric' understanding of the Bible. It increases the translator's understanding of the lexical and grammatical composition of the underlying text by adhering closely to the word order and structure of the originals."
-  format: 'text/usfm'
-  identifier: 'ulb'
-  issued: '2017-11-29'
+  format: 'text/usfm3'
+  identifier: 'ult'
+  issued: '2020-01-31'
   language:
     direction: 'ltr'
     identifier: 'en'
     title: 'English'
-  modified: '2017-11-29'
+  modified: '2020-01-31'
   publisher: 'unfoldingWord'
   relation:
     - 'en/tw'
@@ -53,10 +51,18 @@ dublin_core:
       identifier: 'asv'
       language: 'en'
       version: '1901'
-  subject: 'Bible'
-  title: 'unfoldingWord Literal Text'
+    -
+      identifier: 'ugnt'
+      language: 'el-x-koine'
+      version: '0.11'
+    -
+      identifier: 'uhb'
+      language: 'hbo'
+      version: '2.1.10'
+  subject: 'Aligned Bible'
+  title: 'unfoldingWord® Literal Text'
   type: 'bundle'
-  version: '12'
+  version: '8'
 
 checking:
   checking_entity:
@@ -64,6 +70,14 @@ checking:
   checking_level: '3'
 
 projects:
+
+  -
+    title: 'Front Matter'
+    versification: 'ufw'
+    identifier: 'frt'
+    sort: 0
+    path: './A0-FRT.usfm'
+    categories: [ 'bible-frt'  ]
 
   -
     title: 'Genesis'
