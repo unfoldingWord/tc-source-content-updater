@@ -10,6 +10,7 @@ import * as packageParseHelpers from './helpers/packageParseHelpers';
 import * as taArticleHelpers from './helpers/translationHelps/taArticleHelpers';
 import * as twArticleHelpers from './helpers/translationHelps/twArticleHelpers';
 import * as twGroupDataHelpers from './helpers/translationHelps/twGroupDataHelpers';
+import * as tnArticleHelpers from './helpers/translationHelps/tnArticleHelpers';
 import * as resourcesDownloadHelpers from './helpers/resourcesDownloadHelpers';
 export {getOtherTnsOLVersions} from './helpers/translationHelps/tnArticleHelpers';
 
@@ -19,6 +20,7 @@ export {getOtherTnsOLVersions} from './helpers/translationHelps/tnArticleHelpers
 function Updater() {
   this.remoteCatalog = null;
   this.updatedCatalogResources = null;
+  this.downloadErrors = [];
 }
 
 Updater.prototype = {};
@@ -29,6 +31,29 @@ Updater.prototype = {};
  */
 Updater.prototype.updateCatalog = async function() {
   this.remoteCatalog = await apiHelpers.getCatalog();
+};
+
+/**
+ * Method to manually fetch the detailed error list for recent download
+ * @return {Array|null} any download/parse errors from last download attempt
+ */
+Updater.prototype.getLatestDownloadErrors = function() {
+  return this.downloadErrors;
+};
+
+/**
+ * Method to manually fetch the detailed error list for recent download and return as string
+ * @return {String} any download/parse errors from last download attempt
+ */
+Updater.prototype.getLatestDownloadErrorsStr = function() {
+  let errors = '';
+  if (this.downloadErrors && this.downloadErrors.length) {
+    for (const error of this.downloadErrors) {
+      const errType = error.parseError ? 'Parse Error' : 'Download Error';
+      errors += `${errType}: ${error.downloadUrl} - ${error.errorMessage}`;
+    }
+  }
+  return errors;
 };
 
 /**
@@ -83,15 +108,31 @@ export function getResourcesForLanguage(languageId) {
  * If getLatestResources() was never called or resources = null, function will get all resources for the given language(s)
  * (the latter is useful for getting all resources for a set of languages, such as including all resources of
  * 'en' and 'hi' in a build)
+ * @param {Boolean} allAlignedBibles - if true all aligned Bibles from all languages are updated also
  * @return {Promise} Promise that resolves to return all the resources updated or rejects if a resource failed to download
  */
-Updater.prototype.downloadResources = async function(languageList, resourcesPath, resources = this.updatedCatalogResources) {
+Updater.prototype.downloadResources = async function(languageList, resourcesPath,
+                                                     resources = this.updatedCatalogResources,
+                                                     allAlignedBibles = false) {
   // call this.getResourcesForLanguage(lang) for each language in list to get all resources to update
   if (!resources) {
     await this.getLatestResources([]);
     resources = this.updatedCatalogResources;
   }
-  return resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources);
+  this.downloadErrors = [];
+  let results = null;
+  try {
+    results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors, allAlignedBibles);
+  } catch (e) {
+    const errors = this.getLatestDownloadErrorsStr(); // get detailed errors and log
+    if (errors) {
+      const message = `Source Content Update Errors caught!!!\n${errors}`;
+      console.error(message);
+    }
+    throw e; // return error summary
+  }
+  console.log('Source Content Update Successful');
+  return results;
 };
 
 /**
@@ -129,36 +170,52 @@ Updater.prototype.parseBiblePackage = function(resourceEntry, extractedFilesPath
 /**
  * @description Processes the extracted files for translationAcademy to create a single file for each
  * article
+ * @param {Object} resource Resource object
  * @param {String} extractedFilesPath - Path to the extracted files that came from the zip file in the catalog
  * @param {String} outputPath - Path to place the processed files WITHOUT version in the path
  * @return {String} The path to the processed translationAcademy files with version
  */
-Updater.prototype.processTranslationAcademy = function(extractedFilesPath, outputPath) {
-  return taArticleHelpers.processTranslationAcademy(extractedFilesPath, outputPath);
+Updater.prototype.processTranslationAcademy = function(resource, extractedFilesPath, outputPath) {
+  return taArticleHelpers.processTranslationAcademy(resource, extractedFilesPath, outputPath);
 };
 
 /**
  * @description Processes the extracted files for translationWord to cerate the folder
  * structure and produce the index.js file for the language with the title of each article.
+ * @param {Object} resource Resource object
  * @param {String} extractedFilesPath - Path to the extracted files that came from the zip file from the catalog
  * @param {String} outputPath - Path to place the processed resource files WIHTOUT the version in the path
  * @return {String} Path to the processed translationWords files with version
  */
-Updater.prototype.processTranslationWords = function(extractedFilesPath, outputPath) {
-  return twArticleHelpers.processTranslationWords(extractedFilesPath, outputPath);
+Updater.prototype.processTranslationWords = function(resource, extractedFilesPath, outputPath) {
+  return twArticleHelpers.processTranslationWords(resource, extractedFilesPath, outputPath);
 };
 
 /**
  * @description Generates the tW Group Data files from the given aligned Bible
+ * @param {Object} resource Resource object
  * @param {string} biblePath Path to the Bible with aligned data
  * @param {string} outputPath Path where the translationWords group data is to be placed WITHOUT version
  * @return {string} Path where tW was generated with version
  */
-Updater.prototype.generateTwGroupDataFromAlignedBible = function(biblePath, outputPath) {
-  return twGroupDataHelpers.generateTwGroupDataFromAlignedBible(biblePath, outputPath);
+Updater.prototype.generateTwGroupDataFromAlignedBible = function(resource, biblePath, outputPath) {
+  return twGroupDataHelpers.generateTwGroupDataFromAlignedBible(resource, biblePath, outputPath);
 };
 
 /**
+ * @description Processes the extracted files for translationNotes to separate the folder
+ * structure and produce the index.json file for the language with the title of each article.
+ * @param {Object} resource - Resource object
+ * @param {String} sourcePath - Path to the extracted files that came from the zip file from the catalog
+ * @param {String} outputPath - Path to place the processed resource files WITHOUT the version in the path
+ * @param {String} resourcesPath Path to resources folder
+ */
+Updater.prototype.processTranslationNotes = function(resource, sourcePath, outputPath, resourcesPath) {
+  tnArticleHelpers.processTranslationNotes(resource, sourcePath, outputPath, resourcesPath, this.downloadErrors);
+};
+
+/**
+ * Downloads a specific resource
  * @param {object} resourceDetails - Details about the resource.
  * { languageId: 'en', resourceId: 'ult', version: 0.8 }
  * @param {string} resourceDetails.languageId The language Id of the resource.
@@ -183,10 +240,21 @@ Updater.prototype.downloadAndProcessResource = async function(resourceDetails, r
       format: {},
     },
   };
-  const result = await resourcesDownloadHelpers.downloadAndProcessResource(resource, resourcesPath);
-  // Remove imports folder
-  const importsPath = path.join(resourcesPath, 'imports');
-  fs.removeSync(importsPath);
+  this.downloadErrors = [];
+  let result = null;
+  try {
+    result = await resourcesDownloadHelpers.downloadAndProcessResource(resource, resourcesPath, this.downloadErrors);
+    const importsPath = path.join(resourcesPath, 'imports'); // Remove imports folder
+    fs.removeSync(importsPath);
+  } catch (e) {
+    const errors = this.getLatestDownloadErrorsStr(); // get detailed errors and log
+    if (errors) {
+      const message = `Source Content Update Errors caught!!!\n${errors}`;
+      console.error(message);
+    }
+    throw e; // return error summary
+  }
+  console.log('Source Content Update Successful');
   return result;
 };
 

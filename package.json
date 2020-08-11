@@ -1,6 +1,6 @@
 {
   "name": "tc-source-content-updater",
-  "version": "0.6.13",
+  "version": "0.8.1",
   "description": "Module that updates source content for the desktop application translationCore.",
   "main": "lib/index.js",
   "display": "library",
@@ -31,7 +31,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/translationCoreApps/tc-source-content-updater.git"
+    "url": "git+https://github.com/unfoldingWord/tc-source-content-updater.git"
   },
   "keywords": [
     "dynamic-source-content-updater",
@@ -43,9 +43,9 @@
   "author": "@unfoldingword",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/translationCoreApps/tc-source-content-updater/issues"
+    "url": "https://github.com/unfoldingWord/tc-source-content-updater/issues"
   },
-  "homepage": "https://github.com/translationCoreApps/tc-source-content-updater#readme",
+  "homepage": "https://github.com/unfoldingWord/tc-source-content-updater#readme",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
@@ -60,20 +60,26 @@
     "jest": "^23.6.0",
     "nock": "^10.0.6",
     "rimraf": "^2.6.3",
-    "tmp": "0.0.33"
+    "string-punctuation-tokenizer": "2.0.0",
+    "tmp": "0.0.33",
+    "tsv-groupdata-parser": "0.9.16",
+    "usfm-js": "2.1.0"
   },
   "dependencies": {
     "adm-zip": "^0.4.11",
-    "agentkeepalive": "4.0.2",
-    "follow-redirects": "^1.6.1",
+    "agentkeepalive": "4.1.0",
+    "follow-redirects": "1.11.0",
     "fs-extra": "^4.0.3",
     "ospath": "^1.2.2",
     "path-extra": "^4.2.1",
     "promise-parallel-throttle": "^3.3.0",
     "request": "^2.87.0",
-    "tsv-groupdata-parser": "0.9.13",
     "url": "^0.11.0",
-    "usfm-js": "2.0.2",
     "yamljs": "^0.3.0"
+  },
+  "peerDependencies": {
+    "string-punctuation-tokenizer": "^2.0.0",
+    "tsv-groupdata-parser": "^0.9.16",
+    "usfm-js": "^2.1.0"
   }
 }

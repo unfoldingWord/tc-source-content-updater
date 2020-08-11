@@ -14,7 +14,7 @@
     "guard-for-in": "off",
     "indent": "off",
     "linebreak-style": "off",
-    "max-len": "off", 
+    "max-len": "off",
     "no-console": "off",
     "no-duplicate-imports": [
       "error",

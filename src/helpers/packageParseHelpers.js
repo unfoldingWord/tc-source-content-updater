@@ -58,28 +58,24 @@ export function parseManifest(extractedFilePath, outputPath) {
 export function parseBiblePackage(resource, sourcePath, outputPath) {
   const index = {};
   if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId) {
-throw Error(resourcesHelpers.formatError(resource, errors.RESOURCE_NOT_GIVEN))
-;
-}
+    throw Error(resourcesHelpers.formatError(resource, errors.RESOURCE_NOT_GIVEN));
+  }
   if (!sourcePath) {
-throw Error(resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_GIVEN))
-;
-}
+    throw Error(resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_GIVEN));
+  }
   if (!fs.pathExistsSync(sourcePath)) {
-throw Error(resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_EXIST + ': ' + sourcePath))
-;
-}
+    throw Error(resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_EXIST + ': ' + sourcePath));
+  }
   if (!outputPath) {
-throw Error(resourcesHelpers.formatError(resource, errors.OUTPUT_PATH_NOT_GIVEN))
-;
-}
+    throw Error(resourcesHelpers.formatError(resource, errors.OUTPUT_PATH_NOT_GIVEN));
+  }
+  fs.ensureDirSync(outputPath);
   try {
     const isOL = (resource.resourceId === 'ugnt') || (resource.resourceId === 'uhb');
     const manifest = parseManifest(sourcePath, outputPath);
     if (!manifest.projects) {
-throw Error(resourcesHelpers.formatError(resource, errors.MANIFEST_MISSING_BOOKS))
-;
-}
+      throw Error(resourcesHelpers.formatError(resource, errors.MANIFEST_MISSING_BOOKS));
+    }
     manifest.catalog_modified_time = resource.remoteModifiedTime;
     const savePath = path.join(outputPath, 'manifest.json');
     fs.writeFileSync(savePath, JSON.stringify(manifest, null, 2));
@@ -128,7 +124,8 @@ function getWordCount(verseObjects) {
 function indexBook(bookPath, index, bookCode, isOL) {
   const expectedChapters = bible.BOOK_CHAPTER_VERSES[bookCode];
   if (!expectedChapters) {
-    throw new Error(errors.INVALID_BOOK_CODE + ': ' + bookCode);
+    console.warn(errors.INVALID_BOOK_CODE + ': ' + bookCode);
+    return;
   }
   const files = fs.readdirSync(bookPath);
   const chapterCount = Object.keys(expectedChapters).length;
