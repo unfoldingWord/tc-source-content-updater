@@ -4,14 +4,23 @@ import ospath from 'ospath';
 import fs from 'fs-extra';
 // helpers
 import * as apiHelpers from './helpers/apiHelpers';
+export {apiHelpers};
 import * as parseHelpers from './helpers/parseHelpers';
+export {parseHelpers};
 import * as moveResourcesHelpers from './helpers/moveResourcesHelpers';
+export {moveResourcesHelpers};
 import * as packageParseHelpers from './helpers/packageParseHelpers';
+export {packageParseHelpers};
 import * as taArticleHelpers from './helpers/translationHelps/taArticleHelpers';
+export {taArticleHelpers};
 import * as twArticleHelpers from './helpers/translationHelps/twArticleHelpers';
+export {twArticleHelpers};
 import * as twGroupDataHelpers from './helpers/translationHelps/twGroupDataHelpers';
+export {twGroupDataHelpers};
 import * as tnArticleHelpers from './helpers/translationHelps/tnArticleHelpers';
+export {tnArticleHelpers};
 import * as resourcesDownloadHelpers from './helpers/resourcesDownloadHelpers';
+export {resourcesDownloadHelpers};
 export {getOtherTnsOLVersions} from './helpers/translationHelps/tnArticleHelpers';
 
 /**
