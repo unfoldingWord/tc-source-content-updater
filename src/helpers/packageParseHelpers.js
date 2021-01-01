@@ -84,7 +84,12 @@ export function parseBiblePackage(resource, sourcePath, outputPath) {
       if (project.identifier && project.path) {
         const identifier = project.identifier.toLowerCase();
         const bookPath = path.join(outputPath, identifier);
-        parseUsfmOfBook(path.join(sourcePath, project.path), bookPath);
+        const sourcePath_ = path.join(sourcePath, project.path);
+        if (resource.ignoreMissingProjects && !fs.existsSync(sourcePath_)) {
+          console.log(`Skipping missing book: ${sourcePath_}`);
+          continue;
+        }
+        parseUsfmOfBook(sourcePath_, bookPath);
         indexBook(bookPath, index, identifier, isOL);
       }
     }

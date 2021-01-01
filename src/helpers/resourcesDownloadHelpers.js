@@ -51,9 +51,10 @@ export function addDownloadError(downloadErrors, parseError, errorMessage, downl
  *           }>} resource - resource to download
  * @param {String} resourcesPath Path to the user resources directory
  * @param {Array} downloadErrors - parsed list of download errors with details such as if the download completed (vs. parsing error), error, and url
+ * @param {Boolean} removeOldVersions - if true then remove old versions
  * @return {Promise} Download promise
  */
-export const downloadAndProcessResource = async (resource, resourcesPath, downloadErrors) => {
+export const downloadAndProcessResource = async (resource, resourcesPath, downloadErrors, removeOldVersions=true) => {
   if (!resource) {
     throw Error(errors.RESOURCE_NOT_GIVEN);
   } else if (!resourcesPath) {
@@ -100,7 +101,9 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
         const twGroupDataResourcesPath = path.join(resourcesPath, resource.languageId, 'translationHelps', 'translationWords', 'v' + resource.version);
         try {
           await moveResourcesHelpers.moveResources(twGroupDataPath, twGroupDataResourcesPath);
-          removeAllButLatestVersion(path.dirname(twGroupDataResourcesPath));
+          if (removeOldVersions) {
+            removeAllButLatestVersion(path.dirname(twGroupDataResourcesPath));
+          }
         } catch (err) {
           throw Error(appendError(errors.UNABLE_TO_CREATE_TW_GROUP_DATA, err));
         }
@@ -116,7 +119,9 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
       if (isGreekOrHebrew) versionsToNotDelete = getOtherTnsOLVersions(resourcePath, resource.languageId);
       // Make sure that the resource currently being downloaded is not deleted
       versionsToNotDelete.push('v' + resource.version);
-      removeAllButLatestVersion(path.dirname(resourcePath), versionsToNotDelete);
+      if (removeOldVersions) {
+        removeAllButLatestVersion(path.dirname(resourcePath), versionsToNotDelete);
+      }
     } else {
       throw Error(errors.FAILED_TO_PROCESS_RESOURCE);
     }
