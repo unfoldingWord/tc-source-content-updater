@@ -100,7 +100,6 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
         const twGroupDataResourcesPath = path.join(resourcesPath, resource.languageId, 'translationHelps', 'translationWords', 'v' + resource.version);
         try {
           await moveResourcesHelpers.moveResources(twGroupDataPath, twGroupDataResourcesPath);
-          removeAllButLatestVersion(path.dirname(twGroupDataResourcesPath));
         } catch (err) {
           throw Error(appendError(errors.UNABLE_TO_CREATE_TW_GROUP_DATA, err));
         }
