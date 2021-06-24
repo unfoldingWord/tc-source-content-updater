@@ -194,11 +194,6 @@ function getMissingOriginalResource(resourcesPath, originalLanguageId, originalL
       const versionsToNotDelete = getOtherTnsOLVersions(resourcesPath, originalLanguageId);
       const versionsSubdirectory = originalBiblePath.replace(version, '');
       const latestOriginalBiblePath = resourcesHelpers.getLatestVersionInPath(versionsSubdirectory);
-      // if latest version is the version needed delete older versions
-      if (latestOriginalBiblePath === originalBiblePath) {
-        // Old versions of the orginal language resource bible will be deleted because the tn uses the latest version and not an older version
-        resourcesHelpers.removeAllButLatestVersion(versionsSubdirectory, versionsToNotDelete);
-      }
       // If version needed is not in the resources download it.
       if (!fs.existsSync(originalBiblePath)) {
         // Download orig. lang. resource

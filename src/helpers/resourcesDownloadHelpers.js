@@ -115,7 +115,6 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
       if (isGreekOrHebrew) versionsToNotDelete = getOtherTnsOLVersions(resourcePath, resource.languageId);
       // Make sure that the resource currently being downloaded is not deleted
       versionsToNotDelete.push('v' + resource.version);
-      removeAllButLatestVersion(path.dirname(resourcePath), versionsToNotDelete);
     } else {
       throw Error(errors.FAILED_TO_PROCESS_RESOURCE);
     }
