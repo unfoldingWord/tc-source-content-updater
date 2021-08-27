@@ -49,6 +49,17 @@ describe('Updater.downloadResources', () => {
     expect(fs.readdirSync(resourcesPath)).toContain(...languageList);
   });
 
+  it('should properly parse a special quote, character', async () => {
+    fs.__loadDirIntoMockFs(path.join(__dirname, 'fixtures'), path.join(__dirname, 'fixtures'));
+    await updater.downloadResources(['en'], resourcesPath, [
+      fs.readJsonSync(path.join(__dirname, 'fixtures/en_ult_resource.json'))
+    ]);
+    const ultPath = path.join(resourcesPath, 'en', 'bibles', 'ult', 'v1', '2ti', '3.json');
+    expect(fs.existsSync(ultPath)).toEqual(true);
+    const data = fs.readJsonSync(ultPath);
+    expect(data['9']['verseObjects'][0].content).toEqual('ἀλλ’');
+  });
+
   it('should reject for a download url that does not exist', async () => {
     const prevResources = [{
       languageId: 'el-x-koine',
@@ -74,87 +85,87 @@ describe('Updater.downloadResources', () => {
       subject: 'Translation_Words',
       catalogEntry: {}
     },
-    {
-      languageId: 'en',
-      resourceId: 'udb',
-      remoteModifiedTime: '2017-12-07T23:47:59+00:00',
-      downloadUrl: 'https://cdn.door43.org/en/udb/v12/udb.zip',
-      version: '12',
-      subject: 'Bible',
-      catalogEntry: {}
-    },
-    {
-      languageId: 'en',
-      resourceId: 'ulb',
-      remoteModifiedTime: '2017-12-07T23:45:40+00:00',
-      downloadUrl: 'https://cdn.door43.org/en/ulb/v12/ulb.zip',
-      version: '12',
-      subject: 'Bible',
-      catalogEntry: {}
-    },
-    {
-      languageId: 'en',
-      resourceId: 'ta',
-      remoteModifiedTime: '2018-08-14T16:49:57+00:00',
-      downloadUrl: 'https://cdn.door43.org/en/ta/v9/ta.zip',
-      version: '9',
-      subject: 'Translation_Academy',
-      catalogEntry: {}
-    },
-    {
-      languageId: 'hi',
-      resourceId: 'tw',
-      remoteModifiedTime: '2018-06-08T19:49:08+00:00',
-      downloadUrl: 'https://cdn.door43.org/hi/tw/v8.1/bible.zip',
-      version: '8.1',
-      subject: 'Translation_Words',
-      catalogEntry: {}
-    },
-    {
-      languageId: 'hi',
-      resourceId: 'udb',
-      remoteModifiedTime: '2018-08-16T19:01:48+00:00',
-      downloadUrl: 'a/url/that/should/fail',
-      version: '5.1',
-      subject: 'Bible',
-      catalogEntry: {}
-    },
-    {
-      languageId: 'hi',
-      resourceId: 'ulb',
-      remoteModifiedTime: '2018-08-01T19:08:11+00:00',
-      downloadUrl: 'https://cdn.door43.org/hi/ulb/v5/ulb.zip',
-      version: '5',
-      subject: 'Bible',
-      catalogEntry: {}
-    },
-    {
-      languageId: 'ceb',
-      resourceId: 'ulb',
-      remoteModifiedTime: '0001-01-01T00:00:00+00:00',
-      downloadUrl: 'https://cdn.door43.org/ceb/ulb/v4.2/ulb.zip',
-      version: '4.2',
-      subject: 'Bible',
-      catalogEntry: {}
-    },
-    {
-      languageId: 'ceb',
-      resourceId: 'udb',
-      remoteModifiedTime: '2018-08-16T18:57:32+00:00',
-      downloadUrl: 'https://cdn.door43.org/ceb/udb/v4.1/eph.zip',
-      version: '4.1',
-      subject: 'Bible',
-      catalogEntry: {}
-    },
-    {
-      languageId: 'ceb',
-      resourceId: 'tw',
-      remoteModifiedTime: '2018-04-27T19:39:52+00:00',
-      downloadUrl: 'https://cdn.door43.org/ceb/tw/v6.1/bible.zip',
-      version: '6.1',
-      subject: 'Translation_Words',
-      catalogEntry: {}
-    }];
+      {
+        languageId: 'en',
+        resourceId: 'udb',
+        remoteModifiedTime: '2017-12-07T23:47:59+00:00',
+        downloadUrl: 'https://cdn.door43.org/en/udb/v12/udb.zip',
+        version: '12',
+        subject: 'Bible',
+        catalogEntry: {}
+      },
+      {
+        languageId: 'en',
+        resourceId: 'ulb',
+        remoteModifiedTime: '2017-12-07T23:45:40+00:00',
+        downloadUrl: 'https://cdn.door43.org/en/ulb/v12/ulb.zip',
+        version: '12',
+        subject: 'Bible',
+        catalogEntry: {}
+      },
+      {
+        languageId: 'en',
+        resourceId: 'ta',
+        remoteModifiedTime: '2018-08-14T16:49:57+00:00',
+        downloadUrl: 'https://cdn.door43.org/en/ta/v9/ta.zip',
+        version: '9',
+        subject: 'Translation_Academy',
+        catalogEntry: {}
+      },
+      {
+        languageId: 'hi',
+        resourceId: 'tw',
+        remoteModifiedTime: '2018-06-08T19:49:08+00:00',
+        downloadUrl: 'https://cdn.door43.org/hi/tw/v8.1/bible.zip',
+        version: '8.1',
+        subject: 'Translation_Words',
+        catalogEntry: {}
+      },
+      {
+        languageId: 'hi',
+        resourceId: 'udb',
+        remoteModifiedTime: '2018-08-16T19:01:48+00:00',
+        downloadUrl: 'a/url/that/should/fail',
+        version: '5.1',
+        subject: 'Bible',
+        catalogEntry: {}
+      },
+      {
+        languageId: 'hi',
+        resourceId: 'ulb',
+        remoteModifiedTime: '2018-08-01T19:08:11+00:00',
+        downloadUrl: 'https://cdn.door43.org/hi/ulb/v5/ulb.zip',
+        version: '5',
+        subject: 'Bible',
+        catalogEntry: {}
+      },
+      {
+        languageId: 'ceb',
+        resourceId: 'ulb',
+        remoteModifiedTime: '0001-01-01T00:00:00+00:00',
+        downloadUrl: 'https://cdn.door43.org/ceb/ulb/v4.2/ulb.zip',
+        version: '4.2',
+        subject: 'Bible',
+        catalogEntry: {}
+      },
+      {
+        languageId: 'ceb',
+        resourceId: 'udb',
+        remoteModifiedTime: '2018-08-16T18:57:32+00:00',
+        downloadUrl: 'https://cdn.door43.org/ceb/udb/v4.1/eph.zip',
+        version: '4.1',
+        subject: 'Bible',
+        catalogEntry: {}
+      },
+      {
+        languageId: 'ceb',
+        resourceId: 'tw',
+        remoteModifiedTime: '2018-04-27T19:39:52+00:00',
+        downloadUrl: 'https://cdn.door43.org/ceb/tw/v6.1/bible.zip',
+        version: '6.1',
+        subject: 'Translation_Words',
+        catalogEntry: {}
+      }];
     const languageList = ['en', 'hi', 'ceb'];
     await updater.downloadResources(languageList, resourcesPath, prevResources).catch(err => {
       expect(err).toBeTruthy();
