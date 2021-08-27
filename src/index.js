@@ -135,11 +135,6 @@ Updater.prototype.downloadResources = async function(languageList, resourcesPath
   return results;
 };
 
-Updater.prototype.getLatestResourcesForLanguage = async function(language) {
-  this.getLatestResources([]);
-  return getResourcesForLanguage(language);
-};
-
 /**
  * @description move the converted resource to user's resource folder
  * @param {String} resourceSourcePath - Location of selected downloaded resources
