@@ -27,6 +27,20 @@ function makeRequest(url) {
   });
 }
 
+export function makeRequestDetailed(url) {
+  return new Promise((resolve, reject) => {
+    request(url, function(error, response, body) {
+      if (error)
+        reject(error);
+      else if (response.statusCode === 200) {
+        resolve({response, body});
+      } else {
+        reject(`makeRequestDetailed() - fetch error ${response.statusCode}`);
+      }
+    });
+  });
+}
+
 export function makeJsonRequestDetailed(url) {
   return new Promise((resolve, reject) => {
     request(url, function(error, response, body) {
@@ -40,6 +54,8 @@ export function makeJsonRequestDetailed(url) {
           reject(e);
         }
         resolve({result, response, body});
+      } else {
+        reject(`makeJsonRequestDetailed() - fetch error ${response.statusCode}`);
       }
     });
   });
