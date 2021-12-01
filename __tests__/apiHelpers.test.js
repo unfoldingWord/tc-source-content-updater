@@ -4,82 +4,6 @@ import * as apiHelpers from '../src/helpers/apiHelpers';
 
 jest.unmock('fs-extra');
 
-const startPath = '/Users/blm/translationCore/resources/hi/translationHelps/translationNotes/v47.1';
-const resource = 'hi_tn';
-// const startPath = '/Users/blm/translationCore/resources/en/translationHelps/translationNotes/v54';
-// const resource = 'en_tn';
-// const startPath = '/Users/blm/translationCore/resources/el-x-koine/translationHelps/translationWords/v0.21';
-// const resource = 'ugnt_tw';
-// const startPath = '/Users/blm/translationCore/resources/hbo/translationHelps/translationWords/v2.1.21';
-// const resource = 'hbo_tw';
-
-describe('Examining Check', () => {
-  it('Look for duplicates', () => {
-    const uniqueChecks = {};
-    const catagories = fs.readdirSync(startPath);
-    for (const catagory of catagories) {
-      const catagoryPath = path.join(startPath, catagory);
-      if (fs.statSync(catagoryPath).isDirectory()) {
-        const booksPath = path.join(catagoryPath, 'groups');
-        const books = fs.readdirSync(booksPath);
-        for (const book of books) {
-          if (!uniqueChecks[book]) {
-            uniqueChecks[book] = {};
-          }
-          const bookChecks = uniqueChecks[book];
-          const bookPath = path.join(booksPath, book);
-          if (fs.statSync(bookPath).isDirectory()) {
-            const groupIds = fs.readdirSync(bookPath);
-            for (const groupIdFile of groupIds) {
-              const groupIdPath = path.join(bookPath, groupIdFile);
-              const checkArray = fs.readJsonSync(groupIdPath);
-              for (const check of checkArray) {
-                const key = `${check.contextId.reference.chapter}-${check.contextId.reference.verse}-${check.contextId.groupId}`;
-                if (!bookChecks[key]) {
-                  bookChecks[key] = 1;
-                } else {
-                  bookChecks[key]++;
-                }
-              }
-            }
-          }
-          console.log(`book = ${book}`);
-        }
-        console.log(`catagory = ${catagory}`);
-      }
-    }
-    console.log(`\n\nIn folder: ${startPath}`);
-    const csvLines = [];
-    let totalChecks = 0;
-    let totalDuplicates = 0;
-    csvLines.push(`Book\tNumber of Checks\tNumber of Duplicates\tPercent Duplicates`);
-    const books = Object.keys(uniqueChecks);
-    for (const book of books) {
-      const bookChecks = uniqueChecks[book];
-      const checks = Object.keys(bookChecks);
-
-      if (checks.length) {
-        let bookCount = 0;
-        let duplicateCount = 0;
-        for (const check of checks) {
-          const count = bookChecks[check];
-          bookCount += count;
-          if (count > 1) {
-            duplicateCount += count;
-          }
-        }
-        addDupeCount(duplicateCount, bookCount, csvLines, book);
-        totalChecks += bookCount;
-        totalDuplicates += duplicateCount;
-      }
-    }
-    addDupeCount(totalDuplicates, totalChecks, csvLines, 'Total');
-    const outputPath = `./${resource}-Duplicates.tsv`;
-    fs.writeFileSync(outputPath, csvLines.join('\n') + '\n', 'utf8');
-    console.log(`done - saved results to ${outputPath}`);
-  });
-});
-
 describe('apiHelpers.getCatalog', () => {
   it('should get the resulting catalog', () => {
     return apiHelpers.getCatalog().then(res => {
@@ -204,12 +128,6 @@ describe('apiHelpers.getCatalogCN', () => {
 //
 // helpers
 //
-
-function addDupeCount(duplicateCount, bookCount, csvLines, book) {
-  const percentDupes = Math.round(100 * duplicateCount / bookCount);
-  csvLines.push(`${book}\t${bookCount}\t${duplicateCount}\t${percentDupes}`);
-  console.log(`for ${book} the total is ${bookCount} with ${duplicateCount} duplicates or ${percentDupes}%`);
-}
 
 function addCsvItem(list, org, repo, subject, item) {
   const itemJson = JSON.stringify(item).replace('\t','\\t');
