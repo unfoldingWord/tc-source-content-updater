@@ -88,7 +88,7 @@ describe('apiHelpers.getCatalogCN', () => {
     const filteredSearch = 'https://git.door43.org/api/catalog/v5/search?subject=Bible%2CAligned%20Bible%2CGreek_New_Testament%2CHebrew_Old_Testament%2CTranslation%20Words%2CTranslation%20Notes%2CTranslation%20Academy&sort=subject&limit=50';
     const unFilteredSearch = 'https://git.door43.org/api/catalog/v5/search?sort=subject&limit=50';
     // const latestD43Catalog = 'https://git.door43.org/api/catalog/v5/search/Door43-Catalog?stage=latest&limit=50';
-    const latestD43Catalog = 'http://git.door43.org/api/catalog/v5?owner=Door43-Catalog&stage=latest';
+    const latestD43Catalog = 'http://qa.door43.org/api/catalog/v5?owner=Door43-Catalog&stage=latest';
     const data = await apiHelpers.doMultipartQuery(unFilteredSearch);
     console.log(`Catalog Next Found ${data.length} total items`);
     expect(data.length).toBeTruthy();
