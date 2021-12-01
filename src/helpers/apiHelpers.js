@@ -93,8 +93,21 @@ export async function doMultipartQuery(url) {
  * Request the catalog.json from DCS API
  * @return {Object} - Catalog from the DCS API
  */
-export function getCatalog() {
+export async function getCatalog() {
   // TODO: modified for testing
   // return makeRequest(DCS_API + PIVOTED_CATALOG_PATH);
-  return doMultipartQuery('https://git.door43.org/api/catalog/v5/search/Door43-Catalog?q=Bible%2CTestament%2CTranslation%20Words%2CTranslation%20Notes%2CTranslation%20Academy&limit=50');
+  const fetchUrlReleased = 'https://git.door43.org/api/catalog/v5/search/Door43-Catalog?q=Bible%2CAligned%20Bible%2CGreek%20New%20Testament%2CHebrew%20Old%20Testament%2CTranslation%20Words%2CTSV%20Translation%20Notes%2CTranslation%20Academy%2CBible%20translation%20comprehension%20questions%2C&partialMatch=false&limit=50';
+  const released = await doMultipartQuery(fetchUrlReleased);
+  console.log(`released catalog has ${released.length} items`);
+  const fetchUrlLatest = `${fetchUrlReleased}&stage=latest`;
+  const latest = await doMultipartQuery(fetchUrlLatest);
+  console.log(`latest catalog has ${latest.length} items`);
+  // merge in latest if no released version
+  for (const repo of latest) {
+    const match = released.find(item => (item.full_name === repo.full_name));
+    if (!match) {
+      released.push(repo);
+    }
+  }
+  return released;
 }

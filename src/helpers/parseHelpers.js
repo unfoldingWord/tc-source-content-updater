@@ -205,6 +205,7 @@ export function parseCatalogResources(catalog, ignoreObsResources = true, subjec
     throw new Error(ERROR.CATALOG_CONTENT_ERROR);
   }
   const catalogResources = [];
+  console.log(`unfiltered catalog length = ${catalog.length}`);
   // if (catalog && catalog.subjects) {
     for (let i = 0, len = catalog.length; i < len; i++) {
       const catalogItem = catalog[i];
@@ -215,14 +216,20 @@ export function parseCatalogResources(catalog, ignoreObsResources = true, subjec
         const isCheckingLevel2 = catalogItem.repo.checking_level >= 2;
         const resourceId = catalogItem.name;
         if (ignoreObsResources && (resourceId.indexOf('obs') >= 0)) { // see if we should skip obs resources
+          console.log(`skipping OBS item: ${catalogItem.full_name}`);
           continue;
         }
         const downloadUrl = catalogItem.zipball_url;
         const remoteModifiedTime = catalogItem.repo.updated_at;
         const isDesiredSubject = !subjectFilters ||
           subjectFilters.includes(subject);
-        const version = catalogItem.release && catalogItem.release.name || "master";
-        if (isDesiredSubject && isCheckingLevel2 && catalogItem.release &&
+        let version = catalogItem.release && catalogItem.release.name;
+        if (!version) {
+          version = '0';
+        } else if (version[0].toLowerCase() === 'v') {
+          version = version.substr(1);
+        }
+        if (isDesiredSubject && isCheckingLevel2 &&
           downloadUrl && remoteModifiedTime && languageId) {
           const foundResource = {
             languageId,
@@ -237,10 +244,13 @@ export function parseCatalogResources(catalog, ignoreObsResources = true, subjec
             },
           };
           catalogResources.push(foundResource);
+        } else {
+          console.log(`skipping invalid item: ${catalogItem.full_name}}`);
         }
       // }
     }
   // }
+  console.log(`filtered catalog length: ${catalogResources.length}`);
   return catalogResources;
 }
 
