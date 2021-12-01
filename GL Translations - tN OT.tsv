@@ -1,0 +1,45 @@
+Default Sort	Region	Language Name	Language Tag	Lead Network	Status (also see Grafana)	URL	Notes										
+1	Americas	English	en			https://git.door43.org/Door43-Catalog/en_tn											
+2	Americas	Portuguese	pt-BR														
+3	Americas	Spanish	es-419		Published	https://git.door43.org/Door43-catalog/es-419_tn/	https://git.door43.org/unfoldingWord/SourceTextRequestForm/issues/374	https://git.door43.org/unfoldingWord/SourceTextRequestForm/issues/375									
+4	South Asia	Nepali	ne	HTS	in process by another team												
+5	South Asia	Hindi	hi	BCS	Published BP est, rut, jon Published BP ezr, neh, oba	https://git.door43.org/Door43-Catalog/hi_tn/	https://git.door43.org/unfoldingWord/SourceTextRequestForm/issues/511	https://git.door43.org/unfoldingWord/SourceTextRequestForm/issues/515	https://git.door43.org/unfoldingWord/SourceTextRequestForm/issues/546	https://git.door43.org/unfoldingWord/SourceTextRequestForm/issues/633							
+6	South Asia	Bengali	bn	BCS	not started												
+7	South Asia	Gujarati	gu	BCS	not started												
+8	South Asia	Punjabi	pa	BCS	not started												
+9	South Asia	Oriya	or	BCS	Published (md format), TSV format published (with fixed rc links) Published BP rut, jon	https://git.door43.org/translationCore-Create-BCS/or_tN	https://git.door43.org/unfoldingWord/SourceTextRequestForm/issues/640										
+10	South Asia	Assamese	as	BCS	not started												
+11	South Asia	Marathi	mr	BCS	Published BP rut, jon	https://git.door43.org/translationCore-Create-BCS/mr_tN	https://git.door43.org/unfoldingWord/SourceTextRequestForm/issues/646										
+12	South Asia	Kannada	kn	BCS	STR 636 for BP rut, jon  ***Content issue	https://git.door43.org/translationCore-Create-BCS/kn_tn	https://git.door43.org/unfoldingWord/SourceTextRequestForm/issues/636										
+13	South Asia	Tamil	ta	BCS	not started												
+14	South Asia	Telugu	te	BCS	STR 643 for BP rut, jon ***Content issue	https://git.door43.org/translationCore-Create-BCS/te_tN	https://git.door43.org/unfoldingWord/SourceTextRequestForm/issues/643										
+15	South Asia	Malayalam	ml	BCS	not started												
+16	South Asia	Urdu	ur-deva	BCS	not started												
+17	South Asia	Nagamese	nag	BCS	not started												
+18	Africa	Amharic	am														
+19	Africa	French	fr		Level 3, STR submitted	https://git.door43.org/parfait-ayanou	https://git.door43.org/unfoldingWord/SourceTextRequestForm/issues/355										
+20	Africa	Fulfulde	ff														
+21	Africa	Hausa	ha														
+22	Africa	Malagasy Plateau	plt														
+23	Africa	Swahili	sw		Published at Level 3	https://git.door43.org/Door43-Catalog/sw_tn/	https://git.door43.org/unfoldingWord/SourceTextRequestForm/issues/305										
+24	Eurasia	Hungarian	hu														
+25	Eurasia	Russian	ru		Published BP rut, jon, oba Published BP update rut, est, oba, jon  Published BP update: ezr, neh, est, oba Published BP update: rut, neh, est, oba, jon	https://git.door43.org/ru_gl_final/ru_tn	https://git.door43.org/unfoldingWord/SourceTextRequestForm/issues/610	https://git.door43.org/unfoldingWord/SourceTextRequestForm/issues/620	https://git.door43.org/unfoldingWord/SourceTextRequestForm/issues/622	https://git.door43.org/unfoldingWord/SourceTextRequestForm/issues/625							
+26	Eurasia	Croatian	hr	TP	Published, MD format:  gen (#376),  exo (#369),  jos (#386)  jdg, rut, 1sa (#398)  lev (#412) 2sa (#439) 1ki, 2ki (#441) 1ch (#443) 2ch, est (#449) ezr, neh (#452)	https://git.door43.org/Door43-Catalog/hr_tn/	STRs: 357, 369, 353	https://git.door43.org/unfoldingWord/SourceTextRequestForm/issues/376	https://git.door43.org/unfoldingWord/SourceTextRequestForm/issues/369	https://git.door43.org/unfoldingWord/SourceTextRequestForm/issues/386	https://git.door43.org/unfoldingWord/SourceTextRequestForm/issues/398	https://git.door43.org/unfoldingWord/SourceTextRequestForm/issues/412	https://git.door43.org/unfoldingWord/SourceTextRequestForm/issues/439	https://git.door43.org/unfoldingWord/SourceTextRequestForm/issues/441	https://git.door43.org/unfoldingWord/SourceTextRequestForm/issues/443	https://git.door43.org/unfoldingWord/SourceTextRequestForm/issues/449	https://git.door43.org/unfoldingWord/SourceTextRequestForm/issues/452
+27	MENA-Pak	Arabic	ar														
+28	MENA-Pak	Pashto	ps														
+29	MENA-Pak	Persian	fa														
+30	MENA-Pak	Urdu	ur														
+31	Asia	Burmese	my														
+32	Asia	Cebuano	ceb		Published at Level 3	https://git.door43.org/Door43-Catalog/ceb_tn	https://git.door43.org/Door43/SourceTextRequestForm/issues/170										
+33	Asia	Ilocano	ilo		Published at Level 3	https://git.door43.org/Door43-Catalog/ilo_tn	https://git.door43.org/Door43/SourceTextRequestForm/issues/158										
+34	Asia	Khmer	kh														
+35	Asia	Laotian	lo														
+36	Asia	Malaysian	ms														
+37	Asia	Mandarin	zh														
+38	Asia	Tagalog	tl		Published at Level 3	https://git.door43.org/Door43-Catalog/tl_tn	Not verified; On GOGS, search for https://git.door43.org/explore/repos?q=tl_%25tn%25										
+39	Asia	Thai	th														
+40	Asia	Vietnamese	vi		Published at Level 3	https://git.door43.org/Door43-Catalog/vi_tn	https://git.door43.org/Door43/SourceTextRequestForm/issues/167										
+41	Pacific	Bislama	bi														
+42	Pacific	Indonesian	id		Published (md format)	https://git.door43.org/Door43-catalog/id_tn	https://git.door43.org/unfoldingWord/SourceTextRequestForm/issues/292										
+43	Pacific	Papuan Malay	pmy	Yayasan Bahtraku	Finished but no STR (per Christov), source Indo GL	https://git.door43.org/ezar.chandra/pmy_tn_L3											
+44	Pacific	Tok Pisin	tpi														

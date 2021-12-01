@@ -5,84 +5,112 @@ import {BIBLE_LIST_NT, BIBLE_LIST_OT} from '../src/resources/bible';
 
 jest.unmock('fs-extra');
 
-describe('Examining Checks in Repo', () => {
-  it('Check TSV', async () => {
-    // const repo_url = 'https://git.door43.org/Door43-Catalog/en_tn/raw/branch/master/en_tn_62-2PE.tsv';
-    const owner = 'Door43-Catalog';
-    const repo = 'kn_tn';
-    const repoUrl = `https://git.door43.org/${owner}/${repo}`;
-    const bookList = BIBLE_LIST_OT.concat(BIBLE_LIST_NT);
-    const uniqueChecks = {};
+const duplicatesFolder = path.join('./duplicates');
+fs.ensureDirSync(duplicatesFolder);
 
-    for (const book of bookList) {
-      console.log(`loading book ${book}`);
-      const [, bookId] = book.split('-');
-      if (!uniqueChecks[bookId]) {
-        uniqueChecks[bookId] = {};
+describe('Examining Checks in Repos', () => {
+  const repos = {};
+  const projectLists = ['GL Translations - tN OT.tsv', 'GL Translations - tN NT.tsv'];
+  for (const file of projectLists) {
+    const data = fs.readFileSync(file, 'utf8');
+    if (data) {
+      const lines = data.split('\n');
+      for (let i = 1, l = lines.length; i < l; i++) {
+        const line = lines[i];
+        const fields = line.split('\t');
+        const url = fields[6];
+        if (url) {
+          if (!repos[url]) {
+            repos[url] = true;
+          }
+        }
       }
-      const bookChecks = uniqueChecks[bookId];
-      const bookUrl = `${repoUrl}/raw/branch/master/${repo}_${book}.tsv`;
-      try {
-        const {response, body} = await makeRequestDetailed(bookUrl);
-        const lines = body.split('\n');
-        for (let i = 1, l = lines.length; i < l; i++) {
-          const line = lines[i];
-          if (line) {
-            const fields = line.split('\t');
-            const [ bookId, chapter, verse, id, supportRef, origQuote, occurrence, glQuote, occurrenceNote ] = fields;
-            if (occurrenceNote && origQuote && supportRef) {
-              const key = `${chapter}-${verse}-${supportRef}`;
-              if (!bookChecks[key]) {
-                bookChecks[key] = 1;
+    }
+  }
+
+  const urls = Object.keys(repos);
+  console.log(`found ${urls.length} urls: ${JSON.stringify(urls)}`);
+
+  for (const repo_url of urls) {
+    it(`Check TSV for ${repo_url}`, async () => {
+      const urlParts = repo_url.split('/');
+      // const repo_url = 'https://git.door43.org/Door43-Catalog/en_tn/raw/branch/master/en_tn_62-2PE.tsv';
+      const owner = urlParts[3];
+      const repo = urlParts[4];
+      const repoUrl = `https://git.door43.org/${owner}/${repo}`;
+      const bookList = BIBLE_LIST_OT.concat(BIBLE_LIST_NT);
+      const uniqueChecks = {};
+
+      for (const book of bookList) {
+        console.log(`loading book ${book}`);
+        const [, bookId] = book.split('-');
+        if (!uniqueChecks[bookId]) {
+          uniqueChecks[bookId] = {};
+        }
+        const bookChecks = uniqueChecks[bookId];
+        const bookUrl = `${repoUrl}/raw/branch/master/${repo}_${book}.tsv`;
+        try {
+          const {response, body} = await makeRequestDetailed(bookUrl);
+          const lines = body.split('\n');
+          for (let i = 1, l = lines.length; i < l; i++) {
+            const line = lines[i];
+            if (line) {
+              const fields = line.split('\t');
+              const [bookId, chapter, verse, id, supportRef, origQuote, occurrence, glQuote, occurrenceNote] = fields;
+              if (occurrenceNote && origQuote && supportRef) {
+                const key = `${chapter}-${verse}-${supportRef}`;
+                if (!bookChecks[key]) {
+                  bookChecks[key] = 1;
+                } else {
+                  bookChecks[key]++;
+                }
               } else {
-                bookChecks[key]++;
+                // console.log(`skipping ${line}`);
               }
-            } else {
-              // console.log(`skipping ${line}`);
             }
           }
+          console.log(`book processed: ${book}`);
+        } catch (e) {
+          console.log(`file ${bookUrl} is not found`, e);
         }
-        console.log(`book processed: ${book}`);
-      } catch (e) {
-        console.log(`file ${bookUrl} is not found`, e);
       }
-    }
 
-    console.log(`\n\nDuplicates in repo: ${repoUrl}`);
-    const duplicateCountLines = [];
-    const duplicateLines = [];
-    let totalChecks = 0;
-    let totalDuplicates = 0;
-    duplicateCountLines.push(`Book\tNumber of Checks\tNumber of Duplicates\tPercent Duplicates`);
-    duplicateLines.push(`Book\tCheck\tNumber of Duplicates`);
-    const books = Object.keys(uniqueChecks);
-    for (const book of books) {
-      const bookChecks = uniqueChecks[book];
-      const checks = Object.keys(bookChecks);
+      console.log(`\n\nDuplicates in repo: ${repoUrl}`);
+      const duplicateCountLines = [];
+      const duplicateLines = [];
+      let totalChecks = 0;
+      let totalDuplicates = 0;
+      duplicateCountLines.push(`Book\tNumber of Checks\tNumber of Duplicates\tPercent Duplicates`);
+      duplicateLines.push(`Book\tCheck\tNumber of Duplicates`);
+      const books = Object.keys(uniqueChecks);
+      for (const book of books) {
+        const bookChecks = uniqueChecks[book];
+        const checks = Object.keys(bookChecks);
 
-      if (checks.length) {
-        let bookCount = 0;
-        let duplicateCount = 0;
-        for (const check of checks) {
-          const count = bookChecks[check];
-          bookCount += count;
-          if (count > 1) {
-            duplicateLines.push(`${book}\t${check}\t${count}`);
-            duplicateCount += count;
+        if (checks.length) {
+          let bookCount = 0;
+          let duplicateCount = 0;
+          for (const check of checks) {
+            const count = bookChecks[check];
+            bookCount += count;
+            if (count > 1) {
+              duplicateLines.push(`${book}\t${check}\t${count}`);
+              duplicateCount += count;
+            }
           }
+          addDupeCount(duplicateCount, bookCount, duplicateCountLines, book);
+          totalChecks += bookCount;
+          totalDuplicates += duplicateCount;
         }
-        addDupeCount(duplicateCount, bookCount, duplicateCountLines, book);
-        totalChecks += bookCount;
-        totalDuplicates += duplicateCount;
       }
-    }
-    addDupeCount(totalDuplicates, totalChecks, duplicateCountLines, 'Total');
-    const duplicateCountPath = `./${owner}_${repo}_DuplicateCounts.tsv`;
-    fs.writeFileSync(duplicateCountPath, duplicateCountLines.join('\n') + '\n', 'utf8');
-    const duplicatesPath = `./${owner}_${repo}_Duplicates.tsv`;
-    fs.writeFileSync(duplicatesPath, duplicateLines.join('\n') + '\n', 'utf8');
-    console.log(`done - saved results to ${duplicateCountPath}`);
-  },60000);
+      addDupeCount(totalDuplicates, totalChecks, duplicateCountLines, 'Total');
+      const duplicateCountPath = path.join(duplicatesFolder, `./${owner}_${repo}_DuplicateCounts.tsv`);
+      fs.writeFileSync(duplicateCountPath, duplicateCountLines.join('\n') + '\n', 'utf8');
+      const duplicatesPath = path.join(duplicatesFolder, `./${owner}_${repo}_Duplicates.tsv`);
+      fs.writeFileSync(duplicatesPath, duplicateLines.join('\n') + '\n', 'utf8');
+      console.log(`done - saved results to ${duplicateCountPath}`);
+    }, 60000);
+  }
 });
 
 // const startPath = '/Users/blm/translationCore/resources/hi/translationHelps/translationNotes/v47.1';
