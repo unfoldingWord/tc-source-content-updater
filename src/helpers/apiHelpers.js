@@ -27,6 +27,20 @@ function makeRequest(url) {
   });
 }
 
+export function makeRequestDetailed(url) {
+  return new Promise((resolve, reject) => {
+    request(url, function(error, response, body) {
+      if (error)
+        reject(error);
+      else if (response.statusCode === 200) {
+        resolve({response, body});
+      } else {
+        reject(`makeRequestDetailed() - fetch error ${response.statusCode}`);
+      }
+    });
+  });
+}
+
 export function makeJsonRequestDetailed(url) {
   return new Promise((resolve, reject) => {
     request(url, function(error, response, body) {
@@ -40,6 +54,8 @@ export function makeJsonRequestDetailed(url) {
           reject(e);
         }
         resolve({result, response, body});
+      } else {
+        reject(`makeJsonRequestDetailed() - fetch error ${response.statusCode}`);
       }
     });
   });
@@ -78,5 +94,7 @@ export async function doMultipartQuery(url) {
  * @return {Object} - Catalog from the DCS API
  */
 export function getCatalog() {
-  return makeRequest(DCS_API + PIVOTED_CATALOG_PATH);
+  // TODO: modified for testing
+  // return makeRequest(DCS_API + PIVOTED_CATALOG_PATH);
+  return doMultipartQuery('https://git.door43.org/api/catalog/v5/search/Door43-Catalog?q=Bible%2CTestament%2CTranslation%20Words%2CTranslation%20Notes%2CTranslation%20Academy&limit=50');
 }

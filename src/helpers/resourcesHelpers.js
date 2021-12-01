@@ -180,19 +180,19 @@ export async function processResource(resource, sourcePath, resourcesPath, downl
     fs.ensureDirSync(processedFilesPath);
 
     switch (resource.subject) {
-      case 'Translation_Words':
+      case 'Translation Words':
         twArticleHelpers.processTranslationWords(resource, sourcePath, processedFilesPath);
         break;
-      case 'TSV_Translation_Notes':
+      case 'TSV Translation Notes':
         await tnArticleHelpers.processTranslationNotes(resource, sourcePath, processedFilesPath, resourcesPath, downloadErrors);
         break;
-      case 'Translation_Academy':
+      case 'Translation Academy':
         taArticleHelpers.processTranslationAcademy(resource, sourcePath, processedFilesPath);
         break;
       case 'Bible':
-      case 'Aligned_Bible':
-      case 'Greek_New_Testament':
-      case 'Hebrew_Old_Testament':
+      case 'Aligned Bible':
+      case 'Greek New Testament':
+      case 'Hebrew Old Testament':
         packageParseHelpers.parseBiblePackage(resource, sourcePath, processedFilesPath);
         break;
       default:

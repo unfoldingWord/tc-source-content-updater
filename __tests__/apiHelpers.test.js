@@ -1,8 +1,13 @@
+// this is just a development playbox
+
 import fs from 'fs-extra';
 import path from 'path-extra';
 import * as apiHelpers from '../src/helpers/apiHelpers';
+import Updater from "../src";
 
 jest.unmock('fs-extra');
+jest.unmock('../src/helpers/downloadHelpers');
+jest.unmock('../src/helpers/zipFileHelpers');
 
 describe('apiHelpers.getCatalog', () => {
   it('should get the resulting catalog', () => {
@@ -81,6 +86,22 @@ describe('apiHelpers compare pivoted.json with CN', () => {
     console.log('done');
 
   }, 10000);
+});
+
+describe('test API', () => {
+  it('test Updater', async () => {
+
+    const sourceContentUpdater = new Updater();
+    await sourceContentUpdater.getLatestResources([])
+      .then(async (resources) => {
+        // console.log(sourceContentUpdater.updatedCatalogResources);
+        await sourceContentUpdater.downloadResources(['ru'], './temp');
+        console.log(resources);
+      })
+      .catch((err) => {
+        console.error('Local Resource List:', err);
+      });
+  }, 60000);
 });
 
 describe('apiHelpers.getCatalogCN', () => {

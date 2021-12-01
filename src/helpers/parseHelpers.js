@@ -5,13 +5,13 @@ import * as ERROR from '../resources/errors';
 // if a subject isnt found in this list then it will be ignored by the source content updater
 export const TC_RESOURCES = [
   'Bible',
-  'Aligned_Bible',
-  'Greek_New_Testament',
-  'Hebrew_Old_Testament',
-  'TSV_Translation_Notes',
-  'Bible_translation_comprehension_questions',
-  'Translation_Words',
-  'Translation_Academy',
+  'Aligned Bible',
+  'Greek New Testament',
+  'Hebrew Old Testament',
+  'TSV Translation Notes',
+  'Bible translation comprehension questions',
+  'Translation Words',
+  'Translation Academy',
 ];
 
 export const RESOURCE_ID_MAP = {
@@ -201,57 +201,46 @@ export function getFormatsForResource(resource) {
  *                 }>|null} list of updated resources (returns null on error)
  */
 export function parseCatalogResources(catalog, ignoreObsResources = true, subjectFilters = null) {
-  if (!catalog || !Array.isArray(catalog.subjects)) {
+  if (!catalog || !Array.isArray(catalog)) {
     throw new Error(ERROR.CATALOG_CONTENT_ERROR);
   }
   const catalogResources = [];
-  if (catalog && catalog.subjects) {
-    for (let i = 0, len = catalog.subjects.length; i < len; i++) {
-      const catSubject = catalog.subjects[i];
-      const subject = catSubject.identifier;
-      const languageId = catSubject.language.toLowerCase();
-      const resources = getValidArray(catSubject.resources);
-      for (let j = 0, rLen = resources.length; j < rLen; j++) {
-        const resource = resources[j];
-        const isCheckingLevel2 = resource.checking.checking_level >= 2;
-        const resourceId = resource.identifier;
+  // if (catalog && catalog.subjects) {
+    for (let i = 0, len = catalog.length; i < len; i++) {
+      const catalogItem = catalog[i];
+      const subject = catalogItem.subject;
+      const languageId = catalogItem.language.toLowerCase();
+      // for (let j = 0, rLen = resources.length; j < rLen; j++) {
+      //   const resource = resources[j];
+        const isCheckingLevel2 = catalogItem.repo.checking_level >= 2;
+        const resourceId = catalogItem.name;
         if (ignoreObsResources && (resourceId.indexOf('obs') >= 0)) { // see if we should skip obs resources
           continue;
         }
-        const version = resource.version;
-        const formats = getFormatsForResource(resource);
-        for (let k = 0, kLen = formats.length; k < kLen; k++) {
-          const format = formats[k];
-          try {
-            const isZipFormat = format.format.indexOf('application/zip;') >= 0;
-            const downloadUrl = format.url;
-            const remoteModifiedTime = format.modified;
-            const isDesiredSubject = !subjectFilters ||
-              subjectFilters.includes(subject);
-            if (isDesiredSubject && isZipFormat && isCheckingLevel2 &&
-              downloadUrl && remoteModifiedTime && languageId && version) {
-              const foundResource = {
-                languageId,
-                resourceId,
-                remoteModifiedTime,
-                downloadUrl,
-                version,
-                subject,
-                catalogEntry: {
-                  subject: catSubject,
-                  resource,
-                  format,
-                },
-              };
-              catalogResources.push(foundResource);
-            }
-          } catch (e) {
-            // recover if required fields are missing
-          }
+        const downloadUrl = catalogItem.zipball_url;
+        const remoteModifiedTime = catalogItem.repo.updated_at;
+        const isDesiredSubject = !subjectFilters ||
+          subjectFilters.includes(subject);
+        const version = catalogItem.release && catalogItem.release.name || "master";
+        if (isDesiredSubject && isCheckingLevel2 && catalogItem.release &&
+          downloadUrl && remoteModifiedTime && languageId) {
+          const foundResource = {
+            languageId,
+            resourceId,
+            remoteModifiedTime,
+            downloadUrl,
+            version,
+            subject,
+            catalogEntry: {
+              subject,
+              resource: catalogItem,
+            },
+          };
+          catalogResources.push(foundResource);
         }
-      }
+      // }
     }
-  }
+  // }
   return catalogResources;
 }
 
