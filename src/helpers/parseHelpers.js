@@ -216,7 +216,7 @@ export function parseCatalogResources(catalog, ignoreObsResources = true, subjec
         const isCheckingLevel2 = catalogItem.repo.checking_level >= 2;
         const resourceId = catalogItem.name;
         if (ignoreObsResources && (resourceId.indexOf('obs') >= 0)) { // see if we should skip obs resources
-          console.log(`skipping OBS item: ${catalogItem.full_name}`);
+          // console.log(`skipping OBS item: ${catalogItem.full_name}`);
           continue;
         }
         const downloadUrl = catalogItem.zipball_url;
@@ -225,7 +225,7 @@ export function parseCatalogResources(catalog, ignoreObsResources = true, subjec
           subjectFilters.includes(subject);
         let version = catalogItem.release && catalogItem.release.name;
         if (!version) {
-          version = '0';
+          version = 'master'; // we are on latest
         } else if (version[0].toLowerCase() === 'v') {
           version = version.substr(1);
         }
@@ -245,7 +245,7 @@ export function parseCatalogResources(catalog, ignoreObsResources = true, subjec
           };
           catalogResources.push(foundResource);
         } else {
-          console.log(`skipping invalid item: ${catalogItem.full_name}}`);
+          // console.log(`skipping invalid item: ${catalogItem.full_name}}`);
         }
       // }
     }

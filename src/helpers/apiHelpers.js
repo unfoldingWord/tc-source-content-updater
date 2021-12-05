@@ -1,6 +1,5 @@
 const request = require('request');
-const DCS_API = 'https://api.door43.org';
-const PIVOTED_CATALOG_PATH = '/v3/subjects/pivoted.json';
+
 /**
  * Performs a get request on the specified url.
  * This function trys to parse the body but if it fails
@@ -27,6 +26,11 @@ function makeRequest(url) {
   });
 }
 
+/**
+ * does http request and returns the response data
+ * @param {string} url
+ * @return {Promise<{Object}>}
+ */
 export function makeRequestDetailed(url) {
   return new Promise((resolve, reject) => {
     request(url, function(error, response, body) {
@@ -41,6 +45,11 @@ export function makeRequestDetailed(url) {
   });
 }
 
+/**
+ * does http request and returns the response data parsed from JSON
+ * @param {string} url
+ * @return {Promise<{Object}>}
+ */
 export function makeJsonRequestDetailed(url) {
   return new Promise((resolve, reject) => {
     request(url, function(error, response, body) {
@@ -61,6 +70,12 @@ export function makeJsonRequestDetailed(url) {
   });
 }
 
+/**
+ * does multipart Catalog next API query and returns data for specific page
+ * @param {string} url
+ * @param {number} page
+ * @return {Promise<{Object}>}
+ */
 export async function doMultipartQueryPage(url, page = 1) {
   const url_ = `${url}&page=${page}`;
   const {result, response, body} = await makeJsonRequestDetailed(url_);
@@ -70,6 +85,11 @@ export async function doMultipartQueryPage(url, page = 1) {
   return {items, totalCount};
 }
 
+/**
+ * does multipart Catalog next API query and returns combined data data
+ * @param {string} url
+ * @return {Promise<{Object}>}
+ */
 export async function doMultipartQuery(url) {
   let page = 1;
   let data = [];
@@ -90,19 +110,26 @@ export async function doMultipartQuery(url) {
 }
 
 /**
- * Request the catalog.json from DCS API
+ * Request the Door43-Catalog from catalog-next
  * @return {Object} - Catalog from the DCS API
  */
 export async function getCatalog() {
-  // TODO: modified for testing
-  // return makeRequest(DCS_API + PIVOTED_CATALOG_PATH);
-  const fetchUrlReleased = 'https://git.door43.org/api/catalog/v5/search/Door43-Catalog?q=Bible%2CAligned%20Bible%2CGreek%20New%20Testament%2CHebrew%20Old%20Testament%2CTranslation%20Words%2CTSV%20Translation%20Notes%2CTranslation%20Academy%2CBible%20translation%20comprehension%20questions%2C&partialMatch=false&limit=50';
-  const released = await doMultipartQuery(fetchUrlReleased);
-  console.log(`released catalog has ${released.length} items`);
-  const fetchUrlLatest = `${fetchUrlReleased}&stage=latest`;
-  const latest = await doMultipartQuery(fetchUrlLatest);
-  console.log(`latest catalog has ${latest.length} items`);
-  // merge in latest if no released version
+  let released;
+  let latest;
+
+  try {
+    const fetchUrlReleased = 'https://git.door43.org/api/catalog/v5/search/Door43-Catalog?q=Bible%2CAligned%20Bible%2CGreek%20New%20Testament%2CHebrew%20Old%20Testament%2CTranslation%20Words%2CTSV%20Translation%20Notes%2CTranslation%20Academy%2CBible%20translation%20comprehension%20questions%2C&partialMatch=false&limit=50';
+    released = await doMultipartQuery(fetchUrlReleased);
+    console.log(`released catalog has ${released.length} items`);
+    const fetchUrlLatest = `${fetchUrlReleased}&stage=latest`;
+    latest = await doMultipartQuery(fetchUrlLatest);
+    console.log(`latest catalog has ${latest.length} items`);
+  } catch (e) {
+    console.log('getCatalog() - error getting catalog', e);
+    return [];
+  }
+
+  // merge in latest if no released version for repo
   for (const repo of latest) {
     const match = released.find(item => (item.full_name === repo.full_name));
     if (!match) {
@@ -110,4 +137,21 @@ export async function getCatalog() {
     }
   }
   return released;
+}
+
+/**
+ * does Catalog next API query to get manifest data
+ * @param {string} owner
+ * @param {string} repo
+ * * @return {Promise<{Object}>}
+ */
+export async function getManifestData(owner, repo) {
+  const fetchUrl = `https://git.door43.org/api/catalog/v5/entry/${owner}/${repo}/master/metadata`;
+  try {
+    const {result} = await makeJsonRequestDetailed(fetchUrl);
+    return result && result.dublin_core && result.dublin_core.version;
+  } catch (e) {
+    console.log('getManifestData() - error getting manifest data', e);
+  }
+  return null;
 }
