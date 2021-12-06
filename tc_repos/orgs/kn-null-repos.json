@@ -1,0 +1,3356 @@
+{
+  "kn_irv_tit_book": {
+    "fullName": "India_BCS/kn_irv_tit_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "tit",
+      "percentCompleted": 0.96,
+      "completedVerses": 48,
+      "totalVerses": 50,
+      "unalignedOrig": 246,
+      "unalignedTarget": 183
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "tit",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 35
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 244
+      }
+    }
+  },
+  "kn_iev_tit_book": {
+    "fullName": "Vipin_Bhadran/kn_iev_tit_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "iev",
+      "bookId": "tit",
+      "percentCompleted": 0.061224489795918366,
+      "completedVerses": 3,
+      "totalVerses": 49,
+      "unalignedOrig": 271,
+      "unalignedTarget": 695
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "iev",
+      "bookId": "tit",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 35
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 244
+      }
+    }
+  },
+  "kn_iev_mrk_book": {
+    "fullName": "shojojohn/kn_iev_mrk_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "iev",
+      "bookId": "mrk",
+      "percentCompleted": 1,
+      "completedVerses": 702,
+      "totalVerses": 702,
+      "unalignedOrig": 4712,
+      "unalignedTarget": 6982
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "iev",
+      "bookId": "mrk",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 665
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 2234
+      }
+    }
+  },
+  "kn_irvc_tit_book": {
+    "fullName": "russp41/kn_irvc_tit_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "irvc",
+      "bookId": "tit",
+      "percentCompleted": 0.96,
+      "completedVerses": 48,
+      "totalVerses": 50,
+      "unalignedOrig": 246,
+      "unalignedTarget": 183
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "irvc",
+      "bookId": "tit",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 35
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 241
+      }
+    }
+  },
+  "kn_glt_tit_book": {
+    "fullName": "India_BCS/kn_glt_tit_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "glt",
+      "bookId": "tit",
+      "percentCompleted": 1,
+      "completedVerses": 46,
+      "totalVerses": 46,
+      "unalignedOrig": 0,
+      "unalignedTarget": 0
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "glt",
+      "bookId": "tit",
+      "translationNotes": {
+        "percentCompleted": 1,
+        "completedChecks": 84,
+        "totalChecks": 84
+      },
+      "translationWords": {
+        "percentCompleted": 1,
+        "completedChecks": 221,
+        "totalChecks": 221
+      }
+    }
+  },
+  "kn_kglt_3jn_book": {
+    "fullName": "India_BCS/kn_kglt_3jn_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "kglt",
+      "bookId": "3jn",
+      "percentCompleted": 1,
+      "completedVerses": 15,
+      "totalVerses": 15,
+      "unalignedOrig": 0,
+      "unalignedTarget": 0
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "kglt",
+      "bookId": "3jn",
+      "translationNotes": {
+        "percentCompleted": 1,
+        "completedChecks": 18,
+        "totalChecks": 18
+      },
+      "translationWords": {
+        "percentCompleted": 1,
+        "completedChecks": 63,
+        "totalChecks": 63
+      }
+    }
+  },
+  "kn_tw_by_book": {
+    "fullName": "translationCore-Create-BCS/kn_tw_by_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "tw",
+      "bookId": "by",
+      "percentCompleted": 0,
+      "completedVerses": 0,
+      "totalVerses": 0,
+      "unalignedOrig": 0,
+      "unalignedTarget": 0
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "tw",
+      "bookId": "by",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 0
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 0
+      }
+    }
+  },
+  "kn_kst_tit_book": {
+    "fullName": "India_BCS/kn_kst_tit_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "kst",
+      "bookId": "tit",
+      "percentCompleted": 1,
+      "completedVerses": 49,
+      "totalVerses": 49,
+      "unalignedOrig": 9,
+      "unalignedTarget": 0
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "kst",
+      "bookId": "tit",
+      "translationNotes": {
+        "percentCompleted": 0.6309523809523809,
+        "completedChecks": 53,
+        "totalChecks": 84
+      },
+      "translationWords": {
+        "percentCompleted": 0.0045045045045045045,
+        "completedChecks": 1,
+        "totalChecks": 222
+      }
+    }
+  },
+  "kn_kust_3jn_book": {
+    "fullName": "India_BCS/kn_kust_3jn_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "kust",
+      "bookId": "3jn",
+      "percentCompleted": 1,
+      "completedVerses": 15,
+      "totalVerses": 15,
+      "unalignedOrig": 1,
+      "unalignedTarget": 0
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "kust",
+      "bookId": "3jn",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 18
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 63
+      }
+    }
+  },
+  "kn_gst_3jn_book": {
+    "fullName": "India_BCS/kn_gst_3jn_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "gst",
+      "bookId": "3jn",
+      "percentCompleted": 1,
+      "completedVerses": 15,
+      "totalVerses": 15,
+      "unalignedOrig": 1,
+      "unalignedTarget": 0
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "gst",
+      "bookId": "3jn",
+      "translationNotes": {
+        "percentCompleted": 1,
+        "completedChecks": 18,
+        "totalChecks": 18
+      },
+      "translationWords": {
+        "percentCompleted": 1,
+        "completedChecks": 63,
+        "totalChecks": 63
+      }
+    }
+  },
+  "kn_gst_tit_book": {
+    "fullName": "India_BCS/kn_gst_tit_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "gst",
+      "bookId": "tit",
+      "percentCompleted": 1,
+      "completedVerses": 49,
+      "totalVerses": 49,
+      "unalignedOrig": 9,
+      "unalignedTarget": 0
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "gst",
+      "bookId": "tit",
+      "translationNotes": {
+        "percentCompleted": 1,
+        "completedChecks": 84,
+        "totalChecks": 84
+      },
+      "translationWords": {
+        "percentCompleted": 1,
+        "completedChecks": 221,
+        "totalChecks": 221
+      }
+    }
+  },
+  "kn_irv_eph_book": {
+    "fullName": "shojojohn/kn_irv_eph_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "eph",
+      "percentCompleted": 0.15337423312883436,
+      "completedVerses": 25,
+      "totalVerses": 163,
+      "unalignedOrig": 971,
+      "unalignedTarget": 456
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "eph",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 308
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 683
+      }
+    }
+  },
+  "kn_irv_1ti_book": {
+    "fullName": "shojojohn/kn_irv_1ti_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "1ti",
+      "percentCompleted": 0.23770491803278687,
+      "completedVerses": 29,
+      "totalVerses": 122,
+      "unalignedOrig": 497,
+      "unalignedTarget": 423
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "1ti",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 148
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 511
+      }
+    }
+  },
+  "kn_irv_1jn_book": {
+    "fullName": "BCS_India/kn_irv_1jn_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "1jn",
+      "percentCompleted": 1,
+      "completedVerses": 110,
+      "totalVerses": 110,
+      "unalignedOrig": 753,
+      "unalignedTarget": 276
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "1jn",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 135
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 573
+      }
+    }
+  },
+  "kn_irv_2pe_book": {
+    "fullName": "BCS_India/kn_irv_2pe_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "2pe",
+      "percentCompleted": 1,
+      "completedVerses": 64,
+      "totalVerses": 64,
+      "unalignedOrig": 335,
+      "unalignedTarget": 153
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "2pe",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 96
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 329
+      }
+    }
+  },
+  "kn_irv_mat_book": {
+    "fullName": "BCS_India/kn_irv_mat_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "mat",
+      "percentCompleted": 1,
+      "completedVerses": 1099,
+      "totalVerses": 1099,
+      "unalignedOrig": 5531,
+      "unalignedTarget": 2386
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "mat",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 1289
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 4054
+      }
+    }
+  },
+  "kn_irv_jhn_book": {
+    "fullName": "BCS_India/kn_irv_jhn_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "jhn",
+      "percentCompleted": 1,
+      "completedVerses": 901,
+      "totalVerses": 901,
+      "unalignedOrig": 4406,
+      "unalignedTarget": 1441
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "jhn",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 778
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 3371
+      }
+    }
+  },
+  "kn_irv_mrk_book": {
+    "fullName": "BCS_India/kn_irv_mrk_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "mrk",
+      "percentCompleted": 1,
+      "completedVerses": 702,
+      "totalVerses": 702,
+      "unalignedOrig": 4096,
+      "unalignedTarget": 1990
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "mrk",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 665
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 2218
+      }
+    }
+  },
+  "kn_irv_act_book": {
+    "fullName": "BCS_India/kn_irv_act_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "act",
+      "percentCompleted": 1,
+      "completedVerses": 1039,
+      "totalVerses": 1039,
+      "unalignedOrig": 6348,
+      "unalignedTarget": 2585
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "act",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 1124
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 4350
+      }
+    }
+  },
+  "kn_irv_rom_book": {
+    "fullName": "BCS_India/kn_irv_rom_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "rom",
+      "percentCompleted": 1,
+      "completedVerses": 453,
+      "totalVerses": 453,
+      "unalignedOrig": 2570,
+      "unalignedTarget": 1537
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "rom",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 631
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 2173
+      }
+    }
+  },
+  "kn_irv_1co_book": {
+    "fullName": "shojojohn/kn_irv_1co_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "1co",
+      "percentCompleted": 0.843956043956044,
+      "completedVerses": 384,
+      "totalVerses": 455,
+      "unalignedOrig": 2416,
+      "unalignedTarget": 1136
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "1co",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 368
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 1804
+      }
+    }
+  },
+  "kn_irv_2co_book": {
+    "fullName": "shojojohn/kn_irv_2co_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "2co",
+      "percentCompleted": 0.8272058823529411,
+      "completedVerses": 225,
+      "totalVerses": 272,
+      "unalignedOrig": 1567,
+      "unalignedTarget": 1054
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "2co",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 327
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 1079
+      }
+    }
+  },
+  "kn_irv_gal_book": {
+    "fullName": "BCS_India/kn_irv_gal_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "gal",
+      "percentCompleted": 1,
+      "completedVerses": 156,
+      "totalVerses": 156,
+      "unalignedOrig": 674,
+      "unalignedTarget": 342
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "gal",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 127
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 716
+      }
+    }
+  },
+  "kn_irv_php_book": {
+    "fullName": "BCS_India/kn_irv_php_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "php",
+      "percentCompleted": 1,
+      "completedVerses": 110,
+      "totalVerses": 110,
+      "unalignedOrig": 557,
+      "unalignedTarget": 332
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "php",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 94
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 472
+      }
+    }
+  },
+  "kn_irv_col_book": {
+    "fullName": "BCS_India/kn_irv_col_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "col",
+      "percentCompleted": 1,
+      "completedVerses": 100,
+      "totalVerses": 100,
+      "unalignedOrig": 611,
+      "unalignedTarget": 275
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "col",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 121
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 454
+      }
+    }
+  },
+  "kn_irv_2th_book": {
+    "fullName": "BCS_India/kn_irv_2th_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "2th",
+      "percentCompleted": 1,
+      "completedVerses": 50,
+      "totalVerses": 50,
+      "unalignedOrig": 280,
+      "unalignedTarget": 121
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "2th",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 50
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 262
+      }
+    }
+  },
+  "kn_irv_phm_book": {
+    "fullName": "BCS_India/kn_irv_phm_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "phm",
+      "percentCompleted": 1,
+      "completedVerses": 26,
+      "totalVerses": 26,
+      "unalignedOrig": 119,
+      "unalignedTarget": 81
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "phm",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 25
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 100
+      }
+    }
+  },
+  "kn_irv_heb_book": {
+    "fullName": "BCS_India/kn_irv_heb_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "heb",
+      "percentCompleted": 1,
+      "completedVerses": 323,
+      "totalVerses": 323,
+      "unalignedOrig": 1718,
+      "unalignedTarget": 967
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "heb",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 499
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 1401
+      }
+    }
+  },
+  "kn_irv_jas_book": {
+    "fullName": "BCS_India/kn_irv_jas_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "jas",
+      "percentCompleted": 1,
+      "completedVerses": 113,
+      "totalVerses": 113,
+      "unalignedOrig": 492,
+      "unalignedTarget": 306
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "jas",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 186
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 489
+      }
+    }
+  },
+  "kn_irv_2jn_book": {
+    "fullName": "BCS_India/kn_irv_2jn_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "2jn",
+      "percentCompleted": 1,
+      "completedVerses": 14,
+      "totalVerses": 14,
+      "unalignedOrig": 82,
+      "unalignedTarget": 38
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "2jn",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 12
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 69
+      }
+    }
+  },
+  "kn_irv_3jn_book": {
+    "fullName": "BCS_India/kn_irv_3jn_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "3jn",
+      "percentCompleted": 1,
+      "completedVerses": 15,
+      "totalVerses": 15,
+      "unalignedOrig": 99,
+      "unalignedTarget": 85
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "3jn",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 18
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 63
+      }
+    }
+  },
+  "kn_irv_jud_book": {
+    "fullName": "BCS_India/kn_irv_jud_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "jud",
+      "percentCompleted": 1,
+      "completedVerses": 26,
+      "totalVerses": 26,
+      "unalignedOrig": 122,
+      "unalignedTarget": 83
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "jud",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 25
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 154
+      }
+    }
+  },
+  "kn_irv_rev_book": {
+    "fullName": "BCS_India/kn_irv_rev_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "rev",
+      "percentCompleted": 1,
+      "completedVerses": 430,
+      "totalVerses": 430,
+      "unalignedOrig": 3811,
+      "unalignedTarget": 1482
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "rev",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 593
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 2334
+      }
+    }
+  },
+  "kn_irv_1th_book": {
+    "fullName": "BCS_India/kn_irv_1th_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "1th",
+      "percentCompleted": 1,
+      "completedVerses": 96,
+      "totalVerses": 96,
+      "unalignedOrig": 571,
+      "unalignedTarget": 300
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "1th",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 96
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 445
+      }
+    }
+  },
+  "kn_irv_luk_book": {
+    "fullName": "BCS_India/kn_irv_luk_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "luk",
+      "percentCompleted": 1,
+      "completedVerses": 1188,
+      "totalVerses": 1188,
+      "unalignedOrig": 7029,
+      "unalignedTarget": 3540
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "luk",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 1293
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 4088
+      }
+    }
+  },
+  "kn_irv_1pe_book": {
+    "fullName": "BCS_India/kn_irv_1pe_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "1pe",
+      "percentCompleted": 1,
+      "completedVerses": 105,
+      "totalVerses": 105,
+      "unalignedOrig": 864,
+      "unalignedTarget": 636
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "1pe",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 164
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 632
+      }
+    }
+  },
+  "kn_irv_2ti_book": {
+    "fullName": "BCS_India/kn_irv_2ti_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "2ti",
+      "percentCompleted": 1,
+      "completedVerses": 86,
+      "totalVerses": 86,
+      "unalignedOrig": 389,
+      "unalignedTarget": 186
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "irv",
+      "bookId": "2ti",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 119
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 371
+      }
+    }
+  },
+  "kn_gst_1ti_book": {
+    "fullName": "India_BCS/kn_gst_1ti_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "gst",
+      "bookId": "1ti",
+      "percentCompleted": 1,
+      "completedVerses": 113,
+      "totalVerses": 113,
+      "unalignedOrig": 35,
+      "unalignedTarget": 0
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "gst",
+      "bookId": "1ti",
+      "translationNotes": {
+        "percentCompleted": 0.99,
+        "completedChecks": 301,
+        "totalChecks": 304
+      },
+      "translationWords": {
+        "percentCompleted": 1,
+        "completedChecks": 485,
+        "totalChecks": 485
+      }
+    }
+  },
+  "kn_kgst_eph_book": {
+    "fullName": "India_BCS/kn_kgst_eph_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "kgst",
+      "bookId": "eph",
+      "percentCompleted": 1,
+      "completedVerses": 155,
+      "totalVerses": 155,
+      "unalignedOrig": 81,
+      "unalignedTarget": 1
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "kgst",
+      "bookId": "eph",
+      "translationNotes": {
+        "percentCompleted": 0.964516129032258,
+        "completedChecks": 299,
+        "totalChecks": 310
+      },
+      "translationWords": {
+        "percentCompleted": 0.977810650887574,
+        "completedChecks": 661,
+        "totalChecks": 676
+      }
+    }
+  },
+  "kn_kglt_eph_book": {
+    "fullName": "India_BCS/kn_kglt_eph_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "kglt",
+      "bookId": "eph",
+      "percentCompleted": 1,
+      "completedVerses": 163,
+      "totalVerses": 163,
+      "unalignedOrig": 1,
+      "unalignedTarget": 31
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "kglt",
+      "bookId": "eph",
+      "translationNotes": {
+        "percentCompleted": 0.9870967741935484,
+        "completedChecks": 306,
+        "totalChecks": 310
+      },
+      "translationWords": {
+        "percentCompleted": 1,
+        "completedChecks": 676,
+        "totalChecks": 676
+      }
+    }
+  },
+  "kn_kglt_1ti_book": {
+    "fullName": "India_BCS/kn_kglt_1ti_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "kglt",
+      "bookId": "1ti",
+      "percentCompleted": 1,
+      "completedVerses": 122,
+      "totalVerses": 122,
+      "unalignedOrig": 0,
+      "unalignedTarget": 79
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "kglt",
+      "bookId": "1ti",
+      "translationNotes": {
+        "percentCompleted": 0.99,
+        "completedChecks": 303,
+        "totalChecks": 304
+      },
+      "translationWords": {
+        "percentCompleted": 1,
+        "completedChecks": 485,
+        "totalChecks": 485
+      }
+    }
+  },
+  "kn_gst_2jn_book": {
+    "fullName": "India_BCS/kn_gst_2jn_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "gst",
+      "bookId": "2jn",
+      "percentCompleted": 1,
+      "completedVerses": 13,
+      "totalVerses": 13,
+      "unalignedOrig": 6,
+      "unalignedTarget": 0
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "gst",
+      "bookId": "2jn",
+      "translationNotes": {
+        "percentCompleted": 1,
+        "completedChecks": 53,
+        "totalChecks": 53
+      },
+      "translationWords": {
+        "percentCompleted": 1,
+        "completedChecks": 65,
+        "totalChecks": 65
+      }
+    }
+  },
+  "kn_gst_2ti_book": {
+    "fullName": "India_BCS/kn_gst_2ti_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "gst",
+      "bookId": "2ti",
+      "percentCompleted": 1,
+      "completedVerses": 83,
+      "totalVerses": 83,
+      "unalignedOrig": 35,
+      "unalignedTarget": 1
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "gst",
+      "bookId": "2ti",
+      "translationNotes": {
+        "percentCompleted": 0.9862542955326461,
+        "completedChecks": 287,
+        "totalChecks": 291
+      },
+      "translationWords": {
+        "percentCompleted": 1,
+        "completedChecks": 355,
+        "totalChecks": 355
+      }
+    }
+  },
+  "kn_gst_jon_book": {
+    "fullName": "India_BCS/kn_gst_jon_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "gst",
+      "bookId": "jon",
+      "percentCompleted": 1,
+      "completedVerses": 48,
+      "totalVerses": 48,
+      "unalignedOrig": 6,
+      "unalignedTarget": 1
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "gst",
+      "bookId": "jon",
+      "translationNotes": {
+        "percentCompleted": 0.9885057471264368,
+        "completedChecks": 86,
+        "totalChecks": 87
+      },
+      "translationWords": {
+        "percentCompleted": 1,
+        "completedChecks": 188,
+        "totalChecks": 188
+      }
+    }
+  },
+  "kn_gst_rut_book": {
+    "fullName": "India_BCS/kn_gst_rut_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "gst",
+      "bookId": "rut",
+      "percentCompleted": 1,
+      "completedVerses": 85,
+      "totalVerses": 85,
+      "unalignedOrig": 0,
+      "unalignedTarget": 0
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "gst",
+      "bookId": "rut",
+      "translationNotes": {
+        "percentCompleted": 1,
+        "completedChecks": 129,
+        "totalChecks": 129
+      },
+      "translationWords": {
+        "percentCompleted": 1,
+        "completedChecks": 296,
+        "totalChecks": 296
+      }
+    }
+  },
+  "kn_kglt_2jn_book": {
+    "fullName": "tCore-test-data/kn_kglt_2jn_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "kglt",
+      "bookId": "2jn",
+      "percentCompleted": 1,
+      "completedVerses": 13,
+      "totalVerses": 13,
+      "unalignedOrig": 0,
+      "unalignedTarget": 0
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "kglt",
+      "bookId": "2jn",
+      "translationNotes": {
+        "percentCompleted": 1,
+        "completedChecks": 53,
+        "totalChecks": 53
+      },
+      "translationWords": {
+        "percentCompleted": 1,
+        "completedChecks": 65,
+        "totalChecks": 65
+      }
+    }
+  },
+  "kn_kglt_2ti_book": {
+    "fullName": "India_BCS/kn_kglt_2ti_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "kglt",
+      "bookId": "2ti",
+      "percentCompleted": 1,
+      "completedVerses": 83,
+      "totalVerses": 83,
+      "unalignedOrig": 0,
+      "unalignedTarget": 0
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "kglt",
+      "bookId": "2ti",
+      "translationNotes": {
+        "percentCompleted": 0.99,
+        "completedChecks": 288,
+        "totalChecks": 290
+      },
+      "translationWords": {
+        "percentCompleted": 1,
+        "completedChecks": 355,
+        "totalChecks": 355
+      }
+    }
+  },
+  "kn_kglt_jon_book": {
+    "fullName": "India_BCS/kn_kglt_jon_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "kglt",
+      "bookId": "jon",
+      "percentCompleted": 1,
+      "completedVerses": 48,
+      "totalVerses": 48,
+      "unalignedOrig": 0,
+      "unalignedTarget": 1
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "kglt",
+      "bookId": "jon",
+      "translationNotes": {
+        "percentCompleted": 1,
+        "completedChecks": 87,
+        "totalChecks": 87
+      },
+      "translationWords": {
+        "percentCompleted": 1,
+        "completedChecks": 188,
+        "totalChecks": 188
+      }
+    }
+  },
+  "kn_kglt_rut_book": {
+    "fullName": "India_BCS/kn_kglt_rut_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "kglt",
+      "bookId": "rut",
+      "percentCompleted": 1,
+      "completedVerses": 85,
+      "totalVerses": 85,
+      "unalignedOrig": 0,
+      "unalignedTarget": 0
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "kglt",
+      "bookId": "rut",
+      "translationNotes": {
+        "percentCompleted": 1,
+        "completedChecks": 131,
+        "totalChecks": 131
+      },
+      "translationWords": {
+        "percentCompleted": 1,
+        "completedChecks": 296,
+        "totalChecks": 296
+      }
+    }
+  },
+  "kn_glt_1jn_book": {
+    "fullName": "BCS_India/kn_glt_1jn_book",
+    "ERROR": "could not download BCS_India/kn_glt_1jn_book: Error: UNABLE_TO_DOWNLOAD_RESOURCES for https://git.door43.org/BCS_India/kn_glt_1jn_book/archive/master.zip: Download did not succeed, code 404"
+  },
+  "kn_glt_jas_book": {
+    "fullName": "India_BCS/kn_glt_jas_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "glt",
+      "bookId": "jas",
+      "percentCompleted": 1,
+      "completedVerses": 110,
+      "totalVerses": 110,
+      "unalignedOrig": 1,
+      "unalignedTarget": 0
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "glt",
+      "bookId": "jas",
+      "translationNotes": {
+        "percentCompleted": 0.9819494584837545,
+        "completedChecks": 544,
+        "totalChecks": 554
+      },
+      "translationWords": {
+        "percentCompleted": 1,
+        "completedChecks": 463,
+        "totalChecks": 463
+      }
+    }
+  },
+  "kn_gst_luk_book": {
+    "fullName": "Kumar/kn_gst_luk_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "gst",
+      "bookId": "luk",
+      "percentCompleted": 0.021720243266724587,
+      "completedVerses": 25,
+      "totalVerses": 1151,
+      "unalignedOrig": 18897,
+      "unalignedTarget": 23744
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "gst",
+      "bookId": "luk",
+      "translationNotes": {
+        "percentCompleted": 0.8972833117723157,
+        "completedChecks": 3468,
+        "totalChecks": 3865
+      },
+      "translationWords": {
+        "percentCompleted": 0.5198856251624643,
+        "completedChecks": 2000,
+        "totalChecks": 3847
+      }
+    }
+  },
+  "kn_glt_luk_book": {
+    "fullName": "TANUJA.G/kn_glt_luk_book",
+    "ERROR": "could not download TANUJA.G/kn_glt_luk_book: Error: UNABLE_TO_DOWNLOAD_RESOURCES for https://git.door43.org/TANUJA.G/kn_glt_luk_book/archive/master.zip: Download did not succeed, code 404"
+  },
+  "kn_gst_1jn_book": {
+    "fullName": "Rekha/kn_gst_1jn_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "gst",
+      "bookId": "1jn",
+      "percentCompleted": 0.2,
+      "completedVerses": 21,
+      "totalVerses": 105,
+      "unalignedOrig": 1654,
+      "unalignedTarget": 2035
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "gst",
+      "bookId": "1jn",
+      "translationNotes": {
+        "percentCompleted": 0.9154676258992805,
+        "completedChecks": 509,
+        "totalChecks": 556
+      },
+      "translationWords": {
+        "percentCompleted": 0.9873873873873874,
+        "completedChecks": 548,
+        "totalChecks": 555
+      }
+    }
+  },
+  "kn_gst_jas_book": {
+    "fullName": "Bambino/kn_gst_jas_book",
+    "ERROR": "could not download Bambino/kn_gst_jas_book: Error: UNABLE_TO_DOWNLOAD_RESOURCES for https://git.door43.org/Bambino/kn_gst_jas_book/archive/master.zip: Download did not succeed, code 404"
+  },
+  "kn_test_2jn_book": {
+    "fullName": "ghayden/kn_test_2jn_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "test",
+      "bookId": "2jn",
+      "percentCompleted": 1,
+      "completedVerses": 13,
+      "totalVerses": 13,
+      "unalignedOrig": 0,
+      "unalignedTarget": 0
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "test",
+      "bookId": "2jn",
+      "translationNotes": {
+        "percentCompleted": 1,
+        "completedChecks": 53,
+        "totalChecks": 53
+      },
+      "translationWords": {
+        "percentCompleted": 1,
+        "completedChecks": 65,
+        "totalChecks": 65
+      }
+    }
+  },
+  "kn_kglz_2jn_book": {
+    "fullName": "photonomad1/kn_kglz_2jn_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "kglz",
+      "bookId": "2jn",
+      "percentCompleted": 1,
+      "completedVerses": 13,
+      "totalVerses": 13,
+      "unalignedOrig": 0,
+      "unalignedTarget": 0
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "kglz",
+      "bookId": "2jn",
+      "translationNotes": {
+        "percentCompleted": 1,
+        "completedChecks": 53,
+        "totalChecks": 53
+      },
+      "translationWords": {
+        "percentCompleted": 1,
+        "completedChecks": 65,
+        "totalChecks": 65
+      }
+    }
+  },
+  "goodProjects": {
+    "waFinished": {
+      "shojojohn/kn_iev_mrk_book": {
+        "fullName": "shojojohn/kn_iev_mrk_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "iev",
+          "bookId": "mrk",
+          "percentCompleted": 1,
+          "completedVerses": 702,
+          "totalVerses": 702,
+          "unalignedOrig": 4712,
+          "unalignedTarget": 6982
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "iev",
+          "bookId": "mrk",
+          "translationNotes": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 665
+          },
+          "translationWords": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 2234
+          }
+        }
+      },
+      "India_BCS/kn_glt_tit_book": {
+        "fullName": "India_BCS/kn_glt_tit_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "glt",
+          "bookId": "tit",
+          "percentCompleted": 1,
+          "completedVerses": 46,
+          "totalVerses": 46,
+          "unalignedOrig": 0,
+          "unalignedTarget": 0
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "glt",
+          "bookId": "tit",
+          "translationNotes": {
+            "percentCompleted": 1,
+            "completedChecks": 84,
+            "totalChecks": 84
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 221,
+            "totalChecks": 221
+          }
+        }
+      },
+      "India_BCS/kn_kglt_3jn_book": {
+        "fullName": "India_BCS/kn_kglt_3jn_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "kglt",
+          "bookId": "3jn",
+          "percentCompleted": 1,
+          "completedVerses": 15,
+          "totalVerses": 15,
+          "unalignedOrig": 0,
+          "unalignedTarget": 0
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "kglt",
+          "bookId": "3jn",
+          "translationNotes": {
+            "percentCompleted": 1,
+            "completedChecks": 18,
+            "totalChecks": 18
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 63,
+            "totalChecks": 63
+          }
+        }
+      },
+      "India_BCS/kn_kst_tit_book": {
+        "fullName": "India_BCS/kn_kst_tit_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "kst",
+          "bookId": "tit",
+          "percentCompleted": 1,
+          "completedVerses": 49,
+          "totalVerses": 49,
+          "unalignedOrig": 9,
+          "unalignedTarget": 0
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "kst",
+          "bookId": "tit",
+          "translationNotes": {
+            "percentCompleted": 0.6309523809523809,
+            "completedChecks": 53,
+            "totalChecks": 84
+          },
+          "translationWords": {
+            "percentCompleted": 0.0045045045045045045,
+            "completedChecks": 1,
+            "totalChecks": 222
+          }
+        }
+      },
+      "India_BCS/kn_kust_3jn_book": {
+        "fullName": "India_BCS/kn_kust_3jn_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "kust",
+          "bookId": "3jn",
+          "percentCompleted": 1,
+          "completedVerses": 15,
+          "totalVerses": 15,
+          "unalignedOrig": 1,
+          "unalignedTarget": 0
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "kust",
+          "bookId": "3jn",
+          "translationNotes": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 18
+          },
+          "translationWords": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 63
+          }
+        }
+      },
+      "India_BCS/kn_gst_3jn_book": {
+        "fullName": "India_BCS/kn_gst_3jn_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "gst",
+          "bookId": "3jn",
+          "percentCompleted": 1,
+          "completedVerses": 15,
+          "totalVerses": 15,
+          "unalignedOrig": 1,
+          "unalignedTarget": 0
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "gst",
+          "bookId": "3jn",
+          "translationNotes": {
+            "percentCompleted": 1,
+            "completedChecks": 18,
+            "totalChecks": 18
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 63,
+            "totalChecks": 63
+          }
+        }
+      },
+      "India_BCS/kn_gst_tit_book": {
+        "fullName": "India_BCS/kn_gst_tit_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "gst",
+          "bookId": "tit",
+          "percentCompleted": 1,
+          "completedVerses": 49,
+          "totalVerses": 49,
+          "unalignedOrig": 9,
+          "unalignedTarget": 0
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "gst",
+          "bookId": "tit",
+          "translationNotes": {
+            "percentCompleted": 1,
+            "completedChecks": 84,
+            "totalChecks": 84
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 221,
+            "totalChecks": 221
+          }
+        }
+      },
+      "BCS_India/kn_irv_1jn_book": {
+        "fullName": "BCS_India/kn_irv_1jn_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "1jn",
+          "percentCompleted": 1,
+          "completedVerses": 110,
+          "totalVerses": 110,
+          "unalignedOrig": 753,
+          "unalignedTarget": 276
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "1jn",
+          "translationNotes": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 135
+          },
+          "translationWords": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 573
+          }
+        }
+      },
+      "BCS_India/kn_irv_2pe_book": {
+        "fullName": "BCS_India/kn_irv_2pe_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "2pe",
+          "percentCompleted": 1,
+          "completedVerses": 64,
+          "totalVerses": 64,
+          "unalignedOrig": 335,
+          "unalignedTarget": 153
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "2pe",
+          "translationNotes": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 96
+          },
+          "translationWords": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 329
+          }
+        }
+      },
+      "BCS_India/kn_irv_mat_book": {
+        "fullName": "BCS_India/kn_irv_mat_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "mat",
+          "percentCompleted": 1,
+          "completedVerses": 1099,
+          "totalVerses": 1099,
+          "unalignedOrig": 5531,
+          "unalignedTarget": 2386
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "mat",
+          "translationNotes": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 1289
+          },
+          "translationWords": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 4054
+          }
+        }
+      },
+      "BCS_India/kn_irv_jhn_book": {
+        "fullName": "BCS_India/kn_irv_jhn_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "jhn",
+          "percentCompleted": 1,
+          "completedVerses": 901,
+          "totalVerses": 901,
+          "unalignedOrig": 4406,
+          "unalignedTarget": 1441
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "jhn",
+          "translationNotes": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 778
+          },
+          "translationWords": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 3371
+          }
+        }
+      },
+      "BCS_India/kn_irv_mrk_book": {
+        "fullName": "BCS_India/kn_irv_mrk_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "mrk",
+          "percentCompleted": 1,
+          "completedVerses": 702,
+          "totalVerses": 702,
+          "unalignedOrig": 4096,
+          "unalignedTarget": 1990
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "mrk",
+          "translationNotes": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 665
+          },
+          "translationWords": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 2218
+          }
+        }
+      },
+      "BCS_India/kn_irv_act_book": {
+        "fullName": "BCS_India/kn_irv_act_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "act",
+          "percentCompleted": 1,
+          "completedVerses": 1039,
+          "totalVerses": 1039,
+          "unalignedOrig": 6348,
+          "unalignedTarget": 2585
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "act",
+          "translationNotes": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 1124
+          },
+          "translationWords": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 4350
+          }
+        }
+      },
+      "BCS_India/kn_irv_rom_book": {
+        "fullName": "BCS_India/kn_irv_rom_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "rom",
+          "percentCompleted": 1,
+          "completedVerses": 453,
+          "totalVerses": 453,
+          "unalignedOrig": 2570,
+          "unalignedTarget": 1537
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "rom",
+          "translationNotes": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 631
+          },
+          "translationWords": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 2173
+          }
+        }
+      },
+      "BCS_India/kn_irv_gal_book": {
+        "fullName": "BCS_India/kn_irv_gal_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "gal",
+          "percentCompleted": 1,
+          "completedVerses": 156,
+          "totalVerses": 156,
+          "unalignedOrig": 674,
+          "unalignedTarget": 342
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "gal",
+          "translationNotes": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 127
+          },
+          "translationWords": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 716
+          }
+        }
+      },
+      "BCS_India/kn_irv_php_book": {
+        "fullName": "BCS_India/kn_irv_php_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "php",
+          "percentCompleted": 1,
+          "completedVerses": 110,
+          "totalVerses": 110,
+          "unalignedOrig": 557,
+          "unalignedTarget": 332
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "php",
+          "translationNotes": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 94
+          },
+          "translationWords": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 472
+          }
+        }
+      },
+      "BCS_India/kn_irv_col_book": {
+        "fullName": "BCS_India/kn_irv_col_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "col",
+          "percentCompleted": 1,
+          "completedVerses": 100,
+          "totalVerses": 100,
+          "unalignedOrig": 611,
+          "unalignedTarget": 275
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "col",
+          "translationNotes": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 121
+          },
+          "translationWords": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 454
+          }
+        }
+      },
+      "BCS_India/kn_irv_2th_book": {
+        "fullName": "BCS_India/kn_irv_2th_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "2th",
+          "percentCompleted": 1,
+          "completedVerses": 50,
+          "totalVerses": 50,
+          "unalignedOrig": 280,
+          "unalignedTarget": 121
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "2th",
+          "translationNotes": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 50
+          },
+          "translationWords": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 262
+          }
+        }
+      },
+      "BCS_India/kn_irv_phm_book": {
+        "fullName": "BCS_India/kn_irv_phm_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "phm",
+          "percentCompleted": 1,
+          "completedVerses": 26,
+          "totalVerses": 26,
+          "unalignedOrig": 119,
+          "unalignedTarget": 81
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "phm",
+          "translationNotes": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 25
+          },
+          "translationWords": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 100
+          }
+        }
+      },
+      "BCS_India/kn_irv_heb_book": {
+        "fullName": "BCS_India/kn_irv_heb_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "heb",
+          "percentCompleted": 1,
+          "completedVerses": 323,
+          "totalVerses": 323,
+          "unalignedOrig": 1718,
+          "unalignedTarget": 967
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "heb",
+          "translationNotes": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 499
+          },
+          "translationWords": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 1401
+          }
+        }
+      },
+      "BCS_India/kn_irv_jas_book": {
+        "fullName": "BCS_India/kn_irv_jas_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "jas",
+          "percentCompleted": 1,
+          "completedVerses": 113,
+          "totalVerses": 113,
+          "unalignedOrig": 492,
+          "unalignedTarget": 306
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "jas",
+          "translationNotes": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 186
+          },
+          "translationWords": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 489
+          }
+        }
+      },
+      "BCS_India/kn_irv_2jn_book": {
+        "fullName": "BCS_India/kn_irv_2jn_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "2jn",
+          "percentCompleted": 1,
+          "completedVerses": 14,
+          "totalVerses": 14,
+          "unalignedOrig": 82,
+          "unalignedTarget": 38
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "2jn",
+          "translationNotes": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 12
+          },
+          "translationWords": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 69
+          }
+        }
+      },
+      "BCS_India/kn_irv_3jn_book": {
+        "fullName": "BCS_India/kn_irv_3jn_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "3jn",
+          "percentCompleted": 1,
+          "completedVerses": 15,
+          "totalVerses": 15,
+          "unalignedOrig": 99,
+          "unalignedTarget": 85
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "3jn",
+          "translationNotes": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 18
+          },
+          "translationWords": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 63
+          }
+        }
+      },
+      "BCS_India/kn_irv_jud_book": {
+        "fullName": "BCS_India/kn_irv_jud_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "jud",
+          "percentCompleted": 1,
+          "completedVerses": 26,
+          "totalVerses": 26,
+          "unalignedOrig": 122,
+          "unalignedTarget": 83
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "jud",
+          "translationNotes": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 25
+          },
+          "translationWords": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 154
+          }
+        }
+      },
+      "BCS_India/kn_irv_rev_book": {
+        "fullName": "BCS_India/kn_irv_rev_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "rev",
+          "percentCompleted": 1,
+          "completedVerses": 430,
+          "totalVerses": 430,
+          "unalignedOrig": 3811,
+          "unalignedTarget": 1482
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "rev",
+          "translationNotes": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 593
+          },
+          "translationWords": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 2334
+          }
+        }
+      },
+      "BCS_India/kn_irv_1th_book": {
+        "fullName": "BCS_India/kn_irv_1th_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "1th",
+          "percentCompleted": 1,
+          "completedVerses": 96,
+          "totalVerses": 96,
+          "unalignedOrig": 571,
+          "unalignedTarget": 300
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "1th",
+          "translationNotes": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 96
+          },
+          "translationWords": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 445
+          }
+        }
+      },
+      "BCS_India/kn_irv_luk_book": {
+        "fullName": "BCS_India/kn_irv_luk_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "luk",
+          "percentCompleted": 1,
+          "completedVerses": 1188,
+          "totalVerses": 1188,
+          "unalignedOrig": 7029,
+          "unalignedTarget": 3540
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "luk",
+          "translationNotes": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 1293
+          },
+          "translationWords": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 4088
+          }
+        }
+      },
+      "BCS_India/kn_irv_1pe_book": {
+        "fullName": "BCS_India/kn_irv_1pe_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "1pe",
+          "percentCompleted": 1,
+          "completedVerses": 105,
+          "totalVerses": 105,
+          "unalignedOrig": 864,
+          "unalignedTarget": 636
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "1pe",
+          "translationNotes": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 164
+          },
+          "translationWords": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 632
+          }
+        }
+      },
+      "BCS_India/kn_irv_2ti_book": {
+        "fullName": "BCS_India/kn_irv_2ti_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "2ti",
+          "percentCompleted": 1,
+          "completedVerses": 86,
+          "totalVerses": 86,
+          "unalignedOrig": 389,
+          "unalignedTarget": 186
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "2ti",
+          "translationNotes": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 119
+          },
+          "translationWords": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 371
+          }
+        }
+      },
+      "India_BCS/kn_gst_1ti_book": {
+        "fullName": "India_BCS/kn_gst_1ti_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "gst",
+          "bookId": "1ti",
+          "percentCompleted": 1,
+          "completedVerses": 113,
+          "totalVerses": 113,
+          "unalignedOrig": 35,
+          "unalignedTarget": 0
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "gst",
+          "bookId": "1ti",
+          "translationNotes": {
+            "percentCompleted": 0.99,
+            "completedChecks": 301,
+            "totalChecks": 304
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 485,
+            "totalChecks": 485
+          }
+        }
+      },
+      "India_BCS/kn_kgst_eph_book": {
+        "fullName": "India_BCS/kn_kgst_eph_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "kgst",
+          "bookId": "eph",
+          "percentCompleted": 1,
+          "completedVerses": 155,
+          "totalVerses": 155,
+          "unalignedOrig": 81,
+          "unalignedTarget": 1
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "kgst",
+          "bookId": "eph",
+          "translationNotes": {
+            "percentCompleted": 0.964516129032258,
+            "completedChecks": 299,
+            "totalChecks": 310
+          },
+          "translationWords": {
+            "percentCompleted": 0.977810650887574,
+            "completedChecks": 661,
+            "totalChecks": 676
+          }
+        }
+      },
+      "India_BCS/kn_kglt_eph_book": {
+        "fullName": "India_BCS/kn_kglt_eph_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "kglt",
+          "bookId": "eph",
+          "percentCompleted": 1,
+          "completedVerses": 163,
+          "totalVerses": 163,
+          "unalignedOrig": 1,
+          "unalignedTarget": 31
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "kglt",
+          "bookId": "eph",
+          "translationNotes": {
+            "percentCompleted": 0.9870967741935484,
+            "completedChecks": 306,
+            "totalChecks": 310
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 676,
+            "totalChecks": 676
+          }
+        }
+      },
+      "India_BCS/kn_kglt_1ti_book": {
+        "fullName": "India_BCS/kn_kglt_1ti_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "kglt",
+          "bookId": "1ti",
+          "percentCompleted": 1,
+          "completedVerses": 122,
+          "totalVerses": 122,
+          "unalignedOrig": 0,
+          "unalignedTarget": 79
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "kglt",
+          "bookId": "1ti",
+          "translationNotes": {
+            "percentCompleted": 0.99,
+            "completedChecks": 303,
+            "totalChecks": 304
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 485,
+            "totalChecks": 485
+          }
+        }
+      },
+      "India_BCS/kn_gst_2jn_book": {
+        "fullName": "India_BCS/kn_gst_2jn_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "gst",
+          "bookId": "2jn",
+          "percentCompleted": 1,
+          "completedVerses": 13,
+          "totalVerses": 13,
+          "unalignedOrig": 6,
+          "unalignedTarget": 0
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "gst",
+          "bookId": "2jn",
+          "translationNotes": {
+            "percentCompleted": 1,
+            "completedChecks": 53,
+            "totalChecks": 53
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 65,
+            "totalChecks": 65
+          }
+        }
+      },
+      "India_BCS/kn_gst_2ti_book": {
+        "fullName": "India_BCS/kn_gst_2ti_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "gst",
+          "bookId": "2ti",
+          "percentCompleted": 1,
+          "completedVerses": 83,
+          "totalVerses": 83,
+          "unalignedOrig": 35,
+          "unalignedTarget": 1
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "gst",
+          "bookId": "2ti",
+          "translationNotes": {
+            "percentCompleted": 0.9862542955326461,
+            "completedChecks": 287,
+            "totalChecks": 291
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 355,
+            "totalChecks": 355
+          }
+        }
+      },
+      "India_BCS/kn_gst_jon_book": {
+        "fullName": "India_BCS/kn_gst_jon_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "gst",
+          "bookId": "jon",
+          "percentCompleted": 1,
+          "completedVerses": 48,
+          "totalVerses": 48,
+          "unalignedOrig": 6,
+          "unalignedTarget": 1
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "gst",
+          "bookId": "jon",
+          "translationNotes": {
+            "percentCompleted": 0.9885057471264368,
+            "completedChecks": 86,
+            "totalChecks": 87
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 188,
+            "totalChecks": 188
+          }
+        }
+      },
+      "India_BCS/kn_gst_rut_book": {
+        "fullName": "India_BCS/kn_gst_rut_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "gst",
+          "bookId": "rut",
+          "percentCompleted": 1,
+          "completedVerses": 85,
+          "totalVerses": 85,
+          "unalignedOrig": 0,
+          "unalignedTarget": 0
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "gst",
+          "bookId": "rut",
+          "translationNotes": {
+            "percentCompleted": 1,
+            "completedChecks": 129,
+            "totalChecks": 129
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 296,
+            "totalChecks": 296
+          }
+        }
+      },
+      "tCore-test-data/kn_kglt_2jn_book": {
+        "fullName": "tCore-test-data/kn_kglt_2jn_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "kglt",
+          "bookId": "2jn",
+          "percentCompleted": 1,
+          "completedVerses": 13,
+          "totalVerses": 13,
+          "unalignedOrig": 0,
+          "unalignedTarget": 0
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "kglt",
+          "bookId": "2jn",
+          "translationNotes": {
+            "percentCompleted": 1,
+            "completedChecks": 53,
+            "totalChecks": 53
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 65,
+            "totalChecks": 65
+          }
+        }
+      },
+      "India_BCS/kn_kglt_2ti_book": {
+        "fullName": "India_BCS/kn_kglt_2ti_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "kglt",
+          "bookId": "2ti",
+          "percentCompleted": 1,
+          "completedVerses": 83,
+          "totalVerses": 83,
+          "unalignedOrig": 0,
+          "unalignedTarget": 0
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "kglt",
+          "bookId": "2ti",
+          "translationNotes": {
+            "percentCompleted": 0.99,
+            "completedChecks": 288,
+            "totalChecks": 290
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 355,
+            "totalChecks": 355
+          }
+        }
+      },
+      "India_BCS/kn_kglt_jon_book": {
+        "fullName": "India_BCS/kn_kglt_jon_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "kglt",
+          "bookId": "jon",
+          "percentCompleted": 1,
+          "completedVerses": 48,
+          "totalVerses": 48,
+          "unalignedOrig": 0,
+          "unalignedTarget": 1
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "kglt",
+          "bookId": "jon",
+          "translationNotes": {
+            "percentCompleted": 1,
+            "completedChecks": 87,
+            "totalChecks": 87
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 188,
+            "totalChecks": 188
+          }
+        }
+      },
+      "India_BCS/kn_kglt_rut_book": {
+        "fullName": "India_BCS/kn_kglt_rut_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "kglt",
+          "bookId": "rut",
+          "percentCompleted": 1,
+          "completedVerses": 85,
+          "totalVerses": 85,
+          "unalignedOrig": 0,
+          "unalignedTarget": 0
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "kglt",
+          "bookId": "rut",
+          "translationNotes": {
+            "percentCompleted": 1,
+            "completedChecks": 131,
+            "totalChecks": 131
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 296,
+            "totalChecks": 296
+          }
+        }
+      },
+      "India_BCS/kn_glt_jas_book": {
+        "fullName": "India_BCS/kn_glt_jas_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "glt",
+          "bookId": "jas",
+          "percentCompleted": 1,
+          "completedVerses": 110,
+          "totalVerses": 110,
+          "unalignedOrig": 1,
+          "unalignedTarget": 0
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "glt",
+          "bookId": "jas",
+          "translationNotes": {
+            "percentCompleted": 0.9819494584837545,
+            "completedChecks": 544,
+            "totalChecks": 554
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 463,
+            "totalChecks": 463
+          }
+        }
+      },
+      "ghayden/kn_test_2jn_book": {
+        "fullName": "ghayden/kn_test_2jn_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "test",
+          "bookId": "2jn",
+          "percentCompleted": 1,
+          "completedVerses": 13,
+          "totalVerses": 13,
+          "unalignedOrig": 0,
+          "unalignedTarget": 0
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "test",
+          "bookId": "2jn",
+          "translationNotes": {
+            "percentCompleted": 1,
+            "completedChecks": 53,
+            "totalChecks": 53
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 65,
+            "totalChecks": 65
+          }
+        }
+      },
+      "photonomad1/kn_kglz_2jn_book": {
+        "fullName": "photonomad1/kn_kglz_2jn_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "kglz",
+          "bookId": "2jn",
+          "percentCompleted": 1,
+          "completedVerses": 13,
+          "totalVerses": 13,
+          "unalignedOrig": 0,
+          "unalignedTarget": 0
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "kglz",
+          "bookId": "2jn",
+          "translationNotes": {
+            "percentCompleted": 1,
+            "completedChecks": 53,
+            "totalChecks": 53
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 65,
+            "totalChecks": 65
+          }
+        }
+      }
+    },
+    "waNearlyFinished": {
+      "India_BCS/kn_irv_tit_book": {
+        "fullName": "India_BCS/kn_irv_tit_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "tit",
+          "percentCompleted": 0.96,
+          "completedVerses": 48,
+          "totalVerses": 50,
+          "unalignedOrig": 246,
+          "unalignedTarget": 183
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "irv",
+          "bookId": "tit",
+          "translationNotes": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 35
+          },
+          "translationWords": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 244
+          }
+        }
+      },
+      "russp41/kn_irvc_tit_book": {
+        "fullName": "russp41/kn_irvc_tit_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "irvc",
+          "bookId": "tit",
+          "percentCompleted": 0.96,
+          "completedVerses": 48,
+          "totalVerses": 50,
+          "unalignedOrig": 246,
+          "unalignedTarget": 183
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "irvc",
+          "bookId": "tit",
+          "translationNotes": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 35
+          },
+          "translationWords": {
+            "percentCompleted": 0,
+            "completedChecks": 0,
+            "totalChecks": 241
+          }
+        }
+      }
+    },
+    "allFinished": {
+      "India_BCS/kn_glt_tit_book": {
+        "fullName": "India_BCS/kn_glt_tit_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "glt",
+          "bookId": "tit",
+          "percentCompleted": 1,
+          "completedVerses": 46,
+          "totalVerses": 46,
+          "unalignedOrig": 0,
+          "unalignedTarget": 0
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "glt",
+          "bookId": "tit",
+          "translationNotes": {
+            "percentCompleted": 1,
+            "completedChecks": 84,
+            "totalChecks": 84
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 221,
+            "totalChecks": 221
+          }
+        }
+      },
+      "India_BCS/kn_kglt_3jn_book": {
+        "fullName": "India_BCS/kn_kglt_3jn_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "kglt",
+          "bookId": "3jn",
+          "percentCompleted": 1,
+          "completedVerses": 15,
+          "totalVerses": 15,
+          "unalignedOrig": 0,
+          "unalignedTarget": 0
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "kglt",
+          "bookId": "3jn",
+          "translationNotes": {
+            "percentCompleted": 1,
+            "completedChecks": 18,
+            "totalChecks": 18
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 63,
+            "totalChecks": 63
+          }
+        }
+      },
+      "India_BCS/kn_gst_3jn_book": {
+        "fullName": "India_BCS/kn_gst_3jn_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "gst",
+          "bookId": "3jn",
+          "percentCompleted": 1,
+          "completedVerses": 15,
+          "totalVerses": 15,
+          "unalignedOrig": 1,
+          "unalignedTarget": 0
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "gst",
+          "bookId": "3jn",
+          "translationNotes": {
+            "percentCompleted": 1,
+            "completedChecks": 18,
+            "totalChecks": 18
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 63,
+            "totalChecks": 63
+          }
+        }
+      },
+      "India_BCS/kn_gst_tit_book": {
+        "fullName": "India_BCS/kn_gst_tit_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "gst",
+          "bookId": "tit",
+          "percentCompleted": 1,
+          "completedVerses": 49,
+          "totalVerses": 49,
+          "unalignedOrig": 9,
+          "unalignedTarget": 0
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "gst",
+          "bookId": "tit",
+          "translationNotes": {
+            "percentCompleted": 1,
+            "completedChecks": 84,
+            "totalChecks": 84
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 221,
+            "totalChecks": 221
+          }
+        }
+      },
+      "India_BCS/kn_gst_2jn_book": {
+        "fullName": "India_BCS/kn_gst_2jn_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "gst",
+          "bookId": "2jn",
+          "percentCompleted": 1,
+          "completedVerses": 13,
+          "totalVerses": 13,
+          "unalignedOrig": 6,
+          "unalignedTarget": 0
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "gst",
+          "bookId": "2jn",
+          "translationNotes": {
+            "percentCompleted": 1,
+            "completedChecks": 53,
+            "totalChecks": 53
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 65,
+            "totalChecks": 65
+          }
+        }
+      },
+      "India_BCS/kn_gst_rut_book": {
+        "fullName": "India_BCS/kn_gst_rut_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "gst",
+          "bookId": "rut",
+          "percentCompleted": 1,
+          "completedVerses": 85,
+          "totalVerses": 85,
+          "unalignedOrig": 0,
+          "unalignedTarget": 0
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "gst",
+          "bookId": "rut",
+          "translationNotes": {
+            "percentCompleted": 1,
+            "completedChecks": 129,
+            "totalChecks": 129
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 296,
+            "totalChecks": 296
+          }
+        }
+      },
+      "tCore-test-data/kn_kglt_2jn_book": {
+        "fullName": "tCore-test-data/kn_kglt_2jn_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "kglt",
+          "bookId": "2jn",
+          "percentCompleted": 1,
+          "completedVerses": 13,
+          "totalVerses": 13,
+          "unalignedOrig": 0,
+          "unalignedTarget": 0
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "kglt",
+          "bookId": "2jn",
+          "translationNotes": {
+            "percentCompleted": 1,
+            "completedChecks": 53,
+            "totalChecks": 53
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 65,
+            "totalChecks": 65
+          }
+        }
+      },
+      "India_BCS/kn_kglt_jon_book": {
+        "fullName": "India_BCS/kn_kglt_jon_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "kglt",
+          "bookId": "jon",
+          "percentCompleted": 1,
+          "completedVerses": 48,
+          "totalVerses": 48,
+          "unalignedOrig": 0,
+          "unalignedTarget": 1
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "kglt",
+          "bookId": "jon",
+          "translationNotes": {
+            "percentCompleted": 1,
+            "completedChecks": 87,
+            "totalChecks": 87
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 188,
+            "totalChecks": 188
+          }
+        }
+      },
+      "India_BCS/kn_kglt_rut_book": {
+        "fullName": "India_BCS/kn_kglt_rut_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "kglt",
+          "bookId": "rut",
+          "percentCompleted": 1,
+          "completedVerses": 85,
+          "totalVerses": 85,
+          "unalignedOrig": 0,
+          "unalignedTarget": 0
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "kglt",
+          "bookId": "rut",
+          "translationNotes": {
+            "percentCompleted": 1,
+            "completedChecks": 131,
+            "totalChecks": 131
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 296,
+            "totalChecks": 296
+          }
+        }
+      },
+      "ghayden/kn_test_2jn_book": {
+        "fullName": "ghayden/kn_test_2jn_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "test",
+          "bookId": "2jn",
+          "percentCompleted": 1,
+          "completedVerses": 13,
+          "totalVerses": 13,
+          "unalignedOrig": 0,
+          "unalignedTarget": 0
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "test",
+          "bookId": "2jn",
+          "translationNotes": {
+            "percentCompleted": 1,
+            "completedChecks": 53,
+            "totalChecks": 53
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 65,
+            "totalChecks": 65
+          }
+        }
+      },
+      "photonomad1/kn_kglz_2jn_book": {
+        "fullName": "photonomad1/kn_kglz_2jn_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "kglz",
+          "bookId": "2jn",
+          "percentCompleted": 1,
+          "completedVerses": 13,
+          "totalVerses": 13,
+          "unalignedOrig": 0,
+          "unalignedTarget": 0
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "kglz",
+          "bookId": "2jn",
+          "translationNotes": {
+            "percentCompleted": 1,
+            "completedChecks": 53,
+            "totalChecks": 53
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 65,
+            "totalChecks": 65
+          }
+        }
+      }
+    },
+    "allNearlyFinished": {
+      "India_BCS/kn_gst_1ti_book": {
+        "fullName": "India_BCS/kn_gst_1ti_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "gst",
+          "bookId": "1ti",
+          "percentCompleted": 1,
+          "completedVerses": 113,
+          "totalVerses": 113,
+          "unalignedOrig": 35,
+          "unalignedTarget": 0
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "gst",
+          "bookId": "1ti",
+          "translationNotes": {
+            "percentCompleted": 0.99,
+            "completedChecks": 301,
+            "totalChecks": 304
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 485,
+            "totalChecks": 485
+          }
+        }
+      },
+      "India_BCS/kn_kgst_eph_book": {
+        "fullName": "India_BCS/kn_kgst_eph_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "kgst",
+          "bookId": "eph",
+          "percentCompleted": 1,
+          "completedVerses": 155,
+          "totalVerses": 155,
+          "unalignedOrig": 81,
+          "unalignedTarget": 1
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "kgst",
+          "bookId": "eph",
+          "translationNotes": {
+            "percentCompleted": 0.964516129032258,
+            "completedChecks": 299,
+            "totalChecks": 310
+          },
+          "translationWords": {
+            "percentCompleted": 0.977810650887574,
+            "completedChecks": 661,
+            "totalChecks": 676
+          }
+        }
+      },
+      "India_BCS/kn_kglt_eph_book": {
+        "fullName": "India_BCS/kn_kglt_eph_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "kglt",
+          "bookId": "eph",
+          "percentCompleted": 1,
+          "completedVerses": 163,
+          "totalVerses": 163,
+          "unalignedOrig": 1,
+          "unalignedTarget": 31
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "kglt",
+          "bookId": "eph",
+          "translationNotes": {
+            "percentCompleted": 0.9870967741935484,
+            "completedChecks": 306,
+            "totalChecks": 310
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 676,
+            "totalChecks": 676
+          }
+        }
+      },
+      "India_BCS/kn_kglt_1ti_book": {
+        "fullName": "India_BCS/kn_kglt_1ti_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "kglt",
+          "bookId": "1ti",
+          "percentCompleted": 1,
+          "completedVerses": 122,
+          "totalVerses": 122,
+          "unalignedOrig": 0,
+          "unalignedTarget": 79
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "kglt",
+          "bookId": "1ti",
+          "translationNotes": {
+            "percentCompleted": 0.99,
+            "completedChecks": 303,
+            "totalChecks": 304
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 485,
+            "totalChecks": 485
+          }
+        }
+      },
+      "India_BCS/kn_gst_2ti_book": {
+        "fullName": "India_BCS/kn_gst_2ti_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "gst",
+          "bookId": "2ti",
+          "percentCompleted": 1,
+          "completedVerses": 83,
+          "totalVerses": 83,
+          "unalignedOrig": 35,
+          "unalignedTarget": 1
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "gst",
+          "bookId": "2ti",
+          "translationNotes": {
+            "percentCompleted": 0.9862542955326461,
+            "completedChecks": 287,
+            "totalChecks": 291
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 355,
+            "totalChecks": 355
+          }
+        }
+      },
+      "India_BCS/kn_gst_jon_book": {
+        "fullName": "India_BCS/kn_gst_jon_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "gst",
+          "bookId": "jon",
+          "percentCompleted": 1,
+          "completedVerses": 48,
+          "totalVerses": 48,
+          "unalignedOrig": 6,
+          "unalignedTarget": 1
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "gst",
+          "bookId": "jon",
+          "translationNotes": {
+            "percentCompleted": 0.9885057471264368,
+            "completedChecks": 86,
+            "totalChecks": 87
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 188,
+            "totalChecks": 188
+          }
+        }
+      },
+      "India_BCS/kn_kglt_2ti_book": {
+        "fullName": "India_BCS/kn_kglt_2ti_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "kglt",
+          "bookId": "2ti",
+          "percentCompleted": 1,
+          "completedVerses": 83,
+          "totalVerses": 83,
+          "unalignedOrig": 0,
+          "unalignedTarget": 0
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "kglt",
+          "bookId": "2ti",
+          "translationNotes": {
+            "percentCompleted": 0.99,
+            "completedChecks": 288,
+            "totalChecks": 290
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 355,
+            "totalChecks": 355
+          }
+        }
+      },
+      "India_BCS/kn_glt_jas_book": {
+        "fullName": "India_BCS/kn_glt_jas_book",
+        "wA": {
+          "langId": "kn",
+          "projectId": "glt",
+          "bookId": "jas",
+          "percentCompleted": 1,
+          "completedVerses": 110,
+          "totalVerses": 110,
+          "unalignedOrig": 1,
+          "unalignedTarget": 0
+        },
+        "checks": {
+          "langId": "kn",
+          "projectId": "glt",
+          "bookId": "jas",
+          "translationNotes": {
+            "percentCompleted": 0.9819494584837545,
+            "completedChecks": 544,
+            "totalChecks": 554
+          },
+          "translationWords": {
+            "percentCompleted": 1,
+            "completedChecks": 463,
+            "totalChecks": 463
+          }
+        }
+      }
+    }
+  }
+}

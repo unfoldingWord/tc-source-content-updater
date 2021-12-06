@@ -1,0 +1,310 @@
+{
+  "fr_ulb_tit_book": {
+    "fullName": "tCore-test-data/fr_ulb_tit_book",
+    "wA": {
+      "langId": "fr",
+      "projectId": "ulb",
+      "bookId": "tit",
+      "percentCompleted": 0,
+      "completedVerses": 0,
+      "totalVerses": 0,
+      "unalignedOrig": 0,
+      "unalignedTarget": 0
+    },
+    "checks": {
+      "langId": "fr",
+      "projectId": "ulb",
+      "bookId": "tit",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 0
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 0
+      }
+    }
+  },
+  "fr_miss_tit_book": {
+    "fullName": "tCore-test-data/fr_miss_tit_book",
+    "wA": {
+      "langId": "fr",
+      "projectId": "miss",
+      "bookId": "tit",
+      "percentCompleted": 0,
+      "completedVerses": 0,
+      "totalVerses": 0,
+      "unalignedOrig": 0,
+      "unalignedTarget": 0
+    },
+    "checks": {
+      "langId": "fr",
+      "projectId": "miss",
+      "bookId": "tit",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 0
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 0
+      }
+    }
+  },
+  "fr_test_tit_book": {
+    "fullName": "tCore-test-data/fr_test_tit_book",
+    "wA": {
+      "langId": "fr",
+      "projectId": "test",
+      "bookId": "tit",
+      "percentCompleted": 0,
+      "completedVerses": 0,
+      "totalVerses": 16,
+      "unalignedOrig": 251,
+      "unalignedTarget": 382
+    },
+    "checks": {
+      "langId": "fr",
+      "projectId": "test",
+      "bookId": "tit",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 0
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 0
+      }
+    }
+  },
+  "en_abcd_act_book": {
+    "fullName": "tCore-test-data/en_abcd_act_book",
+    "wA": {
+      "langId": "en",
+      "projectId": "abcd",
+      "bookId": "act",
+      "percentCompleted": 0.99,
+      "completedVerses": 1001,
+      "totalVerses": 1007,
+      "unalignedOrig": 38,
+      "unalignedTarget": 10
+    },
+    "checks": {
+      "langId": "en",
+      "projectId": "abcd",
+      "bookId": "act",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 0
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 0
+      }
+    }
+  },
+  "en_ult_1pe_book": {
+    "fullName": "tCore-test-data/en_ult_1pe_book",
+    "wA": {
+      "langId": "en",
+      "projectId": "ult",
+      "bookId": "1pe",
+      "percentCompleted": 0.99,
+      "completedVerses": 109,
+      "totalVerses": 110,
+      "unalignedOrig": 17,
+      "unalignedTarget": 4
+    },
+    "checks": {
+      "langId": "en",
+      "projectId": "ult",
+      "bookId": "1pe",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 0
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 0
+      }
+    }
+  },
+  "en_ult_mat_book": {
+    "fullName": "tCore-test-data/en_ult_mat_book",
+    "wA": {
+      "langId": "en",
+      "projectId": "ult",
+      "bookId": "mat",
+      "percentCompleted": 0.99,
+      "completedVerses": 1098,
+      "totalVerses": 1099,
+      "unalignedOrig": 8,
+      "unalignedTarget": 57
+    },
+    "checks": {
+      "langId": "en",
+      "projectId": "ult",
+      "bookId": "mat",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 0
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 0
+      }
+    }
+  },
+  "ne_ult_act_book": {
+    "fullName": "tCore-test-data/ne_ult_act_book",
+    "wA": {
+      "langId": "ne",
+      "projectId": "ult",
+      "bookId": "act",
+      "percentCompleted": 0.99,
+      "completedVerses": 1005,
+      "totalVerses": 1007,
+      "unalignedOrig": 2103,
+      "unalignedTarget": 13557
+    },
+    "checks": {
+      "langId": "ne",
+      "projectId": "ult",
+      "bookId": "act",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 0
+      },
+      "translationWords": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 0
+      }
+    }
+  },
+  "en_watw_mat_book": {
+    "fullName": "tCore-test-data/en_watw_mat_book",
+    "wA": {
+      "langId": "en",
+      "projectId": "watw",
+      "bookId": "mat",
+      "percentCompleted": 0.99,
+      "completedVerses": 1091,
+      "totalVerses": 1099,
+      "unalignedOrig": 45,
+      "unalignedTarget": 105
+    },
+    "checks": {
+      "langId": "en",
+      "projectId": "watw",
+      "bookId": "mat",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 1289
+      },
+      "translationWords": {
+        "percentCompleted": 0.99,
+        "completedChecks": 4088,
+        "totalChecks": 4093
+      }
+    }
+  },
+  "en_ult_luk_book": {
+    "fullName": "tCore-test-data/en_ult_luk_book",
+    "wA": {
+      "langId": "en",
+      "projectId": "ult",
+      "bookId": "luk",
+      "percentCompleted": 1,
+      "completedVerses": 1175,
+      "totalVerses": 1175,
+      "unalignedOrig": 43,
+      "unalignedTarget": 72
+    },
+    "checks": {
+      "langId": "en",
+      "projectId": "ult",
+      "bookId": "luk",
+      "translationNotes": {
+        "percentCompleted": 0,
+        "completedChecks": 0,
+        "totalChecks": 1287
+      },
+      "translationWords": {
+        "percentCompleted": 0.99,
+        "completedChecks": 4111,
+        "totalChecks": 4128
+      }
+    }
+  },
+  "en_ust_rut_book": {
+    "fullName": "tCore-test-data/en_ust_rut_book",
+    "wA": {
+      "langId": "en",
+      "projectId": "ust",
+      "bookId": "rut",
+      "percentCompleted": 1,
+      "completedVerses": 85,
+      "totalVerses": 85,
+      "unalignedOrig": 0,
+      "unalignedTarget": 0
+    },
+    "checks": {
+      "langId": "en",
+      "projectId": "ust",
+      "bookId": "rut",
+      "translationNotes": {
+        "percentCompleted": 0.1323529411764706,
+        "completedChecks": 9,
+        "totalChecks": 68
+      },
+      "translationWords": {
+        "percentCompleted": 0.013745704467353952,
+        "completedChecks": 4,
+        "totalChecks": 291
+      }
+    }
+  },
+  "kn_kglt_2jn_book": {
+    "fullName": "tCore-test-data/kn_kglt_2jn_book",
+    "wA": {
+      "langId": "kn",
+      "projectId": "kglt",
+      "bookId": "2jn",
+      "percentCompleted": 1,
+      "completedVerses": 13,
+      "totalVerses": 13,
+      "unalignedOrig": 0,
+      "unalignedTarget": 0
+    },
+    "checks": {
+      "langId": "kn",
+      "projectId": "kglt",
+      "bookId": "2jn",
+      "translationNotes": {
+        "percentCompleted": 1,
+        "completedChecks": 53,
+        "totalChecks": 53
+      },
+      "translationWords": {
+        "percentCompleted": 1,
+        "completedChecks": 65,
+        "totalChecks": 65
+      }
+    }
+  }
+}

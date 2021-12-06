@@ -8,6 +8,7 @@ import Updater from '../src';
 import semver from 'semver';
 import {getSubdirOfUnzippedResource, unzipResource} from '../src/helpers/resourcesHelpers';
 import {download} from '../src/helpers/downloadHelpers';
+import rimraf from 'rimraf';
 
 // require('os').homedir()
 
@@ -18,6 +19,7 @@ jest.unmock('../src/helpers/zipFileHelpers');
 const HOME_DIR = os.homedir();
 const USER_RESOURCES_PATH = path.join(HOME_DIR, 'translationCore/resources');
 const TRANSLATION_HELPS = 'translationHelps';
+const searchForLangAndBook = `https://git.door43.org/api/v1/repos/search?q=hi%5C_%25%5C_act%5C_book&sort=updated&order=desc&limit=30`;
 
 describe('apiHelpers.getCatalog', () => {
   it('should get the resulting catalog', () => {
@@ -99,15 +101,88 @@ describe('apiHelpers compare pivoted.json with CN', () => {
 });
 
 describe('test project', () => {
-  it('download repo', async () => {
+  it('search, download and verify projects in org', async () => {
+    // const org = 'India_BCS';
+    // const langId = 'hi';
+    // const org = 'TC_SAVE';
+    // const langId = '%25'; // match all languages
+    // const org = 'tCore-test-data';
+    // const langId = '%25'; // match all languages
+    // const org = 'Amos.Khokhar';
+    // const langId = '%25'; // match all languages
+    const org = null; // all orgs
+    const langId = 'es-419';
+    const resourcesPath = './downloads';
+    const outputFolder = './tc_repos';
+    let searchUrl = `https://git.door43.org/api/v1/repos/search?q=${langId}%5C_%25%5C_%25%5C_book&sort=id&order=asc&limit=50`;
+    if (org) {
+      searchUrl += `&owner=${org}`;
+    }
+    const repos = await apiHelpers.doMultipartQuery(searchUrl);
+    console.log(`found ${repos.length} projects`);
+    let projectResults = {};
+    for (const project of repos) {
+      const results = await downloadAndVerifyProject(project, resourcesPath, project.full_name);
+      console.log(JSON.stringify(results));
+      projectResults[project.name] = results;
+    }
+
+    const projectNames = Object.keys(projectResults);
+    const waFinished = {};
+    const waNearlyFinished = {};
+    const allFinished = {};
+    const allNearlyFinished = {};
+    for (const projectName of projectNames) {
+      const project = projectResults[projectName];
+      const fullName = project.fullName;
+      let waPercentComplete = 0;
+      let twPercentComplete = 0;
+      let tnPercentComplete = 0;
+      if (project.wA) {
+        waPercentComplete = project.wA.percentCompleted || 0;
+        if (waPercentComplete >= 0.9) {
+          if (waPercentComplete === 1) {
+            waFinished[fullName] = project;
+          } else {
+            waNearlyFinished[fullName] = project;
+          }
+          if (project.checks) {
+            twPercentComplete = project.checks.translationWords && project.checks.translationWords.percentCompleted || 0;
+            tnPercentComplete = project.checks.translationNotes && project.checks.translationNotes.percentCompleted || 0;
+            if (twPercentComplete >= 0.9 && tnPercentComplete >= 0.9) {
+              if (twPercentComplete === 1 && tnPercentComplete === 1) {
+                allFinished[fullName] = project;
+              } else {
+                allNearlyFinished[fullName] = project;
+              }
+            }
+          }
+        }
+      }
+    }
+    projectResults = {
+      ...projectResults,
+      goodProjects: {
+        waFinished,
+        waNearlyFinished,
+        allFinished,
+        allNearlyFinished,
+      },
+    };
+
+    const outputFile = path.join(outputFolder, 'orgs', `./${langId}-${org}-repos.json`);
+    fs.outputJsonSync(outputFile, projectResults);
+    console.log(`saved results into ${outputFile}`);
+  }, 500000);
+
+  it('download and verify project', async () => {
     const fullName = 'India_BCS/hi_hglt_1ti_book';
     const langId = 'hi';
     const resource = getResource(fullName, langId);
     const resourcesPath = './downloads';
-    fs.ensureDirSync(resourcesPath);
     try {
-      const filePath = await downloadRepo(resource, resourcesPath);
-      console.log(filePath);
+      const results = await downloadAndVerifyProject(resource, resourcesPath, fullName);
+      console.log(JSON.stringify(results));
     } catch (e) {
       console.log(`Error downloading ${fullName}`, e);
     }
@@ -117,63 +192,8 @@ describe('test project', () => {
     const projectsPath = path.join(HOME_DIR, `translationCore/projects`);
     const projects = fs.readdirSync(projectsPath);
     for (const project of projects) {
-      const projectPath = path.join(projectsPath, project);
-      if (fs.lstatSync(projectPath).isDirectory()) {
-        const [langId, projectId, bookId] = project.split('_');
-        if (bookId) {
-          const projectPath = path.join(projectsPath, project);
-          // '/Users/blm/translationCore/projects/en_algn_tit_book/.apps/translationCore/alignmentData/tit'
-          const alignmentSubPath = `.apps/translationCore/alignmentData/${bookId}`;
-          const indexPath_ = path.join(projectPath, alignmentSubPath);
-          let totalVerses = 0;
-          let completedVerses = 0;
-          let unalignedOrig = 0;
-          let unalignedTarget = 0;
-          const files = getDirJson(indexPath_);
-          // console.log(files);
-          let percentCompleted;
-
-          for (const file of files) {
-            const chapter = path.base(file);
-            const chapterData = fs.readJsonSync(path.join(indexPath_, file));
-            const verses = Object.keys(chapterData);
-            for (const verse of verses) {
-              totalVerses++;
-              const verseData = chapterData[verse];
-              let originalUnAlignedCount = 0;
-              const wordBankCount = verseData.wordBank && verseData.wordBank.length || 0;
-              for (const alignment of verseData.alignments || []) {
-                if (alignment.bottomWords.length === 0) {
-                  originalUnAlignedCount += alignment.topWords.length;
-                }
-              }
-              let incomplete = (wordBankCount > 0) && (originalUnAlignedCount > 0);
-              if (incomplete) {
-                const completed = getAlignmentFlag(projectPath, 'completed', chapter, verse);
-                if (completed) {
-                  incomplete = false;
-                }
-              }
-              if (!incomplete) {
-                const invalid = getAlignmentFlag(projectPath, 'invalid', chapter, verse);
-                if (invalid) {
-                  incomplete = true;
-                }
-              }
-              completedVerses += (!incomplete) ? 1 : 0;
-            }
-          }
-          if (totalVerses === 0) {
-            percentCompleted = 0;
-          } else {
-            percentCompleted = completedVerses / totalVerses;
-            if (percentCompleted < 1 && percentCompleted > 0.99) {
-              percentCompleted = 0.99;
-            }
-          }
-          console.log(`${project}: ${totalVerses} totalVerses, ${completedVerses} completedVerses, ${Math.round(100 * percentCompleted)}% completed`);
-        }
-      }
+      const results = verifyAlignments(project, projectsPath);
+      console.log(JSON.stringify(percentCompleted));
     }
   });
 
@@ -181,40 +201,8 @@ describe('test project', () => {
     const projectsPath = path.join(HOME_DIR, `translationCore/projects`);
     const projects = fs.readdirSync(projectsPath);
     for (const project of projects) {
-      const projectPath = path.join(projectsPath, project);
-      if (fs.lstatSync(projectPath).isDirectory()) {
-        const [langId, projectId, bookId] = project.split('_');
-        if (bookId) {
-          const projectPath = path.join(projectsPath, project);
-          const tools = ['translationNotes', 'translationWords'];
-          for (const tool of tools) {
-            const indexSubPath = '.apps/translationCore/index/' + tool + '/' + bookId;
-            const indexPath_ = path.join(projectPath, indexSubPath);
-            let totalChecks = 0;
-            let completedChecks = 0;
-            const files = getDirJson(indexPath_);
-            // console.log(files);
-            let percentCompleted;
-
-            for (const file of files) {
-              const checks = fs.readJsonSync(path.join(indexPath_, file));
-              for (const check of checks) {
-                totalChecks++;
-                completedChecks += (check.selections || check.nothingToSelect) ? 1 : 0;
-              }
-            }
-            if (totalChecks === 0) {
-              percentCompleted = 0;
-            } else {
-              percentCompleted = completedChecks / totalChecks;
-              if (percentCompleted < 1 && percentCompleted > 0.99) {
-                percentCompleted = 0.99;
-              }
-            }
-            console.log(project + '-' + tool + ': ' + totalChecks + ' totalChecks, ' + completedChecks + 'completedChecks, ' + Math.round(100 * percentCompleted) + '% completed');
-          }
-        }
-      }
+      const results = verifyChecks(projectsPath, project);
+      console.log(JSON.stringify(percentCompleted));
     }
   });
 });
@@ -245,7 +233,7 @@ describe('apiHelpers searching for books', () => {
       const resourceId = book;
       console.log(`searching for book ${resourceId}`);
       fs.ensureDirSync(outputFolder);
-      const searchUrl = `https://git.door43.org/api/v1/repos/search?q=_${resourceId}_book&sort=updated&order=desc&limit=50`;
+      const searchUrl = `https://git.door43.org/api/v1/repos/search?q=%5C_${resourceId}%5C_book&sort=updated&order=desc&limit=50`;
       const repos = await apiHelpers.doMultipartQuery(searchUrl);
       console.log(`Search Found ${repos.length} total items`);
       const langRepos = {};
@@ -560,23 +548,174 @@ async function downloadRepo(resource, resourcesPath) {
       throw message;
     }
   } catch (err) {
-    throw Error('UNABLE_TO_DOWNLOAD_RESOURCES', err);
+    throw Error(`UNABLE_TO_DOWNLOAD_RESOURCES for ${downloadUrl}: ${err.toString()}`);
   }
   try {
     console.log('Unzipping: ' + resource.downloadUrl);
     importPath = await unzipResource(resource, zipFilePath, resourcesPath);
   } catch (err) {
-    throw Error('UNABLE_TO_UNZIP_RESOURCES', err);
+    throw Error(`UNABLE_TO_UNZIP_RESOURCES at ${zipFilePath}: ${err.toString()}`);
   }
   const importSubdirPath = getSubdirOfUnzippedResource(importPath);
   return importSubdirPath;
 }
 
 function getDirJson(indexPath_) {
-  return fs.readdirSync(indexPath_).filter(item => path.extname(item) === '.json');
+  if (fs.existsSync(indexPath_)) {
+    return fs.readdirSync(indexPath_).filter(item => path.extname(item) === '.json');
+  }
+  return [];
 }
 
 function getAlignmentFlag(projectPath, flag, chapter, verse) {
   const flagged = fs.existsSync(path.join(projectPath, '.apps/translationCore/tools/wordAlignment/', flag, chapter, verse + '.json'));
   return flagged;
+}
+
+function verifyAlignments(project, projectsPath) {
+  const projectPath = path.join(projectsPath, project);
+  if (fs.lstatSync(projectPath).isDirectory()) {
+    const [langId, projectId, bookId] = project.split('_');
+    if (bookId) {
+      // '/Users/blm/translationCore/projects/en_algn_tit_book/.apps/translationCore/alignmentData/tit'
+      const alignmentSubPath = `.apps/translationCore/alignmentData/${bookId}`;
+      const indexPath_ = path.join(projectPath, alignmentSubPath);
+      let totalVerses = 0;
+      let completedVerses = 0;
+      let unalignedOrig = 0;
+      let unalignedTarget = 0;
+      const files = getDirJson(indexPath_);
+      // console.log(files);
+      let percentCompleted;
+
+      for (const file of files) {
+        const chapter = path.base(file);
+        const chapterData = fs.readJsonSync(path.join(indexPath_, file));
+        const verses = Object.keys(chapterData);
+        for (const verse of verses) {
+          totalVerses++;
+          const verseData = chapterData[verse];
+          let originalUnAlignedCount = 0;
+          const wordBankCount = verseData.wordBank && verseData.wordBank.length || 0;
+          for (const alignment of verseData.alignments || []) {
+            if (alignment.bottomWords.length === 0) {
+              originalUnAlignedCount += alignment.topWords.length;
+            }
+          }
+          let incomplete = (wordBankCount > 0) && (originalUnAlignedCount > 0);
+          if (incomplete) {
+            const completed = getAlignmentFlag(projectPath, 'completed', chapter, verse);
+            if (completed) {
+              incomplete = false;
+            }
+          }
+          if (!incomplete) {
+            const invalid = getAlignmentFlag(projectPath, 'invalid', chapter, verse);
+            if (invalid) {
+              incomplete = true;
+            }
+          }
+          completedVerses += (!incomplete) ? 1 : 0;
+          unalignedOrig += originalUnAlignedCount;
+          unalignedTarget += wordBankCount;
+        }
+      }
+      if (totalVerses === 0) {
+        percentCompleted = 0;
+      } else {
+        percentCompleted = completedVerses / totalVerses;
+        if (percentCompleted < 1 && percentCompleted > 0.99) {
+          percentCompleted = 0.99;
+        }
+      }
+      console.log(`${project}: ${totalVerses} totalVerses, ${completedVerses} completedVerses, ${Math.round(100 * percentCompleted)}% completed`);
+      return {
+        langId,
+        projectId,
+        bookId,
+        percentCompleted,
+        completedVerses,
+        totalVerses,
+        unalignedOrig,
+        unalignedTarget,
+      };
+    }
+  }
+  return null;
+}
+
+function verifyChecks(projectsPath, project) {
+  const projectPath = path.join(projectsPath, project);
+  let results = null;
+  if (fs.lstatSync(projectPath).isDirectory()) {
+    const [langId, projectId, bookId] = project.split('_');
+    results = {langId, projectId, bookId};
+    if (bookId) {
+      const projectPath = path.join(projectsPath, project);
+      const tools = ['translationNotes', 'translationWords'];
+      for (const tool of tools) {
+        const indexSubPath = '.apps/translationCore/index/' + tool + '/' + bookId;
+        const indexPath_ = path.join(projectPath, indexSubPath);
+        let totalChecks = 0;
+        let completedChecks = 0;
+        const files = getDirJson(indexPath_);
+        // console.log(files);
+        let percentCompleted;
+
+        for (const file of files) {
+          const checks = fs.readJsonSync(path.join(indexPath_, file));
+          for (const check of checks) {
+            totalChecks++;
+            completedChecks += (check.selections || check.nothingToSelect) ? 1 : 0;
+          }
+        }
+        if (totalChecks === 0) {
+          percentCompleted = 0;
+        } else {
+          percentCompleted = completedChecks / totalChecks;
+          if (percentCompleted < 1 && percentCompleted > 0.99) {
+            percentCompleted = 0.99;
+          }
+        }
+        results[tool] = {
+          percentCompleted,
+          completedChecks,
+          totalChecks,
+        };
+        console.log(project + '-' + tool + ': ' + totalChecks + ' totalChecks, ' + completedChecks + ' completedChecks, ' + Math.round(100 * percentCompleted) + '% completed');
+      }
+    }
+  }
+
+  return results;
+}
+
+async function downloadAndVerifyProject(resource, resourcesPath, fullName) {
+  const project = resource.name;
+  let results;
+  fs.ensureDirSync(resourcesPath);
+  const importFolder = path.join(resourcesPath, 'imports');
+  if (fs.existsSync(importFolder)) {
+    rimraf.sync(importFolder, fs);
+  }
+  try {
+    const filePath = await downloadRepo(resource, resourcesPath);
+    console.log(filePath);
+    const projectsPath = path.join(importFolder, project);
+    const wA = verifyAlignments(project, projectsPath);
+    const checks = verifyChecks(projectsPath, project);
+    results = {
+      fullName,
+      wA,
+      checks,
+    };
+  } catch (e) {
+    const message = `could not download ${resource.full_name}: ${e.toString()}`;
+    console.log(message, e);
+    results = {
+      fullName,
+      ERROR: message,
+    };
+  }
+  return results;
 }
