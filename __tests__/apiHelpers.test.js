@@ -9,6 +9,7 @@ import semver from 'semver';
 import {getSubdirOfUnzippedResource, unzipResource} from '../src/helpers/resourcesHelpers';
 import {download} from '../src/helpers/downloadHelpers';
 import rimraf from 'rimraf';
+import {makeRequestDetailed} from "../src/helpers/apiHelpers";
 
 // require('os').homedir()
 
@@ -21,7 +22,7 @@ const USER_RESOURCES_PATH = path.join(HOME_DIR, 'translationCore/resources');
 const TRANSLATION_HELPS = 'translationHelps';
 const searchForLangAndBook = `https://git.door43.org/api/v1/repos/search?q=hi%5C_%25%5C_act%5C_book&sort=updated&order=desc&limit=30`;
 
-describe('apiHelpers.getCatalog', () => {
+describe.skip('apiHelpers.getCatalog', () => {
   it('should get the resulting catalog', () => {
     return apiHelpers.getCatalog().then(res => {
       expect(res).toMatchObject({
@@ -47,7 +48,7 @@ describe('apiHelpers.getCatalog', () => {
   });
 });
 
-describe('apiHelpers compare pivoted.json with CN', () => {
+describe.skip('apiHelpers compare pivoted.json with CN', () => {
   it('should make a merged CSV', async () => {
     const res = await apiHelpers.getCatalog();
     expect(res).toMatchObject({
@@ -100,7 +101,7 @@ describe('apiHelpers compare pivoted.json with CN', () => {
   }, 10000);
 });
 
-describe('test project', () => {
+describe.skip('test project', () => {
   it('search, download and verify projects in org', async () => {
     // const org = 'India_BCS';
     // const langId = 'hi';
@@ -207,7 +208,7 @@ describe('test project', () => {
   });
 });
 
-describe('test API', () => {
+describe.skip('test API', () => {
   it('test Updater', async () => {
 
     const sourceContentUpdater = new Updater();
@@ -224,7 +225,7 @@ describe('test API', () => {
   }, 60000);
 });
 
-describe('apiHelpers searching for books', () => {
+describe.skip('apiHelpers searching for books', () => {
   const outputFolder = './tc_repos';
   const bookIds = ['rut', 'jon', 'est', 'ezr', 'neh', 'oba', 'luk', 'eph', '1ti', '2ti', 'tit', 'jas', '1jn', '2jn', '3jn'];
 
@@ -283,7 +284,7 @@ describe('apiHelpers searching for books', () => {
   });
 });
 
-describe('apiHelpers.getCatalogCN', () => {
+describe.skip('apiHelpers.getCatalogCN', () => {
   it('should get the CN catalog', async () => {
     const filteredSearch = 'https://git.door43.org/api/catalog/v5/search?subject=Bible%2CAligned%20Bible%2CGreek_New_Testament%2CHebrew_Old_Testament%2CTranslation%20Words%2CTranslation%20Notes%2CTranslation%20Academy&sort=subject&limit=50';
     const unFilteredSearch = 'https://git.door43.org/api/catalog/v5/search?sort=subject&limit=50';
@@ -718,4 +719,37 @@ async function downloadAndVerifyProject(resource, resourcesPath, fullName) {
     };
   }
   return results;
+}
+
+function getUniqueChecks(uniqueChecks, repoPath, repo) {
+  const [, bookId] = book.split('-');
+  if (!uniqueChecks[bookId]) {
+    uniqueChecks[bookId] = {};
+  }
+  const bookChecks = uniqueChecks[bookId];
+  try {
+    // const {response, body} = await makeRequestDetailed(bookUrl); // TODO: get from file
+    const lines = body.split('\n');
+    for (let i = 1, l = lines.length; i < l; i++) {
+      const line = lines[i];
+      if (line) {
+        const fields = line.split('\t');
+        const [bookId, chapter, verse, id, supportRef, origQuote, occurrence, glQuote, occurrenceNote] = fields;
+        if (occurrenceNote && origQuote && supportRef) {
+          const key = `${chapter}-${verse}-${supportRef}`;
+          if (!bookChecks[key]) {
+            bookChecks[key] = 1;
+          } else {
+            bookChecks[key]++;
+          }
+        } else {
+          // console.log(`skipping ${line}`);
+        }
+      }
+    }
+    console.log(`book processed: ${book}`);
+  } catch (e) {
+    console.log(`file ${bookUrl} is not found`, e);
+  }
+  return {i, l};
 }
