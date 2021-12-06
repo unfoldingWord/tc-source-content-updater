@@ -113,7 +113,71 @@ describe('test project', () => {
     }
   },10000);
 
-  it('verify', async () => {
+  it('verify Alignments', async () => {
+    const projectsPath = path.join(HOME_DIR, `translationCore/projects`);
+    const projects = fs.readdirSync(projectsPath);
+    for (const project of projects) {
+      const projectPath = path.join(projectsPath, project);
+      if (fs.lstatSync(projectPath).isDirectory()) {
+        const [langId, projectId, bookId] = project.split('_');
+        if (bookId) {
+          const projectPath = path.join(projectsPath, project);
+          // '/Users/blm/translationCore/projects/en_algn_tit_book/.apps/translationCore/alignmentData/tit'
+          const alignmentSubPath = `.apps/translationCore/alignmentData/${bookId}`;
+          const indexPath_ = path.join(projectPath, alignmentSubPath);
+          let totalVerses = 0;
+          let completedVerses = 0;
+          let unalignedOrig = 0;
+          let unalignedTarget = 0;
+          const files = getDirJson(indexPath_);
+          // console.log(files);
+          let percentCompleted;
+
+          for (const file of files) {
+            const chapter = path.base(file);
+            const chapterData = fs.readJsonSync(path.join(indexPath_, file));
+            const verses = Object.keys(chapterData);
+            for (const verse of verses) {
+              totalVerses++;
+              const verseData = chapterData[verse];
+              let originalUnAlignedCount = 0;
+              const wordBankCount = verseData.wordBank && verseData.wordBank.length || 0;
+              for (const alignment of verseData.alignments || []) {
+                if (alignment.bottomWords.length === 0) {
+                  originalUnAlignedCount += alignment.topWords.length;
+                }
+              }
+              let incomplete = (wordBankCount > 0) && (originalUnAlignedCount > 0);
+              if (incomplete) {
+                const completed = getAlignmentFlag(projectPath, 'completed', chapter, verse);
+                if (completed) {
+                  incomplete = false;
+                }
+              }
+              if (!incomplete) {
+                const invalid = getAlignmentFlag(projectPath, 'invalid', chapter, verse);
+                if (invalid) {
+                  incomplete = true;
+                }
+              }
+              completedVerses += (!incomplete) ? 1 : 0;
+            }
+          }
+          if (totalVerses === 0) {
+            percentCompleted = 0;
+          } else {
+            percentCompleted = completedVerses / totalVerses;
+            if (percentCompleted < 1 && percentCompleted > 0.99) {
+              percentCompleted = 0.99;
+            }
+          }
+          console.log(`${project}: ${totalVerses} totalVerses, ${completedVerses} completedVerses, ${Math.round(100 * percentCompleted)}% completed`);
+        }
+      }
+    }
+  });
+
+  it('verify Checks', async () => {
     const projectsPath = path.join(HOME_DIR, `translationCore/projects`);
     const projects = fs.readdirSync(projectsPath);
     for (const project of projects) {
@@ -128,7 +192,7 @@ describe('test project', () => {
             const indexPath_ = path.join(projectPath, indexSubPath);
             let totalChecks = 0;
             let completedChecks = 0;
-            const files = fs.readdirSync(indexPath_).filter(item => path.extname(item) === '.json');
+            const files = getDirJson(indexPath_);
             // console.log(files);
             let percentCompleted;
 
@@ -143,6 +207,9 @@ describe('test project', () => {
               percentCompleted = 0;
             } else {
               percentCompleted = completedChecks / totalChecks;
+              if (percentCompleted < 1 && percentCompleted > 0.99) {
+                percentCompleted = 0.99;
+              }
             }
             console.log(project + '-' + tool + ': ' + totalChecks + ' totalChecks, ' + completedChecks + 'completedChecks, ' + Math.round(100 * percentCompleted) + '% completed');
           }
@@ -197,7 +264,7 @@ describe('apiHelpers searching for books', () => {
   it(`find tC repos for language`, async () => {
     const langList = {};
     const orgList = {};
-    const files = fs.readdirSync(outputFolder).filter(item => path.extname(item) === '.json');
+    const files = getDirJson(outputFolder);
     for (const file of files) {
       const [bookId] = file.split('-');
       const filePath = path.join(outputFolder, file);
@@ -503,4 +570,13 @@ async function downloadRepo(resource, resourcesPath) {
   }
   const importSubdirPath = getSubdirOfUnzippedResource(importPath);
   return importSubdirPath;
+}
+
+function getDirJson(indexPath_) {
+  return fs.readdirSync(indexPath_).filter(item => path.extname(item) === '.json');
+}
+
+function getAlignmentFlag(projectPath, flag, chapter, verse) {
+  const flagged = fs.existsSync(path.join(projectPath, '.apps/translationCore/tools/wordAlignment/', flag, chapter, verse + '.json'));
+  return flagged;
 }
