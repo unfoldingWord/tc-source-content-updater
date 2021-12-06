@@ -6,6 +6,8 @@ import os from 'os';
 import * as apiHelpers from '../src/helpers/apiHelpers';
 import Updater from '../src';
 import semver from 'semver';
+import {getSubdirOfUnzippedResource, unzipResource} from '../src/helpers/resourcesHelpers';
+import {download} from '../src/helpers/downloadHelpers';
 
 // require('os').homedir()
 
@@ -97,6 +99,20 @@ describe('apiHelpers compare pivoted.json with CN', () => {
 });
 
 describe('test project', () => {
+  it('download repo', async () => {
+    const fullName = 'India_BCS/hi_hglt_1ti_book';
+    const langId = 'hi';
+    const resource = getResource(fullName, langId);
+    const resourcesPath = './downloads';
+    fs.ensureDirSync(resourcesPath);
+    try {
+      const filePath = await downloadRepo(resource, resourcesPath);
+      console.log(filePath);
+    } catch (e) {
+      console.log(`Error downloading ${fullName}`, e);
+    }
+  },10000);
+
   it('verify', async () => {
     const projectsPath = path.join(HOME_DIR, `translationCore/projects`);
     const projects = fs.readdirSync(projectsPath);
@@ -434,4 +450,57 @@ function compareVersions(a, b) {
   }
 }
 
+function getResource(fullName, langId) {
+  const outputFolder = './tc_repos';
+  const dataFolder = path.join(outputFolder, 'orgs');
+  const repos = fs.readJsonSync(path.join(dataFolder, 'langRepos.json'));
+  const langRepos = repos && repos[langId];
+  if (langRepos) {
+    for (const repo of langRepos) {
+      if (repo.full_name === fullName) {
+        return repo;
+      }
+    }
+  }
+  return null;
+}
 
+/**
+ * download repo
+ * @param {Object} resource
+ * @param {string} resourcesPath
+ * @return {Promise<String>}
+ */
+async function downloadRepo(resource, resourcesPath) {
+  let zipFilePath;
+  let importPath;
+  let downloadComplete = false;
+  const importsPath = path.join(resourcesPath, 'imports');
+  let downloadUrl;
+
+  try {
+    const zipFileName = resource.name + '.zip';
+    zipFilePath = path.join(importsPath, zipFileName);
+    fs.ensureDirSync(importsPath);
+    downloadUrl = resource.html_url + '/archive/master.zip';
+    console.log('Downloading: ' + downloadUrl);
+    const results = await download(downloadUrl, zipFilePath);
+    if (results.status === 200) {
+      downloadComplete = true;
+    } else {
+      const message = `Download ${resource.downloadUrl} error, status: ${results.status}`;
+      console.log(message);
+      throw message;
+    }
+  } catch (err) {
+    throw Error('UNABLE_TO_DOWNLOAD_RESOURCES', err);
+  }
+  try {
+    console.log('Unzipping: ' + resource.downloadUrl);
+    importPath = await unzipResource(resource, zipFilePath, resourcesPath);
+  } catch (err) {
+    throw Error('UNABLE_TO_UNZIP_RESOURCES', err);
+  }
+  const importSubdirPath = getSubdirOfUnzippedResource(importPath);
+  return importSubdirPath;
+}
