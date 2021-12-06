@@ -6,7 +6,7 @@ import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
 
 const catalog = require('./fixtures/catalog');
 
-describe('parseCatalogResources()', () => {
+describe.skip('parseCatalogResources()', () => {
   it('should find Bibles', () => {
     const results = parseHelpers.parseCatalogResources(catalog, true, ['Bible']);
     expect(results.length).toEqual(38);
@@ -49,7 +49,7 @@ describe('parseCatalogResources()', () => {
   });
 });
 
-describe('getLatestResources()', () => {
+describe.skip('getLatestResources()', () => {
   it('should succeed with empty resourceList', () => {
     const resourceList = [];
     const results = parseHelpers.getLatestResources(catalog, resourceList);
@@ -121,7 +121,7 @@ describe('getLatestResources()', () => {
   });
 });
 
-describe('getUpdatedLanguageList()', () => {
+describe.skip('getUpdatedLanguageList()', () => {
   const resources = parseHelpers.getLatestResources(catalog, []);
 
   it('should succeed', () => {
@@ -135,7 +135,7 @@ describe('getUpdatedLanguageList()', () => {
   });
 });
 
-describe('getResourcesForLanguage()', () => {
+describe.skip('getResourcesForLanguage()', () => {
   const resources = parseHelpers.getLatestResources(catalog, []);
 
   it('should find el-x-koine', () => {

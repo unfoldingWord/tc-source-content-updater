@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "display": "library",
   "scripts": {
-    "test": "eslint ./src && jest",
+    "test": "eslint ./src && jest --json --outputFile=jest-results.json",
     "fix": "eslint ./src --fix",
     "prebuild": "rm -rf ./lib",
     "build": "NODE_ENV=production babel ./src -d ./lib",

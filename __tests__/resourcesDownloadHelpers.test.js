@@ -10,7 +10,7 @@ import * as errors from '../src/resources/errors';
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 const catalog = require('./fixtures/api.door43.org/v3/subjects/pivoted.json');
 
-describe('Tests for resourcesDownloadHelpers.downloadResources()', function() {
+describe.skip('Tests for resourcesDownloadHelpers.downloadResources()', function() {
   const resources = parseHelpers.getLatestResources(catalog, []);
   const resourcesPath = path.join(ospath.home(), 'translationCore/resources'); // a mocked resources directory
   beforeEach(() => {

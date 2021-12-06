@@ -7,7 +7,7 @@ import * as errors from '../src/resources/errors';
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 
-describe('Updater.downloadResources', () => {
+describe.skip('Updater.downloadResources', () => {
   const updater = new Updater();
   const resourcesPath = path.join(ospath.home(), 'translationCore/resources'); // a mocked resources directory
 
@@ -50,7 +50,7 @@ describe('Updater.downloadResources', () => {
   });
 
   // TODO: remove after testing
-  it.skip('should properly parse a special quote, character', async () => {
+  it('should properly parse a special quote, character', async () => {
     fs.__loadDirIntoMockFs(path.join(__dirname, 'fixtures'), path.join(__dirname, 'fixtures'));
     await updater.downloadResources(['en'], resourcesPath, [
       fs.readJsonSync(path.join(__dirname, 'fixtures/en_ult_resource.json'))
