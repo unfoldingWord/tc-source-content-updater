@@ -21,6 +21,7 @@ import {getOtherTnsOLVersions} from './translationHelps/tnArticleHelpers';
 // constants
 import * as errors from '../resources/errors';
 import * as Bible from '../resources/bible';
+import {getManifestData} from './apiHelpers';
 
 /**
  * add download error keeping track of error message, download url, and if parse error type (if not parse error, then download error)
@@ -59,6 +60,15 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
   } else if (!resourcesPath) {
     throw Error(formatError(resource, errors.RESOURCES_PATH_NOT_GIVEN));
   }
+
+  if (!resource.version || (resource.version === 'master')) {
+    const resourceData = resource.catalogEntry.resource;
+    const version = await getManifestData(resourceData.owner, resourceData.name);
+    if (version) {
+      resource.version = version;
+    }
+  }
+
   // Resource is the Greek UGNT or Hebrew UHB
   const isGreekOrHebrew = (resource.languageId === Bible.NT_ORIG_LANG && resource.resourceId === Bible.NT_ORIG_LANG_BIBLE) ||
     (resource.languageId === Bible.OT_ORIG_LANG && resource.resourceId === Bible.OT_ORIG_LANG_BIBLE);
