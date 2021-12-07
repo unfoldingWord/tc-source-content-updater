@@ -182,6 +182,40 @@ export const findMatchingResource = (resources, languageId, resourceId) => {
 };
 
 /**
+ * orders resources - ta,tw,tn then other resources
+ * @param {object} resource
+ * @return {number}
+ */
+function helpsOrder(resource) {
+  if (resource && resource.resourceId) {
+    if (resource.resourceId) {
+      switch (resource.resourceId.toLowerCase()) {
+        case 'ta':
+          return 0;
+        case 'tw':
+          return 1;
+        case 'tn':
+          return 2;
+        default:
+          return 100;
+      }
+    }
+  }
+  return 100000;
+}
+
+/**
+ * move helps resources to first in list - ta,tw,tn then other resources
+ * @param {object} a
+ * @param {object} b
+ * @return {number}
+ */
+function sortHelps(a, b) {
+  const order = helpsOrder(a) > helpsOrder(b) ? 1 : -1;
+  return order;
+}
+
+/**
  * @description Downloads the resources that need to be updated for the given languages using the DCS API
  * @param {Array} languageList - Array of languages to download the resources for
  * @param {String} resourcesPath - Path to the resources directory where each resource will be placed
@@ -216,7 +250,9 @@ export const downloadResources = (languageList, resourcesPath, resources, downlo
     const importsDir = path.join(resourcesPath, 'imports');
     let downloadableResources = [];
     languageList.forEach((languageId) => {
-      downloadableResources = downloadableResources.concat(parseHelpers.getResourcesForLanguage(resources, languageId));
+      let resourcesForLanguage = parseHelpers.getResourcesForLanguage(resources, languageId);
+      resourcesForLanguage = resourcesForLanguage.sort(sortHelps); // fetch helps first
+      downloadableResources = downloadableResources.concat(resourcesForLanguage);
     });
 
     if (allAlignedBibles) {

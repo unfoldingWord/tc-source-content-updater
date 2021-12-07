@@ -216,13 +216,13 @@ describe.skip('test API', () => {
     await sourceContentUpdater.getLatestResources(localResourceList)
       .then(async (updatedLanguages) => {
         // console.log(sourceContentUpdater.updatedCatalogResources);
-        await sourceContentUpdater.downloadResources(['ru'], './temp/updates');
+        await sourceContentUpdater.downloadResources(['el-x-koine', 'hbo', 'ru'], './temp/updates');
         console.log(updatedLanguages);
       })
       .catch((err) => {
         console.error('Local Resource List:', err);
       });
-  }, 60000);
+  }, 600000);
 });
 
 describe.skip('apiHelpers searching for books', () => {

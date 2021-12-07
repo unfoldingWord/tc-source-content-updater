@@ -213,9 +213,16 @@ export function parseCatalogResources(catalog, ignoreObsResources = true, subjec
       const languageId = catalogItem.language.toLowerCase();
       // for (let j = 0, rLen = resources.length; j < rLen; j++) {
       //   const resource = resources[j];
-        const isCheckingLevel2 = catalogItem.repo.checking_level >= 2;
-        const resourceId = catalogItem.name;
-        if (ignoreObsResources && (resourceId.indexOf('obs') >= 0)) { // see if we should skip obs resources
+      const isCheckingLevel2 = catalogItem.repo.checking_level >= 2;
+      let resourceId = catalogItem.name;
+      if (resourceId.includes('_')) {
+        // try to strip off languageId
+        const [, resourceId_] = resourceId.split('_');
+        if (resourceId_) {
+          resourceId = resourceId_;
+        }
+      }
+      if (ignoreObsResources && (resourceId.indexOf('obs') >= 0)) { // see if we should skip obs resources
           // console.log(`skipping OBS item: ${catalogItem.full_name}`);
           continue;
         }

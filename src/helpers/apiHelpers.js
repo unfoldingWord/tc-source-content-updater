@@ -78,7 +78,7 @@ export function makeJsonRequestDetailed(url) {
  */
 export async function doMultipartQueryPage(url, page = 1) {
   const url_ = `${url}&page=${page}`;
-  const {result, response, body} = await makeJsonRequestDetailed(url_);
+  const {result, response} = await makeJsonRequestDetailed(url_);
   const pos = response && response.rawHeaders && response.rawHeaders.indexOf('X-Total-Count');
   const totalCount = (pos >= 0) ? parseInt(response.rawHeaders[pos + 1]) : 0;
   const items = result && result.data || null;
