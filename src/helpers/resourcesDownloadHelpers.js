@@ -110,7 +110,6 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
         const twGroupDataResourcesPath = path.join(resourcesPath, resource.languageId, 'translationHelps', 'translationWords', 'v' + resource.version);
         try {
           await moveResourcesHelpers.moveResources(twGroupDataPath, twGroupDataResourcesPath);
-          removeAllButLatestVersion(path.dirname(twGroupDataResourcesPath));
         } catch (err) {
           throw Error(appendError(errors.UNABLE_TO_CREATE_TW_GROUP_DATA, err));
         }
@@ -122,11 +121,11 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
         throw Error(appendError(errors.UNABLE_TO_MOVE_RESOURCE_INTO_RESOURCES, err));
       }
       let versionsToNotDelete = [];
-      // Get the version numbers of the original language used by other tNs so that needed versions are not deleted.
-      if (isGreekOrHebrew) versionsToNotDelete = getOtherTnsOLVersions(resourcePath, resource.languageId);
-      // Make sure that the resource currently being downloaded is not deleted
-      versionsToNotDelete.push('v' + resource.version);
-      removeAllButLatestVersion(path.dirname(resourcePath), versionsToNotDelete);
+      if (!isGreekOrHebrew) {
+        // Make sure that the resource currently being downloaded is not deleted
+        versionsToNotDelete.push('v' + resource.version);
+        removeAllButLatestVersion(path.dirname(resourcePath), versionsToNotDelete);
+      }
     } else {
       throw Error(errors.FAILED_TO_PROCESS_RESOURCE);
     }
