@@ -3,13 +3,15 @@
 import fs from 'fs-extra';
 import path from 'path-extra';
 import os from 'os';
+import semver from 'semver';
+import rimraf from 'rimraf';
+import isEqual from 'deep-equal';
 import * as apiHelpers from '../src/helpers/apiHelpers';
 import Updater from '../src';
-import semver from 'semver';
 import {getSubdirOfUnzippedResource, unzipResource} from '../src/helpers/resourcesHelpers';
 import {download} from '../src/helpers/downloadHelpers';
-import rimraf from 'rimraf';
 import {makeRequestDetailed} from '../src/helpers/apiHelpers';
+import Bible from "../lib/resources/bible";
 
 // require('os').homedir()
 
@@ -21,6 +23,31 @@ const HOME_DIR = os.homedir();
 const USER_RESOURCES_PATH = path.join(HOME_DIR, 'translationCore/resources');
 const TRANSLATION_HELPS = 'translationHelps';
 const searchForLangAndBook = `https://git.door43.org/api/v1/repos/search?q=hi%5C_%25%5C_act%5C_book&sort=updated&order=desc&limit=30`;
+
+// runTest().then(() => console.log('Run test DONE'));
+//
+// async function runTest() {
+//   // const org = 'India_BCS';
+//   // const langId = 'hi';
+//   // const org = 'TC_SAVE';
+//   // const langId = '%25'; // match all languages
+//   // const org = 'tCore-test-data';
+//   // const langId = '%25'; // match all languages
+//   // const org = 'Amos.Khokhar';
+//   // const langId = '%25'; // match all languages
+//   const org = null; // all orgs
+//   const langId = 'en';
+//   const resourcesPath = './temp/downloads';
+//   const outputFolder = './temp/tc_repos';
+//   let searchUrl = `https://git.door43.org/api/v1/repos/search?q=${langId}%5C_%25%5C_%25%5C_book&sort=id&order=asc&limit=50`;
+//   if (org) {
+//     searchUrl += `&owner=${org}`;
+//   }
+//   console.log(`Searching for lang ${langId}, org ${org}`);
+//   const repos = await apiHelpers.doMultipartQuery(searchUrl);
+//   console.log(`found ${repos.length} projects`);
+//   await validateProjects(repos, resourcesPath, outputFolder, langId, org);
+// }
 
 describe.skip('apiHelpers.getCatalog', () => {
   it('should get the resulting catalog', () => {
@@ -101,7 +128,7 @@ describe.skip('apiHelpers compare pivoted.json with CN', () => {
   }, 10000);
 });
 
-describe.skip('test project', () => {
+describe('test project', () => {
   it('search, download and verify projects in org', async () => {
     // const org = 'India_BCS';
     // const langId = 'hi';
@@ -112,69 +139,18 @@ describe.skip('test project', () => {
     // const org = 'Amos.Khokhar';
     // const langId = '%25'; // match all languages
     const org = null; // all orgs
-    const langId = 'es-419';
+    const langId = 'hi';
     const resourcesPath = './temp/downloads';
     const outputFolder = './temp/tc_repos';
     let searchUrl = `https://git.door43.org/api/v1/repos/search?q=${langId}%5C_%25%5C_%25%5C_book&sort=id&order=asc&limit=50`;
     if (org) {
       searchUrl += `&owner=${org}`;
     }
+    console.log(`Searching for lang ${langId}, org ${org}`);
     const repos = await apiHelpers.doMultipartQuery(searchUrl);
     console.log(`found ${repos.length} projects`);
-    let projectResults = {};
-    for (const project of repos) {
-      const results = await downloadAndVerifyProject(project, resourcesPath, project.full_name);
-      console.log(JSON.stringify(results));
-      projectResults[project.name] = results;
-    }
-
-    const projectNames = Object.keys(projectResults);
-    const waFinished = {};
-    const waNearlyFinished = {};
-    const allFinished = {};
-    const allNearlyFinished = {};
-    for (const projectName of projectNames) {
-      const project = projectResults[projectName];
-      const fullName = project.fullName;
-      let waPercentComplete = 0;
-      let twPercentComplete = 0;
-      let tnPercentComplete = 0;
-      if (project.wA) {
-        waPercentComplete = project.wA.percentCompleted || 0;
-        if (waPercentComplete >= 0.9) {
-          if (waPercentComplete === 1) {
-            waFinished[fullName] = project;
-          } else {
-            waNearlyFinished[fullName] = project;
-          }
-          if (project.checks) {
-            twPercentComplete = project.checks.translationWords && project.checks.translationWords.percentCompleted || 0;
-            tnPercentComplete = project.checks.translationNotes && project.checks.translationNotes.percentCompleted || 0;
-            if (twPercentComplete >= 0.9 && tnPercentComplete >= 0.9) {
-              if (twPercentComplete === 1 && tnPercentComplete === 1) {
-                allFinished[fullName] = project;
-              } else {
-                allNearlyFinished[fullName] = project;
-              }
-            }
-          }
-        }
-      }
-    }
-    projectResults = {
-      ...projectResults,
-      goodProjects: {
-        waFinished,
-        waNearlyFinished,
-        allFinished,
-        allNearlyFinished,
-      },
-    };
-
-    const outputFile = path.join(outputFolder, 'orgs', `${langId}-${org}-repos.json`);
-    fs.outputJsonSync(outputFile, projectResults);
-    console.log(`saved results into ${outputFile}`);
-  }, 500000);
+    await validateProjects(repos, resourcesPath, outputFolder, langId, org);
+  }, 50000000);
 
   it('download and verify project', async () => {
     const fullName = 'India_BCS/hi_hglt_1ti_book';
@@ -183,11 +159,11 @@ describe.skip('test project', () => {
     const resourcesPath = './temp/downloads';
     try {
       const results = await downloadAndVerifyProject(resource, resourcesPath, fullName);
-      console.log(JSON.stringify(results));
+      console.log(results);
     } catch (e) {
       console.log(`Error downloading ${fullName}`, e);
     }
-  },10000);
+  },1000000);
 
   it('verify Alignments', async () => {
     const projectsPath = path.join(HOME_DIR, `translationCore/projects`);
@@ -202,7 +178,7 @@ describe.skip('test project', () => {
     const projectsPath = path.join(HOME_DIR, `translationCore/projects`);
     const projects = fs.readdirSync(projectsPath);
     for (const project of projects) {
-      const results = verifyChecks(projectsPath, project);
+      const results = await verifyChecks(projectsPath, project);
       console.log(JSON.stringify(percentCompleted));
     }
   });
@@ -645,10 +621,21 @@ function verifyAlignments(project, projectsPath) {
   return null;
 }
 
-function verifyChecks(projectsPath, project) {
+async function verifyChecks(projectsPath, project, checkMigration, resourcesPath) {
   const projectPath = path.join(projectsPath, project);
   let results = null;
   if (fs.lstatSync(projectPath).isDirectory()) {
+    if (checkMigration) {
+      if (fs.existsSync(resourcesPath)) {
+        const {languageId, resourceId, version} = await loadOlderOriginalLanguageResource(resourcesPath, projectPath, bookId);
+        if (!languageId) {
+          console.error('error downloading original language');
+          checkMigration = false;
+        }
+      } else {
+        console.log(`resource folder not found: ${resourcesPath}`);
+      }
+    }
     const [langId, projectId, bookId] = project.split('_');
     results = {langId, projectId, bookId};
     if (bookId) {
@@ -684,6 +671,13 @@ function verifyChecks(projectsPath, project) {
           totalChecks,
         };
         console.log(project + '-' + tool + ': ' + totalChecks + ' totalChecks, ' + completedChecks + ' completedChecks, ' + Math.round(100 * percentCompleted) + '% completed');
+        const stats = getUniqueChecks(projectsPath, project, tool);
+        if (stats) {
+          results[tool] = {
+            ...results[tool],
+            stats,
+          };
+        }
       }
     }
   }
@@ -704,7 +698,7 @@ async function downloadAndVerifyProject(resource, resourcesPath, fullName) {
     console.log(filePath);
     const projectsPath = path.join(importFolder, project);
     const wA = verifyAlignments(project, projectsPath);
-    const checks = verifyChecks(projectsPath, project);
+    const checks = await verifyChecks(projectsPath, project);
     results = {
       fullName,
       wA,
@@ -721,35 +715,376 @@ async function downloadAndVerifyProject(resource, resourcesPath, fullName) {
   return results;
 }
 
-function getUniqueChecks(uniqueChecks, repoPath, repo) {
-  const [, bookId] = book.split('-');
-  if (!uniqueChecks[bookId]) {
-    uniqueChecks[bookId] = {};
-  }
-  const bookChecks = uniqueChecks[bookId];
+function getUniqueChecks(projectsPath, project, toolName) {
+  const uniqueChecks = {};
+  const dupes = {};
+  let toolWarnings = '';
+  const [langId, projectId, bookId] = project.split('_');
   try {
-    // const {response, body} = await makeRequestDetailed(bookUrl); // TODO: get from file
-    const lines = body.split('\n');
-    for (let i = 1, l = lines.length; i < l; i++) {
-      const line = lines[i];
-      if (line) {
-        const fields = line.split('\t');
-        const [bookId, chapter, verse, id, supportRef, origQuote, occurrence, glQuote, occurrenceNote] = fields;
-        if (occurrenceNote && origQuote && supportRef) {
-          const key = `${chapter}-${verse}-${supportRef}`;
-          if (!bookChecks[key]) {
-            bookChecks[key] = 1;
-          } else {
-            bookChecks[key]++;
+    const groupDataPath = path.join(projectsPath, project, '.apps/translationCore/index', toolName, bookId);
+    const indexFiles = getDirJson(groupDataPath);
+    for (const indexFile of indexFiles) {
+      const groupData = fs.readJsonSync(path.join(groupDataPath, indexFile));
+      for (const groupItem of groupData) {
+        if (groupItem.contextId) {
+          const {chapter, verse} = groupItem.contextId.reference;
+          const {checkId, groupId, occurrence} = groupItem.contextId;
+          const key = `${checkId || ''}-${chapter}-${verse}-${groupId}-${occurrence}`;
+          if (!uniqueChecks[key]) {
+            uniqueChecks[key] = [];
           }
-        } else {
-          // console.log(`skipping ${line}`);
+          uniqueChecks[key].push(groupItem);
         }
       }
     }
-    console.log(`book processed: ${book}`);
+    const keys = Object.keys(uniqueChecks);
+    for (const key_ of keys) {
+      const uniqueCheck = uniqueChecks[key_];
+      if (uniqueCheck.length > 1) {
+        let warnings = '';
+        const selections = uniqueCheck.filter(check => check.selections);
+        if (selections.length) {
+          if (selections.length < uniqueCheck.length) {
+            const missingSelections = uniqueCheck.length - selections.length;
+            warnings += `Missing ${missingSelections} selections\t`;
+          }
+          if (selections.length > 1) {
+            let dupeSelections = 0;
+            for (let i = 0; i < selections.length - 1; i++) {
+              for (let j = i + 1; j < selections.length; j++) {
+                if (isEqual(selections[i], selections[j])) {
+                  dupeSelections++;
+                }
+              }
+            }
+            if (dupeSelections) {
+              warnings += `${dupeSelections} selections duplicated\t`;
+            }
+          }
+        }
+        if (warnings) {
+          toolWarnings += `${key_} - ${warnings}\n`;
+        }
+        const dupesList = uniqueCheck.map(item => (Array.isArray(item.selections) ? item.selections.map(item => (`${item.text}-${item.occurrence}`)).join(' ') : (item.selections || '').toString()));
+        dupes[key_] = {
+          dupesList,
+          warnings,
+        };
+      }
+    }
   } catch (e) {
-    console.log(`file ${bookUrl} is not found`, e);
+    const message = `error processing ${project}: ${e.toString()}\n`;
+    console.log(message);
+    toolWarnings += message;
   }
-  return {i, l};
+  console.log(`checks processed: ${project}`);
+  return {
+    dupes,
+    toolWarnings,
+  };
+}
+
+async function validateProjects(repos, resourcesPath, outputFolder, langId, org) {
+  let projectResults = {};
+  const summaryFile = path.join(outputFolder, 'orgs-pre', `${langId}-${org}-repos.json`);
+  if (fs.existsSync(summaryFile)) {
+    const summary = fs.readJsonSync(summaryFile);
+    if (summary && summary.projects) {
+      projectResults = summary.projects;
+    }
+  }
+  for (let i = repos.length - 1; i > 0; i--) {
+    const project = repos[i];
+    if (projectResults[project.full_name]) {
+      continue; // skip over if repo already processed
+    }
+    console.log(`${i+1} - Loading ${project.full_name}`);
+    const results = await downloadAndVerifyProject(project, resourcesPath, project.full_name);
+    if (results && results.wA && results.checks && (results.wA.warnings || results.checks.translationNotes.stats.toolWarnings || results.checks.translationWords.stats.toolWarnings)) {
+      const projectWarnings = `warnings: WA: ${results.wA.warnings}, TN: ${results.checks.translationNotes.stats.toolWarnings}, TW: ${results.checks.translationWords.stats.toolWarnings}`;
+      console.log(projectWarnings);
+      results.projectWarnings = projectWarnings;
+    }
+    // console.log(JSON.stringify(results));
+    projectResults[project.full_name] = results;
+    const totalProjects = repos.length;
+    const processedProjects = repos.length - i + 1;
+
+    const summary = {
+      processedProjects,
+      totalProjects,
+      projects: projectResults,
+    };
+    fs.outputJsonSync(summaryFile, summary);
+  }
+
+  const projectNames = Object.keys(projectResults);
+  const waFinished = {};
+  const waNearlyFinished = {};
+  const allFinished = {};
+  const allNearlyFinished = {};
+  for (const projectName of projectNames) {
+    try {
+      const project = projectResults[projectName];
+      const fullName = project.fullName;
+      let waPercentComplete = 0;
+      let twPercentComplete = 0;
+      let tnPercentComplete = 0;
+      if (project.wA) {
+        waPercentComplete = project.wA.percentCompleted || 0;
+        if (waPercentComplete >= 0.9) {
+          if (waPercentComplete === 1) {
+            waFinished[fullName] = project;
+          } else {
+            waNearlyFinished[fullName] = project;
+          }
+          if (project.checks) {
+            twPercentComplete = project.checks.translationWords && project.checks.translationWords.percentCompleted || 0;
+            tnPercentComplete = project.checks.translationNotes && project.checks.translationNotes.percentCompleted || 0;
+            if (twPercentComplete >= 0.9 && tnPercentComplete >= 0.9) {
+              if (twPercentComplete === 1 && tnPercentComplete === 1) {
+                allFinished[fullName] = project;
+              } else {
+                allNearlyFinished[fullName] = project;
+              }
+            }
+          }
+        }
+      }
+    } catch (e) {
+      const projectWarnings = `project failed: ${e.toString()}`;
+      console.log(projectWarnings);
+      results.projectWarnings = projectWarnings;
+      // console.log(JSON.stringify(results));
+      if (!projectResults[projectName]) {
+        projectResults[projectName] = {};
+      }
+      projectResults[projectName].projectWarnings = projectWarnings;
+    }
+  }
+  const results = {
+    projectSummaries: projectResults,
+    goodProjects: {
+      waFinished,
+      waNearlyFinished,
+      allFinished,
+      allNearlyFinished,
+    },
+  };
+
+  const outputFile = path.join(outputFolder, 'orgs', `${langId}-${org}-repos.json`);
+  fs.outputJsonSync(outputFile, results);
+  console.log(`saved results into ${outputFile}`);
+}
+
+/**
+ * Search folder for most recent version
+ * @param {string} bibleFolderPath
+ * @return {string} latest version found
+ */
+function getMostRecentVersionInFolder(bibleFolderPath) {
+  const versionNumbers = fs.readdirSync(bibleFolderPath).filter(folder => folder !== '.DS_Store'); // ex. v9
+  const latestVersion = getLatestVersion(versionNumbers);
+  return latestVersion;
+}
+
+export function getProjectManifest(projectPath) {
+  if (fs.existsSync(projectPath)) {
+    return fs.readJsonSync(path.join(projectPath, 'manifest.json'));
+  }
+  return {};
+}
+
+/**
+ * Returns the original language version number needed for tn's group data files.
+ * @param {array} tsvRelations
+ * @param {string} resourceId
+ */
+export function getTsvOLVersion(tsvRelations, resourceId) {
+  try {
+    let tsvOLVersion = null;
+
+    if (tsvRelations) {
+      // Get the query string from the tsv_relation array for given resourceId
+      const query = tsvRelations.find((query) => query.includes(resourceId));
+
+      if (query) {
+        // Get version number from query
+        tsvOLVersion = query.split('?v=')[1];
+      }
+    }
+    return tsvOLVersion;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+/**
+ * get current Original language resources by tN
+ * @param {Object} state - current reducers state
+ * @return {null|string}
+ */
+export function getCurrentOrigLangVersionForTn(projectPath, bookId) {
+  const { bibleId: origLangBibleId } = getOrigLangforBook(bookId);
+  // tn files are generated from a specific version number of the original language resources which are reference as relation
+  const { tsv_relation } = getProjectManifest(projectPath);
+  // Get version number needed by tn's tsv
+  const tsvOLVersion = getTsvOLVersion(tsv_relation, origLangBibleId);
+  return tsvOLVersion;
+}
+
+const TRANSLATION_NOTES = 'translationNotes';
+
+/**
+ * Loads the latest or an older version of the original based on tool requirements
+ * language resource based on the tool & project combo.
+ * @param {object}
+ */
+export const loadOlderOriginalLanguageResource = async (projectPath, bookId, toolName) => {
+  const {
+    origLangId, origLangBibleId, latestOlVersion, tsvOLVersion,
+  } = getOrigLangVersionInfoForTn(projectPath, bookId);
+
+  // if version of current original language resource if not the one needed by the tn groupdata
+  if (tsvOLVersion && (tsvOLVersion !== latestOlVersion) && toolName === TRANSLATION_NOTES) {
+    // load original language resource that matches version number for tn groupdata
+    console.log(`translationNotes requires original lang ${tsvOLVersion}`);
+    const resourceDetails = {languageId: origLangId, resourceId: 'ugnt', version: tsvOLVersion};
+    if (!fs.existsSync(resourcePath)) {
+      const sourceContentUpdater = new Updater();
+      try {
+        await await sourceContentUpdater.downloadAndProcessResource(resourceDetails, USER_RESOURCES_PATH);
+      } catch (e) {
+        console.log(`could not download: ${JSON.stringify(resourceDetails)}`, e);
+        return {};
+      }
+    }
+    return resourceDetails;
+  } else {
+    if (!fs.existsSync(resourcePath)) {
+      const resourceDetails = {languageId: origLangId, resourceId: 'ugnt', version: latestOlVersion};
+      return resourceDetails;
+    }
+  }
+  return {};
+};
+
+/**
+ * gets the data that the tool needs
+ * @return {{resourceId, languageId, latestOlVersion, tsvOLVersion: (*|undefined)}}
+ */
+export function getOrigLangVersionInfoForTn(projectPath, bookId) {
+  const { bibleId: origLangBibleId, languageId: origLangId } = getOrigLangforBook(bookId);
+  const bibleFolderPath = path.join(USER_RESOURCES_PATH, origLangId, 'bibles', origLangBibleId);
+  let latestOlVersion = null;
+
+  if (fs.existsSync(bibleFolderPath)) {
+    latestOlVersion = getMostRecentVersionInFolder(bibleFolderPath);
+
+    if (latestOlVersion) {
+      latestOlVersion = latestOlVersion.replace('v',''); // strip off leading 'v'
+    }
+  }
+
+  const tsvOLVersion = getCurrentOrigLangVersionForTn(projectPath, bookId);
+  return {
+    origLangId, origLangBibleId, latestOlVersion, tsvOLVersion,
+  };
+}
+
+/**
+ * Nested version of the books of the bible object.
+ */
+export const BIBLE_BOOKS = {
+  oldTestament: {
+    'gen': 'Genesis',
+    'exo': 'Exodus',
+    'lev': 'Leviticus',
+    'num': 'Numbers',
+    'deu': 'Deuteronomy',
+    'jos': 'Joshua',
+    'jdg': 'Judges',
+    'rut': 'Ruth',
+    '1sa': '1 Samuel',
+    '2sa': '2 Samuel',
+    '1ki': '1 Kings',
+    '2ki': '2 Kings',
+    '1ch': '1 Chronicles',
+    '2ch': '2 Chronicles',
+    'ezr': 'Ezra',
+    'neh': 'Nehemiah',
+    'est': 'Esther',
+    'job': 'Job',
+    'psa': 'Psalms',
+    'pro': 'Proverbs',
+    'ecc': 'Ecclesiastes',
+    'sng': 'Song of Solomon',
+    'isa': 'Isaiah',
+    'jer': 'Jeremiah',
+    'lam': 'Lamentations',
+    'ezk': 'Ezekiel',
+    'dan': 'Daniel',
+    'hos': 'Hosea',
+    'jol': 'Joel',
+    'amo': 'Amos',
+    'oba': 'Obadiah',
+    'jon': 'Jonah',
+    'mic': 'Micah',
+    'nam': 'Nahum',
+    'hab': 'Habakkuk',
+    'zep': 'Zephaniah',
+    'hag': 'Haggai',
+    'zec': 'Zechariah',
+    'mal': 'Malachi',
+  },
+  newTestament: {
+    'mat': 'Matthew',
+    'mrk': 'Mark',
+    'luk': 'Luke',
+    'jhn': 'John',
+    'act': 'Acts',
+    'rom': 'Romans',
+    '1co': '1 Corinthians',
+    '2co': '2 Corinthians',
+    'gal': 'Galatians',
+    'eph': 'Ephesians',
+    'php': 'Philippians',
+    'col': 'Colossians',
+    '1th': '1 Thessalonians',
+    '2th': '2 Thessalonians',
+    '1ti': '1 Timothy',
+    '2ti': '2 Timothy',
+    'tit': 'Titus',
+    'phm': 'Philemon',
+    'heb': 'Hebrews',
+    'jas': 'James',
+    '1pe': '1 Peter',
+    '2pe': '2 Peter',
+    '1jn': '1 John',
+    '2jn': '2 John',
+    '3jn': '3 John',
+    'jud': 'Jude',
+    'rev': 'Revelation',
+  },
+};
+
+/**
+ * tests if book is a Old Testament book
+ * @param bookId
+ * @return {boolean}
+ */
+export function isOldTestament(bookId) {
+  return bookId in BIBLE_BOOKS.oldTestament;
+}
+
+/**
+ * determine Original Language and Original Language bible for book
+ * @param bookId
+ * @return {{resourceLanguage: string, bibleID: string}}
+ */
+export function getOrigLangforBook(bookId) {
+  const isOT = isOldTestament(bookId);
+  const languageId = (isOT) ? Bible.OT_ORIG_LANG : Bible.NT_ORIG_LANG;
+  const bibleId = (isOT) ? Bible.OT_ORIG_LANG_BIBLE : Bible.NT_ORIG_LANG_BIBLE;
+  return { languageId, bibleId };
 }
