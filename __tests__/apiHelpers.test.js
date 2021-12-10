@@ -5,13 +5,13 @@ import path from 'path-extra';
 import os from 'os';
 import semver from 'semver';
 import rimraf from 'rimraf';
+// import nock from 'nock';
 import isEqual from 'deep-equal';
 import * as apiHelpers from '../src/helpers/apiHelpers';
 import Updater from '../src';
 import {getSubdirOfUnzippedResource, unzipResource} from '../src/helpers/resourcesHelpers';
 import {download} from '../src/helpers/downloadHelpers';
-import {makeRequestDetailed} from '../src/helpers/apiHelpers';
-import Bible from "../lib/resources/bible";
+import {NT_ORIG_LANG, NT_ORIG_LANG_BIBLE, OT_ORIG_LANG, OT_ORIG_LANG_BIBLE} from '../src/resources/bible';
 
 // require('os').homedir()
 
@@ -51,10 +51,10 @@ const searchForLangAndBook = `https://git.door43.org/api/v1/repos/search?q=hi%5C
 
 describe.skip('apiHelpers.getCatalog', () => {
   it('should get the resulting catalog', () => {
-    return apiHelpers.getCatalog().then(res => {
+    return apiHelpers.getCatalog().then((res) => {
       expect(res).toMatchObject({
         catalogs: expect.any(Array),
-        subjects: expect.any(Array)
+        subjects: expect.any(Array),
       });
       const items = res && res.subjects;
       console.log(`D43 Catalog returned ${items.length} total items`);
@@ -80,7 +80,7 @@ describe.skip('apiHelpers compare pivoted.json with CN', () => {
     const res = await apiHelpers.getCatalog();
     expect(res).toMatchObject({
       catalogs: expect.any(Array),
-      subjects: expect.any(Array)
+      subjects: expect.any(Array),
     });
     const items = res && res.subjects;
     console.log(`D43 Catalog returned ${items.length} total items`);
@@ -109,7 +109,7 @@ describe.skip('apiHelpers compare pivoted.json with CN', () => {
       const subject = item.subject;
       const repo = item.name;
       const org = item.owner;
-      const pos = csvLines.findIndex(line => ((line.repo === repo) && (line.org === org)));
+      const pos = csvLines.findIndex((line) => ((line.repo === repo) && (line.org === org)));
       if (pos >= 0) {
         const line = csvLines[pos];
         if (line.category === oldCatalog) {
@@ -124,7 +124,6 @@ describe.skip('apiHelpers compare pivoted.json with CN', () => {
 
     writeCsv2('./temp/Catalog-CN-and-Old.tsv', csvLines);
     console.log('done');
-
   }, 10000);
 });
 
@@ -140,6 +139,8 @@ describe('test project', () => {
     // const langId = '%25'; // match all languages
     const org = null; // all orgs
     const langId = 'hi';
+
+    const checkMigration = true;
     const resourcesPath = './temp/downloads';
     const outputFolder = './temp/tc_repos';
     let searchUrl = `https://git.door43.org/api/v1/repos/search?q=${langId}%5C_%25%5C_%25%5C_book&sort=id&order=asc&limit=50`;
@@ -149,7 +150,7 @@ describe('test project', () => {
     console.log(`Searching for lang ${langId}, org ${org}`);
     const repos = await apiHelpers.doMultipartQuery(searchUrl);
     console.log(`found ${repos.length} projects`);
-    await validateProjects(repos, resourcesPath, outputFolder, langId, org);
+    await validateProjects(repos, resourcesPath, outputFolder, langId, org, checkMigration);
   }, 50000000);
 
   it('download and verify project', async () => {
@@ -163,7 +164,7 @@ describe('test project', () => {
     } catch (e) {
       console.log(`Error downloading ${fullName}`, e);
     }
-  },1000000);
+  }, 1000000);
 
   it('verify Alignments', async () => {
     const projectsPath = path.join(HOME_DIR, `translationCore/projects`);
@@ -186,7 +187,6 @@ describe('test project', () => {
 
 describe.skip('test API', () => {
   it('test Updater', async () => {
-
     const sourceContentUpdater = new Updater();
     const localResourceList = getLocalResourceList();
     await sourceContentUpdater.getLatestResources(localResourceList)
@@ -307,13 +307,13 @@ describe.skip('apiHelpers.getCatalogCN', () => {
 //
 
 function addCsvItem(list, org, repo, subject, item) {
-  const itemJson = JSON.stringify(item).replace('\t','\\t');
+  const itemJson = JSON.stringify(item).replace('\t', '\\t');
   list.push({org, repo, subject, resource: itemJson});
   // list.push(`${org}\t${repo}\t${subject}\t${itemJson}`);
 }
 
 function addCsvItem2(list, org, repo, subject, item, category) {
-  const itemJson = JSON.stringify(item).replace('\t','\\t');
+  const itemJson = JSON.stringify(item).replace('\t', '\\t');
   list.push({category, org, repo, subject, resource: itemJson});
   // list.push(`${org}\t${repo}\t${subject}\t${itemJson}`);
 }
@@ -351,7 +351,7 @@ const cleanReaddirSync = (path) => {
 
   if (fs.existsSync(path)) {
     cleanDirectories = fs.readdirSync(path)
-      .filter(file => file !== '.DS_Store');
+      .filter((file) => file !== '.DS_Store');
   } else {
     console.warn(`no such file or directory, ${path}`);
   }
@@ -367,7 +367,7 @@ export const getLocalResourceList = () => {
 
     const localResourceList = [];
     const resourceLanguages = fs.readdirSync(USER_RESOURCES_PATH)
-      .filter(file => path.extname(file) !== '.json' && file !== '.DS_Store');
+      .filter((file) => path.extname(file) !== '.json' && file !== '.DS_Store');
 
     for (let i = 0; i < resourceLanguages.length; i++) {
       const languageId = resourceLanguages[i];
@@ -376,7 +376,7 @@ export const getLocalResourceList = () => {
       const bibleIds = cleanReaddirSync(biblesPath);
       const tHelpsResources = cleanReaddirSync(tHelpsPath);
 
-      bibleIds.forEach(bibleId => {
+      bibleIds.forEach((bibleId) => {
         const bibleIdPath = path.join(biblesPath, bibleId);
         const bibleLatestVersion = getLatestVersion(bibleIdPath);
 
@@ -400,7 +400,7 @@ export const getLocalResourceList = () => {
         }
       });
 
-      tHelpsResources.forEach(tHelpsId => {
+      tHelpsResources.forEach((tHelpsId) => {
         const tHelpResource = path.join(tHelpsPath, tHelpsId);
         const tHelpsLatestVersion = getLatestVersion(tHelpResource);
 
@@ -435,7 +435,7 @@ export const getLocalResourceList = () => {
  * Returns the versioned folder within the directory with the highest value.
  * e.g. `v10` is greater than `v9`
  * @param {string} dir - the directory to read
- * @returns {string} the full path to the latest version directory.
+ * @return {string} the full path to the latest version directory.
  */
 function getLatestVersion(dir) {
   const versions = listVersions(dir);
@@ -450,11 +450,11 @@ function getLatestVersion(dir) {
 /**
  * Returns an array of paths found in the directory filtered and sorted by version
  * @param {string} dir
- * @returns {string[]}
+ * @return {string[]}
  */
 function listVersions(dir) {
   if (fs.pathExistsSync(dir)) {
-    const versionedDirs = fs.readdirSync(dir).filter(file => fs.lstatSync(path.join(dir, file)).isDirectory() &&
+    const versionedDirs = fs.readdirSync(dir).filter((file) => fs.lstatSync(path.join(dir, file)).isDirectory() &&
       file.match(/^v\d/i));
     return versionedDirs.sort((a, b) =>
       -compareVersions(a, b), // do inverted sort
@@ -539,7 +539,7 @@ async function downloadRepo(resource, resourcesPath) {
 
 function getDirJson(indexPath_) {
   if (fs.existsSync(indexPath_)) {
-    return fs.readdirSync(indexPath_).filter(item => path.extname(item) === '.json');
+    return fs.readdirSync(indexPath_).filter((item) => path.extname(item) === '.json');
   }
   return [];
 }
@@ -621,26 +621,25 @@ function verifyAlignments(project, projectsPath) {
   return null;
 }
 
-async function verifyChecks(projectsPath, project, checkMigration, resourcesPath) {
+async function verifyChecks(projectsPath, project, checkMigration) {
   const projectPath = path.join(projectsPath, project);
+  const [langId, projectId, bookId] = project.split('_');
   let results = null;
   if (fs.lstatSync(projectPath).isDirectory()) {
     if (checkMigration) {
-      if (fs.existsSync(resourcesPath)) {
-        const {languageId, resourceId, version} = await loadOlderOriginalLanguageResource(resourcesPath, projectPath, bookId);
-        if (!languageId) {
+      if (fs.existsSync(USER_RESOURCES_PATH)) {
+        const resourcePath = await loadOlderOriginalLanguageResource(projectPath, bookId, TRANSLATION_NOTES);
+        if (!resourcePath) {
           console.error('error downloading original language');
           checkMigration = false;
         }
       } else {
-        console.log(`resource folder not found: ${resourcesPath}`);
+        console.log(`resource folder not found: ${USER_RESOURCES_PATH}`);
       }
     }
-    const [langId, projectId, bookId] = project.split('_');
     results = {langId, projectId, bookId};
     if (bookId) {
       const projectPath = path.join(projectsPath, project);
-      const tools = ['translationNotes', 'translationWords'];
       for (const tool of tools) {
         const indexSubPath = '.apps/translationCore/index/' + tool + '/' + bookId;
         const indexPath_ = path.join(projectPath, indexSubPath);
@@ -685,7 +684,7 @@ async function verifyChecks(projectsPath, project, checkMigration, resourcesPath
   return results;
 }
 
-async function downloadAndVerifyProject(resource, resourcesPath, fullName) {
+async function downloadAndVerifyProject(resource, resourcesPath, fullName, checkMigration) {
   const project = resource.name;
   let results;
   fs.ensureDirSync(resourcesPath);
@@ -698,7 +697,7 @@ async function downloadAndVerifyProject(resource, resourcesPath, fullName) {
     console.log(filePath);
     const projectsPath = path.join(importFolder, project);
     const wA = verifyAlignments(project, projectsPath);
-    const checks = await verifyChecks(projectsPath, project);
+    const checks = await verifyChecks(projectsPath, project, checkMigration);
     results = {
       fullName,
       wA,
@@ -742,7 +741,7 @@ function getUniqueChecks(projectsPath, project, toolName) {
       const uniqueCheck = uniqueChecks[key_];
       if (uniqueCheck.length > 1) {
         let warnings = '';
-        const selections = uniqueCheck.filter(check => check.selections);
+        const selections = uniqueCheck.filter((check) => check.selections);
         if (selections.length) {
           if (selections.length < uniqueCheck.length) {
             const missingSelections = uniqueCheck.length - selections.length;
@@ -765,7 +764,7 @@ function getUniqueChecks(projectsPath, project, toolName) {
         if (warnings) {
           toolWarnings += `${key_} - ${warnings}\n`;
         }
-        const dupesList = uniqueCheck.map(item => (Array.isArray(item.selections) ? item.selections.map(item => (`${item.text}-${item.occurrence}`)).join(' ') : (item.selections || '').toString()));
+        const dupesList = uniqueCheck.map((item) => (Array.isArray(item.selections) ? item.selections.map((item) => (`${item.text}-${item.occurrence}`)).join(' ') : (item.selections || '').toString()));
         dupes[key_] = {
           dupesList,
           warnings,
@@ -784,7 +783,7 @@ function getUniqueChecks(projectsPath, project, toolName) {
   };
 }
 
-async function validateProjects(repos, resourcesPath, outputFolder, langId, org) {
+async function validateProjects(repos, resourcesPath, outputFolder, langId, org, checkMigration) {
   let projectResults = {};
   const summaryFile = path.join(outputFolder, 'orgs-pre', `${langId}-${org}-repos.json`);
   if (fs.existsSync(summaryFile)) {
@@ -799,7 +798,7 @@ async function validateProjects(repos, resourcesPath, outputFolder, langId, org)
       continue; // skip over if repo already processed
     }
     console.log(`${i+1} - Loading ${project.full_name}`);
-    const results = await downloadAndVerifyProject(project, resourcesPath, project.full_name);
+    const results = await downloadAndVerifyProject(project, resourcesPath, project.full_name, checkMigration);
     if (results && results.wA && results.checks && (results.wA.warnings || results.checks.translationNotes.stats.toolWarnings || results.checks.translationWords.stats.toolWarnings)) {
       const projectWarnings = `warnings: WA: ${results.wA.warnings}, TN: ${results.checks.translationNotes.stats.toolWarnings}, TW: ${results.checks.translationWords.stats.toolWarnings}`;
       console.log(projectWarnings);
@@ -878,13 +877,30 @@ async function validateProjects(repos, resourcesPath, outputFolder, langId, org)
 }
 
 /**
+ * Returns the versioned folder within the directory with the highest value.
+ * e.g. `v10` is greater than `v9`
+ * @param {Array} versions - list of versions found
+ * @returns {string|null} the latest version found
+ */
+export const getLatestVersion_ = (versions) => {
+  if (versions && (versions.length > 0)) {
+    const sortedVersions = versions.sort((a, b) =>
+      -compareVersions(a, b), // do inverted sort
+    );
+    return sortedVersions[0]; // most recent version will be first
+  } else {
+    return null;
+  }
+};
+
+/**
  * Search folder for most recent version
  * @param {string} bibleFolderPath
  * @return {string} latest version found
  */
 function getMostRecentVersionInFolder(bibleFolderPath) {
-  const versionNumbers = fs.readdirSync(bibleFolderPath).filter(folder => folder !== '.DS_Store'); // ex. v9
-  const latestVersion = getLatestVersion(versionNumbers);
+  const versionNumbers = fs.readdirSync(bibleFolderPath).filter((folder) => folder !== '.DS_Store'); // ex. v9
+  const latestVersion = getLatestVersion_(versionNumbers);
   return latestVersion;
 }
 
@@ -925,15 +941,72 @@ export function getTsvOLVersion(tsvRelations, resourceId) {
  * @return {null|string}
  */
 export function getCurrentOrigLangVersionForTn(projectPath, bookId) {
-  const { bibleId: origLangBibleId } = getOrigLangforBook(bookId);
+  const {bibleId: origLangBibleId} = getOrigLangforBook(bookId);
   // tn files are generated from a specific version number of the original language resources which are reference as relation
-  const { tsv_relation } = getProjectManifest(projectPath);
+  const {tsv_relation} = getProjectManifest(projectPath);
   // Get version number needed by tn's tsv
   const tsvOLVersion = getTsvOLVersion(tsv_relation, origLangBibleId);
   return tsvOLVersion;
 }
 
 const TRANSLATION_NOTES = 'translationNotes';
+
+/**
+ * Loads a bible book resource.
+ * @param bibleId
+ * @param bookId
+ * @param languageId
+ * @param version
+ * @return {object}
+ */
+export const loadBookResource = (bibleId, bookId, languageId, version = null) => {
+  try {
+    const bibleFolderPath = path.join(USER_RESOURCES_PATH, languageId, 'bibles', bibleId); // ex. user/NAME/translationCore/resources/en/bibles/ult
+
+    if (fs.existsSync(bibleFolderPath)) {
+      const versionNumbers = fs.readdirSync(bibleFolderPath).filter((folder) => folder !== '.DS_Store'); // ex. v9
+      const versionNumber = version || getLatestVersion(versionNumbers);
+      const bibleVersionPath = path.join(bibleFolderPath, 'v' + versionNumber);
+      const bookPath = path.join(bibleVersionPath, bookId);
+
+      if (fs.existsSync(bookPath)) {
+        return bibleVersionPath;
+      } else {
+        console.warn(`loadBookResource() - Bible path not found: ${bookPath}`);
+      }
+    } else {
+      console.log('loadBookResource() - Directory not found, ' + bibleFolderPath);
+    }
+  } catch (error) {
+    console.error(`loadBookResource() - Failed to load book. Bible: ${bibleId} Book: ${bookId} Language: ${languageId}`, error);
+  }
+  return null;
+};
+
+/**
+ * load a book of the bible into resources
+ * @param bibleId
+ * @param bookId
+ * @param languageId
+ * @param version
+ * @return {Function}
+ */
+export const loadResource = async (resourceDetails) => {
+  let bibleDataPath = loadBookResource(resourceDetails.resourceId, resourceDetails.bookId, resourceDetails.languageId, resourceDetails.version);
+  if (!bibleDataPath) { // if not found then download
+    const sourceContentUpdater = new Updater();
+    try {
+      console.log(`Downloading resource ${JSON.stringify(resourceDetails)}`);
+      await await sourceContentUpdater.downloadAndProcessResource(resourceDetails, USER_RESOURCES_PATH);
+      bibleDataPath = loadBookResource(resourceDetails.resourceId, resourceDetails.bookId, resourceDetails.languageId, resourceDetails.version);
+    } catch (e) {
+      console.log(`could not download: ${JSON.stringify(resourceDetails)}`, e);
+      bibleDataPath = null;
+    }
+  }
+  return bibleDataPath;
+};
+
 
 /**
  * Loads the latest or an older version of the original based on tool requirements
@@ -949,24 +1022,12 @@ export const loadOlderOriginalLanguageResource = async (projectPath, bookId, too
   if (tsvOLVersion && (tsvOLVersion !== latestOlVersion) && toolName === TRANSLATION_NOTES) {
     // load original language resource that matches version number for tn groupdata
     console.log(`translationNotes requires original lang ${tsvOLVersion}`);
-    const resourceDetails = {languageId: origLangId, resourceId: 'ugnt', version: tsvOLVersion};
-    if (!fs.existsSync(resourcePath)) {
-      const sourceContentUpdater = new Updater();
-      try {
-        await await sourceContentUpdater.downloadAndProcessResource(resourceDetails, USER_RESOURCES_PATH);
-      } catch (e) {
-        console.log(`could not download: ${JSON.stringify(resourceDetails)}`, e);
-        return {};
-      }
-    }
-    return resourceDetails;
+    const resourceDetails = {bookId, languageId: origLangId, resourceId: origLangBibleId, version: tsvOLVersion};
+    return await loadResource(resourceDetails);
   } else {
-    if (!fs.existsSync(resourcePath)) {
-      const resourceDetails = {languageId: origLangId, resourceId: 'ugnt', version: latestOlVersion};
-      return resourceDetails;
-    }
+    const resourceDetails = {bookId, languageId: origLangId, resourceId: origLangBibleId, version: latestOlVersion};
+    return await loadResource(resourceDetails);
   }
-  return {};
 };
 
 /**
@@ -974,7 +1035,7 @@ export const loadOlderOriginalLanguageResource = async (projectPath, bookId, too
  * @return {{resourceId, languageId, latestOlVersion, tsvOLVersion: (*|undefined)}}
  */
 export function getOrigLangVersionInfoForTn(projectPath, bookId) {
-  const { bibleId: origLangBibleId, languageId: origLangId } = getOrigLangforBook(bookId);
+  const {bibleId: origLangBibleId, languageId: origLangId} = getOrigLangforBook(bookId);
   const bibleFolderPath = path.join(USER_RESOURCES_PATH, origLangId, 'bibles', origLangBibleId);
   let latestOlVersion = null;
 
@@ -982,7 +1043,7 @@ export function getOrigLangVersionInfoForTn(projectPath, bookId) {
     latestOlVersion = getMostRecentVersionInFolder(bibleFolderPath);
 
     if (latestOlVersion) {
-      latestOlVersion = latestOlVersion.replace('v',''); // strip off leading 'v'
+      latestOlVersion = latestOlVersion.replace('v', ''); // strip off leading 'v'
     }
   }
 
@@ -1084,7 +1145,7 @@ export function isOldTestament(bookId) {
  */
 export function getOrigLangforBook(bookId) {
   const isOT = isOldTestament(bookId);
-  const languageId = (isOT) ? Bible.OT_ORIG_LANG : Bible.NT_ORIG_LANG;
-  const bibleId = (isOT) ? Bible.OT_ORIG_LANG_BIBLE : Bible.NT_ORIG_LANG_BIBLE;
-  return { languageId, bibleId };
+  const languageId = (isOT) ? OT_ORIG_LANG : NT_ORIG_LANG;
+  const bibleId = (isOT) ? OT_ORIG_LANG_BIBLE : NT_ORIG_LANG_BIBLE;
+  return {languageId, bibleId};
 }
