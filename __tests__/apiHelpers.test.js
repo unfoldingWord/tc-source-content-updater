@@ -795,7 +795,13 @@ async function validateProjects(repos, resourcesPath, outputFolder, langId, org,
   for (let i = repos.length - 1; i > 0; i--) {
     const project = repos[i];
     if (projectResults[project.full_name]) {
-      continue; // skip over if repo already processed
+      if (checkMigration) {
+        if (projectResults[project.full_name].checkMigration) {
+          continue; // skip over if repo already checked migration
+        }
+      } else {
+        continue; // skip over if repo already processed
+      }
     }
     console.log(`${i+1} - Loading ${project.full_name}`);
     const results = await downloadAndVerifyProject(project, resourcesPath, project.full_name, checkMigration);
