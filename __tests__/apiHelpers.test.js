@@ -792,6 +792,7 @@ export function updateCheckingResourceData(resourceData, bookId, data) {
           }
 
           if (matchFound) {
+            matchedResource = resource;
             updatedQuote = !isEqual(data.contextId.quote, resource.contextId.quote);
             // data.contextId.quote = resource.contextId.quote; // update quote
             // data.contextId.quoteString = resource.contextId.quoteString; // update quoteString
@@ -832,7 +833,7 @@ export function updateCheckingResourceData(resourceData, bookId, data) {
           matchedResource = resource;
           if (resource.matches) {
             resource.matches++;
-            duplicateMigration = true;
+            duplicateMigration = resource.matches;
             console.log(`duplicate resource found ${JSON.stringify(resource)}: count= ${resource.matches}`);
           } else {
             resource.matches = 1;
@@ -892,6 +893,17 @@ export function getFilesInResourcePath(resourcePath, ext=null) {
   return [];
 }
 
+function getKey_(item) {
+  const key = getKey(
+    item.contextId.reference.checkId,
+    item.contextId.reference.chapter,
+    item.contextId.reference.verse,
+    item.contextId.groupId,
+    item.contextId.occurrence
+  );
+  return key;
+}
+
 /**
  * update the resources for this file
  * @param newResourceChecks
@@ -901,6 +913,8 @@ export function getFilesInResourcePath(resourcePath, ext=null) {
  */
 function validateCheckMigrations(existingSelections, newResourceChecks, bookId) {
   let migrations = {};
+  let unmatched = [];
+  let duplicateMigrations = [];
   try {
     const keys = Object.keys(existingSelections);
     for (const key of keys) {
@@ -908,16 +922,48 @@ function validateCheckMigrations(existingSelections, newResourceChecks, bookId) 
       for (const item of list) {
         const groupId = item.contextId && item.contextId.groupId;
         if (groupId) {
-          const results = updateCheckingResourceData(newResourceChecks[groupId], bookId, item);
-          // TODO add warnings to migrations
-          // item.migrationChecks = results;
+          const {
+            dataModified,
+            updatedCheckId,
+            updatedQuote,
+            matchFound,
+            resourcePartialMatches,
+            matchedResource,
+            duplicateMigration,
+            quotesMatch
+          } = updateCheckingResourceData(newResourceChecks[groupId], bookId, item);
+          if (item.selections) {
+            const checkKey = getKey_(item);
+            const resourceKey = matchedResource ? getKey_(matchedResource) : '';
+            const selections = item.selections.map((item) => (`${item.text}-${item.occurrence}`)).join(' ');
+            if (!matchFound) {
+              unmatched.push({
+                key: checkKey,
+                selections,
+                resourcePartialMatches,
+              });
+            }
+            if (duplicateMigration) {
+              duplicateMigrations.push({
+                resourceKey,
+                duplicateMigration
+              })
+            }
+            console.log(key);
+            // TODO add warnings to migrations
+            // item.migrationChecks = results;
+          }
         }
       }
     }
   } catch (e) {
     console.error('updateResourcesForFile() - migration error for: ' + bookId, e);
   }
-  return migrations;
+  return {
+    migrations,
+    duplicateMigrations,
+    unmatched,
+  };
 }
 
 /**
@@ -983,7 +1029,7 @@ function getKey(checkId, chapter, verse, groupId, occurrence) {
 function getUniqueChecks(projectsPath, project, toolName, origLangResourcePath, tnResourceGl) {
   const uniqueChecks = {};
   const dupes = {};
-  const migrations = {};
+  let migrations = {};
   let toolWarnings = '';
   const version = path.base(origLangResourcePath);
   let helpsPath;
