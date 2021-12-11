@@ -7,6 +7,7 @@ import semver from 'semver';
 import rimraf from 'rimraf';
 // import nock from 'nock';
 import isEqual from 'deep-equal';
+import _ from 'lodash';
 import * as apiHelpers from '../src/helpers/apiHelpers';
 import Updater from '../src';
 import {getSubdirOfUnzippedResource, unzipResource} from '../src/helpers/resourcesHelpers';
@@ -23,6 +24,7 @@ const HOME_DIR = os.homedir();
 const USER_RESOURCES_PATH = path.join(HOME_DIR, 'translationCore/resources');
 const TRANSLATION_HELPS = 'translationHelps';
 const searchForLangAndBook = `https://git.door43.org/api/v1/repos/search?q=hi%5C_%25%5C_act%5C_book&sort=updated&order=desc&limit=30`;
+export const QUOTE_MARK = '\u2019';
 
 // // disable nock failed
 // nock.restore();
@@ -699,6 +701,280 @@ async function downloadAndVerifyProject(resource, resourcesPath, fullName, check
   return results;
 }
 
+/**
+ * array of checks for groupId
+ * @param {Array} resourceData
+ * @param {object} matchRef
+ * @return {number}
+ */
+function getReferenceCount(resourceData, matchRef) {
+  let count = 0;
+
+  for (const resource of resourceData) {
+    if (isEqual(resource.contextId.reference, matchRef)) {
+      count++;
+    }
+  }
+  return count;
+}
+
+/**
+ * compares quotes, with fallback to old handling of quote marks
+ * @param projectCheckQuote
+ * @param resourceQuote
+ * @return {*|boolean}
+ */
+export function areQuotesEqual(projectCheckQuote, resourceQuote) {
+  let same = isEqual(projectCheckQuote, resourceQuote);
+
+  if (!same) { // if not exactly the same, check for old quote handling in project quote
+    // a quick sanity check, the old quote would be longer if the quote mark is split out
+    if (Array.isArray(projectCheckQuote) && Array.isArray(resourceQuote) && projectCheckQuote.length > resourceQuote.length) {
+      let index = projectCheckQuote.findIndex(item => (item.word === QUOTE_MARK)); // look for quote mark
+      const quoteMarkFound = index > 1;
+
+      if (quoteMarkFound) { // if quote mark split out, migrate to new format
+        const newQuote = _.cloneDeep(projectCheckQuote);
+        let done = false;
+
+        while (!done) {
+          if (index > 1) {
+            // move quote mark to previous word
+            const previousItem = newQuote[index - 1];
+            previousItem.word += QUOTE_MARK;
+            newQuote.splice(index, 1);
+            index = newQuote.findIndex(item => (item.word === QUOTE_MARK));
+          } else {
+            done = true;
+          }
+        }
+
+        same = isEqual(newQuote, resourceQuote);
+      }
+    }
+  }
+  return same;
+}
+
+/**
+ * update old resource data
+ * @param {array} resourceData
+ * @param {String} bookId
+ * @param {Object} data - resource data to update
+ * @return {Object}
+ */
+export function updateCheckingResourceData(resourceData, bookId, data) {
+  let dataModified = false;
+  let updatedCheckId = false;
+  let updatedQuote = false;
+  let matchFound = false;
+  let quotesMatch = false;
+  let resourcePartialMatches = 0;
+  let matchedResource = null;
+  let duplicateMigration = false;
+
+  if (resourceData) {
+    for (const resource of resourceData) {
+      if (data.contextId.groupId === resource.contextId.groupId &&
+        isEqual(data.contextId.reference, resource.contextId.reference) &&
+        data.contextId.occurrence === resource.contextId.occurrence) {
+        if (!areQuotesEqual(data.contextId.quote, resource.contextId.quote)) { // quotes are  not the same
+          if (data.contextId.checkId) {
+            if (data.contextId.checkId === resource.contextId.checkId) {
+              matchFound = true; // found match
+            }
+          } else { // there is not a check ID in this check, so we try empirical methods
+            // if only one check for this verse, then we update presuming that this is just an original language change.
+            // If more than one check in this groupID for this verse, we skip since it would be too easy to change the quote in the wrong check
+            const count = getReferenceCount(resourceData, resource.contextId.reference);
+            matchFound = (count === 1);
+            resourcePartialMatches = count;
+          }
+
+          if (matchFound) {
+            updatedQuote = !isEqual(data.contextId.quote, resource.contextId.quote);
+            // data.contextId.quote = resource.contextId.quote; // update quote
+            // data.contextId.quoteString = resource.contextId.quoteString; // update quoteString
+
+            if (!data.contextId.checkId && resource.contextId.checkId) {
+              // data.contextId.checkId = resource.contextId.checkId; // add check ID
+              updatedCheckId = true;
+            }
+            dataModified = true;
+          }
+        } else { // quotes match
+          quotesMatch = true;
+          if (data.contextId.checkId) {
+            if (data.contextId.checkId === resource.contextId.checkId) {
+              matchFound = true;
+            }
+          } else { // no check id in current check, and quotes are similar
+            matchFound = true;
+
+            // see if there is a checkId to be added
+            if (resource.contextId.checkId) {
+              // data.contextId.checkId = resource.contextId.checkId; // save checkId
+              updatedCheckId = true;
+              dataModified = true;
+            }
+          }
+
+          if (matchFound && !isEqual(data.contextId.quote, resource.contextId.quote)) {
+            // if quotes not exactly the same, update
+            // data.contextId.quote = resource.contextId.quote;
+            // data.contextId.quoteString = resource.contextId.quoteString;
+            dataModified = true;
+            updatedQuote = true;
+          }
+        }
+
+        if (matchFound) {
+          matchedResource = resource;
+          if (resource.matches) {
+            resource.matches++;
+            duplicateMigration = true;
+            console.log(`duplicate resource found ${JSON.stringify(resource)}: count= ${resource.matches}`);
+          } else {
+            resource.matches = 1;
+          }
+          break;
+        }
+      }
+    }
+
+    if (!matchFound) {
+      console.warn('updateCheckingResourceData() - resource not found for migration: ' + JSON.stringify(data));
+    }
+  }
+  return {
+    dataModified,
+    updatedCheckId,
+    updatedQuote,
+    matchFound,
+    resourcePartialMatches,
+    matchedResource,
+    duplicateMigration,
+    quotesMatch
+  }
+}
+
+/**
+ * get list of folders in resource path
+ * @param {String} resourcePath - path
+ * @return {Array} - list of folders
+ */
+export function getFoldersInResourceFolder(resourcePath) {
+  try {
+    const folders = fs.readdirSync(resourcePath).filter(folder =>
+      fs.lstatSync(path.join(resourcePath, folder)).isDirectory()); // filter out anything not a folder
+    return folders;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+/**
+ * get list of files in resource path
+ * @param {String} resourcePath - path
+ * @param {String|null} [ext=null] - optional extension to match
+ * @return {Array}
+ */
+export function getFilesInResourcePath(resourcePath, ext=null) {
+  if (fs.lstatSync(resourcePath).isDirectory()) {
+    let files = fs.readdirSync(resourcePath).filter(file => {
+      if (ext) {
+        return path.extname(file) === ext;
+      }
+      return file !== '.DS_Store';
+    }); // filter out .DS_Store
+    return files;
+  }
+  return [];
+}
+
+/**
+ * update the resources for this file
+ * @param newResourceChecks
+ * @param existingSelections
+ * @param {String} bookId
+ * @param {Boolean} isContext - if true, then data is expected to be a contextId, otherwise it contains a contextId
+ */
+function validateCheckMigrations(existingSelections, newResourceChecks, bookId) {
+  try {
+    const keys = Object.keys(existingSelections);
+    for (const key of keys) {
+      const list = existingSelections[key];
+      for (const item of list) {
+        const groupId = item.contextId && item.contextId.groupId;
+        if (groupId) {
+          const results = updateCheckingResourceData(newResourceChecks[groupId], bookId, item);
+          item.migrationChecks = results;
+        }
+      }
+    }
+  } catch (e) {
+    console.error('updateResourcesForFile() - migration error for: ' + bookId, e);
+  }
+}
+
+/**
+ * iterate through checking data to make sure it is up to date
+ * @param {String} projectsDir - path to project
+ * @param bookId
+ * @param {String} toolName
+ * @param uniqueChecks
+ * @param helpsPath
+ */
+export function validateMigrations(projectsDir, bookId, toolName, uniqueChecks, helpsPath) {
+  if (fs.existsSync(helpsPath)) {
+    const groups = getFoldersInResourceFolder(helpsPath);
+    const groupChecks = {};
+
+    for (const group of groups) {
+      // console.log(`validateMigrations() - migrating ${group} to new format`);
+      const bookPath = path.join(helpsPath, group, 'groups', bookId);
+
+      if (fs.existsSync(bookPath)) {
+        const checkFiles = getFilesInResourcePath(bookPath, '.json');
+        for (const checkFile of checkFiles) {
+          const checkPath = path.join(bookPath, checkFile);
+          const checks = fs.readJsonSync(checkPath);
+          const groupId = path.base(checkFile);
+          if (!groupChecks[groupId]) {
+            groupChecks[groupId] = [];
+          }
+          groupChecks[groupId] = groupChecks[groupId].concat(checks);
+        }
+      }
+    }
+    validateCheckMigrations(uniqueChecks, groupChecks, bookId);
+    console.log('migrateOldCheckingResourceData() - migration done');
+  }
+}
+
+/**
+ *
+ * @param checkId
+ * @param chapter
+ * @param verse
+ * @param groupId
+ * @param occurrence
+ * @return {string}
+ */
+function getKey(checkId, chapter, verse, groupId, occurrence) {
+  const key = `${checkId || ''}-${chapter}-${verse}-${groupId}-${occurrence}`;
+  return key;
+}
+
+/**
+ *
+ * @param projectsPath
+ * @param project
+ * @param toolName
+ * @param origLangResourcePath
+ * @param tnResourceGl
+ * @return {{dupes: {}, toolWarnings: string}}
+ */
 function getUniqueChecks(projectsPath, project, toolName, origLangResourcePath, tnResourceGl) {
   const uniqueChecks = {};
   const dupes = {};
@@ -722,7 +998,7 @@ function getUniqueChecks(projectsPath, project, toolName, origLangResourcePath, 
         if (groupItem.contextId) {
           const {chapter, verse} = groupItem.contextId.reference;
           const {checkId, groupId, occurrence} = groupItem.contextId;
-          const key = `${checkId || ''}-${chapter}-${verse}-${groupId}-${occurrence}`;
+          const key = getKey(checkId, chapter, verse, groupId, occurrence);
           if (!uniqueChecks[key]) {
             uniqueChecks[key] = [];
           }
@@ -765,6 +1041,7 @@ function getUniqueChecks(projectsPath, project, toolName, origLangResourcePath, 
         };
       }
     }
+    validateMigrations(projectsPath, bookId, toolName, uniqueChecks, helpsPath);
   } catch (e) {
     const message = `error processing ${project}: ${e.toString()}\n`;
     console.log(message);
@@ -777,6 +1054,16 @@ function getUniqueChecks(projectsPath, project, toolName, origLangResourcePath, 
   };
 }
 
+/**
+ *
+ * @param repos
+ * @param resourcesPath
+ * @param outputFolder
+ * @param langId
+ * @param org
+ * @param checkMigration
+ * @return {Promise<void>}
+ */
 async function validateProjects(repos, resourcesPath, outputFolder, langId, org, checkMigration) {
   let projectResults = {};
   const summaryFile = path.join(outputFolder, 'orgs-pre', `${langId}-${org}-repos.json`);
@@ -904,6 +1191,11 @@ function getMostRecentVersionInFolder(bibleFolderPath) {
   return latestVersion;
 }
 
+/**
+ *
+ * @param projectPath
+ * @return {{}|*}
+ */
 export function getProjectManifest(projectPath) {
   if (fs.existsSync(projectPath)) {
     return fs.readJsonSync(path.join(projectPath, 'manifest.json'));
@@ -937,8 +1229,9 @@ export function getTsvOLVersion(tsvRelations, resourceId) {
 
 /**
  * get current Original language resources by tN
- * @param {Object} state - current reducers state
  * @return {null|string}
+ * @param projectPath
+ * @param bookId
  */
 export function getCurrentOrigLangVersionForTn(projectPath, bookId) {
   const {bibleId: origLangBibleId} = getOrigLangforBook(bookId);
@@ -985,11 +1278,8 @@ export const loadBookResource = (bibleId, bookId, languageId, version = null) =>
 
 /**
  * load a book of the bible into resources
- * @param bibleId
- * @param bookId
- * @param languageId
- * @param version
  * @return {Function}
+ * @param resourceDetails
  */
 export const loadResource = async (resourceDetails) => {
   let bibleDataPath = loadBookResource(resourceDetails.resourceId, resourceDetails.bookId, resourceDetails.languageId, resourceDetails.version);
@@ -1007,11 +1297,12 @@ export const loadResource = async (resourceDetails) => {
   return bibleDataPath;
 };
 
-
 /**
  * Loads the latest or an older version of the original based on tool requirements
  * language resource based on the tool & project combo.
- * @param {object}
+ * @param projectPath
+ * @param bookId
+ * @param toolName
  */
 export const loadOlderOriginalLanguageResource = async (projectPath, bookId, toolName) => {
   const {
