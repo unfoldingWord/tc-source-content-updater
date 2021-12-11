@@ -900,6 +900,7 @@ export function getFilesInResourcePath(resourcePath, ext=null) {
  * @param {Boolean} isContext - if true, then data is expected to be a contextId, otherwise it contains a contextId
  */
 function validateCheckMigrations(existingSelections, newResourceChecks, bookId) {
+  let migrations = {};
   try {
     const keys = Object.keys(existingSelections);
     for (const key of keys) {
@@ -908,13 +909,15 @@ function validateCheckMigrations(existingSelections, newResourceChecks, bookId) 
         const groupId = item.contextId && item.contextId.groupId;
         if (groupId) {
           const results = updateCheckingResourceData(newResourceChecks[groupId], bookId, item);
-          item.migrationChecks = results;
+          // TODO add warnings to migrations
+          // item.migrationChecks = results;
         }
       }
     }
   } catch (e) {
     console.error('updateResourcesForFile() - migration error for: ' + bookId, e);
   }
+  return migrations;
 }
 
 /**
@@ -926,6 +929,7 @@ function validateCheckMigrations(existingSelections, newResourceChecks, bookId) 
  * @param helpsPath
  */
 export function validateMigrations(projectsDir, bookId, toolName, uniqueChecks, helpsPath) {
+  let migrations = {};
   if (fs.existsSync(helpsPath)) {
     const groups = getFoldersInResourceFolder(helpsPath);
     const groupChecks = {};
@@ -947,9 +951,10 @@ export function validateMigrations(projectsDir, bookId, toolName, uniqueChecks, 
         }
       }
     }
-    validateCheckMigrations(uniqueChecks, groupChecks, bookId);
+    migrations = validateCheckMigrations(uniqueChecks, groupChecks, bookId);
     console.log('migrateOldCheckingResourceData() - migration done');
   }
+  return migrations;
 }
 
 /**
@@ -978,6 +983,7 @@ function getKey(checkId, chapter, verse, groupId, occurrence) {
 function getUniqueChecks(projectsPath, project, toolName, origLangResourcePath, tnResourceGl) {
   const uniqueChecks = {};
   const dupes = {};
+  const migrations = {};
   let toolWarnings = '';
   const version = path.base(origLangResourcePath);
   let helpsPath;
@@ -1041,7 +1047,7 @@ function getUniqueChecks(projectsPath, project, toolName, origLangResourcePath, 
         };
       }
     }
-    validateMigrations(projectsPath, bookId, toolName, uniqueChecks, helpsPath);
+    migrations = validateMigrations(projectsPath, bookId, toolName, uniqueChecks, helpsPath);
   } catch (e) {
     const message = `error processing ${project}: ${e.toString()}\n`;
     console.log(message);
@@ -1050,6 +1056,7 @@ function getUniqueChecks(projectsPath, project, toolName, origLangResourcePath, 
   console.log(`checks processed: ${project}`);
   return {
     dupes,
+    migrations,
     toolWarnings,
   };
 }
