@@ -24,30 +24,9 @@ const USER_RESOURCES_PATH = path.join(HOME_DIR, 'translationCore/resources');
 const TRANSLATION_HELPS = 'translationHelps';
 const searchForLangAndBook = `https://git.door43.org/api/v1/repos/search?q=hi%5C_%25%5C_act%5C_book&sort=updated&order=desc&limit=30`;
 
-// runTest().then(() => console.log('Run test DONE'));
-//
-// async function runTest() {
-//   // const org = 'India_BCS';
-//   // const langId = 'hi';
-//   // const org = 'TC_SAVE';
-//   // const langId = '%25'; // match all languages
-//   // const org = 'tCore-test-data';
-//   // const langId = '%25'; // match all languages
-//   // const org = 'Amos.Khokhar';
-//   // const langId = '%25'; // match all languages
-//   const org = null; // all orgs
-//   const langId = 'en';
-//   const resourcesPath = './temp/downloads';
-//   const outputFolder = './temp/tc_repos';
-//   let searchUrl = `https://git.door43.org/api/v1/repos/search?q=${langId}%5C_%25%5C_%25%5C_book&sort=id&order=asc&limit=50`;
-//   if (org) {
-//     searchUrl += `&owner=${org}`;
-//   }
-//   console.log(`Searching for lang ${langId}, org ${org}`);
-//   const repos = await apiHelpers.doMultipartQuery(searchUrl);
-//   console.log(`found ${repos.length} projects`);
-//   await validateProjects(repos, resourcesPath, outputFolder, langId, org);
-// }
+// // disable nock failed
+// nock.restore();
+// nock.cleanAll();
 
 describe.skip('apiHelpers.getCatalog', () => {
   it('should get the resulting catalog', () => {
@@ -625,13 +604,18 @@ async function verifyChecks(projectsPath, project, checkMigration) {
   const projectPath = path.join(projectsPath, project);
   const [langId, projectId, bookId] = project.split('_');
   let results = null;
+  let origLangResourcePath;
+  let tnResourceGl;
   if (fs.lstatSync(projectPath).isDirectory()) {
     if (checkMigration) {
       if (fs.existsSync(USER_RESOURCES_PATH)) {
-        const resourcePath = await loadOlderOriginalLanguageResource(projectPath, bookId, TRANSLATION_NOTES);
-        if (!resourcePath) {
+        origLangResourcePath = await loadOlderOriginalLanguageResource(projectPath, bookId, TRANSLATION_NOTES);
+        if (!origLangResourcePath) {
           console.error('error downloading original language');
           checkMigration = false;
+        } else {
+          const {toolsSelectedGLs} = getProjectManifest(projectPath);
+          tnResourceGl = toolsSelectedGLs && toolsSelectedGLs.translationNotes;
         }
       } else {
         console.log(`resource folder not found: ${USER_RESOURCES_PATH}`);
@@ -640,6 +624,7 @@ async function verifyChecks(projectsPath, project, checkMigration) {
     results = {langId, projectId, bookId};
     if (bookId) {
       const projectPath = path.join(projectsPath, project);
+      const tools = ['translationNotes', 'translationWords'];
       for (const tool of tools) {
         const indexSubPath = '.apps/translationCore/index/' + tool + '/' + bookId;
         const indexPath_ = path.join(projectPath, indexSubPath);
@@ -670,7 +655,7 @@ async function verifyChecks(projectsPath, project, checkMigration) {
           totalChecks,
         };
         console.log(project + '-' + tool + ': ' + totalChecks + ' totalChecks, ' + completedChecks + ' completedChecks, ' + Math.round(100 * percentCompleted) + '% completed');
-        const stats = getUniqueChecks(projectsPath, project, tool);
+        const stats = getUniqueChecks(projectsPath, project, tool, origLangResourcePath, tnResourceGl);
         if (stats) {
           results[tool] = {
             ...results[tool],
@@ -714,10 +699,19 @@ async function downloadAndVerifyProject(resource, resourcesPath, fullName, check
   return results;
 }
 
-function getUniqueChecks(projectsPath, project, toolName) {
+function getUniqueChecks(projectsPath, project, toolName, origLangResourcePath, tnResourceGl) {
   const uniqueChecks = {};
   const dupes = {};
   let toolWarnings = '';
+  const version = path.base(origLangResourcePath);
+  let helpsPath;
+  if (toolName === TRANSLATION_NOTES) {
+    helpsPath = path.join(origLangResourcePath, '../../../..', tnResourceGl, 'translationHelps', TRANSLATION_NOTES);
+    helpsPath = getLatestVersion(helpsPath);
+  } else {
+    helpsPath = path.join(origLangResourcePath, '../../../translationHelps', toolName, version);
+  }
+
   const [langId, projectId, bookId] = project.split('_');
   try {
     const groupDataPath = path.join(projectsPath, project, '.apps/translationCore/index', toolName, bookId);
