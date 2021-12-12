@@ -4,7 +4,6 @@
 import fs from 'fs-extra';
 import path from 'path-extra';
 import os from 'os';
-import semver from 'semver';
 import rimraf from 'rimraf';
 // import nock from 'nock';
 import isEqual from 'deep-equal';
@@ -860,6 +859,40 @@ function getUniqueChecks(projectsPath, project, toolName, origLangResourcePath, 
 
 /**
  *
+ * @param reposFormat
+ * @param reposLines
+ * @param outputFolder
+ * @param outputFile
+ */
+function writeToTsv(reposFormat, reposLines, outputFolder, outputFile) {
+  const lines = [];
+  let line = '';
+  // write header
+  for (const field of reposFormat) {
+    const fieldKey = field.key;
+    const fieldText = field.text;
+    let value = fieldText || fieldKey;
+    line += value + '\t';
+  }
+  lines.push(line);
+  for (const repoline of reposLines) {
+    let line = '';
+    for (const field of reposFormat) {
+      const fieldKey = field.key;
+      let value = repoline[fieldKey];
+      if ((value !== 0) && !value) {
+        value = '';
+      }
+      line += value + '\t';
+    }
+    lines.push(line);
+  }
+  fs.ensureDirSync(outputFolder);
+  fs.writeFileSync(path.join(outputFolder, outputFile), lines.join('\n') + '\n', 'utf8');
+}
+
+/**
+ *
  * @param outputFolder
  * @param langId
  * @param org
@@ -879,49 +912,60 @@ function summarizeProjects(outputFolder, langId, org) {
       },
     } = summary;
 
-    const resposLines = [];
-    const lines = [];
+    const reposLines = [];
 
     const projectNames = Object.keys(projectResults);
-    const repoLine = {};
     for (const projectName of projectNames) {
+      const repoLine = {};
+      const lines = [];
       const project = projectResults[projectName];
       repoLine.fullName = project.fullName;
-      repoLine.waPercentComplete = 0;
-      repoLine.twPercentComplete = 0;
-      repoLine.tnPercentComplete = 0;
-      if (project.wA) {
-        repoLine.waPercentComplete = project.wA.percentCompleted || 0;
+      if (project.ERROR) {
+        repoLine.projectError = project.ERROR;
+      } else {
+        repoLine.waPercentComplete = 0;
         repoLine.twPercentComplete = 0;
         repoLine.tnPercentComplete = 0;
-        if (project.checks) {
-          repoLine.twPercentComplete = project.checks.translationWords && project.checks.translationWords.percentCompleted || 0;
-          repoLine.tnPercentComplete = project.checks.translationNotes && project.checks.translationNotes.percentCompleted || 0;
+        if (project.wA) {
+          repoLine.waPercentComplete = project.wA.percentCompleted || 0;
+          repoLine.twPercentComplete = 0;
+          repoLine.tnPercentComplete = 0;
+          if (project.checks) {
+            repoLine.twPercentComplete = project.checks.translationWords && project.checks.translationWords.percentCompleted || 0;
+            repoLine.tnPercentComplete = project.checks.translationNotes && project.checks.translationNotes.percentCompleted || 0;
+          }
+          repoLine.waPercentComplete = Math.round(repoLine.waPercentComplete * 100);
+          repoLine.twPercentComplete = Math.round(repoLine.twPercentComplete * 100);
+          repoLine.tnPercentComplete = Math.round(repoLine.tnPercentComplete * 100);
         }
-        repoLine.waPercentComplete = Math.round(repoLine.waPercentComplete*100);
-        repoLine.twPercentComplete = Math.round(repoLine.twPercentComplete*100);
-        repoLine.tnPercentComplete = Math.round(repoLine.tnPercentComplete*100);
+        // TODO add project details to spreadsheet
       }
-      resposLines.push(repoLine)
+      reposLines.push(repoLine);
     }
     const reposFormat = [
       {
         key: 'fullName',
-        text: 'Project'
+        text: 'Project',
       },
       {
         key: `waPercentComplete`,
-        text: "wA % Done"
+        text: 'wA % Done',
       },
       {
         key: `twPercentComplete`,
-        text: "tW % Done"
+        text: 'tW % Done',
       },
       {
         key: `tnPercentComplete`,
-        text: "tN % Done"
+        text: 'tN % Done',
       },
-    ]
+      {
+        key: `projectError`,
+        text: 'Error',
+      },
+    ];
+    const summaryFolder = path.join(outputFolder, 'summary');
+    writeToTsv(reposFormat, reposLines, summaryFolder, `${langId}-${org}-summary.tsv`);
   }
 }
 
