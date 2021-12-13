@@ -44,7 +44,7 @@ describe('test project', () => {
     // const org = 'Amos.Khokhar';
     // const langId = '%25'; // match all languages
     const org = null; // all orgs
-    const langId = 'kn';
+    const langId = 'hi';
 
     const checkMigration = true;
     const resourcesPath = './temp/downloads';
@@ -950,7 +950,6 @@ function summarizeProjects(outputFolder, langId, org) {
     const projectNames = Object.keys(projectResults);
     for (const projectName of projectNames) {
       const repoLine = {};
-      const lines = [];
       const project = projectResults[projectName];
       repoLine.fullName = project.fullName;
       if (project.ERROR) {
@@ -964,6 +963,22 @@ function summarizeProjects(outputFolder, langId, org) {
           repoLine.twPercentComplete = 0;
           repoLine.tnPercentComplete = 0;
           if (project.checks) {
+            const checks = project.checks;
+            repoLine.time_created = checks.time_created;
+            repoLine.tc_edit_version = checks.tc_edit_version;
+            repoLine.tc_version = checks.tc_version;
+            // repoLine.timeCreated = checks.time_created;
+            const tools = {'wordAlignment': 'wa', 'translationWords': 'tw', 'translationNotes': 'tn'};
+            for (const tool of Object.keys(tools)) {
+              const toolShort = tools[tool];
+              const toolData = checks[tool] && checks[tool].toolData;
+              if (toolData) {
+                repoLine[`${toolShort}_gl`] = toolData.SelectedGL;
+                const olVersion = toolData.orig_lang_check_version;
+                repoLine[`${toolShort}_orig_lang_check_version`] = olVersion ? 'v' + olVersion : '';
+                repoLine[`${toolShort}_gl_check_version`] = toolData.gl_check_version;
+              }
+            }
             repoLine.twPercentComplete = project.checks.translationWords && project.checks.translationWords.percentCompleted || 0;
             repoLine.tnPercentComplete = project.checks.translationNotes && project.checks.translationNotes.percentCompleted || 0;
           }
@@ -985,12 +1000,52 @@ function summarizeProjects(outputFolder, langId, org) {
         text: 'wA % Done',
       },
       {
+        key: `wa_gl`,
+        text: 'wA GL',
+      },
+      {
+        key: `wa_orig_lang_check_version`,
+        text: 'wA Orig Lang Check Version',
+      },
+      {
         key: `twPercentComplete`,
         text: 'tW % Done',
       },
       {
+        key: `tw_gl`,
+        text: 'tW GL',
+      },
+      {
+        key: `tw_orig_lang_check_version`,
+        text: 'tW Orig Lang Check Version',
+      },
+      {
         key: `tnPercentComplete`,
         text: 'tN % Done',
+      },
+      {
+        key: `tn_gl`,
+        text: 'tN GL',
+      },
+      {
+        key: `tn_gl_check_version`,
+        text: 'tN GL Check Version',
+      },
+      {
+        key: `tn_orig_lang_check_version`,
+        text: 'tN Orig Lang Check Version',
+      },
+      {
+        key: `time_created`,
+        text: 'Time Created',
+      },
+      {
+        key: `tc_edit_version`,
+        text: 'tC Edit Version',
+      },
+      {
+        key: `tc_version`,
+        text: 'tC Format Version',
       },
       {
         key: `projectError`,
@@ -1036,7 +1091,7 @@ async function validateProjects(repos, resourcesPath, outputFolder, langId, org,
     }
     console.log(`${i+1} - Loading ${project.full_name}`);
     const results = await downloadAndVerifyProject(project, resourcesPath, project.full_name, checkMigration);
-    if (results && results.wA && results.checks && (results.wA.warnings || results.checks.translationNotes.stats.toolWarnings || results.checks.translationWords.stats.toolWarnings)) {
+    if (results && results.wA && results.checks && (results.wA.warnings || results.checks.translationNotes && (results.checks.translationNotes.stats.toolWarnings || results.checks.translationWords.stats.toolWarnings))) {
       const projectWarnings = `warnings: WA: ${results.wA.warnings}, TN: ${results.checks.translationNotes.stats.toolWarnings}, TW: ${results.checks.translationWords.stats.toolWarnings}`;
       console.log(projectWarnings);
       results.projectWarnings = projectWarnings;
