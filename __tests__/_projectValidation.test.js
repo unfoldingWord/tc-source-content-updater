@@ -1,6 +1,8 @@
 // this is just a development playbox
 // for Project Validation - search, download, and validate projects
 
+// NOCK_OFF=true node --inspect-brk node_modules/.bin/jest --runInBand -t "search, download and verify projects in org"
+
 import fs from 'fs-extra';
 import path from 'path-extra';
 import os from 'os';
@@ -13,7 +15,7 @@ import Updater from '../src';
 import {getSubdirOfUnzippedResource, unzipResource} from '../src/helpers/resourcesHelpers';
 import {download} from '../src/helpers/downloadHelpers';
 import {NT_ORIG_LANG, NT_ORIG_LANG_BIBLE, OT_ORIG_LANG, OT_ORIG_LANG_BIBLE} from '../src/resources/bible';
-import {compareVersions, getLatestVersion} from "./apiHelpers.test";
+import {compareVersions, getLatestVersion} from './_apiHelpers.test';
 
 // require('os').homedir()
 
@@ -24,6 +26,8 @@ jest.unmock('../src/helpers/zipFileHelpers');
 const HOME_DIR = os.homedir();
 const USER_RESOURCES_PATH = path.join(HOME_DIR, 'translationCore/resources');
 export const QUOTE_MARK = '\u2019';
+
+// console.log(process);
 
 // // disable nock failed
 // nock.restore();
@@ -40,7 +44,7 @@ describe('test project', () => {
     // const org = 'Amos.Khokhar';
     // const langId = '%25'; // match all languages
     const org = null; // all orgs
-    const langId = 'hi';
+    const langId = 'kn';
 
     const checkMigration = true;
     const resourcesPath = './temp/downloads';
@@ -339,10 +343,12 @@ function verifyAlignments(project, projectsPath) {
 async function verifyChecks(projectsPath, project, checkMigration) {
   const projectPath = path.join(projectsPath, project);
   const [langId, projectId, bookId] = project.split('_');
-  let results = null;
+  const results = {langId, projectId, bookId};
   let origLangResourcePath;
   let tnResourceGl;
-  if (fs.lstatSync(projectPath).isDirectory()) {
+  const toolsData = {};
+  if (fs.lstatSync(projectPath).isDirectory() && fs.existsSync(path.join(projectPath, 'manifest.json'))) {
+    const projectManifest = getProjectManifest(projectPath);
     if (checkMigration) {
       if (fs.existsSync(USER_RESOURCES_PATH)) {
         origLangResourcePath = await loadOlderOriginalLanguageResource(projectPath, bookId, TRANSLATION_NOTES);
@@ -350,14 +356,28 @@ async function verifyChecks(projectsPath, project, checkMigration) {
           console.error('error downloading original language');
           checkMigration = false;
         } else {
-          const {toolsSelectedGLs} = getProjectManifest(projectPath);
+          const {toolsSelectedGLs} = projectManifest;
           tnResourceGl = toolsSelectedGLs && toolsSelectedGLs.translationNotes;
         }
       } else {
         console.log(`resource folder not found: ${USER_RESOURCES_PATH}`);
       }
     }
-    results = {langId, projectId, bookId};
+
+    results.time_created = projectManifest.time_created;
+    results.tc_edit_version = projectManifest.tc_edit_version;
+    results.tc_version = projectManifest.tc_version;
+    const tools = ['wordAlignment', 'translationNotes', 'translationWords'];
+    for (const tool of tools) {
+      const toolData = {};
+      toolsData[tool] = toolData;
+      toolData.SelectedGL = projectManifest.toolsSelectedGLs && projectManifest.toolsSelectedGLs[tool];
+      toolData.orig_lang_check_version = projectManifest[`tc_orig_lang_check_version_${tool}`];
+      if (tool === 'translationNotes') {
+        toolData.gl_check_version = projectManifest[`tc_${toolData.SelectedGL}_check_version_translationNotes`];
+      }
+    }
+
     if (bookId) {
       const projectPath = path.join(projectsPath, project);
       const tools = ['translationNotes', 'translationWords'];
@@ -391,9 +411,10 @@ async function verifyChecks(projectsPath, project, checkMigration) {
           totalChecks,
         };
         console.log(project + '-' + tool + ': ' + totalChecks + ' totalChecks, ' + completedChecks + ' completedChecks, ' + Math.round(100 * percentCompleted) + '% completed');
-        const stats = getUniqueChecks(projectsPath, project, tool, origLangResourcePath, tnResourceGl);
+        const stats = getUniqueChecks(projectsPath, project, tool, origLangResourcePath, tnResourceGl, checkMigration);
         if (stats) {
           results[tool] = {
+            toolData: toolsData[tool],
             ...results[tool],
             stats,
           };
@@ -401,7 +422,10 @@ async function verifyChecks(projectsPath, project, checkMigration) {
       }
     }
   }
-
+  const tool = 'wordAlignment';
+  results[tool] = {
+    toolData: toolsData[tool],
+  };
   return results;
 }
 
@@ -774,20 +798,24 @@ function getKey(checkId, chapter, verse, groupId, occurrence) {
  * @param toolName
  * @param origLangResourcePath
  * @param tnResourceGl
+ * @param checkMigration
  * @return {{dupes: {}, toolWarnings: string}}
  */
-function getUniqueChecks(projectsPath, project, toolName, origLangResourcePath, tnResourceGl) {
+function getUniqueChecks(projectsPath, project, toolName, origLangResourcePath, tnResourceGl, checkMigration) {
   const uniqueChecks = {};
   const dupes = {};
   let migrations = {};
+  const migrationData = {};
   let toolWarnings = '';
   const version = path.base(origLangResourcePath);
   let helpsPath;
   if (toolName === TRANSLATION_NOTES) {
     helpsPath = path.join(origLangResourcePath, '../../../..', tnResourceGl, 'translationHelps', TRANSLATION_NOTES);
     helpsPath = getLatestVersion(helpsPath);
+    migrationData.glVersion = path.base(helpsPath);
   } else {
     helpsPath = path.join(origLangResourcePath, '../../../translationHelps', toolName, version);
+    migrationData.glVersion = version;
   }
 
   const [langId, projectId, bookId] = project.split('_');
@@ -843,7 +871,10 @@ function getUniqueChecks(projectsPath, project, toolName, origLangResourcePath, 
         };
       }
     }
-    migrations = validateMigrations(projectsPath, bookId, toolName, uniqueChecks, helpsPath);
+    if (checkMigration) {
+      migrations = validateMigrations(projectsPath, bookId, toolName, uniqueChecks, helpsPath);
+      migrations.data = migrationData;
+    }
   } catch (e) {
     const message = `error processing ${project}: ${e.toString()}\n`;
     console.log(message);
@@ -880,7 +911,9 @@ function writeToTsv(reposFormat, reposLines, outputFolder, outputFile) {
     for (const field of reposFormat) {
       const fieldKey = field.key;
       let value = repoline[fieldKey];
-      if ((value !== 0) && !value) {
+      if (typeof(value) === 'object') {
+        value = JSON.stringify(value);
+      } else if ((value !== 0) && !value) {
         value = '';
       }
       line += value + '\t';
