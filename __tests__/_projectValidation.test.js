@@ -76,7 +76,7 @@ describe('test project', () => {
 
   it('download and verify project', async () => {
     const fullName = 'India_BCS/hi_hglt_1ti_book';
-    const langId = 'hi';
+    const langId = 'kn';
     const resource = getResource(fullName, langId);
     const resourcesPath = './temp/downloads';
     try {
@@ -787,7 +787,7 @@ export function validateMigrations(projectsDir, bookId, toolName, uniqueChecks, 
  * @return {string}
  */
 function getKey(checkId, chapter, verse, groupId, occurrence) {
-  const key = `${checkId || ''}-${chapter}-${verse}-${groupId}-${occurrence}`;
+  const key = `${chapter}-${verse}-${groupId}-${checkId || ''}-${occurrence}`;
   return key;
 }
 
@@ -838,6 +838,7 @@ function getUniqueChecks(projectsPath, project, toolName, origLangResourcePath, 
     }
     const keys = Object.keys(uniqueChecks);
     for (const key_ of keys) {
+      let dupeSelections = 0;
       const uniqueCheck = uniqueChecks[key_];
       if (uniqueCheck.length > 1) {
         let warnings = '';
@@ -848,7 +849,6 @@ function getUniqueChecks(projectsPath, project, toolName, origLangResourcePath, 
             warnings += `Missing ${missingSelections} selections\t`;
           }
           if (selections.length > 1) {
-            let dupeSelections = 0;
             for (let i = 0; i < selections.length - 1; i++) {
               for (let j = i + 1; j < selections.length; j++) {
                 if (isEqual(selections[i], selections[j])) {
@@ -857,18 +857,20 @@ function getUniqueChecks(projectsPath, project, toolName, origLangResourcePath, 
               }
             }
             if (dupeSelections) {
-              warnings += `${dupeSelections} selections duplicated\t`;
+              warnings += `${dupeSelections+1} selections duplicated\t`;
             }
           }
         }
         if (warnings) {
           toolWarnings += `${key_} - ${warnings}\n`;
         }
-        const dupesList = uniqueCheck.map((item) => (Array.isArray(item.selections) ? item.selections.map((item) => (`${item.text}-${item.occurrence}`)).join(' ') : (item.selections || '').toString()));
-        dupes[key_] = {
-          dupesList,
-          warnings,
-        };
+        if (dupeSelections) {
+          const dupesList = uniqueCheck.map((item) => (Array.isArray(item.selections) ? item.selections.map((item) => (`${item.text}-${item.occurrence}`)).join(' ') : (item.selections || '').toString()));
+          dupes[key_] = {
+            dupesList,
+            warnings,
+          };
+        }
       }
     }
     if (checkMigration) {
@@ -921,7 +923,31 @@ function writeToTsv(reposFormat, reposLines, outputFolder, outputFile) {
     lines.push(line);
   }
   fs.ensureDirSync(outputFolder);
-  fs.writeFileSync(path.join(outputFolder, outputFile), lines.join('\n') + '\n', 'utf8');
+  const data = lines.join('\n') + '\n';
+  fs.writeFileSync(path.join(outputFolder, outputFile), data, 'utf8');
+  return data;
+}
+
+/**
+ *
+ * @param reposLines
+ * @param sortKey
+ * @return {*}
+ */
+function sortObjects(reposLines, sortKey) {
+  const keySort = (a, b) => {
+    const x = a[sortKey].toLowerCase();
+    const y = b[sortKey].toLowerCase();
+    if (x < y) {
+      return -1;
+    }
+    if (x > y) {
+      return 1;
+    }
+    return 0;
+  };
+  const sorted = reposLines.sort(keySort);
+  return sorted;
 }
 
 /**
@@ -949,6 +975,7 @@ function summarizeProjects(outputFolder, langId, org) {
 
     const projectNames = Object.keys(projectResults);
     for (const projectName of projectNames) {
+      let projectWarning = '';
       const repoLine = {};
       const project = projectResults[projectName];
       repoLine.fullName = project.fullName;
@@ -970,6 +997,7 @@ function summarizeProjects(outputFolder, langId, org) {
             // repoLine.timeCreated = checks.time_created;
             const tools = {'wordAlignment': 'wa', 'translationWords': 'tw', 'translationNotes': 'tn'};
             for (const tool of Object.keys(tools)) {
+              const projectLines = [];
               const toolShort = tools[tool];
               const toolData = checks[tool] && checks[tool].toolData;
               if (toolData) {
@@ -978,6 +1006,72 @@ function summarizeProjects(outputFolder, langId, org) {
                 repoLine[`${toolShort}_orig_lang_check_version`] = olVersion ? 'v' + olVersion : '';
                 repoLine[`${toolShort}_gl_check_version`] = toolData.gl_check_version;
               }
+
+              if (['translationWords', 'translationNotes'].includes(tool)) {
+                const toolData = checks[tool] && checks[tool].stats;
+                if (toolData) {
+                  const dupeIds = toolData.dupes ? Object.keys(toolData.dupes) : [];
+                  if (dupeIds.length) {
+                    for (const dupeId of dupeIds) {
+                      const dupe = toolData.dupes[dupeId];
+                      const dupeLine = {
+                        reference: dupeId,
+                        message: dupe.warnings && dupe.warnings.replace('\t', ' ') || '',
+                        selections: JSON.stringify(dupe.dupesList),
+                      };
+                      projectLines.push(dupeLine);
+                      projectWarning += `duplicate ${toolShort} selections found, `;
+                    }
+                  }
+                  const migrationData = toolData.migrations;
+                  const duplicateMigrations = migrationData && migrationData.duplicateMigrations || [];
+                  if (duplicateMigrations && duplicateMigrations.length) {
+                    for (const dupe of duplicateMigrations) {
+                      const dupeLine = {
+                        reference: dupe.resourceKey,
+                        message: `${dupe.duplicateMigration} duplicate migrations`,
+                      };
+                      projectLines.push(dupeLine);
+                      projectWarning += `duplicate ${toolShort} migrations found, `;
+                    }
+                  }
+                  const unmatchedChecks = migrationData && migrationData.unmatched || [];
+                  if (unmatchedChecks && unmatchedChecks.length) {
+                    for (const unmatched of unmatchedChecks) {
+                      let message = `unable to migrate selection, no match found for check in new resources`;
+                      if (unmatched.resourcePartialMatches) {
+                        message = `unable to migrate selection, there are ${unmatched.resourcePartialMatches} similar checks`;
+                      }
+                      const line = {
+                        reference: unmatched.key,
+                        message,
+                        selections: unmatched.selections,
+                      };
+                      projectLines.push(line);
+                      projectWarning += `unmatched ${toolShort} checks found, `;
+                    }
+                  }
+                }
+              }
+              const projectSummaryFolder = path.join(outputFolder, 'summary', langId);
+              const projectSummaryFileName = `${repoLine.fullName.replace('/', '-')}-${toolShort}-summary.tsv`;
+              const projectsFormat = [
+                {
+                  key: 'reference',
+                  text: 'Reference',
+                },
+                {
+                  key: `message`,
+                  text: 'Message',
+                },
+                {
+                  key: `selections`,
+                  text: 'Selections',
+                },
+              ];
+              if (projectLines.length) {
+                writeToTsv(projectsFormat, sortObjects(projectLines, 'reference'), projectSummaryFolder, projectSummaryFileName);
+              }
             }
             repoLine.twPercentComplete = project.checks.translationWords && project.checks.translationWords.percentCompleted || 0;
             repoLine.tnPercentComplete = project.checks.translationNotes && project.checks.translationNotes.percentCompleted || 0;
@@ -985,8 +1079,10 @@ function summarizeProjects(outputFolder, langId, org) {
           repoLine.waPercentComplete = Math.round(repoLine.waPercentComplete * 100);
           repoLine.twPercentComplete = Math.round(repoLine.twPercentComplete * 100);
           repoLine.tnPercentComplete = Math.round(repoLine.tnPercentComplete * 100);
+          if (projectWarning) {
+            repoLine.warnings = projectWarning;
+          }
         }
-        // TODO add project details to spreadsheet
       }
       reposLines.push(repoLine);
     }
@@ -1048,12 +1144,16 @@ function summarizeProjects(outputFolder, langId, org) {
         text: 'tC Format Version',
       },
       {
+        key: `warnings`,
+        text: 'Project warnings',
+      },
+      {
         key: `projectError`,
-        text: 'Error',
+        text: 'Project Error',
       },
     ];
     const summaryFolder = path.join(outputFolder, 'summary');
-    writeToTsv(reposFormat, reposLines, summaryFolder, `${langId}-${org}-summary.tsv`);
+    writeToTsv(reposFormat, sortObjects(reposLines, 'fullName'), summaryFolder, `${langId}-${org}-summary.tsv`);
   }
 }
 
