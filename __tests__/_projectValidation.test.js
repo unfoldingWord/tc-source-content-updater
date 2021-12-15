@@ -33,7 +33,7 @@ export const QUOTE_MARK = '\u2019';
 // nock.restore();
 // nock.cleanAll();
 
-describe('test project', () => {
+describe.skip('test project', () => {
   it('search, download and verify projects in org', async () => {
     // const org = 'India_BCS';
     // const langId = 'hi';
@@ -47,6 +47,7 @@ describe('test project', () => {
     const langId = 'hi';
 
     const checkMigration = true;
+    const retryFailedDownloads = false;
     const resourcesPath = './temp/downloads';
     const outputFolder = './temp/tc_repos';
     let searchUrl = `https://git.door43.org/api/v1/repos/search?q=${langId}%5C_%25%5C_%25%5C_book&sort=id&order=asc&limit=50`;
@@ -56,7 +57,7 @@ describe('test project', () => {
     console.log(`Searching for lang ${langId}, org ${org}`);
     const repos = await apiHelpers.doMultipartQuery(searchUrl);
     console.log(`found ${repos.length} projects`);
-    await validateProjects(repos, resourcesPath, outputFolder, langId, org, checkMigration);
+    await validateProjects(repos, resourcesPath, outputFolder, langId, org, checkMigration, retryFailedDownloads);
   }, 50000000);
 
   it('summarizeProjects', () => {
@@ -411,13 +412,21 @@ async function verifyChecks(projectsPath, project, checkMigration) {
           totalChecks,
         };
         console.log(project + '-' + tool + ': ' + totalChecks + ' totalChecks, ' + completedChecks + ' completedChecks, ' + Math.round(100 * percentCompleted) + '% completed');
-        const stats = getUniqueChecks(projectsPath, project, tool, origLangResourcePath, tnResourceGl, checkMigration);
-        if (stats) {
-          results[tool] = {
-            toolData: toolsData[tool],
-            ...results[tool],
-            stats,
-          };
+        let haveResources = origLangResourcePath;
+        if (tool === 'translationNotes' && !tnResourceGl) {
+          haveResources = false;
+        }
+        if (haveResources) {
+          const stats = getUniqueChecks(projectsPath, project, tool, origLangResourcePath, tnResourceGl, checkMigration);
+          if (stats) {
+            results[tool] = {
+              toolData: toolsData[tool],
+              ...results[tool],
+              stats,
+            };
+          }
+        } else {
+          console.log(`missing resources for ${tool}`);
         }
       }
     }
@@ -458,7 +467,13 @@ async function downloadAndVerifyProject(resource, resourcesPath, fullName, check
       checkMigration,
     };
   } catch (e) {
-    const message = `could not download ${resource.full_name}: ${e.toString()}`;
+    const errStr = e.toString();
+    let message = `Could not download ${resource.full_name}: ${errStr}`;
+    if (errStr.indexOf('code 404') > 0) {
+      message = `Empty Repo: ${resource.full_name}: ${errStr}`;
+    } else {
+      console.log('other');
+    }
     console.log(message, e);
     results = {
       fullName,
@@ -1167,56 +1182,65 @@ function summarizeProjects(outputFolder, langId, org) {
  * @param checkMigration
  * @return {Promise<void>}
  */
-async function validateProjects(repos, resourcesPath, outputFolder, langId, org, checkMigration) {
-  let projectResults = {};
+async function validateProjects(repos, resourcesPath, outputFolder, langId, org, checkMigration, retryFailedDownloads) {
+  let projectsResults = {};
   const summaryFile = path.join(outputFolder, 'orgs-pre', `${langId}-${org}-repos.json`);
   if (fs.existsSync(summaryFile)) {
     const summary = fs.readJsonSync(summaryFile);
     if (summary && summary.projects) {
-      projectResults = summary.projects;
+      projectsResults = summary.projects;
     }
   }
   for (let i = repos.length - 1; i > 0; i--) {
     const project = repos[i];
-    if (projectResults[project.full_name]) {
-      if (checkMigration) {
-        if (projectResults[project.full_name].checkMigration) {
-          console.log(`skipping over ${project} already migration checked`);
-          continue; // skip over if repo already checked migration
-        }
+    const projectResults = projectsResults[project.full_name];
+    if (projectResults) {
+      if (retryFailedDownloads && projectResults.ERROR) {
+        delete projectResults.ERROR;
+        delete projectResults.checkMigration;
       } else {
-        console.log(`skipping over ${project} since no migration checking`);
-        continue; // skip over if repo already processed
+        if (checkMigration) {
+          if (projectResults.checkMigration) {
+            console.log(`skipping over ${project} already migration checked`);
+            continue; // skip over if repo already checked migration
+          }
+        } else {
+          console.log(`skipping over ${project} since no migration checking`);
+          continue; // skip over if repo already processed
+        }
       }
     }
     console.log(`${i+1} - Loading ${project.full_name}`);
     const results = await downloadAndVerifyProject(project, resourcesPath, project.full_name, checkMigration);
-    if (results && results.wA && results.checks && (results.wA.warnings || results.checks.translationNotes && (results.checks.translationNotes.stats.toolWarnings || results.checks.translationWords.stats.toolWarnings))) {
-      const projectWarnings = `warnings: WA: ${results.wA.warnings}, TN: ${results.checks.translationNotes.stats.toolWarnings}, TW: ${results.checks.translationWords.stats.toolWarnings}`;
+    const waWarnings = results && results.wA && results.wA.warnings || '';
+    const tnWarnings = results && results.checks && results.checks.translationNotes && results.checks.translationNotes.stats && results.checks.translationNotes.stats.toolWarnings || '';
+    const twWarnings = results && results.checks && results.checks.translationWords && results.checks.translationWords.stats && results.checks.translationWords.stats.toolWarnings || '';
+    if (waWarnings || tnWarnings || twWarnings) {
+      const projectWarnings = `warnings: WA: ${waWarnings}, TN: ${tnWarnings}, TW: ${twWarnings}`;
       console.log(projectWarnings);
       results.projectWarnings = projectWarnings;
     }
     // console.log(JSON.stringify(results));
-    projectResults[project.full_name] = results;
+    projectsResults[project.full_name] = results;
     const totalProjects = repos.length;
     const processedProjects = repos.length - i + 1;
 
     const summary = {
       processedProjects,
       totalProjects,
-      projects: projectResults,
+      projects: projectsResults,
     };
     fs.outputJsonSync(summaryFile, summary);
   }
 
-  const projectNames = Object.keys(projectResults);
+  const projectNames = Object.keys(projectsResults);
   const waFinished = {};
   const waNearlyFinished = {};
   const allFinished = {};
   const allNearlyFinished = {};
   for (const projectName of projectNames) {
     try {
-      const project = projectResults[projectName];
+      const project = projectsResults[projectName];
       const fullName = project.fullName;
       let waPercentComplete = 0;
       let twPercentComplete = 0;
@@ -1247,14 +1271,14 @@ async function validateProjects(repos, resourcesPath, outputFolder, langId, org,
       console.log(`${projectName} - ${projectWarnings}`);
       results.projectWarnings = projectWarnings;
       // console.log(JSON.stringify(results));
-      if (!projectResults[projectName]) {
-        projectResults[projectName] = {};
+      if (!projectsResults[projectName]) {
+        projectsResults[projectName] = {};
       }
-      projectResults[projectName].projectWarnings = projectWarnings;
+      projectsResults[projectName].projectWarnings = projectWarnings;
     }
   }
   const results = {
-    projectSummaries: projectResults,
+    projectSummaries: projectsResults,
     goodProjects: {
       waFinished,
       waNearlyFinished,

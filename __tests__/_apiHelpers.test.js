@@ -116,7 +116,7 @@ describe.skip('test API', () => {
     await sourceContentUpdater.getLatestResources(localResourceList)
       .then(async (updatedLanguages) => {
         // console.log(sourceContentUpdater.updatedCatalogResources);
-        await sourceContentUpdater.downloadResources(['el-x-koine', 'hbo', 'ru'], './temp/updates');
+        await sourceContentUpdater.downloadResources(['en'], './temp/updates');
         console.log(updatedLanguages);
       })
       .catch((err) => {
