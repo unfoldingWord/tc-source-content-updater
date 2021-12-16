@@ -44,10 +44,10 @@ describe.skip('test project', () => {
     // const org = 'Amos.Khokhar';
     // const langId = '%25'; // match all languages
     const org = null; // all orgs
-    const langId = 'hi';
+    const langId = 'kn';
 
     const checkMigration = true;
-    const retryFailedDownloads = false;
+    const retryFailedDownloads = true;
     const resourcesPath = './temp/downloads';
     const outputFolder = './temp/tc_repos';
     let searchUrl = `https://git.door43.org/api/v1/repos/search?q=${langId}%5C_%25%5C_%25%5C_book&sort=id&order=asc&limit=50`;
