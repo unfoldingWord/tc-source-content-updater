@@ -8,12 +8,8 @@ import semver from 'semver';
 import rimraf from 'rimraf';
 // import nock from 'nock';
 import isEqual from 'deep-equal';
-import _ from 'lodash';
 import * as apiHelpers from '../src/helpers/apiHelpers';
 import Updater from '../src';
-import {getSubdirOfUnzippedResource, unzipResource} from '../src/helpers/resourcesHelpers';
-import {download} from '../src/helpers/downloadHelpers';
-import {NT_ORIG_LANG, NT_ORIG_LANG_BIBLE, OT_ORIG_LANG, OT_ORIG_LANG_BIBLE} from '../src/resources/bible';
 
 // require('os').homedir()
 
@@ -24,7 +20,7 @@ jest.unmock('../src/helpers/zipFileHelpers');
 const HOME_DIR = os.homedir();
 const USER_RESOURCES_PATH = path.join(HOME_DIR, 'translationCore/resources');
 const TRANSLATION_HELPS = 'translationHelps';
-const searchForLangAndBook = `https://git.door43.org/api/v1/repos/search?q=hi%5C_%25%5C_act%5C_book&sort=updated&order=desc&limit=30`;
+// const searchForLangAndBook = `https://git.door43.org/api/v1/repos/search?q=hi%5C_%25%5C_act%5C_book&sort=updated&order=desc&limit=30`;
 export const QUOTE_MARK = '\u2019';
 
 // // disable nock failed
@@ -109,15 +105,20 @@ describe.skip('apiHelpers compare pivoted.json with CN', () => {
   }, 10000);
 });
 
-describe.skip('test API', () => {
+describe('test API', () => {
   it('test Updater', async () => {
+    const resourcesPath = './temp/updates';
     const sourceContentUpdater = new Updater();
-    const localResourceList = getLocalResourceList();
+    const localResourceList = getLocalResourceList(resourcesPath);
+    const initialResourceList = saveResources(resourcesPath, localResourceList);
     await sourceContentUpdater.getLatestResources(localResourceList)
       .then(async (updatedLanguages) => {
         // console.log(sourceContentUpdater.updatedCatalogResources);
-        await sourceContentUpdater.downloadResources(['en'], './temp/updates');
+        await sourceContentUpdater.downloadResources(['en'], resourcesPath);
         console.log(updatedLanguages);
+        const localResourceList = getLocalResourceList(resourcesPath);
+        const finalResourceList = saveResources(resourcesPath, localResourceList);
+        console.log('stuff');
       })
       .catch((err) => {
         console.error('Local Resource List:', err);
@@ -257,20 +258,25 @@ const cleanReaddirSync = (path) => {
   return cleanDirectories;
 };
 
-export const getLocalResourceList = () => {
+/**
+ *
+ * @param resourcesPath
+ * @return {null|*[]}
+ */
+export const getLocalResourceList = (resourcesPath = USER_RESOURCES_PATH) => {
   try {
-    if (!fs.existsSync(USER_RESOURCES_PATH)) {
-      fs.ensureDirSync(USER_RESOURCES_PATH);
+    if (!fs.existsSync(resourcesPath)) {
+      fs.ensureDirSync(resourcesPath);
     }
 
     const localResourceList = [];
-    const resourceLanguages = fs.readdirSync(USER_RESOURCES_PATH)
+    const resourceLanguages = fs.readdirSync(resourcesPath)
       .filter((file) => path.extname(file) !== '.json' && file !== '.DS_Store');
 
     for (let i = 0; i < resourceLanguages.length; i++) {
       const languageId = resourceLanguages[i];
-      const biblesPath = path.join(USER_RESOURCES_PATH, languageId, 'bibles');
-      const tHelpsPath = path.join(USER_RESOURCES_PATH, languageId, TRANSLATION_HELPS);
+      const biblesPath = path.join(resourcesPath, languageId, 'bibles');
+      const tHelpsPath = path.join(resourcesPath, languageId, TRANSLATION_HELPS);
       const bibleIds = cleanReaddirSync(biblesPath);
       const tHelpsResources = cleanReaddirSync(tHelpsPath);
 
@@ -378,4 +384,34 @@ export function compareVersions(a, b) {
   } else {
     return 0;
   }
+}
+
+
+/**
+ * @description This helper method generates a timestamp in milliseconds for use
+ *              in the storing of data in the app. Timestamps will be used to
+ *              generate filenames and modified dates.
+ * @param {String} str A date string. If null, will be current date
+ * @return {String} The timestamp in milliseconds
+ ******************************************************************************/
+export const generateTimestamp = (str) => {
+  if (!str) {
+    return (new Date()).toJSON();
+  } else {
+    return (new Date(str)).toJSON();
+  }
+};
+
+function dateToFileName(str) {
+  let fileName = generateTimestamp(str);
+  fileName = fileName.replace(/[:"]/g, '_');
+  return fileName;
+}
+
+function saveResources(outputFolder, data) {
+  const fileName = `localResources-${dateToFileName()}.json`;
+  fs.ensureDirSync(outputFolder);
+  const outputPath = path.join(outputFolder, fileName);
+  fs.outputJSONSync(outputPath, data);
+  return outputPath
 }
