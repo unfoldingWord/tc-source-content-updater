@@ -35,6 +35,7 @@ export const TRANSLATION_NOTES = 'translationNotes';
 export const TRANSLATION_ACADEMY = 'translationAcademy';
 export const TRANSLATION_HELPS = 'translationHelps';
 export const WORD_ALIGNMENT = 'wordAlignment';
+const JSON_OPTS = {spaces: 2};
 
 // console.log(process);
 
@@ -53,7 +54,7 @@ describe('test project', () => {
     // const org = 'Amos.Khokhar';
     // const langId = '%25'; // match all languages
     const org = null; // all orgs
-    const langId = 'kn';
+    const langId = 'vi';
 
     const checkMigration = true;
     const retryFailedDownloads = true;
@@ -79,7 +80,7 @@ describe('test project', () => {
     // const org = 'Amos.Khokhar';
     // const langId = '%25'; // match all languages
     const org = null; // all orgs
-    const langId = 'hi';
+    const langId = 'ar';
     const outputFolder = './temp/tc_repos';
     summarizeProjects(outputFolder, langId, org);
   }, 50000000);
@@ -116,16 +117,22 @@ describe('test project', () => {
   });
 });
 
-describe.skip('apiHelpers searching for books', () => {
+describe('apiHelpers searching for books', () => {
   const outputFolder = './temp/tc_repos';
-  const bookIds = ['rut', 'jon', 'est', 'ezr', 'neh', 'oba', 'luk', 'eph', '1ti', '2ti', 'tit', 'jas', '1jn', '2jn', '3jn'];
+  // const bookIds = ['rut', 'jon', 'est', 'ezr', 'neh', 'oba', 'luk', 'eph', '1ti', '2ti', 'tit', 'jas', '1jn', '2jn', '3jn'];
+  const bookIds = ['%25']; // find all books
+  const org = null; // all orgs
+  const langId = '%25'; // match all languages
 
-  for (const book of bookIds) {
-    it(`find tC repos for ${book}`, async () => {
-      const resourceId = book;
-      console.log(`searching for book ${resourceId}`);
+  for (const bookId of bookIds) {
+    it(`find tC repos for ${bookId}`, async () => {
+      console.log(`searching for book ${bookId}`);
       fs.ensureDirSync(outputFolder);
-      const searchUrl = `https://git.door43.org/api/v1/repos/search?q=%5C_${resourceId}%5C_book&sort=updated&order=desc&limit=50`;
+      let searchUrl = `https://git.door43.org/api/v1/repos/search?q=${langId}%5C_%25%5C_${bookId}%5C_book&sort=id&order=asc&limit=50`;
+      if (org) {
+        searchUrl += `&owner=${org}`;
+      }
+
       const repos = await apiHelpers.doMultipartQuery(searchUrl);
       console.log(`Search Found ${repos.length} total items`);
       const langRepos = {};
@@ -136,12 +143,116 @@ describe.skip('apiHelpers searching for books', () => {
         }
         langRepos[languageId].push(repo);
       }
-      const outputFile = path.join(outputFolder, `${resourceId}-repos.json`);
-      fs.outputJsonSync(outputFile, langRepos);
+      const outputFile = path.join(outputFolder, `${bookId}-repos.json`);
+      fs.outputJsonSync(outputFile, langRepos, JSON_OPTS);
     }, 50000);
   }
 
-  it(`find tC repos for language`, async () => {
+  it(`sort all tC repos`, async () => {
+    const langList = {};
+    const orgList = {};
+    const orgLangList = {};
+    const repoList = [];
+    // const [bookId] = file.split('-');
+    const filePath = path.join(outputFolder, `%25-repos.json`);
+    const data = fs.readJsonSync(filePath);
+    // console.log(data);
+    const langs = Object.keys(data);
+    for (const langId of langs) {
+      if (!langList[langId]) {
+        langList[langId] = [];
+      }
+      if (!orgLangList[langId]) {
+        orgLangList[langId] = {};
+      }
+      for (const item of data[langId]) {
+        const name = item.name || '';
+        const parts = name.split('_');
+        if (parts.length === 4) {
+          langList[langId].push(item);
+          const [langId_, bibleId, bookId] = parts;
+          const org = item.owner.login;
+          if (!orgLangList[langId][org]) {
+            orgLangList[langId][org] = 0;
+          }
+          orgLangList[langId][org]++;
+          if (!orgList[org]) {
+            orgList[org] = 0;
+          }
+          orgList[org]++;
+
+          repoList.push({
+            langId,
+            org,
+            name,
+            fullName: item.full_name || '',
+            bibleId,
+            bookId,
+          });
+        }
+      }
+    }
+
+    let langs_ = Object.keys(langList);
+    for (const langId of langs_) {
+      const repos = langList[langId];
+      const count = repos && repos.length || 0;
+      if (count <= 0) {
+        delete langList[langId];
+      }
+    }
+
+    langs_ = Object.keys(langList);
+    const langCount = langs_.length;
+
+    const langCounts = langs_.map(langId => ({
+      langId,
+      count: langList[langId].length,
+    }));
+    const orgCounts = Object.keys(orgList).map(org => ({
+      org,
+      count: orgList[org],
+    }));
+
+    const extraData = {
+      langCount,
+      langCounts: sortObjects(langCounts, 'count', true),
+      orgCount: orgCounts.length,
+      orgCounts: sortObjects(orgCounts, 'count', true),
+    };
+
+    langList.extraData = extraData;
+
+    const dataFolder = path.join(outputFolder, 'orgs');
+    fs.outputJsonSync(path.join(dataFolder, `$orgs.json`), orgLangList, JSON_OPTS);
+    fs.outputJsonSync(path.join(dataFolder, 'langRepos.json'), langList, JSON_OPTS);
+
+    const repoFormat = [
+      {
+        key: 'org',
+        text: 'Owner',
+      },
+      {
+        key: 'name',
+        text: 'Project',
+      },
+      {
+        key: `langId`,
+        text: 'Language ID',
+      },
+      {
+        key: `bibleId`,
+        text: 'Bible ID',
+      },
+      {
+        key: `bookId`,
+        text: 'Book ID',
+      },
+    ];
+    writeToTsv(repoFormat, sortStringObjects(repoList, 'fullName'), outputFolder, `tCore_projects.tsv`);
+  });
+
+  it(`sort tC repos for language`, async () => {
     const langList = {};
     const orgList = {};
     const files = getDirJson(outputFolder);
@@ -170,8 +281,8 @@ describe.skip('apiHelpers searching for books', () => {
       }
     }
     const dataFolder = path.join(outputFolder, 'orgs');
-    fs.outputJsonSync(path.join(dataFolder, `$orgs.json`), orgList);
-    fs.outputJsonSync(path.join(dataFolder, 'langRepos.json'), langList);
+    fs.outputJsonSync(path.join(dataFolder, `$orgs.json`), orgList, JSON_OPTS);
+    fs.outputJsonSync(path.join(dataFolder, 'langRepos.json'), langList, JSON_OPTS);
   });
 });
 
@@ -958,7 +1069,7 @@ function writeToTsv(reposFormat, reposLines, outputFolder, outputFile) {
  * @param sortKey
  * @return {*}
  */
-function sortObjects(reposLines, sortKey) {
+function sortStringObjects(reposLines, sortKey) {
   const keySort = (a, b) => {
     const x = a[sortKey].toLowerCase();
     const y = b[sortKey].toLowerCase();
@@ -969,6 +1080,32 @@ function sortObjects(reposLines, sortKey) {
       return 1;
     }
     return 0;
+  };
+  const sorted = reposLines.sort(keySort);
+  return sorted;
+}
+
+/**
+ *
+ * @param reposLines
+ * @param sortKey
+ * @param reverse
+ * @return {*}
+ */
+function sortObjects(reposLines, sortKey, reverse) {
+  const keySort = (a, b) => {
+    const x = a[sortKey];
+    const y = b[sortKey];
+    let result = 0;
+    if (x < y) {
+      result = -1;
+    } else if (x > y) {
+      result = 1;
+    }
+    if (reverse) {
+      result = -result;
+    }
+    return result;
   };
   const sorted = reposLines.sort(keySort);
   return sorted;
@@ -1133,7 +1270,7 @@ function summarizeProjects(outputFolder, langId, org) {
                 },
               ];
               if (projectLines.length) {
-                writeToTsv(projectsFormat, sortObjects(projectLines, 'reference'), projectSummaryFolder, projectSummaryFileName);
+                writeToTsv(projectsFormat, sortStringObjects(projectLines, 'reference'), projectSummaryFolder, projectSummaryFileName);
               }
             }
             repoLine.twPercentComplete = project.checks.translationWords && project.checks.translationWords.percentCompleted || 0;
@@ -1216,7 +1353,7 @@ function summarizeProjects(outputFolder, langId, org) {
       },
     ];
     const summaryFolder = path.join(outputFolder, 'summary');
-    writeToTsv(reposFormat, sortObjects(reposLines, 'fullName'), summaryFolder, `${langId}-${org}-summary.tsv`);
+    writeToTsv(reposFormat, sortStringObjects(reposLines, 'fullName'), summaryFolder, `${langId}-${org}-summary.tsv`);
   }
 }
 
@@ -1278,7 +1415,7 @@ async function validateProjects(repos, resourcesPath, outputFolder, langId, org,
       totalProjects,
       projects: projectsResults,
     };
-    fs.outputJsonSync(summaryFile, summary);
+    fs.outputJsonSync(summaryFile, summary, JSON_OPTS);
   }
 
   const projectNames = Object.keys(projectsResults);
@@ -1336,7 +1473,7 @@ async function validateProjects(repos, resourcesPath, outputFolder, langId, org,
   };
 
   const outputFile = path.join(outputFolder, 'orgs', `${langId}-${org}-repos.json`);
-  fs.outputJsonSync(outputFile, results);
+  fs.outputJsonSync(outputFile, results, JSON_OPTS);
   console.log(`saved results into ${outputFile}`);
 }
 

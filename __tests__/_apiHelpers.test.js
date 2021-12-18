@@ -110,14 +110,15 @@ describe('test API', () => {
     const resourcesPath = './temp/updates';
     const sourceContentUpdater = new Updater();
     const localResourceList = getLocalResourceList(resourcesPath);
-    const initialResourceList = saveResources(resourcesPath, localResourceList);
+    const initialResourceList = saveResources(resourcesPath, localResourceList, 'initial');
     await sourceContentUpdater.getLatestResources(localResourceList)
       .then(async (updatedLanguages) => {
+        saveResources(resourcesPath, updatedLanguages, 'updated');
         // console.log(sourceContentUpdater.updatedCatalogResources);
         await sourceContentUpdater.downloadResources(['en'], resourcesPath);
         console.log(updatedLanguages);
         const localResourceList = getLocalResourceList(resourcesPath);
-        const finalResourceList = saveResources(resourcesPath, localResourceList);
+        const finalResourceList = saveResources(resourcesPath, localResourceList, 'final');
         console.log('stuff');
       })
       .catch((err) => {
@@ -292,6 +293,7 @@ export const getLocalResourceList = (resourcesPath = USER_RESOURCES_PATH) => {
             const localResource = {
               languageId: languageId,
               resourceId: bibleId,
+              version: path.base(bibleLatestVersion),
               modifiedTime: resourceManifest.catalog_modified_time,
             };
 
@@ -408,8 +410,9 @@ function dateToFileName(str) {
   return fileName;
 }
 
-function saveResources(outputFolder, data) {
-  const fileName = `localResources-${dateToFileName()}.json`;
+function saveResources(outputFolder, data, tag) {
+  // const fileName = `localResources-${dateToFileName()}.json`;
+  const fileName = `localResources-${tag}.json`;
   fs.ensureDirSync(outputFolder);
   const outputPath = path.join(outputFolder, fileName);
   fs.outputJSONSync(outputPath, data);
