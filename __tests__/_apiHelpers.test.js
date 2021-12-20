@@ -5,9 +5,7 @@ import fs from 'fs-extra';
 import path from 'path-extra';
 import os from 'os';
 import semver from 'semver';
-import rimraf from 'rimraf';
 // import nock from 'nock';
-import isEqual from 'deep-equal';
 import * as apiHelpers from '../src/helpers/apiHelpers';
 import Updater from '../src';
 
@@ -26,6 +24,28 @@ export const QUOTE_MARK = '\u2019';
 // // disable nock failed
 // nock.restore();
 // nock.cleanAll();
+
+describe('test API', () => {
+  it('test Updater', async () => {
+    const resourcesPath = './temp/updates';
+    const sourceContentUpdater = new Updater();
+    const localResourceList = getLocalResourceList(resourcesPath);
+    const initialResourceList = saveResources(resourcesPath, localResourceList, 'initial');
+    await sourceContentUpdater.getLatestResources(localResourceList)
+      .then(async (updatedLanguages) => {
+        saveResources(resourcesPath, updatedLanguages, 'updated');
+        // console.log(sourceContentUpdater.updatedCatalogResources);
+        await sourceContentUpdater.downloadResources(['en'], resourcesPath);
+        console.log(updatedLanguages);
+        const localResourceList = getLocalResourceList(resourcesPath);
+        const finalResourceList = saveResources(resourcesPath, localResourceList, 'final');
+        console.log('stuff');
+      })
+      .catch((err) => {
+        console.error('Local Resource List:', err);
+      });
+  }, 600000);
+});
 
 describe.skip('apiHelpers.getCatalog', () => {
   it('should get the resulting catalog', () => {
@@ -103,28 +123,6 @@ describe.skip('apiHelpers compare pivoted.json with CN', () => {
     writeCsv2('./temp/Catalog-CN-and-Old.tsv', csvLines);
     console.log('done');
   }, 10000);
-});
-
-describe('test API', () => {
-  it('test Updater', async () => {
-    const resourcesPath = './temp/updates';
-    const sourceContentUpdater = new Updater();
-    const localResourceList = getLocalResourceList(resourcesPath);
-    const initialResourceList = saveResources(resourcesPath, localResourceList, 'initial');
-    await sourceContentUpdater.getLatestResources(localResourceList)
-      .then(async (updatedLanguages) => {
-        saveResources(resourcesPath, updatedLanguages, 'updated');
-        // console.log(sourceContentUpdater.updatedCatalogResources);
-        await sourceContentUpdater.downloadResources(['en'], resourcesPath);
-        console.log(updatedLanguages);
-        const localResourceList = getLocalResourceList(resourcesPath);
-        const finalResourceList = saveResources(resourcesPath, localResourceList, 'final');
-        console.log('stuff');
-      })
-      .catch((err) => {
-        console.error('Local Resource List:', err);
-      });
-  }, 600000);
 });
 
 describe.skip('apiHelpers.getCatalogCN', () => {
@@ -404,7 +402,7 @@ export const generateTimestamp = (str) => {
   }
 };
 
-function dateToFileName(str) {
+export function dateToFileName(str) {
   let fileName = generateTimestamp(str);
   fileName = fileName.replace(/[:"]/g, '_');
   return fileName;
