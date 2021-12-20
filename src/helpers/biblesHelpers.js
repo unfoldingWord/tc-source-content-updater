@@ -6,6 +6,7 @@ import path from 'path-extra';
  * generate manifest.json
  * @param {Object} oldManifest - old manifest data
  * @param {String} RESOURCE_OUTPUT_PATH - folder to store manifest.json
+ * @param {Object} resource
  * @return {Object} new manifest data
  */
 export function generateBibleManifest(oldManifest, RESOURCE_OUTPUT_PATH, resource) {

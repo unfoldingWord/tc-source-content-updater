@@ -113,7 +113,7 @@ export async function doMultipartQuery(url) {
  * Request the Door43-Catalog from catalog-next
  * @return {Object} - Catalog from the DCS API
  */
-export async function getCatalog() {
+export async function getD43Catalog() {
   let released;
   let latest;
 
@@ -137,6 +137,40 @@ export async function getCatalog() {
     }
   }
   return released;
+}
+
+export async function getCatalogAllReleases() {
+  let released = [];
+  // const subjectList = ['Bible', 'Aligned Bible', 'Greek New Testament', 'Hebrew Old Testament', 'Translation Words', 'TSV Translation Notes', 'Translation Academy', 'Bible translation comprehension questions'];
+  const subjectList = ['Bible', 'Testament', 'Translation Words', 'TSV Translation Notes', 'Translation Academy'];
+
+  try {
+    for (const subject of subjectList) {
+      const fetchUrl = `https://git.door43.org/api/catalog/v3?subject=${subject}`;
+      const {result} = await makeJsonRequestDetailed(fetchUrl);
+      let repos = 0;
+      for (const language of result.languages) {
+        const languageId = language.identifier;
+        const resources = language.resources || [];
+        for (const resource of resources) {
+          resource.language = languageId;
+          released.push(resource);
+          repos++;
+        }
+      }
+      console.log(`${subject} has ${repos} items`);
+    }
+    console.log(`released catalog has ${released.length} items`);
+  } catch (e) {
+    console.log('getCatalog() - error getting catalog', e);
+    return [];
+  }
+
+  return released;
+}
+
+export async function getCatalog() {
+  return getCatalogAllReleases();
 }
 
 /**

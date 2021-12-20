@@ -28,7 +28,7 @@ jest.unmock('../src/helpers/zipFileHelpers');
 // nock.restore();
 // nock.cleanAll();
 
-describe.skip('test API', () => {
+describe('test API', () => {
   it('test Updater', async () => {
     const resourcesPath = './temp/updates';
     const sourceContentUpdater = new Updater();

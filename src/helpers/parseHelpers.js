@@ -213,8 +213,8 @@ export function parseCatalogResources(catalog, ignoreObsResources = true, subjec
       const languageId = catalogItem.language.toLowerCase();
       // for (let j = 0, rLen = resources.length; j < rLen; j++) {
       //   const resource = resources[j];
-      const isCheckingLevel2 = catalogItem.repo.checking_level >= 2;
-      let resourceId = catalogItem.name;
+      const isCheckingLevel2 = catalogItem.checking.checking_level >= 2;
+      let resourceId = catalogItem.identifier;
       if (resourceId.includes('_')) {
         // try to strip off languageId
         const [, resourceId_] = resourceId.split('_');
@@ -223,17 +223,21 @@ export function parseCatalogResources(catalog, ignoreObsResources = true, subjec
         }
       }
       if (ignoreObsResources && (resourceId.indexOf('obs') >= 0)) { // see if we should skip obs resources
-          // console.log(`skipping OBS item: ${catalogItem.full_name}`);
-          continue;
-        }
-        const downloadUrl = catalogItem.zipball_url;
-        const remoteModifiedTime = catalogItem.repo.updated_at;
+        // console.log(`skipping OBS item: ${catalogItem.full_name}`);
+        continue;
+      }
+      if (catalogItem.formats.length > 1) {
+        console.log('too many');
+      }
+      const firstFormat = catalogItem.formats && catalogItem.formats[0];
+      const downloadUrl = firstFormat.ur;
+        const remoteModifiedTime = catalogItem.modified;
         const isDesiredSubject = !subjectFilters ||
           subjectFilters.includes(subject);
-        let version = catalogItem.release && catalogItem.release.name;
+        let version = catalogItem.version;
         if (!version) {
           version = 'master'; // we are on latest
-        } else if (version[0].toLowerCase() === 'v') {
+        } else if (version[0].toLowerCase() === 'v') { // trim leading v
           version = version.substr(1);
         }
         if (isDesiredSubject && isCheckingLevel2 &&

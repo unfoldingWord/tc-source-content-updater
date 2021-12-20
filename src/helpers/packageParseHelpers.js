@@ -32,6 +32,7 @@ export const parseUsfmOfBook = (usfmPath, outputPath) => {
  * parses manifest.yaml data to create manifest.json
  * @param {String} extractedFilePath - path containing manifest.yaml
  * @param {string} outputPath - path to place manifest.json
+ * @param {Object} resource
  * @return {Object} new manifest data
  */
 export function parseManifest(extractedFilePath, outputPath, resource) {
