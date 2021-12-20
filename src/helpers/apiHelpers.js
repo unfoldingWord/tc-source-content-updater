@@ -149,7 +149,7 @@ export async function getManifestData(owner, repo) {
   const fetchUrl = `https://git.door43.org/api/catalog/v5/entry/${owner}/${repo}/master/metadata`;
   try {
     const {result} = await makeJsonRequestDetailed(fetchUrl);
-    return result && result.dublin_core && result.dublin_core.version;
+    return result;
   } catch (e) {
     console.log('getManifestData() - error getting manifest data', e);
   }

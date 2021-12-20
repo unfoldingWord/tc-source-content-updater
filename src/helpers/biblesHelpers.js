@@ -8,7 +8,7 @@ import path from 'path-extra';
  * @param {String} RESOURCE_OUTPUT_PATH - folder to store manifest.json
  * @return {Object} new manifest data
  */
-export function generateBibleManifest(oldManifest, RESOURCE_OUTPUT_PATH) {
+export function generateBibleManifest(oldManifest, RESOURCE_OUTPUT_PATH, resource) {
   const newManifest = {};
   newManifest.dublin_core = oldManifest.dublin_core; // preserve original manifest data
   newManifest.checking = oldManifest.checking;
@@ -22,6 +22,8 @@ export function generateBibleManifest(oldManifest, RESOURCE_OUTPUT_PATH) {
   newManifest.subject = oldManifest.dublin_core.subject;
   newManifest.resource_id = oldManifest.dublin_core.identifier;
   newManifest.resource_title = oldManifest.dublin_core.title;
+  const remoteModifiedTime = resource && resource.remoteModifiedTime || (new Date()).toJSON();
+  newManifest.remoteModifiedTime = remoteModifiedTime;
   const oldMainfestIdentifier = oldManifest.dublin_core.identifier
                                       .toLowerCase();
   const identifiers = ['ugnt', 'ubh'];

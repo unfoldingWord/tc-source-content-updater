@@ -1,7 +1,11 @@
+// this is just a development playbox
+// for Resource Validation - search, download, and validate projects
+
 import fs from 'fs-extra';
 import path from 'path-extra';
 import {makeRequestDetailed} from '../src/helpers/apiHelpers';
 import {BIBLE_LIST_NT, BIBLE_LIST_OT} from '../src/resources/bible';
+import {addDupeCount} from './_projectValidationHelpers';
 
 jest.unmock('fs-extra');
 
@@ -168,52 +172,6 @@ describe.skip('Examining Checks in File System', () => {
 //
 // helpers
 //
-
-function addDupeCount(duplicateCount, bookCount, csvLines, book) {
-  const percentDupes = Math.round(100 * duplicateCount / bookCount);
-  csvLines.push(`${book}\t${bookCount}\t${duplicateCount}\t${percentDupes}`);
-  console.log(`for ${book} the total is ${bookCount} with ${duplicateCount} duplicates or ${percentDupes}%`);
-}
-
-function addCsvItem(list, org, repo, subject, item) {
-  const itemJson = JSON.stringify(item).replace('\t','\\t');
-  list.push({org, repo, subject, resource: itemJson});
-  // list.push(`${org}\t${repo}\t${subject}\t${itemJson}`);
-}
-
-function addCsvItem2(list, org, repo, subject, item, category) {
-  const itemJson = JSON.stringify(item).replace('\t','\\t');
-  list.push({category, org, repo, subject, resource: itemJson});
-  // list.push(`${org}\t${repo}\t${subject}\t${itemJson}`);
-}
-
-function writeCsv(filename, list) {
-  const csvLines = [];
-  for (const item of list) {
-    const itemJson = JSON.stringify(item.resource).replace('\t', '\\t');
-    csvLines.push(`${item.org}\t${item.repo}\t${item.subject}\t${itemJson}`);
-  }
-  fs.writeFileSync(filename, csvLines.join('\n') + '\n', 'utf8');
-}
-
-function writeCsv2(filename, list) {
-  const csvLines = [];
-  for (const item of list) {
-    const itemJson = JSON.stringify(item.resource).replace('\t', '\\t');
-    csvLines.push(`${item.category}\t${item.org}\t${item.repo}\t${item.subject}\t${itemJson}`);
-  }
-  fs.writeFileSync(filename, csvLines.join('\n') + '\n', 'utf8');
-}
-
-function getOrgItems(orgs, org, csvLines) {
-  const items = orgs[org];
-  for (const item of items) {
-    const subject = item.subject;
-    const repo = item.name;
-    const org = item.owner;
-    addCsvItem(csvLines, org, repo, subject, item);
-  }
-}
 
 async function getUniqueChecks(book, uniqueChecks, repoUrl, repo) {
   const [, bookId] = book.split('-');
