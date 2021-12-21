@@ -37,7 +37,7 @@ export function addCsvItem(list, org, repo, subject, item) {
  * @param category
  */
 export function addCsvItem2(list, org, repo, subject, item, category) {
-  const itemJson = JSON.stringify(item).replace('\t', '\\t');
+  const itemJson = JSON.stringify(item).replace('\t', '\\t').substr(0, 256);
   list.push({category, org, repo, subject, resource: itemJson});
   // list.push(`${org}\t${repo}\t${subject}\t${itemJson}`);
 }

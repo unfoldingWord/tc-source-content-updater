@@ -76,9 +76,9 @@ describe('test API', () => {
   }, 600000);
 });
 
-describe.skip('apiHelpers.getCatalog', () => {
+describe.skip('apiHelpers.getCatalogOld', () => {
   it('should get the resulting catalog', () => {
-    return apiHelpers.getCatalog().then((res) => {
+    return apiHelpers.getCatalogOld().then((res) => {
       expect(res).toMatchObject({
         catalogs: expect.any(Array),
         subjects: expect.any(Array),
@@ -102,9 +102,9 @@ describe.skip('apiHelpers.getCatalog', () => {
   });
 });
 
-describe.skip('apiHelpers compare pivoted.json with CN', () => {
+describe('apiHelpers compare pivoted.json with CN', () => {
   it('should make a merged CSV', async () => {
-    const res = await apiHelpers.getCatalog();
+    const res = await apiHelpers.getCatalogOld();
     expect(res).toMatchObject({
       catalogs: expect.any(Array),
       subjects: expect.any(Array),
@@ -126,16 +126,19 @@ describe.skip('apiHelpers compare pivoted.json with CN', () => {
     console.log(`D43 Catalog flattened has ${csvLines.length} total items`);
     writeCsv('./temp/CatalogOld.tsv', csvLines);
 
-    const latestD43Catalog = 'http://git.door43.org/api/catalog/v5?owner=Door43-Catalog&stage=latest';
-    const data = await apiHelpers.doMultipartQuery(latestD43Catalog);
+    const data = await apiHelpers.getCatalogAllReleases();
     console.log(`Catalog Next Found ${data.length} total items`);
     expect(data.length).toBeTruthy();
     const cnCatalog = 'CN';
     const cnCatalogCombined = 'CN+Old';
     for (const item of data) {
       const subject = item.subject;
-      const repo = item.name;
-      const org = item.owner;
+      const resourceId = item.identifier;
+      const languageId = item.language;
+      const repo = `${languageId}_${resourceId}`;
+      const url = item.formats && item.formats[0] && item.formats[0].ur;
+      const parts = url.split('/');
+      const org = parts[3];
       const pos = csvLines.findIndex((line) => ((line.repo === repo) && (line.org === org)));
       if (pos >= 0) {
         const line = csvLines[pos];

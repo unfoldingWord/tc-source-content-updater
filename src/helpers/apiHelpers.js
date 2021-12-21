@@ -1,4 +1,8 @@
+import {delay} from './utils';
+
 const request = require('request');
+const DCS_API = 'https://api.door43.org';
+const PIVOTED_CATALOG_PATH = '/v3/subjects/pivoted.json';
 
 /**
  * Performs a get request on the specified url.
@@ -24,6 +28,14 @@ function makeRequest(url) {
       }
     });
   });
+}
+
+/**
+ * Request the catalog.json from DCS API
+ * @return {Object} - Catalog from the DCS API
+ */
+export function getCatalogOld() {
+  return makeRequest(DCS_API + PIVOTED_CATALOG_PATH);
 }
 
 /**
@@ -139,15 +151,32 @@ export async function getD43Catalog() {
   return released;
 }
 
+async function getSubject(subject, retries=3) {
+  let result_;
+  for (let i = 1; i <= retries; i++) {
+    try {
+      const fetchUrl = `https://git.door43.org/api/catalog/v3?subject=${subject}`;
+      const {result} = await makeJsonRequestDetailed(fetchUrl);
+      result_ = result;
+      break;
+    } catch (e) {
+      if (i >= retries) {
+        throw e;
+      }
+      await delay(500);
+    }
+  }
+  return result_;
+}
+
 export async function getCatalogAllReleases() {
   let released = [];
   // const subjectList = ['Bible', 'Aligned Bible', 'Greek New Testament', 'Hebrew Old Testament', 'Translation Words', 'TSV Translation Notes', 'Translation Academy', 'Bible translation comprehension questions'];
-  const subjectList = ['Bible', 'Testament', 'Translation Words', 'TSV Translation Notes', 'Translation Academy'];
+  const subjectList = ['Bible', 'Testament', 'Translation Words', 'TSV Translation Notes', 'Translation Academy', 'Translation Questions'];
 
   try {
     for (const subject of subjectList) {
-      const fetchUrl = `https://git.door43.org/api/catalog/v3?subject=${subject}`;
-      const {result} = await makeJsonRequestDetailed(fetchUrl);
+      const result = await getSubject(subject);
       let repos = 0;
       for (const language of result.languages) {
         const languageId = language.identifier;
