@@ -15,6 +15,7 @@ import {
   writeCsv,
   writeCsv2,
 } from './_apiHelpers';
+import path from "path-extra";
 
 // require('os').homedir()
 
@@ -22,7 +23,8 @@ jest.unmock('fs-extra');
 jest.unmock('../src/helpers/downloadHelpers');
 jest.unmock('../src/helpers/zipFileHelpers');
 
-// const searchForLangAndBook = `https://git.door43.org/api/v1/repos/search?q=hi%5C_%25%5C_act%5C_book&sort=updated&order=desc&limit=30`;
+const HOME_DIR = os.homedir();
+const USER_RESOURCES = path.join(HOME_DIR, `translationCore/resources`);
 
 // // disable nock failed
 // nock.restore();
@@ -31,6 +33,7 @@ jest.unmock('../src/helpers/zipFileHelpers');
 describe('test API', () => {
   it('test Updater', async () => {
     const resourcesPath = './temp/updates';
+    // const resourcesPath = USER_RESOURCES;
     const sourceContentUpdater = new Updater();
     const localResourceList = getLocalResourceList(resourcesPath);
     const initialResourceList = saveResources(resourcesPath, localResourceList, 'initial');
@@ -38,7 +41,10 @@ describe('test API', () => {
     saveResources(resourcesPath, updatedLanguages, 'updated');
     // console.log(sourceContentUpdater.updatedCatalogResources);
     const resourceStatus = _.cloneDeep(localResourceList);
-    const langsToUpdate = ['en', 'el-x-koine', 'es-419', 'hbo', 'ru'];
+    const langsToUpdate = ['es-419', 'en', 'ru', 'hi'];
+    const remoteResources = sourceContentUpdater.remoteCatalog.filter(item => langsToUpdate.includes(item.language));
+    const updatedRemoteResources = sourceContentUpdater.updatedCatalogResources.filter(item => langsToUpdate.includes(item.languageId));
+    // const langsToUpdate = ['en', 'el-x-koine', 'es-419', 'hbo', 'ru'];
     for (const langId of langsToUpdate) {
       if (updatedLanguages.find(item => (item.languageId === langId))) {
         for (const remote of sourceContentUpdater.updatedCatalogResources) {
@@ -68,7 +74,7 @@ describe('test API', () => {
     for (const langId of langsToUpdate) {
       const match = newUpdatedLanguages.find(item => (item.languageId === langId));
       if (match) {
-        console.error(`didn't get updated: ${match.fullName}`);
+        console.error(`didn't get updated: ${match.languageId}`);
       }
       expect(match).toBeFalsy();
     }
@@ -102,7 +108,7 @@ describe.skip('apiHelpers.getCatalogOld', () => {
   });
 });
 
-describe('apiHelpers compare pivoted.json with CN', () => {
+describe.skip('apiHelpers compare pivoted.json with CN', () => {
   it('should make a merged CSV', async () => {
     const res = await apiHelpers.getCatalogOld();
     expect(res).toMatchObject({
@@ -135,20 +141,32 @@ describe('apiHelpers compare pivoted.json with CN', () => {
       const subject = item.subject;
       const resourceId = item.identifier;
       const languageId = item.language;
-      const repo = `${languageId}_${resourceId}`;
-      const url = item.formats && item.formats[0] && item.formats[0].ur;
-      const parts = url.split('/');
-      const org = parts[3];
+      const repo = item.repo;
+      const url = item.formats && item.formats[0] && item.formats[0].url;
+      // const parts = url.split('/');
+      const org = item.owner;
+      const item_ = { org, repo, subject, resourceId, languageId };
+      const itemJson = JSON.stringify(item_);
+      if (itemJson.toLowerCase().indexOf('obs') >= 0) {
+        console.log(`found OBS in ${org}/${repo} - ${subject}: ${itemJson}`);
+      }
       const pos = csvLines.findIndex((line) => ((line.repo === repo) && (line.org === org)));
       if (pos >= 0) {
         const line = csvLines[pos];
+        if (line.matched) {
+          console.log(`dupe in catalog: ${org}/${repo} - ${subject}: ${itemJson}`);
+        } else {
+          line.matched = true;
+        }
+        line.subject = subject;
+        line.url = url;
         if (line.category === oldCatalog) {
           line.category = cnCatalogCombined;
         } else {
           console.log(JSON.stringify(line));
         }
       } else {
-        addCsvItem2(csvLines, org, repo, subject, item, cnCatalog);
+        addCsvItem2(csvLines, org, repo, subject, item, cnCatalog, url);
       }
     }
 

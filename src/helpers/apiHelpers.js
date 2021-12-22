@@ -151,13 +151,14 @@ export async function getD43Catalog() {
   return released;
 }
 
-async function getSubject(subject, retries=3) {
+async function searchWithRetry(subjects, retries=3) {
   let result_;
   for (let i = 1; i <= retries; i++) {
     try {
-      const fetchUrl = `https://git.door43.org/api/catalog/v3?subject=${subject}`;
+      const subjectParam = encodeURI(subjects.join(','));
+      const fetchUrl = `https://git.door43.org/api/catalog/v3/search?subject=${subjectParam}`;
       const {result} = await makeJsonRequestDetailed(fetchUrl);
-      result_ = result;
+      result_ = result && result;
       break;
     } catch (e) {
       if (i >= retries) {
@@ -171,14 +172,15 @@ async function getSubject(subject, retries=3) {
 
 export async function getCatalogAllReleases() {
   let released = [];
-  // const subjectList = ['Bible', 'Aligned Bible', 'Greek New Testament', 'Hebrew Old Testament', 'Translation Words', 'TSV Translation Notes', 'Translation Academy', 'Bible translation comprehension questions'];
-  const subjectList = ['Bible', 'Testament', 'Translation Words', 'TSV Translation Notes', 'Translation Academy', 'Translation Questions'];
+  const subjectList = ['Bible', 'Aligned Bible', 'Greek New Testament', 'Hebrew Old Testament', 'Translation Words', 'TSV Translation Notes', 'Translation Academy', 'Bible translation comprehension questions'];
+  // const subjectList = ['Bible', 'Testament', 'Translation Words', 'TSV Translation Notes', 'Translation Academy'];
 
   try {
-    for (const subject of subjectList) {
-      const result = await getSubject(subject);
-      let repos = 0;
-      for (const language of result.languages) {
+    // for (const subject of subjectList) {
+    const result = await searchWithRetry(subjectList);
+    let repos = 0;
+    const languages = result && result.languages || [];
+    for (const language of languages) {
         const languageId = language.identifier;
         const resources = language.resources || [];
         for (const resource of resources) {
@@ -187,8 +189,8 @@ export async function getCatalogAllReleases() {
           repos++;
         }
       }
-      console.log(`${subject} has ${repos} items`);
-    }
+      console.log(`has ${repos} items`);
+    // }
     console.log(`released catalog has ${released.length} items`);
   } catch (e) {
     console.log('getCatalog() - error getting catalog', e);

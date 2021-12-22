@@ -36,9 +36,9 @@ export function addCsvItem(list, org, repo, subject, item) {
  * @param item
  * @param category
  */
-export function addCsvItem2(list, org, repo, subject, item, category) {
+export function addCsvItem2(list, org, repo, subject, item, category, url='') {
   const itemJson = JSON.stringify(item).replace('\t', '\\t').substr(0, 256);
-  list.push({category, org, repo, subject, resource: itemJson});
+  list.push({category, org, repo, subject, resource: itemJson, url});
   // list.push(`${org}\t${repo}\t${subject}\t${itemJson}`);
 }
 
@@ -65,7 +65,7 @@ export function writeCsv2(filename, list) {
   const csvLines = [];
   for (const item of list) {
     const itemJson = JSON.stringify(item.resource).replace('\t', '\\t');
-    csvLines.push(`${item.category}\t${item.org}\t${item.repo}\t${item.subject}\t${itemJson}`);
+    csvLines.push(`${item.category}\t${item.org}\t${item.repo}\t${item.subject}\t${item.url}\t${itemJson}`);
   }
   fs.writeFileSync(filename, csvLines.join('\n') + '\n', 'utf8');
 }

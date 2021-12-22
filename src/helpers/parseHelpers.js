@@ -2,16 +2,16 @@
 import * as ERROR from '../resources/errors';
 
 // the following are the subject found in the door43 catalog.
-// if a subject isnt found in this list then it will be ignored by the source content updater
+// if a subject isn't found in this list then it will be ignored by the source content updater
 export const TC_RESOURCES = [
   'Bible',
-  'Aligned Bible',
-  'Greek New Testament',
-  'Hebrew Old Testament',
-  'TSV Translation Notes',
-  'Bible translation comprehension questions',
-  'Translation Words',
-  'Translation Academy',
+  'Aligned_Bible',
+  'Greek_New_Testament',
+  'Hebrew_Old_Testament',
+  'TSV_Translation_Notes',
+  'Bible_translation_comprehension_questions',
+  'Translation_Words',
+  'Translation_Academy',
 ];
 
 export const RESOURCE_ID_MAP = {
@@ -232,34 +232,37 @@ export function parseCatalogResources(catalog, ignoreObsResources = true, subjec
         console.log('too many');
       }
       const firstFormat = catalogItem.formats && catalogItem.formats[0];
-      const downloadUrl = firstFormat.ur;
-        const remoteModifiedTime = catalogItem.modified;
-        const isDesiredSubject = !subjectFilters ||
-          subjectFilters.includes(subject);
-        let version = catalogItem.version;
-        if (!version) {
-          version = 'master'; // we are on latest
-        } else if (version[0].toLowerCase() === 'v') { // trim leading v
-          version = version.substr(1);
-        }
-        if (isDesiredSubject && isCheckingLevel2 &&
-          downloadUrl && remoteModifiedTime && languageId) {
-          const foundResource = {
-            languageId,
-            resourceId,
-            remoteModifiedTime,
-            downloadUrl,
-            version,
+      const downloadUrl = firstFormat.url;
+      const remoteModifiedTime = catalogItem.modified;
+      const isDesiredSubject = !subjectFilters ||
+        subjectFilters.includes(subject);
+      let version = catalogItem.version;
+      if (!version) {
+        version = 'master'; // we are on latest
+      } else if (version[0].toLowerCase() === 'v') { // trim leading v
+        version = version.substr(1);
+      }
+      if (!(catalogItem.projects && catalogItem.projects.length)) {
+        continue; // skip over repos with no projects
+      }
+      if (isDesiredSubject && isCheckingLevel2 &&
+        downloadUrl && remoteModifiedTime && languageId) {
+        const foundResource = {
+          languageId,
+          resourceId,
+          remoteModifiedTime,
+          downloadUrl,
+          version,
+          subject,
+          catalogEntry: {
             subject,
-            catalogEntry: {
-              subject,
-              resource: catalogItem,
-            },
-          };
-          catalogResources.push(foundResource);
-        } else {
-          // console.log(`skipping invalid item: ${catalogItem.full_name}}`);
-        }
+            resource: catalogItem,
+          },
+        };
+        catalogResources.push(foundResource);
+      } else {
+        // console.log(`skipping invalid item: ${catalogItem.full_name}}`);
+      }
       // }
     }
   // }
