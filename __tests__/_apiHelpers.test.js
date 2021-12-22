@@ -30,7 +30,7 @@ const USER_RESOURCES = path.join(HOME_DIR, `translationCore/resources`);
 // nock.restore();
 // nock.cleanAll();
 
-describe('test API', () => {
+describe.skip('test API', () => {
   it('test Updater', async () => {
     const resourcesPath = './temp/updates';
     // const resourcesPath = USER_RESOURCES;

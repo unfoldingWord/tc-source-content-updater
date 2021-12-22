@@ -17,7 +17,6 @@ import {
 import * as parseHelpers from './parseHelpers';
 import * as downloadHelpers from './downloadHelpers';
 import * as moveResourcesHelpers from './moveResourcesHelpers';
-import {getOtherTnsOLVersions} from './translationHelps/tnArticleHelpers';
 // constants
 import * as errors from '../resources/errors';
 import * as Bible from '../resources/bible';
@@ -121,7 +120,7 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
       } catch (err) {
         throw Error(appendError(errors.UNABLE_TO_MOVE_RESOURCE_INTO_RESOURCES, err));
       }
-      let versionsToNotDelete = [];
+      const versionsToNotDelete = [];
       if (!isGreekOrHebrew) {
         // Make sure that the resource currently being downloaded is not deleted
         versionsToNotDelete.push('v' + resource.version);

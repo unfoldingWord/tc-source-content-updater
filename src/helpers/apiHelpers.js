@@ -151,6 +151,12 @@ export async function getD43Catalog() {
   return released;
 }
 
+/**
+ * searching with a max number of retries
+ * @param {array} subjects
+ * @param {number} retries
+ * @return {Promise<*>}
+ */
 async function searchWithRetry(subjects, retries=3) {
   let result_;
   for (let i = 1; i <= retries; i++) {
@@ -170,8 +176,12 @@ async function searchWithRetry(subjects, retries=3) {
   return result_;
 }
 
+/**
+ * get published catalog using catalog next v3
+ * @return {Promise<*[]>}
+ */
 export async function getCatalogAllReleases() {
-  let released = [];
+  const released = [];
   const subjectList = ['Bible', 'Aligned Bible', 'Greek New Testament', 'Hebrew Old Testament', 'Translation Words', 'TSV Translation Notes', 'Translation Academy', 'Bible translation comprehension questions'];
   // const subjectList = ['Bible', 'Testament', 'Translation Words', 'TSV Translation Notes', 'Translation Academy'];
 
@@ -200,6 +210,10 @@ export async function getCatalogAllReleases() {
   return released;
 }
 
+/**
+ * get published catalog
+ * @return {Promise<*[]>}
+ */
 export async function getCatalog() {
   return getCatalogAllReleases();
 }
