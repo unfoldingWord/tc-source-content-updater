@@ -162,7 +162,8 @@ async function searchWithRetry(subjects, retries=3) {
   for (let i = 1; i <= retries; i++) {
     try {
       const subjectParam = encodeURI(subjects.join(','));
-      const fetchUrl = `https://git.door43.org/api/catalog/v3/search?subject=${subjectParam}`;
+      const owner = `Door43-Catalog`;
+      const fetchUrl = `https://git.door43.org/api/catalog/v3/search?owner=${owner}&subject=${subjectParam}`;
       const {result} = await makeJsonRequestDetailed(fetchUrl);
       result_ = result && result;
       break;
