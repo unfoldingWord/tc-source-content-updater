@@ -14,6 +14,32 @@ import * as tnArticleHelpers from './helpers/translationHelps/tnArticleHelpers';
 import * as resourcesDownloadHelpers from './helpers/resourcesDownloadHelpers';
 export {getOtherTnsOLVersions} from './helpers/translationHelps/tnArticleHelpers';
 
+export const STAGE = {
+  PROD: 'prod',
+  PRE_PROD: 'preprod',
+  DRAFT: 'draft',
+  LATEST: 'latest',
+};
+
+export const SUBJECT = {
+  ALL_RESOURCES: null,
+  ALL_TC_RESOURCES: 'Bible,Aligned Bible,Greek New Testament,Hebrew Old Testament,Translation Words,TSV Translation Notes,Translation Academy',
+  ALL_BIBLES: 'Bible,Aligned Bible,Greek New Testament,Hebrew Old Testament',
+  ORIGINAL_LANGUAGE_BIBLES: 'Greek New Testament,Hebrew Old Testament',
+  ALIGNED_BIBLES: 'Aligned Bible',
+  UNALIGNED_BIBLES: 'Bible',
+};
+
+export const SORT = {
+  SUBJECT: 'subject',
+  REPO_NAME: 'reponame',
+  TAG: 'tag',
+  RELEASED_TIME: 'released',
+  LANGUAGE_ID: 'lang',
+  TITLE: 'title',
+  DEFAULT: '', // by "lang", "subject" and then "tag"
+};
+
 /**
  * Updater constructor
  */
@@ -31,6 +57,30 @@ Updater.prototype = {};
  */
 Updater.prototype.updateCatalog = async function() {
   this.remoteCatalog = await apiHelpers.getCatalog();
+};
+
+/**
+ * Method to manually fetch the latest remoteCatalog for the current
+ * Updater instance. This function has no return value
+ * @param {Object} searchParams - details below
+ * @param {String} searchParams.owner - if undefined then all are searched
+ * @param {String} searchParams.languageId - if undefined then all are searched
+ * @param {String} searchParams.subject - one or more separated by comma.  If undefined then all are searched.
+ *          Example 'Bible,Aligned Bible,Greek New Testament,Hebrew Old Testament,Translation Words,TSV Translation Notes,Translation Academy'
+ * @param {Number} searchParams.limit - maximum results to return, default 100
+ * @param {Boolean} searchParams.partialMatch - if true will do case insensitive substring matching, default is false
+ * @param {String} searchParams.stage - specifies which release stage to be returned out of these stages:
+ *                    "prod" - return only the production releases
+ *                    "preprod" - return the pre-production release if it exists instead of the production release
+ *                    "draft" - return the draft release if it exists instead of pre-production or production release
+ *                    "latest" -return the default branch (e.g. master) if it is a valid RC instead of the "prod", "preprod" or "draft".  (default)
+ * @param {Number} searchParams.checkingLevel - search only for entries with the given checking level(s). Can be 1, 2 or 3.  Default is any.
+ * @param {Number} searchParams.sort - search only for entries with the given checking level(s). Can be 1, 2 or 3.  Default is any.
+ * @param {number} retries - number of times to retry calling search API, default 3
+ * @return {Promise<*[]|null>}
+ */
+Updater.prototype.searchCatalogNext = async function(searchParams, retries=3) {
+  return await apiHelpers.searchCatalogNext(searchParams);
 };
 
 /**

@@ -28,7 +28,7 @@ export const TRANSLATION_NOTES = 'translationNotes';
 export const TRANSLATION_ACADEMY = 'translationAcademy';
 export const TRANSLATION_HELPS = 'translationHelps';
 export const WORD_ALIGNMENT = 'wordAlignment';
-const JSON_OPTS = {spaces: 2};
+export const JSON_OPTS = {spaces: 2};
 
 /**
  *

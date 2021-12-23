@@ -1,11 +1,13 @@
 // this is just a development playbox
 // for validating switch to Catalog Next APIs
 
+import fs from 'fs-extra';
+import path from 'path-extra';
 import os from 'os';
 import _ from 'lodash';
 // import nock from 'nock';
 import * as apiHelpers from '../src/helpers/apiHelpers';
-import Updater from '../src';
+import Updater, {SORT, STAGE, SUBJECT} from '../src';
 import {
   addCsvItem,
   addCsvItem2,
@@ -15,7 +17,7 @@ import {
   writeCsv,
   writeCsv2,
 } from './_apiHelpers';
-import path from "path-extra";
+import {JSON_OPTS, sortStringObjects, writeToTsv} from './_projectValidationHelpers';
 
 // require('os').homedir()
 
@@ -30,7 +32,69 @@ const USER_RESOURCES = path.join(HOME_DIR, `translationCore/resources`);
 // nock.restore();
 // nock.cleanAll();
 
-describe.skip('test API', () => {
+describe('test API', () => {
+  it('test searchCatalogNext', async () => {
+    const sourceContentUpdater = new Updater();
+    const searchParams = {
+      subject: SUBJECT.ALL_TC_RESOURCES,
+      // owner: 'STR',
+      languageId: 'en',
+      // sort: SORT.LANGUAGE_ID,
+
+      // ========================
+      // less common params:
+      // ========================
+
+      limit: 10000,
+      // partialMatch: true,
+      // stage: STAGE.PROD,
+      // checkingLevel: 3,
+    };
+    const items = await sourceContentUpdater.searchCatalogNext(searchParams);
+    expect(Array.isArray(items)).toBeTruthy();
+    console.log(`Search returned ${items.length} total items`);
+    const repoLines = [];
+    const org = 'Door43-Catalog';
+    for (const item of items) {
+      const line = {
+        full_name: item.full_name,
+        clone_url: item.repo.clone_url,
+        subject: item.subject,
+        stage: item.stage,
+        branch_or_tag_name: item.branch_or_tag_name,
+        title: item.title,
+      };
+      repoLines.push(line);
+    }
+    console.log(`search flattened has ${repoLines.length} total items`);
+    const repoFormat = [
+      {
+        key: 'full_name',
+        text: 'full_name',
+      },
+      {
+        key: 'clone_url',
+        text: 'clone_url',
+      },
+      {
+        key: `subject`,
+        text: 'subject',
+      },
+      {
+        key: `stage`,
+        text: 'stage',
+      },
+      {
+        key: `title`,
+        text: 'title',
+      },
+    ];
+    const outputFolder = './temp';
+    const outputFile = 'CatalogNew';
+    writeToTsv(repoFormat, repoLines, outputFolder, outputFile + '.tsv');
+    fs.outputJsonSync(path.join(outputFolder, outputFile + '.json'), items, JSON_OPTS);
+  }, 60000);
+
   it('test Updater', async () => {
     const resourcesPath = './temp/updates';
     // const resourcesPath = USER_RESOURCES;
