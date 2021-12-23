@@ -32,12 +32,12 @@ const USER_RESOURCES = path.join(HOME_DIR, `translationCore/resources`);
 // nock.restore();
 // nock.cleanAll();
 
-describe('test API', () => {
+describe.skip('test API', () => {
   it('test searchCatalogNext', async () => {
     const sourceContentUpdater = new Updater();
     const searchParams = {
       subject: SUBJECT.ALL_TC_RESOURCES,
-      // owner: 'STR',
+      // owner: 'unfoldingWord',
       languageId: 'en',
       // sort: SORT.LANGUAGE_ID,
 
