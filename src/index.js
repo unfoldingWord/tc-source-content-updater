@@ -14,6 +14,9 @@ import * as tnArticleHelpers from './helpers/translationHelps/tnArticleHelpers';
 import * as resourcesDownloadHelpers from './helpers/resourcesDownloadHelpers';
 export {getOtherTnsOLVersions} from './helpers/translationHelps/tnArticleHelpers';
 
+// ============================
+// defines useful for searching
+
 export const STAGE = {
   PROD: 'prod',
   PRE_PROD: 'preprod',
@@ -37,7 +40,7 @@ export const SORT = {
   RELEASED_TIME: 'released',
   LANGUAGE_ID: 'lang',
   TITLE: 'title',
-  DEFAULT: '', // by "lang", "subject" and then "tag"
+  DEFAULT: '', // by "lang", then "subject" and then "tag"
 };
 
 /**

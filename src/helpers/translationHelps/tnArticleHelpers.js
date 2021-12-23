@@ -190,16 +190,6 @@ function getMissingOriginalResource(resourcesPath, originalLanguageId, originalL
         version
       );
 
-      // Get the version of the other Tns original language to determine versions that should not be deleted.
-      // const versionsToNotDelete = getOtherTnsOLVersions(resourcesPath, originalLanguageId);
-      // const versionsSubdirectory = originalBiblePath.replace(version, '');
-      // const latestOriginalBiblePath = resourcesHelpers.getLatestVersionInPath(versionsSubdirectory);
-      // // if latest version is the version needed delete older versions
-      // if (latestOriginalBiblePath === originalBiblePath) {
-      //   // Old versions of the original language resource bible will be deleted because the tn uses the latest version and not an older version
-      //   resourcesHelpers.removeAllButLatestVersion(versionsSubdirectory, versionsToNotDelete);
-      // }
-      // If version needed is not in the resources download it.
       if (!fs.existsSync(originalBiblePath)) {
         // Download orig. lang. resource
         const downloadUrl = `https://cdn.door43.org/${originalLanguageId}/${originalLanguageBibleId}/${version}/${originalLanguageBibleId}.zip`;

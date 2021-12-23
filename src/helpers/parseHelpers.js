@@ -142,8 +142,6 @@ export function getLatestResources(catalog, localResourceList) {
         } else {
           catalogResource.localModifiedTime = localResource.modifiedTime;
         }
-      } else {
-        console.log(`not found`);
       }
     }
   }

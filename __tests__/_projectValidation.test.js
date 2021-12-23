@@ -1,4 +1,4 @@
-// this is just a development playbox
+// these are integration tests used for development, these are skipped
 // for Project Validation - search, download, and validate projects
 
 // NOCK_OFF=true node --inspect-brk node_modules/.bin/jest --runInBand -t "search, download and verify projects in org"
