@@ -205,73 +205,58 @@ export function parseCatalogResources(catalog, ignoreObsResources = true, subjec
     throw new Error(ERROR.CATALOG_CONTENT_ERROR);
   }
   const catalogResources = [];
-  console.log(`unfiltered catalog length = ${catalog.length}`);
-  // if (catalog && catalog.subjects) {
-    for (let i = 0, len = catalog.length; i < len; i++) {
-      const catalogItem = catalog[i];
-      const subject = catalogItem.subject;
-      const languageId = catalogItem.language.toLowerCase();
-      // for (let j = 0, rLen = resources.length; j < rLen; j++) {
-      //   const resource = resources[j];
-      const isCheckingLevel2 = catalogItem.checking.checking_level >= 2;
-      let resourceId = catalogItem.identifier;
-      if (resourceId.includes('_')) {
-        // try to strip off languageId
-        const [, resourceId_] = resourceId.split('_');
-        if (resourceId_) {
-          resourceId = resourceId_;
-        }
+  for (let i = 0, len = catalog.length; i < len; i++) {
+    const catalogItem = catalog[i];
+    const subject = catalogItem.subject;
+    const languageId = catalogItem.language.toLowerCase();
+    const isCheckingLevel2 = catalogItem.checking.checking_level >= 2;
+    let resourceId = catalogItem.identifier;
+    if (resourceId.includes('_')) {
+      // try to strip off languageId
+      const [, resourceId_] = resourceId.split('_');
+      if (resourceId_) {
+        resourceId = resourceId_;
       }
-      if (ignoreObsResources && (resourceId.indexOf('obs') >= 0)) { // see if we should skip obs resources
-        // console.log(`skipping OBS item: ${catalogItem.full_name}`);
-        continue;
-      }
-      if (catalogItem.formats.length > 1) {
-        console.log('too many');
-      }
-      const firstFormat = catalogItem.formats && catalogItem.formats[0];
-      const downloadUrl = firstFormat.url;
-      const remoteModifiedTime = catalogItem.modified;
-      const isDesiredSubject = !subjectFilters ||
-        subjectFilters.includes(subject);
-      let version = catalogItem.version;
-      if (!version) {
-        version = 'master'; // we are on latest
-      } else if (version[0].toLowerCase() === 'v') { // trim leading v
-        version = version.substr(1);
-      }
-      if (!(catalogItem.projects && catalogItem.projects.length)) {
-        continue; // skip over repos with no projects
-      }
-      if (isDesiredSubject && isCheckingLevel2 &&
-        downloadUrl && remoteModifiedTime && languageId) {
-        const foundResource = {
-          languageId,
-          resourceId,
-          remoteModifiedTime,
-          downloadUrl,
-          version,
-          subject,
-          catalogEntry: {
-            subject,
-            resource: catalogItem,
-          },
-        };
-        catalogResources.push(foundResource);
-      } else {
-        // console.log(`skipping invalid item: ${catalogItem.full_name}}`);
-      }
-      // }
     }
-  // }
+    if (ignoreObsResources && (resourceId.indexOf('obs') >= 0)) { // see if we should skip obs resources
+      // console.log(`skipping OBS item: ${catalogItem.full_name}`);
+      continue;
+    }
+    if (catalogItem.formats.length > 1) {
+      console.log('too many');
+    }
+    const firstFormat = catalogItem.formats && catalogItem.formats[0];
+    const downloadUrl = firstFormat.url;
+    const remoteModifiedTime = catalogItem.modified;
+    const isDesiredSubject = !subjectFilters ||
+      subjectFilters.includes(subject);
+    let version = catalogItem.version;
+    if (!version) {
+      version = 'master'; // we are on latest
+    } else if (version[0].toLowerCase() === 'v') { // trim leading v
+      version = version.substr(1);
+    }
+    if (!(catalogItem.projects && catalogItem.projects.length)) {
+      continue; // skip over repos with no projects
+    }
+    if (isDesiredSubject && isCheckingLevel2 &&
+      downloadUrl && remoteModifiedTime && languageId) {
+      const foundResource = {
+        languageId,
+        resourceId,
+        remoteModifiedTime,
+        downloadUrl,
+        version,
+        subject,
+        catalogEntry: {
+          subject,
+          resource: catalogItem,
+        },
+      };
+      catalogResources.push(foundResource);
+    }
+  }
   console.log(`filtered catalog length: ${catalogResources.length}`);
   return catalogResources;
 }
 
-/**
- * Formats the given content in an importable form for tC
- * @param {Object} content - The unparsed content from DCS
- */
-export function formatResources(content) {
-  //
-}

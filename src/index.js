@@ -67,8 +67,7 @@ Updater.prototype.updateCatalog = async function() {
 };
 
 /**
- * Method to manually fetch the latest remoteCatalog for the current
- * Updater instance. This function has no return value
+ * Method to search for latest resources using catalog next
  * @param {Object} searchParams - details below
  * @param {String} searchParams.owner - if undefined then all are searched
  * @param {String} searchParams.languageId - if undefined then all are searched
@@ -87,7 +86,7 @@ Updater.prototype.updateCatalog = async function() {
  * @return {Promise<*[]|null>}
  */
 Updater.prototype.searchCatalogNext = async function(searchParams, retries=3) {
-  return await apiHelpers.searchCatalogNext(searchParams);
+  return await apiHelpers.searchCatalogNext(searchParams, retries);
 };
 
 /**
@@ -192,7 +191,7 @@ Updater.prototype.downloadResources = async function(languageList, resourcesPath
 };
 
 /**
- * @description Downloads  and processes all the resources in resources along with dependencies that need to be updated using the DCS API
+ * @description Downloads and processes each item in resources list along with dependencies that need to be updated using the DCS API
  * @param {String} resourcesPath - Path to the resources directory where each resource will be placed
  * @param {Array.<Object>} resources - Array of resources that are newer than previously downloaded resources;
  * defaults to this.updatedCatalogResources which was set by previously calling getLatestResources();
