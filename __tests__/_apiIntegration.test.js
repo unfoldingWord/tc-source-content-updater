@@ -34,7 +34,7 @@ export const JSON_OPTS = {spaces: 2};
 // nock.restore();
 // nock.cleanAll();
 
-describe.skip('test API', () => {
+describe('test API', () => {
   it('test searchCatalogNext', async () => {
     const sourceContentUpdater = new Updater();
     const searchParams = {
@@ -192,7 +192,7 @@ describe.skip('test API', () => {
     saveResources(resourcesPath, updatedLanguages, 'updated');
     // console.log(sourceContentUpdater.updatedCatalogResources);
     const resourceStatus = _.cloneDeep(localResourceList);
-    const langsToUpdate = ['es-419', 'en', 'ru', 'hi'];
+    const langsToUpdate = ['es-419', 'en', 'el-x-koine', 'hi'];
     const remoteResources = sourceContentUpdater.remoteCatalog.filter(item => langsToUpdate.includes(item.language));
     const updatedRemoteResources = sourceContentUpdater.updatedCatalogResources.filter(item => langsToUpdate.includes(item.languageId));
     // const langsToUpdate = ['en', 'el-x-koine', 'es-419', 'hbo', 'ru'];

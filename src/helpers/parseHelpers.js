@@ -81,16 +81,23 @@ export function getUpdatedLanguageList(updatedRemoteResources) {
   const updatedLanguages = [];
   for (const resource of updatedRemoteResources) {
     const languageId = resource.languageId;
-    const updatedBible = {
-      languageId,
-      localModifiedTime: resource.localModifiedTime || '',
-      remoteModifiedTime: resource.remoteModifiedTime,
-    };
-    const dup = updatedLanguages.findIndex((item) =>
+     const dup = updatedLanguages.findIndex((item) =>
       (item.languageId === languageId)
     );
+    const resLocalModifiedTime = resource.localModifiedTime || '';
     if (dup < 0) {
-      updatedLanguages.push(updatedBible); // add if language not present
+      const updatedLanguage = {
+        languageId,
+        localModifiedTime: resLocalModifiedTime,
+        remoteModifiedTime: resource.remoteModifiedTime,
+        resources: [resource],
+      };
+      updatedLanguages.push(updatedLanguage); // add if language not present
+    } else {
+      const languageItem = updatedLanguages[dup];
+      languageItem.localModifiedTime = (languageItem.localModifiedTime > resLocalModifiedTime) ? languageItem.localModifiedTime : resLocalModifiedTime;
+      languageItem.remoteModifiedTime = (languageItem.remoteModifiedTime > resource.remoteModifiedTime) ? languageItem.remoteModifiedTime : resource.remoteModifiedTime;
+      languageItem.resources.push(resource);
     }
   }
   return updatedLanguages.sort((a, b) =>
