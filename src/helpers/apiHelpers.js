@@ -6,55 +6,63 @@ const request = require('request');
 /**
  * does http request and returns the response data parsed from JSON
  * @param {string} url
+ * @param {number} retries
  * @return {Promise<{Object}>}
  */
-export function makeJsonRequestDetailed(url) {
-  return new Promise((resolve, reject) => {
-    request(url, function(error, response, body) {
-      if (error)
-        reject(error);
-      else if (response.statusCode === 200) {
-        let result = body;
-        try {
-          result = JSON.parse(body);
-        } catch (e) {
-          reject(e);
-        }
-        resolve({result, response, body});
-      } else {
-        reject(`makeJsonRequestDetailed() - fetch error ${response.statusCode}`);
+export async function makeJsonRequestDetailed(url, retries=5) {
+  let result_;
+  for (let i = 1; i <= retries; i++) {
+    result_ = null;
+    try {
+      result_ = await new Promise((resolve, reject) => {
+        request(url, function(error, response, body) {
+          if (error)
+            reject(error);
+          else if (response.statusCode === 200) {
+            let result = body;
+            try {
+              result = JSON.parse(body);
+            } catch (e) {
+              reject(e);
+            }
+            resolve({result, response, body});
+          } else {
+            reject(`fetch error ${response.statusCode}`);
+          }
+        });
+      });
+    } catch (e) {
+      if (i >= retries) {
+        console.warn('makeJsonRequestDetailed() - error getting manifest data', e);
+        throw e;
       }
-    });
-  });
+      result_ = null;
+      await delay(500);
+      console.log(`makeJsonRequestDetailed() - retry ${i+1} getting manifest data, last error`, e);
+    }
+
+    if (result_) {
+      break;
+    }
+  }
+  return result_;
 }
 
 /**
- * searching with a max number of retries
+ * searching subjects
  * @param {array} subjects
  * @param {number} retries
  * @return {Promise<*>}
  */
-async function searchWithRetry(subjects, retries=3) {
-  let result_;
-  for (let i = 1; i <= retries; i++) {
-    try {
-      const subjectParam = encodeURI(subjects.join(','));
-      const owner = `Door43-Catalog`; // TODO: remove this filter and combine results with catalog next v5 results once we start to support all orgs
-      let fetchUrl = `https://git.door43.org/api/catalog/v3/search?subject=${subjectParam}`;
-      if (owner) {
-        fetchUrl += fetchUrl + `&owner=${owner}`;
-      }
-      const {result} = await makeJsonRequestDetailed(fetchUrl);
-      result_ = result && result;
-      break;
-    } catch (e) {
-      if (i >= retries) {
-        throw e;
-      }
-      await delay(500);
-    }
+async function searchSubjects(subjects, retries=3) {
+  const subjectParam = encodeURI(subjects.join(','));
+  const owner = `Door43-Catalog`; // TODO: remove this filter and combine results with catalog next v5 results once we start to support all orgs
+  let fetchUrl = `https://git.door43.org/api/catalog/v3/search?subject=${subjectParam}`;
+  if (owner) {
+    fetchUrl += fetchUrl + `&owner=${owner}`;
   }
-  return result_;
+  const {result} = await makeJsonRequestDetailed(fetchUrl, retries);
+  return result;
 }
 
 /**
@@ -68,7 +76,7 @@ export async function getCatalogAllReleases() {
 
   try {
     // for (const subject of subjectList) {
-    const result = await searchWithRetry(subjectList);
+    const result = await searchSubjects(subjectList);
     let repos = 0;
     const languages = result && result.languages || [];
     for (const language of languages) {
@@ -147,33 +155,30 @@ export async function searchCatalogNext(searchParams, retries=3) {
     partialMatch,
     sort = SORT.REPO_NAME,
   } = searchParams;
-  for (let i = 1; i <= retries; i++) {
-    try {
-      let fetchUrl = `https://git.door43.org/api/catalog/v5/search`;
-      let parameters = '';
-      parameters = addUrlParameter(owner, parameters, 'owner');
-      parameters = addUrlParameter(languageId, parameters, 'lang');
-      parameters = addUrlParameter(subject, parameters, 'subject');
-      parameters = addUrlParameter(limit, parameters, 'limit');
-      parameters = addUrlParameter(stage, parameters, 'stage');
-      parameters = addUrlParameter(checkingLevel, parameters, 'checkingLevel');
-      parameters = addUrlParameter(partialMatch, parameters, 'partialMatch');
-      parameters = addUrlParameter(sort, parameters, 'sort');
-      if (parameters) {
-        fetchUrl += '?' + parameters;
-      }
-      console.log(`Searching: ${fetchUrl}`);
-      const {result} = await makeJsonRequestDetailed(fetchUrl);
-      result_ = result && result.data;
-      break;
-    } catch (e) {
-      if (i >= retries) {
-        throw e;
-      }
-      await delay(500);
+
+  try {
+    let fetchUrl = `https://git.door43.org/api/catalog/v5/search`;
+    let parameters = '';
+    parameters = addUrlParameter(owner, parameters, 'owner');
+    parameters = addUrlParameter(languageId, parameters, 'lang');
+    parameters = addUrlParameter(subject, parameters, 'subject');
+    parameters = addUrlParameter(limit, parameters, 'limit');
+    parameters = addUrlParameter(stage, parameters, 'stage');
+    parameters = addUrlParameter(checkingLevel, parameters, 'checkingLevel');
+    parameters = addUrlParameter(partialMatch, parameters, 'partialMatch');
+    parameters = addUrlParameter(sort, parameters, 'sort');
+    if (parameters) {
+      fetchUrl += '?' + parameters;
     }
+    console.log(`Searching: ${fetchUrl}`);
+    const {result} = await makeJsonRequestDetailed(fetchUrl, retries);
+    result_ = result && result.data;
+  } catch (e) {
+    console.warn('searchCatalogNext() - error calling search API', e);
+    return null;
   }
 
+  // filter for supported repos
   const supported = [];
   for (const item of result_ || []) {
     // add fields for backward compatibility
@@ -203,8 +208,6 @@ export async function searchCatalogNext(searchParams, retries=3) {
     // add supported resources to returned list
     if (item.downloadUrl && item.subject && item.name && item.full_name) {
       supported.push(item);
-    } else {
-      console.log(`Unsupported resource: ${item.downloadUrl}`);
     }
   }
   return supported;
@@ -219,18 +222,11 @@ export async function searchCatalogNext(searchParams, retries=3) {
  */
 export async function downloadManifestData(owner, repo, retries=5) {
   const fetchUrl = `https://git.door43.org/api/catalog/v5/entry/${owner}/${repo}/master/metadata`;
-  for (let i = 1; i <= retries; i++) {
-    try {
-      const {result} = await makeJsonRequestDetailed(fetchUrl);
-      return result;
-    } catch (e) {
-      if (i >= retries) {
-        console.warn('getManifestData() - error getting manifest data', e);
-        throw e;
-      }
-      await delay(500);
-      console.log(`getManifestData() - retry ${i+1} getting manifest data`, e);
-    }
+  try {
+    const {result} = await makeJsonRequestDetailed(fetchUrl, retries);
+    return result;
+  } catch (e) {
+    console.warn('getManifestData() - error getting manifest data', e);
+    throw e;
   }
-  return null;
 }
