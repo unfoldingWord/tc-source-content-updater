@@ -31,6 +31,10 @@ export const SUBJECT = {
   ORIGINAL_LANGUAGE_BIBLES: 'Greek New Testament,Hebrew Old Testament',
   ALIGNED_BIBLES: 'Aligned Bible',
   UNALIGNED_BIBLES: 'Bible',
+  ALL_TC_HELPS: 'Translation Words,TSV Translation Notes,Translation Academy',
+  TRANSLATION_WORDS: 'Translation Words',
+  TRANSLATION_NOTES: 'TSV Translation Notes',
+  TRANSLATION_ACADEMY: 'Translation Academy',
 };
 
 export const SORT = {
@@ -153,7 +157,7 @@ export function getResourcesForLanguage(languageId) {
 }
 
 /**
- * @description Downloads the resources that need to be updated for the given languages using the DCS API
+ * @description Downloads and processes the resources that need to be updated for the given languages using the DCS API
  * @param {Array.<String>} languageList - Array of language codes to download their resources
  * @param {String} resourcesPath - Path to the resources directory where each resource will be placed
  * @param {Array.<Object>} resources - Array of resources that are newer than previously downloaded resources;
@@ -167,7 +171,6 @@ export function getResourcesForLanguage(languageId) {
 Updater.prototype.downloadResources = async function(languageList, resourcesPath,
                                                      resources = this.updatedCatalogResources,
                                                      allAlignedBibles = false) {
-  // call this.getResourcesForLanguage(lang) for each language in list to get all resources to update
   if (!resources) {
     await this.getLatestResources([]);
     resources = this.updatedCatalogResources;
@@ -176,6 +179,46 @@ Updater.prototype.downloadResources = async function(languageList, resourcesPath
   let results = null;
   try {
     results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors, allAlignedBibles);
+  } catch (e) {
+    const errors = this.getLatestDownloadErrorsStr(); // get detailed errors and log
+    if (errors) {
+      const message = `Source Content Update Errors caught!!!\n${errors}`;
+      console.error(message);
+    }
+    throw e; // return error summary
+  }
+  console.log('Source Content Update Successful');
+  return results;
+};
+
+/**
+ * @description Downloads  and processes all the resources in resources along with dependencies that need to be updated using the DCS API
+ * @param {String} resourcesPath - Path to the resources directory where each resource will be placed
+ * @param {Array.<Object>} resources - Array of resources that are newer than previously downloaded resources;
+ * defaults to this.updatedCatalogResources which was set by previously calling getLatestResources();
+ * If getLatestResources() was never called or resources = null, function will get all resources for the given language(s)
+ * (the latter is useful for getting all resources for a set of languages, such as including all resources of
+ * 'en' and 'hi' in a build)
+ * @return {Promise<Array|null>} Promise that resolves to return all the resources updated or rejects if a resource failed to download
+ */
+Updater.prototype.downloadAllResources = async function(resourcesPath,
+                                                        resources ) {
+  if (!resources || !resources.length) {
+    console.log('Source Content Update Failed - Resources Empty');
+    return null;
+  }
+
+  this.downloadErrors = [];
+  const languageList = [];
+  for (const resource of resources) {
+    const languageId = resource.languageId;
+    if (languageId && ! languageList.includes(languageId)) {
+      languageList.push(languageId);
+    }
+  }
+  let results = null;
+  try {
+    results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors, false);
   } catch (e) {
     const errors = this.getLatestDownloadErrorsStr(); // get detailed errors and log
     if (errors) {

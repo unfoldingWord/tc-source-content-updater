@@ -173,22 +173,64 @@ export async function searchCatalogNext(searchParams, retries=3) {
       await delay(500);
     }
   }
-  return result_;
+
+  const supported = [];
+  for (const item of result_ || []) {
+    // add fields for backward compatibility
+    const languageId = item.language;
+    let [, resourceId] = (item.name || '').split(`${languageId}_`);
+    resourceId = resourceId || item.name; // if language was not in name, then use name as resource ID
+    item.resourceId = resourceId;
+    item.languageId = languageId;
+    if (item.zipball_url) {
+      item.downloadUrl = item.zipball_url;
+    }
+    // check for version. if there is one, it will save having to fetch it from DCS later.
+    if (item.release) { // if released
+      const tagName = item.release.tag_name;
+      if (tagName && (tagName[0] === 'v')) {
+        item.version = tagName.substr(1);
+      }
+    } else {
+      const branchOrTagName = item.branch_or_tag_name;
+      if (branchOrTagName && (branchOrTagName[0] === 'v')) {
+        item.version = branchOrTagName.substr(1);
+      }
+    }
+    if (item.subject) {
+      item.subject = item.subject.replaceAll(' ', '_');
+    }
+    // add supported resources to returned list
+    if (item.downloadUrl && item.subject && item.name && item.full_name) {
+      supported.push(item);
+    } else {
+      console.log(`Unsupported resource: ${item.downloadUrl}`);
+    }
+  }
+  return supported;
 }
 
 /**
  * does Catalog next API query to get manifest data
  * @param {string} owner
  * @param {string} repo
- * * @return {Promise<{Object}>}
+ * @param {number} retries
+ * @return {Promise<{Object}>}
  */
-export async function getManifestData(owner, repo) {
+export async function downloadManifestData(owner, repo, retries=5) {
   const fetchUrl = `https://git.door43.org/api/catalog/v5/entry/${owner}/${repo}/master/metadata`;
-  try {
-    const {result} = await makeJsonRequestDetailed(fetchUrl);
-    return result;
-  } catch (e) {
-    console.log('getManifestData() - error getting manifest data', e);
+  for (let i = 1; i <= retries; i++) {
+    try {
+      const {result} = await makeJsonRequestDetailed(fetchUrl);
+      return result;
+    } catch (e) {
+      if (i >= retries) {
+        console.warn('getManifestData() - error getting manifest data', e);
+        throw e;
+      }
+      await delay(500);
+      console.log(`getManifestData() - retry ${i+1} getting manifest data`, e);
+    }
   }
   return null;
 }

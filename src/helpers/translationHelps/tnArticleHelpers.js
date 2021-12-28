@@ -107,7 +107,7 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
     const tsvFiles = fs.readdirSync(sourcePath).filter((filename) => path.extname(filename) === '.tsv');
     const tnErrors = [];
 
-    tsvFiles.forEach(async (filename) => {
+    for (const filename of tsvFiles) {
       try {
         const bookId = filename.split('-')[1].toLowerCase().replace('.tsv', '');
         if (!BOOK_CHAPTER_VERSES[bookId]) console.error(`${bookId} is not a valid book id.`);
@@ -131,7 +131,7 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
         if (fs.existsSync(originalBiblePath)) {
           const filepath = path.join(sourcePath, filename);
           const groupData = await tsvToGroupData(filepath, 'translationNotes', {categorized: true}, originalBiblePath, resourcesPath, resource.languageId);
-          formatAndSaveGroupData(groupData, outputPath, bookId);
+          await formatAndSaveGroupData(groupData, outputPath, bookId);
         } else {
           const message = `processTranslationNotes() - cannot find original bible ${originalBiblePath}:`;
           console.error(message);
@@ -142,7 +142,7 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
         console.error(message, e);
         tnErrors.push(message + e.toString());
       }
-    });
+    }
 
     if (tnErrors.length) { // report errors
       const message = `processTranslationNotes() - error processing ${sourcePath}`;

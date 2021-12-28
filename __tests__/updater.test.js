@@ -4,10 +4,11 @@ import path from 'path-extra';
 import ospath from 'ospath';
 // constants
 import * as errors from '../src/resources/errors';
+import * as parseHelpers from '../src/helpers/parseHelpers';
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 
-describe.skip('Updater.downloadResources', () => {
+describe('Updater.downloadResources', () => {
   const updater = new Updater();
   const resourcesPath = path.join(ospath.home(), 'translationCore/resources'); // a mocked resources directory
 
@@ -17,9 +18,9 @@ describe.skip('Updater.downloadResources', () => {
   });
 
   it('should resolve for hbo', async () => {
-    await updater.getLatestResources([]);
+    loadMockedResources(updater);
     let languageID = 'hbo';
-    const hebrewSubject = updater.remoteCatalog.subjects.find(item => (item.language === languageID));
+    const hebrewSubject = updater.remoteCatalog.find(item => (item.language === languageID));
     const resources = await updater.downloadResources([languageID], resourcesPath);
     expect(resources.length).toEqual(1);
     expect(hebrewSubject.languageId).toEqual(resources[0].language);
@@ -27,29 +28,34 @@ describe.skip('Updater.downloadResources', () => {
   });
 
   it('should resolve for el-x-koine', async () => {
+    loadMockedResources(updater);
     const resources = await updater.downloadResources(['el-x-koine'], resourcesPath);
     expect(resources.length).toEqual(1);
   });
 
   it('should fail due to language list empty', async () => {
+    loadMockedResources(updater);
     const expectedError = errors.LANGUAGE_LIST_EMPTY;
     expect(updater.downloadResources()).rejects.toEqual(expectedError);
   });
 
   it('should fail due to resources path not given', async () => {
+    loadMockedResources(updater);
     const languageIds = ['en'];
     const expectedError = errors.RESOURCES_PATH_NOT_GIVEN;
     expect(updater.downloadResources(languageIds)).rejects.toEqual(expectedError);
   });
 
   it('should resolve for multiple languages being downloaded', async () => {
+    loadMockedResources(updater);
     const languageList = ['el-x-koine', 'en', 'hi', 'ceb'];
     const resources = await updater.downloadResources(languageList, resourcesPath);
-    expect(resources.length).toEqual(14);
+    expect(resources.length).toEqual(10);
     expect(fs.readdirSync(resourcesPath)).toContain(...languageList);
   });
 
   it('should properly parse a special quote, character', async () => {
+    loadMockedResources(updater);
     fs.__loadDirIntoMockFs(path.join(__dirname, 'fixtures'), path.join(__dirname, 'fixtures'));
     await updater.downloadResources(['en'], resourcesPath, [
       fs.readJsonSync(path.join(__dirname, 'fixtures/en_ult_resource.json'))
@@ -61,6 +67,7 @@ describe.skip('Updater.downloadResources', () => {
   });
 
   it('should reject for a download url that does not exist', async () => {
+    loadMockedResources(updater);
     const prevResources = [{
       languageId: 'el-x-koine',
       resourceId: 'ugnt',
@@ -76,6 +83,7 @@ describe.skip('Updater.downloadResources', () => {
   });
 
   it('should reject for a download url that does not exist #2', async () => {
+    loadMockedResources(updater);
     const prevResources = [{
       languageId: 'en',
       resourceId: 'tw',
@@ -179,3 +187,19 @@ describe.skip('Updater.downloadResources', () => {
     });
   });
 });
+
+//
+// helpers
+//
+
+/**
+ * load mocked resources
+ * @param {object} updater
+ * @return {Array<{languageId: String, localModifiedTime: String, remoteModifiedTime: String}>}
+ */
+function loadMockedResources(updater) {
+  updater.remoteCatalog = fs.__actual.readJsonSync(path.join('./__tests__/fixtures/catalogNext.json'));
+  updater.updatedCatalogResources = parseHelpers.getLatestResources(updater.remoteCatalog, []);
+  const langlist = parseHelpers.getUpdatedLanguageList(updater.updatedCatalogResources);
+  return langlist;
+}

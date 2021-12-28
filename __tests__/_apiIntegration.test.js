@@ -1,5 +1,5 @@
-// these are integration tests used for development, these are skipped
-// for validating switch to Catalog Next APIs
+// these are integration tests used for development, these are all normally skipped.
+// these are for validating switch to Catalog Next APIs
 
 import fs from 'fs-extra';
 import path from 'path-extra';
@@ -14,10 +14,11 @@ import {
   getLocalResourceList,
   getOrgItems,
   saveResources,
+  sortStringObjects,
   writeCsv,
   writeCsv2,
-} from './_apiHelpers';
-import {JSON_OPTS, sortStringObjects, writeToTsv} from './_projectValidationHelpers';
+  writeToTsv,
+} from './_apiIntegrationHelpers';
 
 // require('os').homedir()
 
@@ -27,6 +28,7 @@ jest.unmock('../src/helpers/zipFileHelpers');
 
 const HOME_DIR = os.homedir();
 const USER_RESOURCES = path.join(HOME_DIR, `translationCore/resources`);
+export const JSON_OPTS = {spaces: 2};
 
 // // disable nock failed
 // nock.restore();
@@ -63,6 +65,7 @@ describe.skip('test API', () => {
         stage: item.stage,
         branch_or_tag_name: item.branch_or_tag_name,
         title: item.title,
+        version: item.version,
       };
       repoLines.push(line);
     }
@@ -85,15 +88,99 @@ describe.skip('test API', () => {
         text: 'stage',
       },
       {
+        key: `version`,
+        text: 'version',
+      },
+      {
         key: `title`,
         text: 'title',
       },
     ];
     const outputFolder = './temp';
     const outputFile = 'CatalogNew';
-    writeToTsv(repoFormat, repoLines, outputFolder, outputFile + '.tsv');
+    writeToTsv(repoFormat, sortStringObjects(repoLines, 'full_name'), outputFolder, outputFile + '.tsv');
     fs.outputJsonSync(path.join(outputFolder, outputFile + '.json'), items, JSON_OPTS);
   }, 60000);
+
+  it('test search & download CatalogNext', async () => {
+    const sourceContentUpdater = new Updater();
+    const searchParams = {
+      subject: SUBJECT.ALL_TC_RESOURCES,
+      owner: 'Es-419_gl',
+      languageId: 'es-419',
+      // sort: SORT.LANGUAGE_ID,
+
+      // ========================
+      // less common params:
+      // ========================
+
+      limit: 10000,
+      // partialMatch: true,
+      // stage: STAGE.PROD,
+      // checkingLevel: 3,
+    };
+    const items = await sourceContentUpdater.searchCatalogNext(searchParams);
+    expect(Array.isArray(items)).toBeTruthy();
+    console.log(`Search returned ${items.length} total items`);
+    const repoLines = [];
+    const org = 'Door43-Catalog';
+    for (const item of items) {
+      const line = {
+        full_name: item.full_name,
+        clone_url: item.repo.clone_url,
+        subject: item.subject,
+        stage: item.stage,
+        branch_or_tag_name: item.branch_or_tag_name,
+        title: item.title,
+        version: item.version,
+      };
+      repoLines.push(line);
+    }
+    console.log(`search flattened has ${repoLines.length} total items`);
+    const repoFormat = [
+      {
+        key: 'full_name',
+        text: 'full_name',
+      },
+      {
+        key: 'clone_url',
+        text: 'clone_url',
+      },
+      {
+        key: `subject`,
+        text: 'subject',
+      },
+      {
+        key: `stage`,
+        text: 'stage',
+      },
+      {
+        key: `version`,
+        text: 'version',
+      },
+      {
+        key: `title`,
+        text: 'title',
+      },
+    ];
+    const outputFolder = './temp';
+    const outputFile = 'CatalogNew';
+    writeToTsv(repoFormat, sortStringObjects(repoLines, 'full_name'), outputFolder, outputFile + '.tsv');
+    fs.outputJsonSync(path.join(outputFolder, outputFile + '.json'), items, JSON_OPTS);
+
+    const resourcesPath = './temp/updates';
+    let results;
+    try {
+      results = await sourceContentUpdater.downloadAllResources(resourcesPath, items);
+    } catch (e) {
+      results = null;
+      console.error('error downloading', e);
+    }
+    expect(results).toBeTruthy();
+    expect(results.length).toEqual(items.length);
+    const errors = sourceContentUpdater.getLatestDownloadErrorsStr();
+    expect(errors).toBeFalsy();
+  }, 600000);
 
   it('test Updater', async () => {
     const resourcesPath = './temp/updates';

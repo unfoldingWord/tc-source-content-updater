@@ -20,7 +20,7 @@ import * as moveResourcesHelpers from './moveResourcesHelpers';
 // constants
 import * as errors from '../resources/errors';
 import * as Bible from '../resources/bible';
-import {getManifestData} from './apiHelpers';
+import {downloadManifestData} from './apiHelpers';
 
 /**
  * add download error keeping track of error message, download url, and if parse error type (if not parse error, then download error)
@@ -61,8 +61,8 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
   }
 
   if (!resource.version || (resource.version === 'master')) {
-    const resourceData = resource.catalogEntry.resource;
-    const manifest = await getManifestData(resourceData.owner, resourceData.name);
+    const resourceData = resource.catalogEntry ? resource.catalogEntry.resource : resource;
+    const manifest = await downloadManifestData(resourceData.owner, resourceData.name);
     const version = manifest && manifest.dublin_core && manifest.dublin_core.version;
     if (version) {
       resource.version = version;

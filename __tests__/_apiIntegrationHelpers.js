@@ -261,3 +261,89 @@ export function saveResources(outputFolder, data, tag) {
   fs.outputJSONSync(outputPath, data);
   return outputPath;
 }
+
+/**
+ *
+ * @param reposFormat
+ * @param reposLines
+ * @param outputFolder
+ * @param outputFile
+ */
+export function writeToTsv(reposFormat, reposLines, outputFolder, outputFile) {
+  const lines = [];
+  let line = '';
+  // write header
+  for (const field of reposFormat) {
+    const fieldKey = field.key;
+    const fieldText = field.text;
+    let value = fieldText || fieldKey;
+    line += value + '\t';
+  }
+  lines.push(line);
+  for (const repoline of reposLines) {
+    let line = '';
+    for (const field of reposFormat) {
+      const fieldKey = field.key;
+      let value = repoline[fieldKey];
+      if (typeof(value) === 'object') {
+        value = JSON.stringify(value);
+      } else if ((value !== 0) && !value) {
+        value = '';
+      }
+      line += value + '\t';
+    }
+    lines.push(line);
+  }
+  fs.ensureDirSync(outputFolder);
+  const data = lines.join('\n') + '\n';
+  fs.writeFileSync(path.join(outputFolder, outputFile), data, 'utf8');
+  return data;
+}
+
+/**
+ *
+ * @param reposLines
+ * @param sortKey
+ * @return {*}
+ */
+export function sortStringObjects(reposLines, sortKey) {
+  const keySort = (a, b) => {
+    const x = a[sortKey].toLowerCase();
+    const y = b[sortKey].toLowerCase();
+    if (x < y) {
+      return -1;
+    }
+    if (x > y) {
+      return 1;
+    }
+    return 0;
+  };
+  const sorted = reposLines.sort(keySort);
+  return sorted;
+}
+
+/**
+ *
+ * @param reposLines
+ * @param sortKey
+ * @param reverse
+ * @return {*}
+ */
+export function sortObjects(reposLines, sortKey, reverse) {
+  const keySort = (a, b) => {
+    const x = a[sortKey];
+    const y = b[sortKey];
+    let result = 0;
+    if (x < y) {
+      result = -1;
+    } else if (x > y) {
+      result = 1;
+    }
+    if (reverse) {
+      result = -result;
+    }
+    return result;
+  };
+  const sorted = reposLines.sort(keySort);
+  return sorted;
+}

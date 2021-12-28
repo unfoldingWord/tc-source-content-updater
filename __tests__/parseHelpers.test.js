@@ -4,19 +4,19 @@ import * as parseHelpers from '../src/helpers/parseHelpers';
 import * as ERROR from '../src/resources/errors';
 import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
 
-const catalog = require('./fixtures/catalog');
+const catalog = require('./fixtures/catalogNext');
 
-describe.skip('parseCatalogResources()', () => {
+describe('parseCatalogResources()', () => {
   it('should find Bibles', () => {
     const results = parseHelpers.parseCatalogResources(catalog, true, ['Bible']);
-    expect(results.length).toEqual(38);
+    expect(results.length).toEqual(2);
   });
 
   it('All language Ids are lower case', () => {
     const results = parseHelpers.parseCatalogResources(catalog, true, ['Bible']);
     const re = /^[-a-z0-9]*$/; // dash is allowed
 
-    for( let idx = 0; idx < results.length; idx++) {
+    for ( let idx = 0; idx < results.length; idx++) {
       //console.log( "results.languageId: ", results[idx].languageId );
       expect(results[idx].languageId).toEqual(expect.stringMatching(re));
     }
@@ -30,12 +30,12 @@ describe.skip('parseCatalogResources()', () => {
 
   it('should return everything with no filter', () => {
     const results = parseHelpers.parseCatalogResources(catalog, false, null);
-    expect(results.length).toEqual(137);
+    expect(results.length).toEqual(11);
   });
 
   it('should return everything with default filter', () => {
     const results = parseHelpers.parseCatalogResources(catalog, true);
-    expect(results.length).toEqual(93);
+    expect(results.length).toEqual(11);
   });
 
   it('should throw exception for null catalog', done => {
@@ -49,16 +49,16 @@ describe.skip('parseCatalogResources()', () => {
   });
 });
 
-describe.skip('getLatestResources()', () => {
+describe('getLatestResources()', () => {
   it('should succeed with empty resourceList', () => {
     const resourceList = [];
     const results = parseHelpers.getLatestResources(catalog, resourceList);
-    expect(results.length).toEqual(56);
+    expect(results.length).toEqual(11);
 
     const greekResources = getResourcesForLanguageAndResource(results, 'el-x-koine');
     expect(greekResources.length).toEqual(1);
 
-    const frenchResources = getResourcesForLanguageAndResource(results, 'fr');
+    const frenchResources = getResourcesForLanguageAndResource(results, 'ceb');
     expect(frenchResources.length).toEqual(3);
   });
 
@@ -67,7 +67,7 @@ describe.skip('getLatestResources()', () => {
       {languageId: 'fr', resourceId: 'f10', modifiedTime: '2018-04-27T18:51:27+00:00'}
     ];
     const results = parseHelpers.getLatestResources(catalog, resourceList);
-    expect(results.length).toEqual(55);
+    expect(results.length).toEqual(11);
 
     const greekResources = getResourcesForLanguageAndResource(results, 'el-x-koine');
     expect(greekResources.length).toEqual(1);
@@ -81,12 +81,12 @@ describe.skip('getLatestResources()', () => {
       {languageId: 'fr', resourceId: 'f10', modifiedTime: '2018-04-27T18:51:26+00:00'}
     ];
     const results = parseHelpers.getLatestResources(catalog, resourceList);
-    expect(results.length).toEqual(56);
+    expect(results.length).toEqual(11);
 
     const greekResources = getResourcesForLanguageAndResource(results, 'el-x-koine');
     expect(greekResources.length).toEqual(1);
 
-    const frenchResources = getResourcesForLanguageAndResource(results, 'fr', 'f10');
+    const frenchResources = getResourcesForLanguageAndResource(results, 'ceb', 'udb');
     expect(frenchResources.length).toEqual(1);
   });
 
@@ -121,12 +121,12 @@ describe.skip('getLatestResources()', () => {
   });
 });
 
-describe.skip('getUpdatedLanguageList()', () => {
+describe('getUpdatedLanguageList()', () => {
   const resources = parseHelpers.getLatestResources(catalog, []);
 
   it('should succeed', () => {
     const languages = parseHelpers.getUpdatedLanguageList(resources);
-    expect(languages.length).toEqual(31); // ur-deva = ur-Deva
+    expect(languages.length).toEqual(5);
   });
 
   it('should return null on null resources', () => {
@@ -135,7 +135,7 @@ describe.skip('getUpdatedLanguageList()', () => {
   });
 });
 
-describe.skip('getResourcesForLanguage()', () => {
+describe('getResourcesForLanguage()', () => {
   const resources = parseHelpers.getLatestResources(catalog, []);
 
   it('should find el-x-koine', () => {
@@ -145,20 +145,20 @@ describe.skip('getResourcesForLanguage()', () => {
 
   it('should find hi', () => {
     const results = parseHelpers.getResourcesForLanguage(resources, 'hi');
-    expect(results.length).toEqual(4);
-    validateResourceType(results, 'irv', 1);
-    validateResourceType(results, 'tw', 1);
-    validateResourceType(results, 'ulb', 1);
-    validateResourceType(results, 'udb', 1);
+    expect(results.length).toEqual(2);
+    validateResourceType(results, 'irv', 0);
+    validateResourceType(results, 'tw', 0);
+    validateResourceType(results, 'glt', 1);
+    validateResourceType(results, 'gst', 1);
   });
 
   it('should find en', () => {
     const results = parseHelpers.getResourcesForLanguage(resources, 'en');
-    expect(results.length).toEqual(6);
+    expect(results.length).toEqual(4);
     validateResourceType(results, 'ta', 1);
     validateResourceType(results, 'tw', 1);
-    validateResourceType(results, 'ulb', 1);
-    validateResourceType(results, 'udb', 1);
+    validateResourceType(results, 'ult', 1);
+    validateResourceType(results, 'ust', 1);
   });
 
   it('should return empty list for language not found', () => {
