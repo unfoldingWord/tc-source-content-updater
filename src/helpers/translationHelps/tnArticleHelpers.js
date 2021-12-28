@@ -144,13 +144,13 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
       }
     }
 
+    await delay(200);
+
     if (tnErrors.length) { // report errors
       const message = `processTranslationNotes() - error processing ${sourcePath}`;
       console.error(message);
       throw new Error(`${message}:\n${tnErrors.join('\n')}`);
     }
-
-    await delay(200);
 
     // Generate groupsIndex using tN groupData & tA articles.
     const translationAcademyPath = path.join(
