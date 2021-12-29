@@ -166,6 +166,7 @@ function getCompatibleResourceList(resources) {
     item.languageId = languageId;
     item.checking_level = item.repo && item.repo.checking_level;
     item.foundInCatalog = 'NEW';
+    item.modified = item.modified || item.released;
 
     if (item.zipball_url) {
       item.downloadUrl = item.zipball_url;
