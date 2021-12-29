@@ -311,7 +311,7 @@ export function formatError(resource, errMessage) {
       resourceId: 'unknown',
     };
   }
-  return resource.languageId + '_' + resource.resourceId + ': ' + errMessage;
+  return resource.owner + '/' + resource.languageId + '_' + resource.resourceId + ': ' + errMessage;
 }
 
 /**

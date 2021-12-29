@@ -216,7 +216,12 @@ describe('test API', () => {
         }
       }
     }
-    await sourceContentUpdater.downloadResources(langsToUpdate, resourcesPath);
+    let downloadErrors = null;
+    try {
+      await sourceContentUpdater.downloadResources(langsToUpdate, resourcesPath);
+    } catch (e) {
+      downloadErrors = e.toString();
+    }
     // console.log(updatedLanguages);
     const localResourceListAfter = getLocalResourceList(resourcesPath);
     const finalResourceList = saveResources(resourcesPath, localResourceListAfter, 'final');
@@ -229,6 +234,7 @@ describe('test API', () => {
       }
       expect(match).toBeFalsy();
     }
+    expect(downloadErrors).toBeFalsy();
     console.log('stuff');
   }, 6000000);
 });
