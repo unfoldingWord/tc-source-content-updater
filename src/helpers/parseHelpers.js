@@ -247,7 +247,7 @@ export function parseCatalogResources(catalog, ignoreObsResources = true, subjec
     } else if (version[0].toLowerCase() === 'v') { // trim leading v
       version = version.substr(1);
     }
-    if (!(catalogItem.projects && catalogItem.projects.length) || !(catalogItem.books && catalogItem.books.length)) {
+    if (!(catalogItem.projects && catalogItem.projects.length) && !(catalogItem.books && catalogItem.books.length)) {
       continue; // skip over repos with no projects or books
     }
     if (isDesiredSubject && isCheckingLevel2 &&
