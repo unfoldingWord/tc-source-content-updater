@@ -119,7 +119,7 @@ function addUrlParameter(value, parameters, tag) {
     if (parameters) { // see if we need separator
       parameters += '&';
     }
-    parameters += `${tag}=${encodeURI(value)}`;
+    parameters += `${tag}=${encodeURIComponent(value)}`;
   }
   return parameters;
 }
