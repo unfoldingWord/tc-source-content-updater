@@ -110,7 +110,7 @@ export function sortVersions(versions) {
   if (!versions || !Array.isArray(versions)) {
     return versions;
   }
-  // Only sort of all items are strings
+  // Only sort if all items are strings
   for (let i = 0; i < versions.length; ++i) {
     if (typeof versions[i] !== 'string') {
       return versions;
@@ -233,7 +233,10 @@ export function getActualResourcePath(resource, resourcesPath) {
     resourceName = translationHelps[resourceName];
     type = 'translationHelps';
   }
-  const actualResourcePath = path.join(resourcesPath, languageId, type, resourceName, 'v' + resource.version);
+  const version = 'v' + resource.version;
+  const ownerStr = encodeURIComponent(resource.owner || '');
+  const versionDir = ownerStr ? `${version}_${ownerStr}` : version;
+  const actualResourcePath = path.join(resourcesPath, languageId, type, resourceName, versionDir);
   fs.ensureDirSync(actualResourcePath);
   return actualResourcePath;
 }
@@ -279,7 +282,7 @@ return twGroupDataPath
  * @return {Boolean} True if versions were deleted, false if nothing was touched
  */
 export function removeAllButLatestVersion(resourcePath, versionsToNotDelete = [], ownerStr = '') {
-  // Remove the previoius verison(s)
+  // Remove the previous version(s)
   const versionDirs = getVersionsInPath(resourcePath, ownerStr);
   if (versionDirs && versionDirs.length > 1) {
     const lastVersion = versionDirs[versionDirs.length - 1];

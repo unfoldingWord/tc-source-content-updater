@@ -104,11 +104,11 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
     const importSubdirPath = getSubdirOfUnzippedResource(importPath);
     const processedFilesPath = await processResource(resource, importSubdirPath, resourcesPath, downloadErrors);
     if (processedFilesPath) {
-      const ownerStr = encodeURIComponent(resourceData.owner || '');
+      const ownerStr = encodeURIComponent(resource.owner || '');
 
       // Extra step if the resource is the Greek UGNT or Hebrew UHB
       const version = 'v' + resource.version;
-      const versionDir = ownerStr ? `_${ownerStr}` : version;
+      const versionDir = ownerStr ? `${version}_${ownerStr}` : version;
       if (isGreekOrHebrew) {
         const twGroupDataPath = makeTwGroupDataResource(resource, processedFilesPath);
         const twGroupDataResourcesPath = path.join(resourcesPath, resource.languageId, 'translationHelps', 'translationWords', versionDir);
@@ -127,7 +127,7 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
       const versionsToNotDelete = [];
       if (!isGreekOrHebrew) {
         // Make sure that the resource currently being downloaded is not deleted
-        versionsToNotDelete.push(version);
+        versionsToNotDelete.push(versionDir);
         removeAllButLatestVersion(path.dirname(resourcePath), versionsToNotDelete, ownerStr);
       }
     } else {

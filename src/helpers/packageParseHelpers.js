@@ -37,6 +37,9 @@ export const parseUsfmOfBook = (usfmPath, outputPath) => {
  */
 export function parseManifest(extractedFilePath, outputPath, resource) {
   const oldManifest = resourcesHelpers.getResourceManifest(extractedFilePath);
+  if (!oldManifest) {
+    console.log('stop');
+  }
   return generateBibleManifest(oldManifest, outputPath, resource);
 }
 

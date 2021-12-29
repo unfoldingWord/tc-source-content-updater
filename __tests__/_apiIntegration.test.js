@@ -230,7 +230,7 @@ describe('test API', () => {
       expect(match).toBeFalsy();
     }
     console.log('stuff');
-  }, 600000);
+  }, 6000000);
 });
 
 describe.skip('apiHelpers.getCatalogOld', () => {

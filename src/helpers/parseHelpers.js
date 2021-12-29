@@ -259,6 +259,7 @@ export function parseCatalogResources(catalog, ignoreObsResources = true, subjec
         downloadUrl,
         version,
         subject,
+        owner: catalogItem.owner,
         catalogEntry: {
           subject,
           resource: catalogItem,
