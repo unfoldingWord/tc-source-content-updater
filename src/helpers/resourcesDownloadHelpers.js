@@ -60,8 +60,8 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
     throw Error(formatError(resource, errors.RESOURCES_PATH_NOT_GIVEN));
   }
 
+  const resourceData = resource.catalogEntry ? resource.catalogEntry.resource : resource;
   if (!resource.version || (resource.version === 'master')) {
-    const resourceData = resource.catalogEntry ? resource.catalogEntry.resource : resource;
     const manifest = await downloadManifestData(resourceData.owner, resourceData.name);
     const version = manifest && manifest.dublin_core && manifest.dublin_core.version;
     if (version) {
@@ -104,10 +104,14 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
     const importSubdirPath = getSubdirOfUnzippedResource(importPath);
     const processedFilesPath = await processResource(resource, importSubdirPath, resourcesPath, downloadErrors);
     if (processedFilesPath) {
+      const ownerStr = encodeURIComponent(resourceData.owner || '');
+
       // Extra step if the resource is the Greek UGNT or Hebrew UHB
+      const version = 'v' + resource.version;
+      const versionDir = ownerStr ? `_${ownerStr}` : version;
       if (isGreekOrHebrew) {
         const twGroupDataPath = makeTwGroupDataResource(resource, processedFilesPath);
-        const twGroupDataResourcesPath = path.join(resourcesPath, resource.languageId, 'translationHelps', 'translationWords', 'v' + resource.version);
+        const twGroupDataResourcesPath = path.join(resourcesPath, resource.languageId, 'translationHelps', 'translationWords', versionDir);
         try {
           await moveResourcesHelpers.moveResources(twGroupDataPath, twGroupDataResourcesPath);
         } catch (err) {
@@ -123,8 +127,8 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
       const versionsToNotDelete = [];
       if (!isGreekOrHebrew) {
         // Make sure that the resource currently being downloaded is not deleted
-        versionsToNotDelete.push('v' + resource.version);
-        removeAllButLatestVersion(path.dirname(resourcePath), versionsToNotDelete);
+        versionsToNotDelete.push(version);
+        removeAllButLatestVersion(path.dirname(resourcePath), versionsToNotDelete, ownerStr);
       }
     } else {
       throw Error(errors.FAILED_TO_PROCESS_RESOURCE);
@@ -295,7 +299,7 @@ export const downloadResources = (languageList, resourcesPath, resources, downlo
 };
 
 /**
- * Sorts the list of downloadable resources. Specifically moves tA
+ * Sorts the list of downloadable resources. Sorts by language and moves tA
  * to the front of the array in order to be downloaded before tN
  * since tN will use tA articles to generate the groupsIndex files.
  * @param {array} downloadableResources list of downloadable resources.
@@ -304,9 +308,20 @@ export const downloadResources = (languageList, resourcesPath, resources, downlo
 const sortDownloableResources = (downloadableResources) => {
   return downloadableResources.sort((resourceA, resourceB) => {
     const firstResource = 'ta';// move ta to the front of the array so that it is downloaded before tn.
-    const idA = resourceA.resourceId.toLowerCase();
-    const idB = resourceB.resourceId.toLowerCase();
 
-    return idA == firstResource ? -1 : idB == firstResource ? 1 : 0;
+    const langA = resourceA.languageId;
+    const langB = resourceB.languageId;
+    if (langB > langA) {
+      return -1;
+    } else if (langB === langA) {
+      const idA = resourceA.resourceId.toLowerCase();
+      const idB = resourceB.resourceId.toLowerCase();
+
+      const compareResult = (idA == firstResource) ? -1 : (idB == firstResource) ? 1 : 0;
+      console.log(compareResult);
+      return compareResult;
+    } else { // langB < langA
+      return 1;
+    }
   });
 };

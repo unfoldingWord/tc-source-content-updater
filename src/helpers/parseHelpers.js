@@ -247,8 +247,8 @@ export function parseCatalogResources(catalog, ignoreObsResources = true, subjec
     } else if (version[0].toLowerCase() === 'v') { // trim leading v
       version = version.substr(1);
     }
-    if (!(catalogItem.projects && catalogItem.projects.length)) {
-      continue; // skip over repos with no projects
+    if (!(catalogItem.projects && catalogItem.projects.length) || !(catalogItem.books && catalogItem.books.length)) {
+      continue; // skip over repos with no projects or books
     }
     if (isDesiredSubject && isCheckingLevel2 &&
       downloadUrl && remoteModifiedTime && languageId) {
@@ -265,6 +265,8 @@ export function parseCatalogResources(catalog, ignoreObsResources = true, subjec
         },
       };
       catalogResources.push(foundResource);
+    } else {
+      console.log(`skipping: ${JSON.stringify(catalogItem)}`);
     }
   }
   console.log(`filtered catalog length: ${catalogResources.length}`);

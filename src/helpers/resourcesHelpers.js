@@ -82,15 +82,20 @@ export function getResourceManifestFromYaml(resourcePath) {
 /**
  * Returns an array of versions found in the path that start with [vV]\d
  * @param {String} resourcePath - base path to search for versions
+ * @param {string} ownerStr - optional owner to filter by
  * @return {Array} - array of versions, e.g. ['v1', 'v10', 'v1.1']
  */
-export function getVersionsInPath(resourcePath) {
+export function getVersionsInPath(resourcePath, ownerStr = null) {
   if (!resourcePath || !fs.pathExistsSync(resourcePath)) {
     return null;
   }
   const isVersionDirectory = (name) => {
     const fullPath = path.join(resourcePath, name);
-    return fs.lstatSync(fullPath).isDirectory() && name.match(/^v\d/i);
+    let isMatch = fs.lstatSync(fullPath).isDirectory() && name.match(/^v\d/i);
+    if (isMatch && ownerStr) { // if we need to filter by owner
+      isMatch = name.endsWith(ownerStr);
+    }
+    return isMatch;
   };
   return sortVersions(fs.readdirSync(resourcePath).filter(isVersionDirectory));
 }
@@ -118,10 +123,11 @@ export function sortVersions(versions) {
 /**
  * Return the full path to the highest version folder in resource path
  * @param {String} resourcePath - base path to search for versions
+ * @param {string} ownerStr - optional owner to filter by
  * @return {String} - path to highest version
  */
-export function getLatestVersionInPath(resourcePath) {
-  const versions = sortVersions(getVersionsInPath(resourcePath));
+export function getLatestVersionInPath(resourcePath, ownerStr = null) {
+  const versions = sortVersions(getVersionsInPath(resourcePath, ownerStr));
   if (versions && versions.length) {
     return path.join(resourcePath, versions[versions.length - 1]);
   }
@@ -269,11 +275,12 @@ return twGroupDataPath
  * Removes all version directories except the latest
  * @param {String} resourcePath Path to the resource directory that has subdirs of versions
  * @param {array} versionsToNotDelete List of versions not to be deleted.
+ * @param {string} ownerStr - optional owner to filter by
  * @return {Boolean} True if versions were deleted, false if nothing was touched
  */
-export function removeAllButLatestVersion(resourcePath, versionsToNotDelete = []) {
+export function removeAllButLatestVersion(resourcePath, versionsToNotDelete = [], ownerStr = '') {
   // Remove the previoius verison(s)
-  const versionDirs = getVersionsInPath(resourcePath);
+  const versionDirs = getVersionsInPath(resourcePath, ownerStr);
   if (versionDirs && versionDirs.length > 1) {
     const lastVersion = versionDirs[versionDirs.length - 1];
     versionDirs.forEach((versionDir) => {

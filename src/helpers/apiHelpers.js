@@ -87,6 +87,7 @@ export async function getOldCatalogReleases() {
         for (const resource of resources) {
           resource.languageId = languageId;
           resource.resourceId = resource.identifier;
+          resource.foundInCatalog = 'OLD';
           resource.full_name = resource.full_name || `${resource.owner}/${resource.repo}`;
           resource.checking_level = resource.checking && resource.checking.checking_level;
           released.push(resource);
@@ -122,6 +123,7 @@ export async function getCatalog() {
     const index = catalogReleases.findIndex(oldItem => (item.full_name === oldItem.full_name));
     if (index >= 0) {
       catalogReleases[index] = item; // overwrite item in old catalog
+      catalogReleases[index].foundInCatalog = 'NEW+OLD';
     } else {
       catalogReleases.push(item); // add unique item
     }
@@ -163,6 +165,7 @@ function getCompatibleResourceList(resources) {
     item.resourceId = resourceId;
     item.languageId = languageId;
     item.checking_level = item.repo && item.repo.checking_level;
+    item.foundInCatalog = 'NEW';
 
     if (item.zipball_url) {
       item.downloadUrl = item.zipball_url;
