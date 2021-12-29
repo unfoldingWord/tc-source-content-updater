@@ -22,6 +22,7 @@ import {
   BIBLE_LIST_NT,
 } from '../../resources/bible';
 import {makeSureResourceUnzipped} from '../unzipFileHelpers';
+import {DOOR43_CATALOG} from '../apiHelpers';
 
 /**
  * search to see if we need to get any missing resources needed for tN processing
@@ -126,7 +127,7 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
           originalLanguageId,
           'bibles',
           originalLanguageBibleId,
-          version
+          `${version}_${DOOR43_CATALOG}`
         );
         if (fs.existsSync(originalBiblePath)) {
           const filepath = path.join(sourcePath, filename);
@@ -187,7 +188,7 @@ function getMissingOriginalResource(resourcesPath, originalLanguageId, originalL
         originalLanguageId,
         'bibles',
         originalLanguageBibleId,
-        version
+        `${version}_${DOOR43_CATALOG}`
       );
 
       if (!fs.existsSync(originalBiblePath)) {
@@ -201,6 +202,7 @@ function getMissingOriginalResource(resourcesPath, originalLanguageId, originalL
           downloadUrl,
           version: version.replace('v', ''),
           subject: 'Bible',
+          owner: DOOR43_CATALOG,
           catalogEntry: {
             subject: {},
             resource: {},

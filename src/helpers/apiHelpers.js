@@ -1,8 +1,14 @@
 import {delay} from './utils';
 import {SORT, STAGE, SUBJECT} from '../index';
+import fs from 'fs-extra';
+import path from 'path-extra';
+import semver from 'semver';
+import * as Bible from '../resources/bible';
 
 const request = require('request');
-const DOOR43_CATALOG = `Door43-Catalog`;
+export const DOOR43_CATALOG = `Door43-Catalog`;
+export const TRANSLATION_HELPS = 'translationHelps';
+export const EMPTY_TIME = '0001-01-01T00:00:00+00:00';
 
 /**
  * does http request and returns the response data parsed from JSON
@@ -128,9 +134,30 @@ export async function getCatalog() {
       catalogReleases.push(item); // add unique item
     }
   }
-  console.log(`now ${catalogReleases.length} items in merged catalog`);
+  const catalogReleases_ = catalogReleases.filter(resource => {
+    const isGreekOrHebrew = (resource.languageId === Bible.NT_ORIG_LANG && resource.resourceId === Bible.NT_ORIG_LANG_BIBLE) ||
+      (resource.languageId === Bible.OT_ORIG_LANG && resource.resourceId === Bible.OT_ORIG_LANG_BIBLE);
 
-  return catalogReleases;
+    if (isGreekOrHebrew) { // TODO: until we get twl support, we have to restrict original languages
+      const isDoor43 = resource.owner === DOOR43_CATALOG;
+      if (!isDoor43) {
+        return false;
+      }
+    }
+
+    if (resource.branch_or_tag_name) { // check for version
+      const firstChar = resource.branch_or_tag_name[0];
+      const isDigit = (firstChar >= '0') && (firstChar <= '9');
+      if ((firstChar !== 'v') && !isDigit) {
+        return false; // reject if tag is not a version
+      }
+    }
+
+    return true;
+  });
+  console.log(`now ${catalogReleases_.length} items in merged catalog`);
+
+  return catalogReleases_;
 }
 
 /**
@@ -269,3 +296,192 @@ export async function downloadManifestData(owner, repo, retries=5) {
     throw e;
   }
 }
+
+/**
+ * reads files names from folder and remove system files
+ * @param {string} path
+ * @return {*[]}
+ */
+const cleanReaddirSync = (path) => {
+  let cleanDirectories = [];
+
+  if (fs.existsSync(path)) {
+    cleanDirectories = fs.readdirSync(path)
+      .filter((file) => file !== '.DS_Store');
+  } else {
+    console.warn(`no such file or directory, ${path}`);
+  }
+
+  return cleanDirectories;
+};
+
+/**
+ * Returns the versioned folder within the directory with the highest value.
+ * e.g. `v10` is greater than `v9`
+ * @param {string} dir - the directory to read
+ * @return {string} the full path to the latest version directory.
+ */
+export function getLatestVersion(dir) {
+  const versions = listVersions(dir);
+
+  if (versions.length > 0) {
+    return path.join(dir, versions[0]);
+  } else {
+    return null;
+  }
+}
+
+/**
+ * Returns the versioned folder within the directory with the highest value.
+ * e.g. `v10` is greater than `v9`
+ * @param {string} dir - the directory to read
+ * @return {string} the full path to the latest version directory.
+ */
+export function getLatestVersionsAndOwners(dir) {
+  const versions = listVersions(dir);
+  const orgs = {};
+
+  for (const folder of versions) {
+    let owner = '';
+    const pos = folder.indexOf('_');
+    if (pos >= 0) {
+      owner = folder.substr(pos + 1);
+    }
+    if (!orgs[owner]) {
+      orgs[owner] = [];
+    }
+    orgs[owner].push(folder);
+  }
+
+  const orgsKeys = Object.keys(orgs);
+  for (const org of orgsKeys) {
+    const versions = orgs[org];
+    const latest = path.join(dir, versions[0]);
+    orgs[org] = latest;
+  }
+
+  if (orgsKeys.length > 0) {
+    return orgs;
+  } else {
+    return null;
+  }
+}
+
+/**
+ * Returns an array of paths found in the directory filtered and sorted by version
+ * @param {string} dir
+ * @return {string[]}
+ */
+function listVersions(dir) {
+  if (fs.pathExistsSync(dir)) {
+    const versionedDirs = fs.readdirSync(dir).filter((file) => fs.lstatSync(path.join(dir, file)).isDirectory() &&
+      file.match(/^v\d/i));
+    return versionedDirs.sort((a, b) =>
+      -compareVersions(a, b), // do inverted sort
+    );
+  }
+  return [];
+}
+
+/**
+ * compares version numbers, if a > b returns 1; if a < b return -1; else are equal and return 0
+ * @param a
+ * @param b
+ * @return {number}
+ */
+export function compareVersions(a, b) {
+  const cleanA = semver.coerce(a);
+  const cleanB = semver.coerce(b);
+
+  if (semver.gt(cleanA, cleanB)) {
+    return 1;
+  } else if (semver.lt(cleanA, cleanB)) {
+    return -1;
+  } else {
+    return 0;
+  }
+}
+
+/**
+ * get local resources
+ * @param {string} resourcesPath
+ * @return {null|*[]}
+ */
+export const getLocalResourceList = (resourcesPath) => {
+  try {
+    if (!fs.existsSync(resourcesPath)) {
+      fs.ensureDirSync(resourcesPath);
+    }
+
+    const localResourceList = [];
+    const resourceLanguages = fs.readdirSync(resourcesPath)
+      .filter((file) => path.extname(file) !== '.json' && file !== '.DS_Store');
+
+    for (let i = 0; i < resourceLanguages.length; i++) {
+      const languageId = resourceLanguages[i];
+      const biblesPath = path.join(resourcesPath, languageId, 'bibles');
+      const tHelpsPath = path.join(resourcesPath, languageId, TRANSLATION_HELPS);
+      const bibleIds = cleanReaddirSync(biblesPath);
+      const tHelpsResources = cleanReaddirSync(tHelpsPath);
+
+      bibleIds.forEach((bibleId) => {
+        const bibleIdPath = path.join(biblesPath, bibleId);
+        const owners = getLatestVersionsAndOwners(bibleIdPath) || {};
+        for (const org of Object.keys(owners)) {
+          const bibleLatestVersion = owners[org];
+          if (bibleLatestVersion) {
+            const pathToBibleManifestFile = path.join(bibleLatestVersion, 'manifest.json');
+
+            if (fs.existsSync(pathToBibleManifestFile)) {
+              const resourceManifest = fs.readJsonSync(pathToBibleManifestFile);
+              const remoteModifiedTime = (resourceManifest.remoteModifiedTime !== EMPTY_TIME) && resourceManifest.remoteModifiedTime;
+              const localResource = {
+                languageId: languageId,
+                resourceId: bibleId,
+                version: path.base(bibleLatestVersion, true),
+                modifiedTime: remoteModifiedTime || resourceManifest.catalog_modified_time,
+              };
+
+              localResourceList.push(localResource);
+            } else {
+              console.warn(`getLocalResourceList(): no such file or directory, ${pathToBibleManifestFile}`);
+            }
+          } else {
+            console.log(`getLocalResourceList(): $bibleLatestVersion is ${bibleLatestVersion}.`);
+          }
+        }
+      });
+
+      tHelpsResources.forEach((tHelpsId) => {
+        const tHelpResource = path.join(tHelpsPath, tHelpsId);
+        const owners = getLatestVersionsAndOwners(tHelpResource) || {};
+        for (const org of Object.keys(owners)) {
+          const tHelpsLatestVersion = owners[org];
+
+          if (tHelpsLatestVersion) {
+            const pathTotHelpsManifestFile = path.join(tHelpsLatestVersion, 'manifest.json');
+
+            if (fs.existsSync(pathTotHelpsManifestFile)) {
+              const resourceManifest = fs.readJsonSync(pathTotHelpsManifestFile);
+              const localResource = {
+                languageId: languageId,
+                resourceId: tHelpsId,
+                modifiedTime: resourceManifest.catalog_modified_time,
+              };
+
+              localResourceList.push(localResource);
+            } else {
+              console.warn(`getLocalResourceList(): no such file or directory, ${pathTotHelpsManifestFile}`);
+            }
+          } else {
+            console.log(`getLocalResourceList(): tHelpsLatestVersion is ${tHelpsLatestVersion}.`);
+          }
+        }
+      });
+    }
+    return localResourceList;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};

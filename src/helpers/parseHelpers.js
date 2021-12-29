@@ -267,7 +267,7 @@ export function parseCatalogResources(catalog, ignoreObsResources = true, subjec
       };
       catalogResources.push(foundResource);
     } else {
-      console.log(`skipping: ${JSON.stringify(catalogItem)}`);
+      // console.log(`skipping: ${JSON.stringify(catalogItem)}`);
     }
   }
   console.log(`filtered catalog length: ${catalogResources.length}`);

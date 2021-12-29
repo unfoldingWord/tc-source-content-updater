@@ -62,7 +62,7 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
 
   const resourceData = resource.catalogEntry ? resource.catalogEntry.resource : resource;
   if (!resource.version || (resource.version === 'master')) {
-    const manifest = await downloadManifestData(resourceData.owner, resourceData.name);
+    const manifest = await downloadManifestData(resourceData.owner || resource.owner, resourceData.name);
     const version = manifest && manifest.dublin_core && manifest.dublin_core.version;
     if (version) {
       resource.version = version;

@@ -186,7 +186,7 @@ describe('test API', () => {
     const resourcesPath = './temp/updates';
     // const resourcesPath = USER_RESOURCES;
     const sourceContentUpdater = new Updater();
-    const localResourceList = getLocalResourceList(resourcesPath);
+    const localResourceList = sourceContentUpdater.getLocalResourceList(resourcesPath);
     const initialResourceList = saveResources(resourcesPath, localResourceList, 'initial');
     const updatedLanguages = await sourceContentUpdater.getLatestResources(localResourceList);
     saveResources(resourcesPath, updatedLanguages, 'updated');
@@ -223,14 +223,14 @@ describe('test API', () => {
       downloadErrors = e.toString();
     }
     // console.log(updatedLanguages);
-    const localResourceListAfter = getLocalResourceList(resourcesPath);
+    const localResourceListAfter = sourceContentUpdater.getLocalResourceList(resourcesPath);
     const finalResourceList = saveResources(resourcesPath, localResourceListAfter, 'final');
     const sourceContentUpdater2 = new Updater();
     const newUpdatedLanguages = await sourceContentUpdater2.getLatestResources(localResourceListAfter);
     for (const langId of langsToUpdate) {
       const match = newUpdatedLanguages.find(item => (item.languageId === langId));
       if (match) {
-        console.error(`didn't get updated: ${match.languageId}`);
+        console.error(`Language didn't get updated: ${match.languageId}`);
       }
       expect(match).toBeFalsy();
     }
