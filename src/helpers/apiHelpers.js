@@ -1,7 +1,8 @@
 import {delay} from './utils';
-import {SORT, STAGE} from '../index';
+import {SORT, STAGE, SUBJECT} from '../index';
 
 const request = require('request');
+const DOOR43_CATALOG = `Door43-Catalog`;
 
 /**
  * does http request and returns the response data parsed from JSON
@@ -51,12 +52,12 @@ export async function makeJsonRequestDetailed(url, retries=5) {
 /**
  * searching subjects
  * @param {array} subjects
+ * @param {string} owner
  * @param {number} retries
  * @return {Promise<*>}
  */
-async function searchSubjects(subjects, retries=3) {
+async function searchSubjects(subjects, owner, retries=3) {
   const subjectParam = encodeURI(subjects.join(','));
-  const owner = `Door43-Catalog`; // TODO: remove this filter and combine results with catalog next v5 results once we start to support all orgs
   let fetchUrl = `https://git.door43.org/api/catalog/v3/search?subject=${subjectParam}`;
   if (owner) {
     fetchUrl += fetchUrl + `&owner=${owner}`;
@@ -69,21 +70,25 @@ async function searchSubjects(subjects, retries=3) {
  * get published catalog using catalog next v3
  * @return {Promise<*[]>}
  */
-export async function getCatalogAllReleases() {
+export async function getOldCatalogReleases() {
   const released = [];
+  const owner = null; // get all owners
   const subjectList = ['Bible', 'Aligned Bible', 'Greek New Testament', 'Hebrew Old Testament', 'Translation Words', 'TSV Translation Notes', 'Translation Academy'];
   // const subjectList = ['Bible', 'Testament', 'Translation Words', 'TSV Translation Notes', 'Translation Academy'];
 
   try {
     // for (const subject of subjectList) {
-    const result = await searchSubjects(subjectList);
+    const result = await searchSubjects(subjectList, owner, 5);
     let repos = 0;
     const languages = result && result.languages || [];
     for (const language of languages) {
         const languageId = language.identifier;
         const resources = language.resources || [];
         for (const resource of resources) {
-          resource.language = languageId;
+          resource.languageId = languageId;
+          resource.resourceId = resource.identifier;
+          resource.full_name = resource.full_name || `${resource.owner}/${resource.repo}`;
+          resource.checking_level = resource.checking && resource.checking.checking_level;
           released.push(resource);
           repos++;
         }
@@ -104,7 +109,26 @@ export async function getCatalogAllReleases() {
  * @return {Promise<*[]>}
  */
 export async function getCatalog() {
-  return getCatalogAllReleases();
+  const catalogReleases = await getOldCatalogReleases();
+  const searchParams = {
+    subject: SUBJECT.ALL_TC_RESOURCES,
+    stage: STAGE.PROD,
+  };
+  console.log(`found ${catalogReleases.length} items in old catalog`);
+  const newCatalogReleases = await searchCatalogNext(searchParams);
+  console.log(`found ${newCatalogReleases.length} items in new catalog`);
+  // merge catalogs together - catalog new takes precident
+  for (const item of newCatalogReleases) {
+    const index = catalogReleases.findIndex(oldItem => (item.full_name === oldItem.full_name));
+    if (index >= 0) {
+      catalogReleases[index] = item; // overwrite item in old catalog
+    } else {
+      catalogReleases.push(item); // add unique item
+    }
+  }
+  console.log(`now ${catalogReleases.length} items in merged catalog`);
+
+  return catalogReleases;
 }
 
 /**
@@ -119,9 +143,51 @@ function addUrlParameter(value, parameters, tag) {
     if (parameters) { // see if we need separator
       parameters += '&';
     }
-    parameters += `${tag}=${encodeURI(value)}`;
+    parameters += `${tag}=${encodeURIComponent(value)}`;
   }
   return parameters;
+}
+
+/**
+ * filter for supported repos
+ * @param {array} resources
+ * @return {*[]}
+ */
+function getCompatibleResourceList(resources) {
+  const supported = [];
+  for (const item of resources || []) {
+    // add fields for backward compatibility
+    const languageId = item.language;
+    let [, resourceId] = (item.name || '').split(`${languageId}_`);
+    resourceId = resourceId || item.name; // if language was not in name, then use name as resource ID
+    item.resourceId = resourceId;
+    item.languageId = languageId;
+    item.checking_level = item.repo && item.repo.checking_level;
+
+    if (item.zipball_url) {
+      item.downloadUrl = item.zipball_url;
+    }
+    // check for version. if there is one, it will save having to fetch it from DCS later.
+    if (item.release) { // if released
+      const tagName = item.release.tag_name;
+      if (tagName && (tagName[0] === 'v')) {
+        item.version = tagName.substr(1);
+      }
+    } else {
+      const branchOrTagName = item.branch_or_tag_name;
+      if (branchOrTagName && (branchOrTagName[0] === 'v')) {
+        item.version = branchOrTagName.substr(1);
+      }
+    }
+    if (item.subject) {
+      item.subject = item.subject.replaceAll(' ', '_');
+    }
+    // add supported resources to returned list
+    if (item.downloadUrl && item.subject && item.name && item.full_name) {
+      supported.push(item);
+    }
+  }
+  return supported;
 }
 
 /**
@@ -178,38 +244,7 @@ export async function searchCatalogNext(searchParams, retries=3) {
     return null;
   }
 
-  // filter for supported repos
-  const supported = [];
-  for (const item of result_ || []) {
-    // add fields for backward compatibility
-    const languageId = item.language;
-    let [, resourceId] = (item.name || '').split(`${languageId}_`);
-    resourceId = resourceId || item.name; // if language was not in name, then use name as resource ID
-    item.resourceId = resourceId;
-    item.languageId = languageId;
-    if (item.zipball_url) {
-      item.downloadUrl = item.zipball_url;
-    }
-    // check for version. if there is one, it will save having to fetch it from DCS later.
-    if (item.release) { // if released
-      const tagName = item.release.tag_name;
-      if (tagName && (tagName[0] === 'v')) {
-        item.version = tagName.substr(1);
-      }
-    } else {
-      const branchOrTagName = item.branch_or_tag_name;
-      if (branchOrTagName && (branchOrTagName[0] === 'v')) {
-        item.version = branchOrTagName.substr(1);
-      }
-    }
-    if (item.subject) {
-      item.subject = item.subject.replaceAll(' ', '_');
-    }
-    // add supported resources to returned list
-    if (item.downloadUrl && item.subject && item.name && item.full_name) {
-      supported.push(item);
-    }
-  }
+  const supported = getCompatibleResourceList(result_);
   return supported;
 }
 

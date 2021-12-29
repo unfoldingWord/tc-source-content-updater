@@ -215,9 +215,9 @@ export function parseCatalogResources(catalog, ignoreObsResources = true, subjec
   for (let i = 0, len = catalog.length; i < len; i++) {
     const catalogItem = catalog[i];
     const subject = catalogItem.subject;
-    const languageId = catalogItem.language.toLowerCase();
-    const isCheckingLevel2 = catalogItem.checking.checking_level >= 2;
-    let resourceId = catalogItem.identifier;
+    const languageId = catalogItem.languageId.toLowerCase();
+    const isCheckingLevel2 = catalogItem.checking_level >= 2;
+    let resourceId = catalogItem.resourceId || '';
     if (resourceId.includes('_')) {
       // try to strip off languageId
       const [, resourceId_] = resourceId.split('_');
@@ -229,11 +229,15 @@ export function parseCatalogResources(catalog, ignoreObsResources = true, subjec
       // console.log(`skipping OBS item: ${catalogItem.full_name}`);
       continue;
     }
-    if (catalogItem.formats.length > 1) {
-      console.log('too many');
+    let downloadUrl = catalogItem.downloadUrl;
+    if (!downloadUrl) {
+      const formats = catalogItem.formats;
+      if (formats && formats.length > 1) {
+        console.log('too many');
+      }
+      const firstFormat = formats && formats[0];
+      downloadUrl = firstFormat.url;
     }
-    const firstFormat = catalogItem.formats && catalogItem.formats[0];
-    const downloadUrl = firstFormat.url;
     const remoteModifiedTime = catalogItem.modified;
     const isDesiredSubject = !subjectFilters ||
       subjectFilters.includes(subject);

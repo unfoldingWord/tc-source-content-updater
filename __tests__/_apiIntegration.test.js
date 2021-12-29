@@ -283,7 +283,7 @@ describe.skip('apiHelpers compare pivoted.json with CN', () => {
     console.log(`D43 Catalog flattened has ${csvLines.length} total items`);
     writeCsv('./temp/CatalogOld.tsv', csvLines);
 
-    const data = await apiHelpers.getCatalogAllReleases();
+    const data = await apiHelpers.getOldCatalogReleases();
     console.log(`Catalog Next Found ${data.length} total items`);
     expect(data.length).toBeTruthy();
     const cnCatalog = 'CN';
