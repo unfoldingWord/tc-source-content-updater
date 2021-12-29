@@ -229,11 +229,15 @@ export function parseCatalogResources(catalog, ignoreObsResources = true, subjec
       // console.log(`skipping OBS item: ${catalogItem.full_name}`);
       continue;
     }
-    if (catalogItem.formats.length > 1) {
-      console.log('too many');
+    let downloadUrl = catalogItem.downloadUrl;
+    if (!downloadUrl) {
+      const formats = catalogItem.formats;
+      if (formats && formats.length > 1) {
+        console.log('too many');
+      }
+      const firstFormat = formats && formats[0];
+      downloadUrl = firstFormat.url;
     }
-    const firstFormat = catalogItem.formats && catalogItem.formats[0];
-    const downloadUrl = firstFormat.url;
     const remoteModifiedTime = catalogItem.modified;
     const isDesiredSubject = !subjectFilters ||
       subjectFilters.includes(subject);
@@ -243,8 +247,8 @@ export function parseCatalogResources(catalog, ignoreObsResources = true, subjec
     } else if (version[0].toLowerCase() === 'v') { // trim leading v
       version = version.substr(1);
     }
-    if (!(catalogItem.projects && catalogItem.projects.length)) {
-      continue; // skip over repos with no projects
+    if (!(catalogItem.projects && catalogItem.projects.length) || !(catalogItem.books && catalogItem.books.length)) {
+      continue; // skip over repos with no projects or books
     }
     if (isDesiredSubject && isCheckingLevel2 &&
       downloadUrl && remoteModifiedTime && languageId) {
