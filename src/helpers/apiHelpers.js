@@ -187,6 +187,7 @@ export async function searchCatalogNext(searchParams, retries=3) {
     resourceId = resourceId || item.name; // if language was not in name, then use name as resource ID
     item.resourceId = resourceId;
     item.languageId = languageId;
+    item.modified = item.modified || item.released;
     if (item.zipball_url) {
       item.downloadUrl = item.zipball_url;
     }
