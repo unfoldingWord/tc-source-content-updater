@@ -9,6 +9,7 @@ const request = require('request');
 export const DOOR43_CATALOG = `Door43-Catalog`;
 export const TRANSLATION_HELPS = 'translationHelps';
 export const EMPTY_TIME = '0001-01-01T00:00:00+00:00';
+export const OWNER_SEPARATOR = '_';
 
 /**
  * does http request and returns the response data parsed from JSON
@@ -337,7 +338,7 @@ export function getVersionAndOwnerFromPath(versionPath) {
 export function splitVersionAndOwner(versionAndOwner) {
   let version = versionAndOwner;
   let owner = '';
-  const pos = versionAndOwner.indexOf('_');
+  const pos = versionAndOwner.indexOf(OWNER_SEPARATOR);
   if (pos >= 0) {
     owner = decodeURIComponent(versionAndOwner.substr(pos + 1));
     version = versionAndOwner.substr(0, pos);

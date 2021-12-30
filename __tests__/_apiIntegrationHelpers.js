@@ -16,29 +16,29 @@ export const QUOTE_MARK = '\u2019';
 /**
  *
  * @param list
- * @param org
+ * @param owner
  * @param repo
  * @param subject
  * @param item
  */
-export function addCsvItem(list, org, repo, subject, item) {
+export function addCsvItem(list, owner, repo, subject, item) {
   const itemJson = JSON.stringify(item).replace('\t', '\\t');
-  list.push({org, repo, subject, resource: itemJson});
-  // list.push(`${org}\t${repo}\t${subject}\t${itemJson}`);
+  list.push({owner, repo, subject, resource: itemJson});
+  // list.push(`${owner}\t${repo}\t${subject}\t${itemJson}`);
 }
 
 /**
  *
  * @param list
- * @param org
+ * @param owner
  * @param repo
  * @param subject
  * @param item
  * @param category
  */
-export function addCsvItem2(list, org, repo, subject, item, category, url='') {
+export function addCsvItem2(list, owner, repo, subject, item, category, url='') {
   const itemJson = JSON.stringify(item).replace('\t', '\\t').substr(0, 256);
-  list.push({category, org, repo, subject, resource: itemJson, url});
+  list.push({category, owner, repo, subject, resource: itemJson, url});
   // list.push(`${org}\t${repo}\t${subject}\t${itemJson}`);
 }
 
@@ -51,7 +51,7 @@ export function writeCsv(filename, list) {
   const csvLines = [];
   for (const item of list) {
     const itemJson = JSON.stringify(item.resource).replace('\t', '\\t');
-    csvLines.push(`${item.org}\t${item.repo}\t${item.subject}\t${itemJson}`);
+    csvLines.push(`${item.owner}\t${item.repo}\t${item.subject}\t${itemJson}`);
   }
   fs.writeFileSync(filename, csvLines.join('\n') + '\n', 'utf8');
 }
@@ -65,24 +65,24 @@ export function writeCsv2(filename, list) {
   const csvLines = [];
   for (const item of list) {
     const itemJson = JSON.stringify(item.resource).replace('\t', '\\t');
-    csvLines.push(`${item.category}\t${item.org}\t${item.repo}\t${item.subject}\t${item.url}\t${itemJson}`);
+    csvLines.push(`${item.category}\t${item.owner}\t${item.repo}\t${item.subject}\t${item.url}\t${itemJson}`);
   }
   fs.writeFileSync(filename, csvLines.join('\n') + '\n', 'utf8');
 }
 
 /**
  *
- * @param orgs
- * @param org
+ * @param owners
+ * @param owner
  * @param csvLines
  */
-export function getOrgItems(orgs, org, csvLines) {
-  const items = orgs[org];
+export function getOrgItems(owners, owner, csvLines) {
+  const items = owners[owner];
   for (const item of items) {
     const subject = item.subject;
     const repo = item.name;
-    const org = item.owner;
-    addCsvItem(csvLines, org, repo, subject, item);
+    const owner = item.owner;
+    addCsvItem(csvLines, owner, repo, subject, item);
   }
 }
 

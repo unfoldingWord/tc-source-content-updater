@@ -13,9 +13,9 @@ import * as packageParseHelpers from './packageParseHelpers';
 // constants
 import * as errors from '../resources/errors';
 import * as Bible from '../resources/bible';
-import {DOOR43_CATALOG} from './apiHelpers';
+import {DOOR43_CATALOG, OWNER_SEPARATOR} from './apiHelpers';
 
-const translationHelps = {
+export const TRANSLATION_HELPS_INDEX = {
   ta: 'translationAcademy',
   tn: 'translationNotes',
   tw: 'translationWords',
@@ -90,6 +90,11 @@ export function getVersionsInPath(resourcePath, ownerStr = DOOR43_CATALOG) {
   if (!resourcePath || !fs.pathExistsSync(resourcePath)) {
     return null;
   }
+
+  if (ownerStr[0] !== OWNER_SEPARATOR) { // prefix the separator character if missing
+    ownerStr = OWNER_SEPARATOR + ownerStr;
+  }
+
   const isVersionDirectory = (name) => {
     const fullPath = path.join(resourcePath, name);
     let isMatch = fs.lstatSync(fullPath).isDirectory() && name.match(/^v\d/i);
@@ -127,7 +132,7 @@ export function sortVersions(versions) {
  * @param {string} ownerStr - optional owner to filter by
  * @return {String} - path to highest version
  */
-export function getLatestVersionInPath(resourcePath, ownerStr = null) {
+export function getLatestVersionInPath(resourcePath, ownerStr = DOOR43_CATALOG) {
   const versions = sortVersions(getVersionsInPath(resourcePath, ownerStr));
   if (versions && versions.length) {
     return path.join(resourcePath, versions[versions.length - 1]);
@@ -230,8 +235,8 @@ export function getActualResourcePath(resource, resourcesPath) {
   const languageId = resource.languageId;
   let resourceName = resource.resourceId;
   let type = 'bibles';
-  if (translationHelps[resourceName]) {
-    resourceName = translationHelps[resourceName];
+  if (TRANSLATION_HELPS_INDEX[resourceName]) {
+    resourceName = TRANSLATION_HELPS_INDEX[resourceName];
     type = 'translationHelps';
   }
   const version = 'v' + resource.version;

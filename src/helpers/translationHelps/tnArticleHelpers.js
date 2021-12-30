@@ -34,7 +34,7 @@ import {DOOR43_CATALOG} from '../apiHelpers';
  * @param {String} languageId - language ID for tA
  * @return {Promise<{otQuery: string, ntQuery: string}>}
  */
-export async function getMissingResources(sourcePath, resourcesPath, getMissingOriginalResource, downloadErrors, languageId) {
+export async function getMissingResources(sourcePath, resourcesPath, getMissingOriginalResource, downloadErrors, languageId, ownerStr) {
   const tsvManifest = resourcesHelpers.getResourceManifestFromYaml(sourcePath);
   // array of related resources used to generated the tsv.
   const tsvRelations = tsvManifest.dublin_core.relation;
@@ -60,17 +60,19 @@ export async function getMissingResources(sourcePath, resourcesPath, getMissingO
     }
   }
 
+  await delay(500);
+
   // make sure tA is unzipped
   const tAPath = path.join(
     resourcesPath,
     languageId,
     'translationHelps/translationAcademy'
   );
-  const taVersionPath = resourcesHelpers.getLatestVersionInPath(tAPath);
+  const taVersionPath = resourcesHelpers.getLatestVersionInPath(tAPath, ownerStr);
   if (taVersionPath) {
     makeSureResourceUnzipped(taVersionPath);
   } else {
-    throw new Error(`getMissingResources() - cannot find tA at ${tAPath}`);
+    throw new Error(`getMissingResources() - cannot find tA at ${tAPath} for ${ownerStr}`);
   }
   return {otQuery, ntQuery};
 }
@@ -103,7 +105,7 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
       fs.removeSync(outputPath);
     }
 
-    const {otQuery, ntQuery} = await getMissingResources(sourcePath, resourcesPath, getMissingOriginalResource, downloadErrors, resource.languageId);
+    const {otQuery, ntQuery} = await getMissingResources(sourcePath, resourcesPath, getMissingOriginalResource, downloadErrors, resource.languageId, resource.owner);
     console.log(`processTranslationNotes() - have needed original bibles for ${sourcePath}, starting processing`);
     const tsvFiles = fs.readdirSync(sourcePath).filter((filename) => path.extname(filename) === '.tsv');
     const tnErrors = [];

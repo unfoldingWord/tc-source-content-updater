@@ -54,7 +54,7 @@ describe('test API', () => {
     expect(Array.isArray(items)).toBeTruthy();
     console.log(`Search returned ${items.length} total items`);
     const repoLines = [];
-    const org = 'Door43-Catalog';
+    const owner = 'Door43-Catalog';
     for (const item of items) {
       const line = {
         full_name: item.full_name,
@@ -121,7 +121,7 @@ describe('test API', () => {
     expect(Array.isArray(items)).toBeTruthy();
     console.log(`Search returned ${items.length} total items`);
     const repoLines = [];
-    const org = 'Door43-Catalog';
+    const owner = 'Door43-Catalog';
     for (const item of items) {
       const line = {
         full_name: item.full_name,
@@ -131,6 +131,7 @@ describe('test API', () => {
         branch_or_tag_name: item.branch_or_tag_name,
         title: item.title,
         version: item.version,
+        owner,
       };
       repoLines.push(line);
     }
@@ -225,15 +226,24 @@ describe('test API', () => {
     const finalResourceList = saveResources(resourcesPath, localResourceListAfter, 'final');
     const sourceContentUpdater2 = new Updater();
     const newUpdatedLanguages = await sourceContentUpdater2.getLatestResources(localResourceListAfter);
+    const failedUpdates = [];
     for (const langId of langsToUpdate) {
       const match = newUpdatedLanguages.find(item => (item.languageId === langId));
       if (match) {
         console.error(`Language didn't get updated: ${match.languageId}`);
+        for (const resource of match.resources) {
+          const description = `${resource.owner}/${resource.languageId}_${resource.resourceId}`;
+          console.error(`Missing: ${description}`);
+          failedUpdates.push(description);
+        }
       }
-      expect(match).toBeFalsy();
     }
+    if (downloadErrors) {
+      console.error(`Download errors: ${downloadErrors}`);
+    }
+    expect(failedUpdates.length).toEqual(0);
     expect(downloadErrors).toBeFalsy();
-    console.log('stuff');
+    console.log('Test finally Done');
   }, 6000000);
 });
 
@@ -247,14 +257,14 @@ describe.skip('apiHelpers.getCatalogOld', () => {
       const items = res && res.subjects;
       console.log(`D43 Catalog returned ${items.length} total items`);
       const csvLines = [];
-      const org = 'Door43-Catalog';
+      const owner = 'Door43-Catalog';
       for (const item of items) {
         const language = item.language;
         for (const resource of item.resources) {
           const resId = resource.identifier;
           const subject = resource.subject;
           const repo = `${language}_${resId}`;
-          addCsvItem(csvLines, org, repo, subject, resource);
+          addCsvItem(csvLines, owner, repo, subject, resource);
         }
       }
       console.log(`D43 Catalog flattened has ${csvLines.length} total items`);
@@ -273,7 +283,7 @@ describe.skip('apiHelpers compare pivoted.json with CN', () => {
     const items = res && res.subjects;
     console.log(`D43 Catalog returned ${items.length} total items`);
     const csvLines = [];
-    const org = 'Door43-Catalog';
+    const owner = 'Door43-Catalog';
     const oldCatalog = 'Old';
     for (const item of items) {
       const language = item.language;
@@ -281,7 +291,7 @@ describe.skip('apiHelpers compare pivoted.json with CN', () => {
         const resId = resource.identifier;
         const subject = resource.subject;
         const repo = `${language}_${resId}`;
-        addCsvItem2(csvLines, org, repo, subject, resource, oldCatalog);
+        addCsvItem2(csvLines, owner, repo, subject, resource, oldCatalog);
       }
     }
     console.log(`D43 Catalog flattened has ${csvLines.length} total items`);
@@ -299,17 +309,17 @@ describe.skip('apiHelpers compare pivoted.json with CN', () => {
       const repo = item.repo;
       const url = item.formats && item.formats[0] && item.formats[0].url;
       // const parts = url.split('/');
-      const org = item.owner;
-      const item_ = { org, repo, subject, resourceId, languageId };
+      const owner = item.owner;
+      const item_ = {owner, repo, subject, resourceId, languageId};
       const itemJson = JSON.stringify(item_);
       if (itemJson.toLowerCase().indexOf('obs') >= 0) {
-        console.log(`found OBS in ${org}/${repo} - ${subject}: ${itemJson}`);
+        console.log(`found OBS in ${owner}/${repo} - ${subject}: ${itemJson}`);
       }
-      const pos = csvLines.findIndex((line) => ((line.repo === repo) && (line.org === org)));
+      const pos = csvLines.findIndex((line) => ((line.repo === repo) && (line.owner === owner)));
       if (pos >= 0) {
         const line = csvLines[pos];
         if (line.matched) {
-          console.log(`dupe in catalog: ${org}/${repo} - ${subject}: ${itemJson}`);
+          console.log(`dupe in catalog: ${owner}/${repo} - ${subject}: ${itemJson}`);
         } else {
           line.matched = true;
         }
@@ -321,7 +331,7 @@ describe.skip('apiHelpers compare pivoted.json with CN', () => {
           console.log(JSON.stringify(line));
         }
       } else {
-        addCsvItem2(csvLines, org, repo, subject, item, cnCatalog, url);
+        addCsvItem2(csvLines, owner, repo, subject, item, cnCatalog, url);
       }
     }
 
@@ -339,33 +349,33 @@ describe.skip('apiHelpers.getCatalogCN', () => {
     const data = await apiHelpers.doMultipartQuery(unFilteredSearch);
     console.log(`Catalog Next Found ${data.length} total items`);
     expect(data.length).toBeTruthy();
-    const orgs = {};
+    const owners = {};
     for (let i = 0, l = data.length; i < l; i++) {
       const item = data[i];
-      const org = item && item.repo && item.repo.owner && item.repo.owner.login || null;
-      if (org) {
-        if (!orgs[org]) {
-          orgs[org] = [];
+      const owner = item && item.repo && item.repo.owner && item.repo.owner.login || null;
+      if (owner) {
+        if (!owners[owner]) {
+          owners[owner] = [];
         }
-        orgs[org].push(item);
+        owners[owner].push(item);
       } else {
-        console.log(`missing org in ${JSON.stringify(item)}`);
+        console.log(`missing owner in ${JSON.stringify(item)}`);
       }
     }
-    const orgList = Object.keys(orgs);
-    for (const org of orgList) {
-      console.log(`${org} has ${orgs[org].length} items`);
+    const ownersList = Object.keys(owners);
+    for (const owner of ownersList) {
+      console.log(`${owner} has ${owners[owner].length} items`);
     }
 
     let csvLines = [];
-    const org = 'Door43-Catalog';
-    getOrgItems(orgs, org, csvLines);
+    const owner = 'Door43-Catalog';
+    getOrgItems(owners, owner, csvLines);
     console.log(`D43 Catalog flattened has ${csvLines.length} total items`);
     writeCsv('./temp/CatalogCN-D43.tsv', csvLines);
 
     csvLines = [];
-    for (const org of orgList) {
-      getOrgItems(orgs, org, csvLines);
+    for (const owner of ownersList) {
+      getOrgItems(owners, owner, csvLines);
     }
     console.log(`Catalog Next flattened has ${csvLines.length} total items`);
     writeCsv('./temp/CatalogCN.tsv', csvLines);
