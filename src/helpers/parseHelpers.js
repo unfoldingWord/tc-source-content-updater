@@ -114,6 +114,7 @@ export function getUpdatedLanguageList(updatedRemoteResources) {
  *                  resourceId: String,
  *                  modifiedTime: String,
  *                  }>} localResourceList - list of resources that are on the users local machine already {}
+ * @param {array} filterByOwner - if given, a list of owners to allow for download, returned list will be limited to these owners
  * @return {Array.<{
  *                   languageId: String,
  *                   resourceId: String,
@@ -125,11 +126,11 @@ export function getUpdatedLanguageList(updatedRemoteResources) {
  *                   catalogEntry: {subject, resource, format}
  *                 }>} updated resources  (throws exception on error)
  */
-export function getLatestResources(catalog, localResourceList) {
+export function getLatestResources(catalog, localResourceList, filterByOwner = null) {
   if (!catalog || !Array.isArray(localResourceList)) {
     throw new Error(ERROR.PARAMETER_ERROR);
   }
-  const tCoreResources = parseCatalogResources(catalog, true, TC_RESOURCES);
+  let tCoreResources = parseCatalogResources(catalog, true, TC_RESOURCES);
   // remove resources that are already up to date
   for (const localResource of localResourceList) {
     let resourceId = localResource.resourceId;
@@ -152,6 +153,13 @@ export function getLatestResources(catalog, localResourceList) {
         }
       }
     }
+  }
+
+  if (filterByOwner) { // we need to remove resources that are not in owner list
+    const filteredResources = tCoreResources.filter(resource => (filterByOwner.includes(resource.owner)));
+    const itemsRemoved = tCoreResources.length - filteredResources.length;
+    console.log(`${itemsRemoved} items removed from filtered list, new length is ${filteredResources.length}`);
+    tCoreResources = filteredResources;
   }
 
   return tCoreResources.sort((a, b) =>

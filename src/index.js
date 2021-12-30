@@ -122,6 +122,7 @@ Updater.prototype.getLatestDownloadErrorsStr = function() {
  *                  resourceId: String,
  *                  modifiedTime: String,
  *                  }>} localResourceList - list of resources that are on the users local machine already {}
+ * @param {array} filterByOwner - if given, a list of owners to allow for download, updatedCatalogResources and returned list will be limited to these owners
  * @return {
  *          Array.<{
  *                   languageId: String,
@@ -130,9 +131,9 @@ Updater.prototype.getLatestDownloadErrorsStr = function() {
  *                 }>
  *         }} - list of languages that have updates in catalog (throws exception on error)
  */
-Updater.prototype.getLatestResources = async function(localResourceList) {
+Updater.prototype.getLatestResources = async function(localResourceList, filterByOwner= null ) {
   await this.updateCatalog();
-  this.updatedCatalogResources = parseHelpers.getLatestResources(this.remoteCatalog, localResourceList);
+  this.updatedCatalogResources = parseHelpers.getLatestResources(this.remoteCatalog, localResourceList, filterByOwner);
   return parseHelpers.getUpdatedLanguageList(this.updatedCatalogResources);
 };
 

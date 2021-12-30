@@ -116,7 +116,11 @@
     ],
     "owner": "Door43-Catalog",
     "repo": "ceb_tw",
-    "language": "ceb"
+    "languageId": "ceb",
+    "resourceId": "tw",
+    "foundInCatalog": "OLD",
+    "full_name": "Door43-Catalog/ceb_tw",
+    "checking_level": "3"
   },
   {
     "identifier": "udb",
@@ -180,7 +184,11 @@
     ],
     "owner": "Door43-Catalog",
     "repo": "ceb_udb",
-    "language": "ceb"
+    "languageId": "ceb",
+    "resourceId": "udb",
+    "foundInCatalog": "OLD",
+    "full_name": "Door43-Catalog/ceb_udb",
+    "checking_level": "3"
   },
   {
     "identifier": "ulb",
@@ -932,7 +940,11 @@
     ],
     "owner": "Door43-Catalog",
     "repo": "ceb_ulb",
-    "language": "ceb"
+    "languageId": "ceb",
+    "resourceId": "ulb",
+    "foundInCatalog": "OLD",
+    "full_name": "Door43-Catalog/ceb_ulb",
+    "checking_level": "3"
   },
   {
     "identifier": "ugnt",
@@ -1254,7 +1266,11 @@
     ],
     "owner": "Door43-Catalog",
     "repo": "el-x-koine_ugnt",
-    "language": "el-x-koine"
+    "languageId": "el-x-koine",
+    "resourceId": "ugnt",
+    "foundInCatalog": "OLD",
+    "full_name": "Door43-Catalog/el-x-koine_ugnt",
+    "checking_level": "3"
   },
   {
     "identifier": "ta",
@@ -1357,7 +1373,11 @@
     ],
     "owner": "Door43-Catalog",
     "repo": "en_ta",
-    "language": "en"
+    "languageId": "en",
+    "resourceId": "ta",
+    "foundInCatalog": "OLD",
+    "full_name": "Door43-Catalog/en_ta",
+    "checking_level": "3"
   },
   {
     "identifier": "tw",
@@ -1425,7 +1445,11 @@
     ],
     "owner": "Door43-Catalog",
     "repo": "en_tw",
-    "language": "en"
+    "languageId": "en",
+    "resourceId": "tw",
+    "foundInCatalog": "OLD",
+    "full_name": "Door43-Catalog/en_tw",
+    "checking_level": "3"
   },
   {
     "identifier": "ult",
@@ -2200,7 +2224,11 @@
     ],
     "owner": "Door43-Catalog",
     "repo": "en_ult",
-    "language": "en"
+    "languageId": "en",
+    "resourceId": "ult",
+    "foundInCatalog": "OLD",
+    "full_name": "Door43-Catalog/en_ult",
+    "checking_level": "3"
   },
   {
     "identifier": "ust",
@@ -2959,7 +2987,11 @@
     ],
     "owner": "Door43-Catalog",
     "repo": "en_ust",
-    "language": "en"
+    "languageId": "en",
+    "resourceId": "ust",
+    "foundInCatalog": "OLD",
+    "full_name": "Door43-Catalog/en_ust",
+    "checking_level": "3"
   },
   {
     "identifier": "uhb",
@@ -3400,7 +3432,11 @@
     ],
     "owner": "Door43-Catalog",
     "repo": "hbo_uhb",
-    "language": "hbo"
+    "languageId": "hbo",
+    "resourceId": "uhb",
+    "foundInCatalog": "OLD",
+    "full_name": "Door43-Catalog/hbo_uhb",
+    "checking_level": "3"
   },
   {
     "identifier": "glt",
@@ -3612,7 +3648,11 @@
     ],
     "owner": "Door43-Catalog",
     "repo": "hi_glt",
-    "language": "hi"
+    "languageId": "hi",
+    "resourceId": "glt",
+    "foundInCatalog": "OLD",
+    "full_name": "Door43-Catalog/hi_glt",
+    "checking_level": "3"
   },
   {
     "identifier": "gst",
@@ -3798,6 +3838,10 @@
     ],
     "owner": "Door43-Catalog",
     "repo": "hi_gst",
-    "language": "hi"
+    "languageId": "hi",
+    "resourceId": "gst",
+    "foundInCatalog": "OLD",
+    "full_name": "Door43-Catalog/hi_gst",
+    "checking_level": "3"
   }
 ]

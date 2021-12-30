@@ -32,7 +32,7 @@ export const JSON_OPTS = {spaces: 2};
 // nock.restore();
 // nock.cleanAll();
 
-describe('test API', () => {
+describe.skip('test API', () => {
   it('test searchCatalogNext', async () => {
     const sourceContentUpdater = new Updater();
     const searchParams = {
@@ -182,18 +182,24 @@ describe('test API', () => {
   }, 600000);
 
   it('test Updater', async () => {
+    const filterByOwner = ['Door43-Catalog']; // set to null to do all owners
+    const langsToUpdate = ['es-419', 'en', 'el-x-koine', 'hi', 'hbo']; // set to null to update all
+    const allAlignedBibles = false; // if true then also download all aligned bibles
     const resourcesPath = './temp/updates';
     // const resourcesPath = USER_RESOURCES;
     const sourceContentUpdater = new Updater();
     const localResourceList = apiHelpers.getLocalResourceList(resourcesPath);
     const initialResourceList = saveResources(resourcesPath, localResourceList, 'initial');
-    const updatedLanguages = await sourceContentUpdater.getLatestResources(localResourceList);
+    const updatedLanguages = await sourceContentUpdater.getLatestResources(localResourceList, filterByOwner);
     saveResources(resourcesPath, updatedLanguages, 'updated');
     // console.log(sourceContentUpdater.updatedCatalogResources);
     const resourceStatus = _.cloneDeep(localResourceList);
-    const langsToUpdate = ['es-419', 'en', 'el-x-koine', 'hi', 'hbo'];
-    const remoteResources = sourceContentUpdater.remoteCatalog.filter(item => langsToUpdate.includes(item.language));
-    const updatedRemoteResources = sourceContentUpdater.updatedCatalogResources.filter(item => langsToUpdate.includes(item.languageId));
+    let remoteResources = sourceContentUpdater.remoteCatalog;
+    let updatedRemoteResources = sourceContentUpdater.updatedCatalogResources;
+    if (langsToUpdate) {
+      remoteResources = sourceContentUpdater.remoteCatalog.filter(item => langsToUpdate.includes(item.language));
+      updatedRemoteResources = sourceContentUpdater.updatedCatalogResources.filter(item => langsToUpdate.includes(item.languageId));
+    }
     // const langsToUpdate = ['en', 'el-x-koine', 'es-419', 'hbo', 'ru'];
     for (const langId of langsToUpdate) {
       if (updatedLanguages.find(item => (item.languageId === langId))) {
@@ -217,7 +223,7 @@ describe('test API', () => {
     }
     let downloadErrors = null;
     try {
-      await sourceContentUpdater.downloadResources(langsToUpdate, resourcesPath);
+      await sourceContentUpdater.downloadResources(langsToUpdate, resourcesPath, sourceContentUpdater.updatedCatalogResources, allAlignedBibles);
     } catch (e) {
       downloadErrors = e.toString();
     }
@@ -225,7 +231,7 @@ describe('test API', () => {
     const localResourceListAfter = apiHelpers.getLocalResourceList(resourcesPath);
     const finalResourceList = saveResources(resourcesPath, localResourceListAfter, 'final');
     const sourceContentUpdater2 = new Updater();
-    const newUpdatedLanguages = await sourceContentUpdater2.getLatestResources(localResourceListAfter);
+    const newUpdatedLanguages = await sourceContentUpdater2.getLatestResources(localResourceListAfter, filterByOwner);
     const failedUpdates = [];
     for (const langId of langsToUpdate) {
       const match = newUpdatedLanguages.find(item => (item.languageId === langId));

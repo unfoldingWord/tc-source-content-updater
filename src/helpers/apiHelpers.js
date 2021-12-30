@@ -396,8 +396,8 @@ export function listVersions(dir) {
 
 /**
  * compares version numbers, if a > b returns 1; if a < b return -1; else are equal and return 0
- * @param a
- * @param b
+ * @param {String} a
+ * @param {String} b
  * @return {number}
  */
 export function compareVersions(a, b) {
