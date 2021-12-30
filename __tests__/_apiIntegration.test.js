@@ -5,13 +5,11 @@ import fs from 'fs-extra';
 import path from 'path-extra';
 import os from 'os';
 import _ from 'lodash';
-// import nock from 'nock';
 import * as apiHelpers from '../src/helpers/apiHelpers';
 import Updater, {SORT, STAGE, SUBJECT} from '../src';
 import {
   addCsvItem,
   addCsvItem2,
-  getLocalResourceList,
   getOrgItems,
   saveResources,
   sortStringObjects,
@@ -186,13 +184,13 @@ describe('test API', () => {
     const resourcesPath = './temp/updates';
     // const resourcesPath = USER_RESOURCES;
     const sourceContentUpdater = new Updater();
-    const localResourceList = sourceContentUpdater.getLocalResourceList(resourcesPath);
+    const localResourceList = apiHelpers.getLocalResourceList(resourcesPath);
     const initialResourceList = saveResources(resourcesPath, localResourceList, 'initial');
     const updatedLanguages = await sourceContentUpdater.getLatestResources(localResourceList);
     saveResources(resourcesPath, updatedLanguages, 'updated');
     // console.log(sourceContentUpdater.updatedCatalogResources);
     const resourceStatus = _.cloneDeep(localResourceList);
-    const langsToUpdate = ['es-419', 'en', 'el-x-koine', 'hi'];
+    const langsToUpdate = ['es-419', 'en', 'el-x-koine', 'hi', 'hbo'];
     const remoteResources = sourceContentUpdater.remoteCatalog.filter(item => langsToUpdate.includes(item.language));
     const updatedRemoteResources = sourceContentUpdater.updatedCatalogResources.filter(item => langsToUpdate.includes(item.languageId));
     // const langsToUpdate = ['en', 'el-x-koine', 'es-419', 'hbo', 'ru'];
@@ -223,7 +221,7 @@ describe('test API', () => {
       downloadErrors = e.toString();
     }
     // console.log(updatedLanguages);
-    const localResourceListAfter = sourceContentUpdater.getLocalResourceList(resourcesPath);
+    const localResourceListAfter = apiHelpers.getLocalResourceList(resourcesPath);
     const finalResourceList = saveResources(resourcesPath, localResourceListAfter, 'final');
     const sourceContentUpdater2 = new Updater();
     const newUpdatedLanguages = await sourceContentUpdater2.getLatestResources(localResourceListAfter);

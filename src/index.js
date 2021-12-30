@@ -156,15 +156,6 @@ export function getResourcesForLanguage(languageId) {
 }
 
 /**
- * get local resources
- * @param {string} resourcesPath
- * @return {null|*[]}
- */
-Updater.prototype.getLocalResourceList = function(resourcesPath) {
-  return apiHelpers.getLocalResourceList(resourcesPath);
-};
-
-/**
  * @description Downloads and processes the resources that need to be updated for the given languages using the DCS API
  * @param {Array.<String>} languageList - Array of language codes to download their resources
  * @param {String} resourcesPath - Path to the resources directory where each resource will be placed

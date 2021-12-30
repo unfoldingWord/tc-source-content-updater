@@ -134,6 +134,7 @@ export async function getCatalog() {
       catalogReleases.push(item); // add unique item
     }
   }
+  console.log(`now ${catalogReleases.length} items in merged catalog, before filter`);
   const catalogReleases_ = catalogReleases.filter(resource => {
     const isGreekOrHebrew = (resource.languageId === Bible.NT_ORIG_LANG && resource.resourceId === Bible.NT_ORIG_LANG_BIBLE) ||
       (resource.languageId === Bible.OT_ORIG_LANG && resource.resourceId === Bible.OT_ORIG_LANG_BIBLE);
@@ -302,7 +303,7 @@ export async function downloadManifestData(owner, repo, retries=5) {
  * @param {string} path
  * @return {*[]}
  */
-const cleanReaddirSync = (path) => {
+export const cleanReaddirSync = (path) => {
   let cleanDirectories = [];
 
   if (fs.existsSync(path)) {
@@ -316,19 +317,32 @@ const cleanReaddirSync = (path) => {
 };
 
 /**
- * Returns the versioned folder within the directory with the highest value.
- * e.g. `v10` is greater than `v9`
- * @param {string} dir - the directory to read
- * @return {string} the full path to the latest version directory.
+ * takes path that has version and owner such as `~/resources/bible/v1.1_unfoldingWord` and extracts the version and owner.
+ * @param {string} versionPath
+ * @return {{owner: string, version: string}}
  */
-export function getLatestVersion(dir) {
-  const versions = listVersions(dir);
-
-  if (versions.length > 0) {
-    return path.join(dir, versions[0]);
-  } else {
-    return null;
+export function getVersionAndOwnerFromPath(versionPath) {
+  if (versionPath) {
+    const versionAndOwner = path.base(versionPath, true);
+    return splitVersionAndOwner(versionAndOwner);
   }
+  return {};
+}
+
+/**
+ * takes string that has version and owner such as `v1.1_unfoldingWord` and splits into version and owner.
+ * @param {string} versionAndOwner
+ * @return {{owner: string, version: string}}
+ */
+export function splitVersionAndOwner(versionAndOwner) {
+  let version = versionAndOwner;
+  let owner = '';
+  const pos = versionAndOwner.indexOf('_');
+  if (pos >= 0) {
+    owner = decodeURIComponent(versionAndOwner.substr(pos + 1));
+    version = versionAndOwner.substr(0, pos);
+  }
+  return {version, owner};
 }
 
 /**
@@ -338,19 +352,15 @@ export function getLatestVersion(dir) {
  * @return {string} the full path to the latest version directory.
  */
 export function getLatestVersionsAndOwners(dir) {
-  const versions = listVersions(dir);
+  const versionAndOwners = listVersions(dir);
   const orgs = {};
 
-  for (const folder of versions) {
-    let owner = '';
-    const pos = folder.indexOf('_');
-    if (pos >= 0) {
-      owner = folder.substr(pos + 1);
-    }
+  for (const versionAndOwner of versionAndOwners) {
+    let {owner} = splitVersionAndOwner(versionAndOwner);
     if (!orgs[owner]) {
       orgs[owner] = [];
     }
-    orgs[owner].push(folder);
+    orgs[owner].push(versionAndOwner);
   }
 
   const orgsKeys = Object.keys(orgs);
@@ -372,7 +382,7 @@ export function getLatestVersionsAndOwners(dir) {
  * @param {string} dir
  * @return {string[]}
  */
-function listVersions(dir) {
+export function listVersions(dir) {
   if (fs.pathExistsSync(dir)) {
     const versionedDirs = fs.readdirSync(dir).filter((file) => fs.lstatSync(path.join(dir, file)).isDirectory() &&
       file.match(/^v\d/i));
@@ -427,19 +437,22 @@ export const getLocalResourceList = (resourcesPath) => {
       bibleIds.forEach((bibleId) => {
         const bibleIdPath = path.join(biblesPath, bibleId);
         const owners = getLatestVersionsAndOwners(bibleIdPath) || {};
-        for (const org of Object.keys(owners)) {
-          const bibleLatestVersion = owners[org];
+        for (const owner of Object.keys(owners)) {
+          const bibleLatestVersion = owners[owner];
           if (bibleLatestVersion) {
             const pathToBibleManifestFile = path.join(bibleLatestVersion, 'manifest.json');
+            const {version, owner} = getVersionAndOwnerFromPath(bibleLatestVersion);
 
             if (fs.existsSync(pathToBibleManifestFile)) {
               const resourceManifest = fs.readJsonSync(pathToBibleManifestFile);
               const remoteModifiedTime = (resourceManifest.remoteModifiedTime !== EMPTY_TIME) && resourceManifest.remoteModifiedTime;
               const localResource = {
-                languageId: languageId,
+                languageId,
                 resourceId: bibleId,
-                version: path.base(bibleLatestVersion, true),
+                owner,
+                version,
                 modifiedTime: remoteModifiedTime || resourceManifest.catalog_modified_time,
+                manifest: resourceManifest,
               };
 
               localResourceList.push(localResource);
@@ -455,18 +468,22 @@ export const getLocalResourceList = (resourcesPath) => {
       tHelpsResources.forEach((tHelpsId) => {
         const tHelpResource = path.join(tHelpsPath, tHelpsId);
         const owners = getLatestVersionsAndOwners(tHelpResource) || {};
-        for (const org of Object.keys(owners)) {
-          const tHelpsLatestVersion = owners[org];
+        for (const owner of Object.keys(owners)) {
+          const tHelpsLatestVersion = owners[owner];
 
           if (tHelpsLatestVersion) {
             const pathTotHelpsManifestFile = path.join(tHelpsLatestVersion, 'manifest.json');
+            const {version, owner} = getVersionAndOwnerFromPath(tHelpsLatestVersion);
 
             if (fs.existsSync(pathTotHelpsManifestFile)) {
               const resourceManifest = fs.readJsonSync(pathTotHelpsManifestFile);
               const localResource = {
-                languageId: languageId,
+                languageId,
                 resourceId: tHelpsId,
+                owner,
+                version,
                 modifiedTime: resourceManifest.catalog_modified_time,
+                manifest: resourceManifest,
               };
 
               localResourceList.push(localResource);

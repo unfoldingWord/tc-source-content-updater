@@ -137,6 +137,7 @@ export function getLatestResources(catalog, localResourceList) {
       resourceId = RESOURCE_ID_MAP[resourceId] || resourceId; // map resource names to ids
       const index = tCoreResources.findIndex((remoteResource) =>
         ((localResource.languageId.toLowerCase() === remoteResource.languageId.toLowerCase()) &&
+          (localResource.owner === remoteResource.owner) &&
           (remoteResource.resourceId === resourceId))
       );
 

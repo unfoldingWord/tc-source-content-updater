@@ -13,6 +13,7 @@ import * as packageParseHelpers from './packageParseHelpers';
 // constants
 import * as errors from '../resources/errors';
 import * as Bible from '../resources/bible';
+import {DOOR43_CATALOG} from './apiHelpers';
 
 const translationHelps = {
   ta: 'translationAcademy',
@@ -85,7 +86,7 @@ export function getResourceManifestFromYaml(resourcePath) {
  * @param {string} ownerStr - optional owner to filter by
  * @return {Array} - array of versions, e.g. ['v1', 'v10', 'v1.1']
  */
-export function getVersionsInPath(resourcePath, ownerStr = null) {
+export function getVersionsInPath(resourcePath, ownerStr = DOOR43_CATALOG) {
   if (!resourcePath || !fs.pathExistsSync(resourcePath)) {
     return null;
   }
