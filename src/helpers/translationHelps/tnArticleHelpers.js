@@ -107,7 +107,7 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
     const tsvFiles = fs.readdirSync(sourcePath).filter((filename) => path.extname(filename) === '.tsv');
     const tnErrors = [];
 
-    tsvFiles.forEach(async (filename) => {
+    for (const filename of tsvFiles) {
       try {
         const bookId = filename.split('-')[1].toLowerCase().replace('.tsv', '');
         if (!BOOK_CHAPTER_VERSES[bookId]) console.error(`${bookId} is not a valid book id.`);
@@ -131,7 +131,7 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
         if (fs.existsSync(originalBiblePath)) {
           const filepath = path.join(sourcePath, filename);
           const groupData = await tsvToGroupData(filepath, 'translationNotes', {categorized: true}, originalBiblePath, resourcesPath, resource.languageId);
-          formatAndSaveGroupData(groupData, outputPath, bookId);
+          await formatAndSaveGroupData(groupData, outputPath, bookId);
         } else {
           const message = `processTranslationNotes() - cannot find original bible ${originalBiblePath}:`;
           console.error(message);
@@ -142,15 +142,15 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
         console.error(message, e);
         tnErrors.push(message + e.toString());
       }
-    });
+    }
+
+    await delay(200);
 
     if (tnErrors.length) { // report errors
       const message = `processTranslationNotes() - error processing ${sourcePath}`;
       console.error(message);
       throw new Error(`${message}:\n${tnErrors.join('\n')}`);
     }
-
-    await delay(200);
 
     // Generate groupsIndex using tN groupData & tA articles.
     const translationAcademyPath = path.join(
@@ -190,16 +190,6 @@ function getMissingOriginalResource(resourcesPath, originalLanguageId, originalL
         version
       );
 
-      // Get the version of the other Tns original language to determine versions that should not be deleted.
-      const versionsToNotDelete = getOtherTnsOLVersions(resourcesPath, originalLanguageId);
-      const versionsSubdirectory = originalBiblePath.replace(version, '');
-      const latestOriginalBiblePath = resourcesHelpers.getLatestVersionInPath(versionsSubdirectory);
-      // if latest version is the version needed delete older versions
-      if (latestOriginalBiblePath === originalBiblePath) {
-        // Old versions of the orginal language resource bible will be deleted because the tn uses the latest version and not an older version
-        resourcesHelpers.removeAllButLatestVersion(versionsSubdirectory, versionsToNotDelete);
-      }
-      // If version needed is not in the resources download it.
       if (!fs.existsSync(originalBiblePath)) {
         // Download orig. lang. resource
         const downloadUrl = `https://cdn.door43.org/${originalLanguageId}/${originalLanguageBibleId}/${version}/${originalLanguageBibleId}.zip`;

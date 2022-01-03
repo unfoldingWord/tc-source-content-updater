@@ -63,3 +63,6 @@ typings/
 # IntelliJ config
 .idea
 *.iml
+
+temp
+/jest-results.json

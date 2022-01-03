@@ -6,12 +6,13 @@ import * as resourcesDownloadHelpers from '../src/helpers/resourcesDownloadHelpe
 import * as parseHelpers from '../src/helpers/parseHelpers';
 // constants
 import * as errors from '../src/resources/errors';
+import Updater from '../src';
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
-const catalog = require('./fixtures/api.door43.org/v3/subjects/pivoted.json');
 
 describe('Tests for resourcesDownloadHelpers.downloadResources()', function() {
-  const resources = parseHelpers.getLatestResources(catalog, []);
+  const updater = new Updater();
+  const resources = parseHelpers.getLatestResources(loadMockedResources(updater), []);
   const resourcesPath = path.join(ospath.home(), 'translationCore/resources'); // a mocked resources directory
   beforeEach(() => {
     fs.__resetMockFS();
@@ -36,7 +37,7 @@ describe('Tests for resourcesDownloadHelpers.downloadResources()', function() {
 
   it('Test resourcesDownloadHelpers.downloadResources() for "hi" should download, process and deploy all resources', async () => {
     const languageList = ['hi'];
-    const expectedLength = 4;
+    const expectedLength = 2;
     return resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources).then((res) => {
       expect(res).toHaveLength(expectedLength);
     });
@@ -61,7 +62,7 @@ describe('Tests for resourcesDownloadHelpers.downloadResources()', function() {
 
   it('Test resourcesDownloadHelpers.downloadResources() for empty language list and allAlignedBibles should pass', async () => {
     const languageList = [];
-    const expectedLength = 3;
+    const expectedLength = 4;
     const allAlignedBibles = true;
     const downloadErrors = [];
     return resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, downloadErrors, allAlignedBibles).then((res) => {
@@ -71,7 +72,7 @@ describe('Tests for resourcesDownloadHelpers.downloadResources()', function() {
 
   it('Test resourcesDownloadHelpers.downloadResources() for empty language list and allAlignedBibles should remove duplicates', async () => {
     const languageList = [];
-    const expectedLength = 3;
+    const expectedLength = 4;
     const allAlignedBibles = true;
     const downloadErrors = [];
     const resources_ = [...resources];
@@ -126,3 +127,17 @@ describe('Tests for resourcesDownloadHelpers.downloadAndProcessResource()', () =
     });
   });
 });
+
+//
+// helpers
+//
+
+/**
+ * load mocked resources
+ * @param {object} updater
+ * @return {Array<{languageId: String, localModifiedTime: String, remoteModifiedTime: String}>}
+ */
+function loadMockedResources(updater) {
+  updater.remoteCatalog = fs.__actual.readJsonSync(path.join('./__tests__/fixtures/catalogNext.json'));
+  return updater.remoteCatalog;
+}

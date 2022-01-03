@@ -8,7 +8,7 @@ import * as resourcesHelpers from '../resourcesHelpers';
 import * as errors from '../../resources/errors';
 
 /**
- * @description Processes the extracted files for translationWord to cerate the folder
+ * @description Processes the extracted files for translationWord to create the folder
  * structure and produce the index.js file for the language with the title of each article.
  * @param {Object} resource - Resource object
  * @param {String} sourcePath - Path to the extracted files that came from the zip file from the catalog
@@ -28,7 +28,10 @@ export function processTranslationWords(resource, sourcePath, outputPath) {
     fs.removeSync(outputPath);
   const typesPath = path.join(sourcePath, 'bible');
   const isDirectory = (item) => fs.lstatSync(path.join(typesPath, item)).isDirectory();
-  const typeDirs = fs.readdirSync(typesPath).filter(isDirectory);
+  let typeDirs = [];
+  if (fs.existsSync(typesPath)) {
+    typeDirs = fs.readdirSync(typesPath).filter(isDirectory);
+  }
   typeDirs.forEach((typeDir) => {
     const typePath = path.join(typesPath, typeDir);
     const files = fs.readdirSync(typePath).filter((filename) => path.extname(filename) === '.md');

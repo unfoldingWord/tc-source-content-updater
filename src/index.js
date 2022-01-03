@@ -12,7 +12,42 @@ import * as twArticleHelpers from './helpers/translationHelps/twArticleHelpers';
 import * as twGroupDataHelpers from './helpers/translationHelps/twGroupDataHelpers';
 import * as tnArticleHelpers from './helpers/translationHelps/tnArticleHelpers';
 import * as resourcesDownloadHelpers from './helpers/resourcesDownloadHelpers';
+import * as resourcesHelpers from './helpers/resourcesHelpers';
 export {getOtherTnsOLVersions} from './helpers/translationHelps/tnArticleHelpers';
+export {apiHelpers, parseHelpers, resourcesHelpers, resourcesDownloadHelpers};
+
+// ============================
+// defines useful for searching
+
+export const STAGE = {
+  PROD: 'prod',
+  PRE_PROD: 'preprod',
+  DRAFT: 'draft',
+  LATEST: 'latest',
+};
+
+export const SUBJECT = {
+  ALL_RESOURCES: null,
+  ALL_TC_RESOURCES: 'Bible,Aligned Bible,Greek New Testament,Hebrew Old Testament,Translation Words,TSV Translation Notes,Translation Academy',
+  ALL_BIBLES: 'Bible,Aligned Bible,Greek New Testament,Hebrew Old Testament',
+  ORIGINAL_LANGUAGE_BIBLES: 'Greek New Testament,Hebrew Old Testament',
+  ALIGNED_BIBLES: 'Aligned Bible',
+  UNALIGNED_BIBLES: 'Bible',
+  ALL_TC_HELPS: 'Translation Words,TSV Translation Notes,Translation Academy',
+  TRANSLATION_WORDS: 'Translation Words',
+  TRANSLATION_NOTES: 'TSV Translation Notes',
+  TRANSLATION_ACADEMY: 'Translation Academy',
+};
+
+export const SORT = {
+  SUBJECT: 'subject',
+  REPO_NAME: 'reponame',
+  TAG: 'tag',
+  RELEASED_TIME: 'released',
+  LANGUAGE_ID: 'lang',
+  TITLE: 'title',
+  DEFAULT: '', // by "lang", then "subject" and then "tag"
+};
 
 /**
  * Updater constructor
@@ -31,6 +66,33 @@ Updater.prototype = {};
  */
 Updater.prototype.updateCatalog = async function() {
   this.remoteCatalog = await apiHelpers.getCatalog();
+};
+
+/**
+ * @typedef {Object} searchParamsType
+ * @property {String} owner - resource owner, if undefined then all are searched
+ * @property {String} languageId - language of resource, if undefined then all are searched
+ * @property {String} subject - one or more subjects separated by comma. See options defined in SUBJECT.
+ *                                  If undefined then all are searched.
+ * @property {Number} limit - maximum results to return, default 100
+ * @property {String} partialMatch - if true will do case insensitive, substring matching, default is false
+ * @property {String} stage - specifies which release stage to be returned out of these stages:
+ *                    STAGE.PROD - return only the production releases
+ *                    STAGE.PRE_PROD - return the pre-production release if it exists instead of the production release
+ *                    STAGE.DRAFT - return the draft release if it exists instead of pre-production or production release
+ *                    STAGE.LATEST -return the default branch (e.g. master) if it is a valid RC instead of the "prod", "preprod" or "draft".  (default)
+ * @property {Number|String} checkingLevel - search only for entries with the given checking level(s). Can be 1, 2 or 3.  Default is any.
+ * @property {String} sort - how to sort results (see defines in SORT), if undefined then sorted by by "lang", then "subject" and then "tag"
+ */
+
+/**
+ * Method to search for latest resources using catalog next
+ * @param {searchParamsType} searchParams - search options
+ * @param {number} retries - number of times to retry calling search API, default 3
+ * @return {Promise<*[]|null>}
+ */
+Updater.prototype.searchCatalogNext = async function(searchParams, retries=3) {
+  return await apiHelpers.searchCatalogNext(searchParams, retries);
 };
 
 /**
@@ -100,10 +162,21 @@ export function getResourcesForLanguage(languageId) {
 }
 
 /**
- * @description Downloads the resources that need to be updated for the given languages using the DCS API
+ * @typedef {Object} ResourceType
+ * @property {String} languageId
+ * @property {String} resourceId
+ * @property {String} remoteModifiedTime
+ * @property {String} downloadUrl
+ * @property {String} version
+ * @property {String} subject
+ * @property {String} owner
+ */
+
+/**
+ * @description Downloads and processes the resources that need to be updated for the given languages using the DCS API
  * @param {Array.<String>} languageList - Array of language codes to download their resources
  * @param {String} resourcesPath - Path to the resources directory where each resource will be placed
- * @param {Array.<Object>} resources - Array of resources that are newer than previously downloaded resources;
+ * @param {Array.<ResourceType>} resources - Array of resources that are newer than previously downloaded resources;
  * defaults to this.updatedCatalogResources which was set by previously calling getLatestResources();
  * If getLatestResources() was never called or resources = null, function will get all resources for the given language(s)
  * (the latter is useful for getting all resources for a set of languages, such as including all resources of
@@ -114,7 +187,6 @@ export function getResourcesForLanguage(languageId) {
 Updater.prototype.downloadResources = async function(languageList, resourcesPath,
                                                      resources = this.updatedCatalogResources,
                                                      allAlignedBibles = false) {
-  // call this.getResourcesForLanguage(lang) for each language in list to get all resources to update
   if (!resources) {
     await this.getLatestResources([]);
     resources = this.updatedCatalogResources;
@@ -123,6 +195,46 @@ Updater.prototype.downloadResources = async function(languageList, resourcesPath
   let results = null;
   try {
     results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors, allAlignedBibles);
+  } catch (e) {
+    const errors = this.getLatestDownloadErrorsStr(); // get detailed errors and log
+    if (errors) {
+      const message = `Source Content Update Errors caught!!!\n${errors}`;
+      console.error(message);
+    }
+    throw e; // return error summary
+  }
+  console.log('Source Content Update Successful');
+  return results;
+};
+
+/**
+ * @description Downloads and processes each item in resources list along with dependencies that need to be updated using the DCS API
+ * @param {String} resourcesPath - Path to the resources directory where each resource will be placed
+ * @param {Array.<ResourceType>} resources - Array of resources that are newer than previously downloaded resources;
+ * defaults to this.updatedCatalogResources which was set by previously calling getLatestResources();
+ * If getLatestResources() was never called or resources = null, function will get all resources for the given language(s)
+ * (the latter is useful for getting all resources for a set of languages, such as including all resources of
+ * 'en' and 'hi' in a build)
+ * @return {Promise<Array|null>} Promise that resolves to return all the resources updated or rejects if a resource failed to download
+ */
+Updater.prototype.downloadAllResources = async function(resourcesPath,
+                                                        resources ) {
+  if (!resources || !resources.length) {
+    console.log('Source Content Update Failed - Resources Empty');
+    return null;
+  }
+
+  this.downloadErrors = [];
+  const languageList = [];
+  for (const resource of resources) {
+    const languageId = resource.languageId;
+    if (languageId && ! languageList.includes(languageId)) {
+      languageList.push(languageId);
+    }
+  }
+  let results = null;
+  try {
+    results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors, false);
   } catch (e) {
     const errors = this.getLatestDownloadErrorsStr(); // get detailed errors and log
     if (errors) {

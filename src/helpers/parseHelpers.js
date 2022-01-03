@@ -2,7 +2,7 @@
 import * as ERROR from '../resources/errors';
 
 // the following are the subject found in the door43 catalog.
-// if a subject isnt found in this list then it will be ignored by the source content updater
+// if a subject isn't found in this list then it will be ignored by the source content updater
 export const TC_RESOURCES = [
   'Bible',
   'Aligned_Bible',
@@ -81,16 +81,23 @@ export function getUpdatedLanguageList(updatedRemoteResources) {
   const updatedLanguages = [];
   for (const resource of updatedRemoteResources) {
     const languageId = resource.languageId;
-    const updatedBible = {
-      languageId,
-      localModifiedTime: resource.localModifiedTime || '',
-      remoteModifiedTime: resource.remoteModifiedTime,
-    };
-    const dup = updatedLanguages.findIndex((item) =>
+     const dup = updatedLanguages.findIndex((item) =>
       (item.languageId === languageId)
     );
+    const resLocalModifiedTime = resource.localModifiedTime || '';
     if (dup < 0) {
-      updatedLanguages.push(updatedBible); // add if language not present
+      const updatedLanguage = {
+        languageId,
+        localModifiedTime: resLocalModifiedTime,
+        remoteModifiedTime: resource.remoteModifiedTime,
+        resources: [resource],
+      };
+      updatedLanguages.push(updatedLanguage); // add if language not present
+    } else {
+      const languageItem = updatedLanguages[dup];
+      languageItem.localModifiedTime = (languageItem.localModifiedTime > resLocalModifiedTime) ? languageItem.localModifiedTime : resLocalModifiedTime;
+      languageItem.remoteModifiedTime = (languageItem.remoteModifiedTime > resource.remoteModifiedTime) ? languageItem.remoteModifiedTime : resource.remoteModifiedTime;
+      languageItem.resources.push(resource);
     }
   }
   return updatedLanguages.sort((a, b) =>
@@ -201,64 +208,66 @@ export function getFormatsForResource(resource) {
  *                 }>|null} list of updated resources (returns null on error)
  */
 export function parseCatalogResources(catalog, ignoreObsResources = true, subjectFilters = null) {
-  if (!catalog || !Array.isArray(catalog.subjects)) {
+  if (!catalog || !Array.isArray(catalog)) {
     throw new Error(ERROR.CATALOG_CONTENT_ERROR);
   }
   const catalogResources = [];
-  if (catalog && catalog.subjects) {
-    for (let i = 0, len = catalog.subjects.length; i < len; i++) {
-      const catSubject = catalog.subjects[i];
-      const subject = catSubject.identifier;
-      const languageId = catSubject.language.toLowerCase();
-      const resources = getValidArray(catSubject.resources);
-      for (let j = 0, rLen = resources.length; j < rLen; j++) {
-        const resource = resources[j];
-        const isCheckingLevel2 = resource.checking.checking_level >= 2;
-        const resourceId = resource.identifier;
-        if (ignoreObsResources && (resourceId.indexOf('obs') >= 0)) { // see if we should skip obs resources
-          continue;
-        }
-        const version = resource.version;
-        const formats = getFormatsForResource(resource);
-        for (let k = 0, kLen = formats.length; k < kLen; k++) {
-          const format = formats[k];
-          try {
-            const isZipFormat = format.format.indexOf('application/zip;') >= 0;
-            const downloadUrl = format.url;
-            const remoteModifiedTime = format.modified;
-            const isDesiredSubject = !subjectFilters ||
-              subjectFilters.includes(subject);
-            if (isDesiredSubject && isZipFormat && isCheckingLevel2 &&
-              downloadUrl && remoteModifiedTime && languageId && version) {
-              const foundResource = {
-                languageId,
-                resourceId,
-                remoteModifiedTime,
-                downloadUrl,
-                version,
-                subject,
-                catalogEntry: {
-                  subject: catSubject,
-                  resource,
-                  format,
-                },
-              };
-              catalogResources.push(foundResource);
-            }
-          } catch (e) {
-            // recover if required fields are missing
-          }
-        }
+  for (let i = 0, len = catalog.length; i < len; i++) {
+    const catalogItem = catalog[i];
+    const subject = catalogItem.subject;
+    const languageId = catalogItem.language.toLowerCase();
+    const isCheckingLevel2 = catalogItem.checking.checking_level >= 2;
+    let resourceId = catalogItem.identifier;
+    if (resourceId.includes('_')) {
+      // try to strip off languageId
+      const [, resourceId_] = resourceId.split('_');
+      if (resourceId_) {
+        resourceId = resourceId_;
       }
     }
+    if (ignoreObsResources && (resourceId.indexOf('obs') >= 0)) { // see if we should skip obs resources
+      // console.log(`skipping OBS item: ${catalogItem.full_name}`);
+      continue;
+    }
+    let downloadUrl = catalogItem.downloadUrl;
+    if (!downloadUrl) {
+      const formats = catalogItem.formats;
+      if (formats && formats.length > 1) {
+        console.log('too many');
+      }
+      const firstFormat = formats && formats[0];
+      downloadUrl = firstFormat.url;
+    }
+    const remoteModifiedTime = catalogItem.modified;
+    const isDesiredSubject = !subjectFilters ||
+      subjectFilters.includes(subject);
+    let version = catalogItem.version;
+    if (!version) {
+      version = 'master'; // we are on latest
+    } else if (version[0].toLowerCase() === 'v') { // trim leading v
+      version = version.substr(1);
+    }
+    if (!(catalogItem.projects && catalogItem.projects.length) && !(catalogItem.books && catalogItem.books.length)) {
+      continue; // skip over repos with no projects or books
+    }
+    if (isDesiredSubject && isCheckingLevel2 &&
+      downloadUrl && remoteModifiedTime && languageId) {
+      const foundResource = {
+        languageId,
+        resourceId,
+        remoteModifiedTime,
+        downloadUrl,
+        version,
+        subject,
+        catalogEntry: {
+          subject,
+          resource: catalogItem,
+        },
+      };
+      catalogResources.push(foundResource);
+    }
   }
+  console.log(`filtered catalog length: ${catalogResources.length}`);
   return catalogResources;
 }
 
-/**
- * Formats the given content in an importable form for tC
- * @param {Object} content - The unparsed content from DCS
- */
-export function formatResources(content) {
-  //
-}

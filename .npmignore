@@ -5,3 +5,6 @@ testSetUp
 coverage
 .idea
 .vscode
+src
+temp
+/jest-results.json

@@ -17,10 +17,10 @@ import {
 import * as parseHelpers from './parseHelpers';
 import * as downloadHelpers from './downloadHelpers';
 import * as moveResourcesHelpers from './moveResourcesHelpers';
-import {getOtherTnsOLVersions} from './translationHelps/tnArticleHelpers';
 // constants
 import * as errors from '../resources/errors';
 import * as Bible from '../resources/bible';
+import {downloadManifestData} from './apiHelpers';
 
 /**
  * add download error keeping track of error message, download url, and if parse error type (if not parse error, then download error)
@@ -59,6 +59,16 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
   } else if (!resourcesPath) {
     throw Error(formatError(resource, errors.RESOURCES_PATH_NOT_GIVEN));
   }
+
+  if (!resource.version || (resource.version === 'master')) {
+    const resourceData = resource.catalogEntry ? resource.catalogEntry.resource : resource;
+    const manifest = await downloadManifestData(resourceData.owner, resourceData.name);
+    const version = manifest && manifest.dublin_core && manifest.dublin_core.version;
+    if (version) {
+      resource.version = version;
+    }
+  }
+
   // Resource is the Greek UGNT or Hebrew UHB
   const isGreekOrHebrew = (resource.languageId === Bible.NT_ORIG_LANG && resource.resourceId === Bible.NT_ORIG_LANG_BIBLE) ||
     (resource.languageId === Bible.OT_ORIG_LANG && resource.resourceId === Bible.OT_ORIG_LANG_BIBLE);
@@ -100,7 +110,6 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
         const twGroupDataResourcesPath = path.join(resourcesPath, resource.languageId, 'translationHelps', 'translationWords', 'v' + resource.version);
         try {
           await moveResourcesHelpers.moveResources(twGroupDataPath, twGroupDataResourcesPath);
-          removeAllButLatestVersion(path.dirname(twGroupDataResourcesPath));
         } catch (err) {
           throw Error(appendError(errors.UNABLE_TO_CREATE_TW_GROUP_DATA, err));
         }
@@ -111,12 +120,12 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
       } catch (err) {
         throw Error(appendError(errors.UNABLE_TO_MOVE_RESOURCE_INTO_RESOURCES, err));
       }
-      let versionsToNotDelete = [];
-      // Get the version numbers of the original language used by other tNs so that needed versions are not deleted.
-      if (isGreekOrHebrew) versionsToNotDelete = getOtherTnsOLVersions(resourcePath, resource.languageId);
-      // Make sure that the resource currently being downloaded is not deleted
-      versionsToNotDelete.push('v' + resource.version);
-      removeAllButLatestVersion(path.dirname(resourcePath), versionsToNotDelete);
+      const versionsToNotDelete = [];
+      if (!isGreekOrHebrew) {
+        // Make sure that the resource currently being downloaded is not deleted
+        versionsToNotDelete.push('v' + resource.version);
+        removeAllButLatestVersion(path.dirname(resourcePath), versionsToNotDelete);
+      }
     } else {
       throw Error(errors.FAILED_TO_PROCESS_RESOURCE);
     }
@@ -172,6 +181,40 @@ export const findMatchingResource = (resources, languageId, resourceId) => {
 };
 
 /**
+ * orders resources - ta,tw,tn then other resources
+ * @param {object} resource
+ * @return {number}
+ */
+function helpsOrder(resource) {
+  if (resource && resource.resourceId) {
+    if (resource.resourceId) {
+      switch (resource.resourceId.toLowerCase()) {
+        case 'ta':
+          return 0;
+        case 'tw':
+          return 1;
+        case 'tn':
+          return 2;
+        default:
+          return 100;
+      }
+    }
+  }
+  return 100000;
+}
+
+/**
+ * move helps resources to first in list - ta,tw,tn then other resources
+ * @param {object} a
+ * @param {object} b
+ * @return {number}
+ */
+function sortHelps(a, b) {
+  const order = helpsOrder(a) > helpsOrder(b) ? 1 : -1;
+  return order;
+}
+
+/**
  * @description Downloads the resources that need to be updated for the given languages using the DCS API
  * @param {Array} languageList - Array of languages to download the resources for
  * @param {String} resourcesPath - Path to the resources directory where each resource will be placed
@@ -206,7 +249,9 @@ export const downloadResources = (languageList, resourcesPath, resources, downlo
     const importsDir = path.join(resourcesPath, 'imports');
     let downloadableResources = [];
     languageList.forEach((languageId) => {
-      downloadableResources = downloadableResources.concat(parseHelpers.getResourcesForLanguage(resources, languageId));
+      let resourcesForLanguage = parseHelpers.getResourcesForLanguage(resources, languageId);
+      resourcesForLanguage = resourcesForLanguage.sort(sortHelps); // fetch helps first
+      downloadableResources = downloadableResources.concat(resourcesForLanguage);
     });
 
     if (allAlignedBibles) {

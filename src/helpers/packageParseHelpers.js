@@ -32,11 +32,12 @@ export const parseUsfmOfBook = (usfmPath, outputPath) => {
  * parses manifest.yaml data to create manifest.json
  * @param {String} extractedFilePath - path containing manifest.yaml
  * @param {string} outputPath - path to place manifest.json
+ * @param {Object} resource
  * @return {Object} new manifest data
  */
-export function parseManifest(extractedFilePath, outputPath) {
+export function parseManifest(extractedFilePath, outputPath, resource) {
   const oldManifest = resourcesHelpers.getResourceManifest(extractedFilePath);
-  return generateBibleManifest(oldManifest, outputPath);
+  return generateBibleManifest(oldManifest, outputPath, resource);
 }
 
 /**
@@ -72,7 +73,7 @@ export function parseBiblePackage(resource, sourcePath, outputPath) {
   fs.ensureDirSync(outputPath);
   try {
     const isOL = (resource.resourceId === 'ugnt') || (resource.resourceId === 'uhb');
-    const manifest = parseManifest(sourcePath, outputPath);
+    const manifest = parseManifest(sourcePath, outputPath, resource);
     if (!manifest.projects) {
       throw Error(resourcesHelpers.formatError(resource, errors.MANIFEST_MISSING_BOOKS));
     }
