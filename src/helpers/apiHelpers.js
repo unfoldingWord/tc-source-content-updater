@@ -96,6 +96,12 @@ export async function getOldCatalogReleases() {
           resource.foundInCatalog = 'OLD';
           resource.full_name = resource.full_name || `${resource.owner}/${resource.repo}`;
           resource.checking_level = resource.checking && resource.checking.checking_level;
+          const formats = resource.formats;
+          if (formats && formats.length > 1) {
+            console.log('too many');
+          }
+          const firstFormat = formats && formats[0];
+          resource.downloadUrl = firstFormat && firstFormat.url;
           released.push(resource);
           repos++;
         }

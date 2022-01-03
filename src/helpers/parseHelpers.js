@@ -238,15 +238,7 @@ export function parseCatalogResources(catalog, ignoreObsResources = true, subjec
       // console.log(`skipping OBS item: ${catalogItem.full_name}`);
       continue;
     }
-    let downloadUrl = catalogItem.downloadUrl;
-    if (!downloadUrl) {
-      const formats = catalogItem.formats;
-      if (formats && formats.length > 1) {
-        console.log('too many');
-      }
-      const firstFormat = formats && formats[0];
-      downloadUrl = firstFormat.url;
-    }
+    const downloadUrl = catalogItem.downloadUrl;
     const remoteModifiedTime = catalogItem.modified;
     const isDesiredSubject = !subjectFilters ||
       subjectFilters.includes(subject);
