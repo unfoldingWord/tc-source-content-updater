@@ -141,6 +141,26 @@ export function getLatestVersionInPath(resourcePath, ownerStr = DOOR43_CATALOG) 
 }
 
 /**
+ * returns the highest version for array that matches owner
+ * @param {Array} versions - base path to search for versions
+ * @param {string} ownerStr - optional owner to filter by, default to DOOR43_CATALOG
+ * @return {String} - highest version
+ */
+export function getLatestVersionFromList(versions, ownerStr = DOOR43_CATALOG) {
+  if (Array.isArray(versions)) {
+    if (versions.length) {
+      if (ownerStr[0] !== OWNER_SEPARATOR) { // prefix the separator character if missing
+        ownerStr = OWNER_SEPARATOR + ownerStr;
+      }
+
+      versions = versions.filter(version => version.endsWith(ownerStr));
+      return versions[versions.length - 1];
+    }
+  }
+  return null;
+}
+
+/**
  * @description Unzips a resource's zip file to an imports directory for processing
  * @param {Object} resource Resource object containing resourceId and languageId
  * @param {String} zipFilePath Path to the zip file

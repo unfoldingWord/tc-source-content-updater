@@ -12,7 +12,9 @@ import * as twArticleHelpers from './helpers/translationHelps/twArticleHelpers';
 import * as twGroupDataHelpers from './helpers/translationHelps/twGroupDataHelpers';
 import * as tnArticleHelpers from './helpers/translationHelps/tnArticleHelpers';
 import * as resourcesDownloadHelpers from './helpers/resourcesDownloadHelpers';
+import * as resourcesHelpers from './helpers/resourcesHelpers';
 export {getOtherTnsOLVersions} from './helpers/translationHelps/tnArticleHelpers';
+export {apiHelpers, parseHelpers, resourcesHelpers, resourcesDownloadHelpers};
 
 // ============================
 // defines useful for searching
@@ -67,21 +69,25 @@ Updater.prototype.updateCatalog = async function() {
 };
 
 /**
+ * @typedef {Object} searchParamsType
+ * @property {String} owner - resource owner, if undefined then all are searched
+ * @property {String} languageId - language of resource, if undefined then all are searched
+ * @property {String} subject - one or more subjects separated by comma. See options defined in SUBJECT.
+ *                                  If undefined then all are searched.
+ * @property {Number} limit - maximum results to return, default 100
+ * @property {String} partialMatch - if true will do case insensitive, substring matching, default is false
+ * @property {String} stage - specifies which release stage to be returned out of these stages:
+ *                    STAGE.PROD - return only the production releases
+ *                    STAGE.PRE_PROD - return the pre-production release if it exists instead of the production release
+ *                    STAGE.DRAFT - return the draft release if it exists instead of pre-production or production release
+ *                    STAGE.LATEST -return the default branch (e.g. master) if it is a valid RC instead of the "prod", "preprod" or "draft".  (default)
+ * @property {Number|String} checkingLevel - search only for entries with the given checking level(s). Can be 1, 2 or 3.  Default is any.
+ * @property {String} sort - how to sort results (see defines in SORT), if undefined then sorted by by "lang", then "subject" and then "tag"
+ */
+
+/**
  * Method to search for latest resources using catalog next
- * @param {Object} searchParams - details below
- * @param {String} searchParams.owner - if undefined then all are searched
- * @param {String} searchParams.languageId - if undefined then all are searched
- * @param {String} searchParams.subject - one or more separated by comma.  If undefined then all are searched.
- *          Example 'Bible,Aligned Bible,Greek New Testament,Hebrew Old Testament,Translation Words,TSV Translation Notes,Translation Academy'
- * @param {Number} searchParams.limit - maximum results to return, default 100
- * @param {Boolean} searchParams.partialMatch - if true will do case insensitive substring matching, default is false
- * @param {String} searchParams.stage - specifies which release stage to be returned out of these stages:
- *                    "prod" - return only the production releases
- *                    "preprod" - return the pre-production release if it exists instead of the production release
- *                    "draft" - return the draft release if it exists instead of pre-production or production release
- *                    "latest" -return the default branch (e.g. master) if it is a valid RC instead of the "prod", "preprod" or "draft".  (default)
- * @param {Number} searchParams.checkingLevel - search only for entries with the given checking level(s). Can be 1, 2 or 3.  Default is any.
- * @param {Number} searchParams.sort - search only for entries with the given checking level(s). Can be 1, 2 or 3.  Default is any.
+ * @param {searchParamsType} searchParams - search options
  * @param {number} retries - number of times to retry calling search API, default 3
  * @return {Promise<*[]|null>}
  */
@@ -113,6 +119,17 @@ Updater.prototype.getLatestDownloadErrorsStr = function() {
 };
 
 /**
+ * @typedef {Object} ResourceType
+ * @property {String} languageId
+ * @property {String} resourceId
+ * @property {String} remoteModifiedTime
+ * @property {String} downloadUrl
+ * @property {String} version
+ * @property {String} subject
+ * @property {String} owner
+ */
+
+/**
  * Used to initiate a load of the latest resource so that the user can then select which ones
  * they would like to update.
  * Note: This function only returns the resources that are not up to date on the user machine
@@ -127,7 +144,8 @@ Updater.prototype.getLatestDownloadErrorsStr = function() {
  *          Array.<{
  *                   languageId: String,
  *                   localModifiedTime: String,
- *                   remoteModifiedTime: String
+ *                   remoteModifiedTime: String,
+ *                   resources: Array.<{ResourceType}>
  *                 }>
  *         }} - list of languages that have updates in catalog (throws exception on error)
  */
