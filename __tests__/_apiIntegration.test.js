@@ -34,7 +34,7 @@ export const JSON_OPTS = {spaces: 2};
 // nock.restore();
 // nock.cleanAll();
 
-describe('test API', () => {
+describe.skip('test API', () => {
   it('test searchCatalogNext', async () => {
     const sourceContentUpdater = new Updater();
     const searchParams = {
