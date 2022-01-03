@@ -175,10 +175,21 @@ export function getResourcesForLanguage(languageId) {
 }
 
 /**
+ * @typedef {Object} ResourceType
+ * @property {String} languageId
+ * @property {String} resourceId
+ * @property {String} remoteModifiedTime
+ * @property {String} downloadUrl
+ * @property {String} version
+ * @property {String} subject
+ * @property {String} owner
+ */
+
+/**
  * @description Downloads and processes the resources that need to be updated for the given languages using the DCS API
  * @param {Array.<String>} languageList - Array of language codes to download their resources
  * @param {String} resourcesPath - Path to the resources directory where each resource will be placed
- * @param {Array.<Object>} resources - Array of resources that are newer than previously downloaded resources;
+ * @param {Array.<ResourceType>} resources - Array of resources that are newer than previously downloaded resources;
  * defaults to this.updatedCatalogResources which was set by previously calling getLatestResources();
  * If getLatestResources() was never called or resources = null, function will get all resources for the given language(s)
  * (the latter is useful for getting all resources for a set of languages, such as including all resources of
@@ -212,7 +223,7 @@ Updater.prototype.downloadResources = async function(languageList, resourcesPath
 /**
  * @description Downloads and processes each item in resources list along with dependencies that need to be updated using the DCS API
  * @param {String} resourcesPath - Path to the resources directory where each resource will be placed
- * @param {Array.<Object>} resources - Array of resources that are newer than previously downloaded resources;
+ * @param {Array.<ResourceType>} resources - Array of resources that are newer than previously downloaded resources;
  * defaults to this.updatedCatalogResources which was set by previously calling getLatestResources();
  * If getLatestResources() was never called or resources = null, function will get all resources for the given language(s)
  * (the latter is useful for getting all resources for a set of languages, such as including all resources of

@@ -65,3 +65,4 @@ typings/
 *.iml
 
 temp
+/jest-results.json

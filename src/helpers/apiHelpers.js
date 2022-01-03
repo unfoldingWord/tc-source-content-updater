@@ -84,7 +84,6 @@ export async function getOldCatalogReleases() {
   // const subjectList = ['Bible', 'Testament', 'Translation Words', 'TSV Translation Notes', 'Translation Academy'];
 
   try {
-    // for (const subject of subjectList) {
     const result = await searchSubjects(subjectList, owner, 5);
     let repos = 0;
     const languages = result && result.languages || [];
@@ -102,7 +101,6 @@ export async function getOldCatalogReleases() {
         }
       }
       console.log(`has ${repos} items`);
-    // }
     console.log(`released catalog has ${released.length} items`);
   } catch (e) {
     console.error('getCatalog() - error getting catalog', e);
