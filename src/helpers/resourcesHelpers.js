@@ -3,6 +3,7 @@ import fs from 'fs-extra';
 import path from 'path-extra';
 import yaml from 'yamljs';
 import {isObject} from 'util';
+import semver from 'semver';
 // helpers
 import * as zipFileHelpers from './zipFileHelpers';
 import * as twArticleHelpers from './translationHelps/twArticleHelpers';
@@ -107,6 +108,136 @@ export function getVersionsInPath(resourcePath, ownerStr = DOOR43_CATALOG) {
 }
 
 /**
+ * reads files names from folder and remove system files
+ * @param {string} path
+ * @return {*[]}
+ */
+export const cleanReaddirSync = (path) => {
+  let cleanDirectories = [];
+
+  if (fs.existsSync(path)) {
+    cleanDirectories = fs.readdirSync(path)
+      .filter((file) => file !== '.DS_Store');
+  } else {
+    console.warn(`no such file or directory, ${path}`);
+  }
+
+  return cleanDirectories;
+};
+
+/**
+ * takes path that has version and owner such as `~/resources/bible/v1.1_unfoldingWord` and extracts the version and owner.
+ * @param {string} versionPath
+ * @return {{owner: string, version: string}}
+ */
+export function getVersionAndOwnerFromPath(versionPath) {
+  if (versionPath) {
+    const versionAndOwner = path.base(versionPath, true);
+    return splitVersionAndOwner(versionAndOwner);
+  }
+  return {};
+}
+
+/**
+ * takes string that has version and owner such as `v1.1_unfoldingWord` and splits into version and owner.
+ * @param {string} versionAndOwner
+ * @return {{owner: string, version: string}}
+ */
+export function splitVersionAndOwner(versionAndOwner) {
+  let version = versionAndOwner;
+  let owner = '';
+  const pos = versionAndOwner.indexOf(OWNER_SEPARATOR);
+  if (pos >= 0) {
+    owner = decodeURIComponent(versionAndOwner.substr(pos + 1));
+    version = versionAndOwner.substr(0, pos);
+  }
+  return {version, owner};
+}
+
+/**
+ * Returns the versioned folder within the directory with the highest value.
+ * e.g. `v10` is greater than `v9`
+ * @param {string} dir - the directory to read
+ * @return {string} the full path to the latest version directory.
+ */
+export function getLatestVersionsAndOwners(dir) {
+  const versionAndOwners = listVersions(dir, true);
+  const orgs = {};
+
+  for (const versionAndOwner of versionAndOwners) {
+    const {owner} = splitVersionAndOwner(versionAndOwner);
+    if (!orgs[owner]) {
+      orgs[owner] = [];
+    }
+    orgs[owner].push(versionAndOwner);
+  }
+
+  const orgsKeys = Object.keys(orgs);
+  for (const org of orgsKeys) {
+    const versions = orgs[org];
+    const latest = path.join(dir, versions[0]);
+    orgs[org] = latest;
+  }
+
+  if (orgsKeys.length > 0) {
+    return orgs;
+  } else {
+    return null;
+  }
+}
+
+/**
+ * sorts array by version number
+ * @param {Array} versionedDirs
+ * @param {boolean} inverted - if true then do reverse sort
+ * @return {*}
+ */
+export function sortVersionsByNumber(versionedDirs, inverted = false) {
+  if (inverted) {
+    return versionedDirs.sort((a, b) =>
+      -compareVersions(a, b), // do inverted sort
+    );
+  }
+  return versionedDirs.sort((a, b) =>
+    compareVersions(a, b), // do regular sort
+  );
+}
+
+/**
+ * Returns an array of paths found in the directory filtered and sorted by version
+ * @param {string} dir
+ * @param {boolean} inverted - if true then do reverse sort
+ * @return {string[]}
+ */
+export function listVersions(dir, inverted = false) {
+  if (fs.pathExistsSync(dir)) {
+    const versionedDirs = fs.readdirSync(dir).filter((file) => fs.lstatSync(path.join(dir, file)).isDirectory() &&
+      file.match(/^v\d/i));
+    return sortVersionsByNumber(versionedDirs, inverted);
+  }
+  return [];
+}
+
+/**
+ * compares version numbers, if a > b returns 1; if a < b return -1; else are equal and return 0
+ * @param {String} a
+ * @param {String} b
+ * @return {number}
+ */
+export function compareVersions(a, b) {
+  const cleanA = semver.coerce(a);
+  const cleanB = semver.coerce(b);
+
+  if (semver.gt(cleanA, cleanB)) {
+    return 1;
+  } else if (semver.lt(cleanA, cleanB)) {
+    return -1;
+  } else {
+    return 0;
+  }
+}
+
+/**
  * Returns a sorted an array of versions so that numeric parts are properly ordered (e.g. v10a < v100)
  * @param {Array} versions - array of versions unsorted: ['v05.5.2', 'v5.5.1', 'V6.21.0', 'v4.22.0', 'v6.1.0', 'v6.1a.0', 'v5.1.0', 'V4.5.0']
  * @return {Array} - array of versions sorted:  ["V4.5.0", "v4.22.0", "v5.1.0", "v5.5.1", "v05.5.2", "v6.1.0", "v6.1a.0", "V6.21.0"]
@@ -122,7 +253,7 @@ export function sortVersions(versions) {
       return versions;
     }
   }
-  versions.sort((a, b) => String(a).localeCompare(b, undefined, {numeric: true}));
+  versions = sortVersionsByNumber(versions); // sort by standard version order
   return versions;
 }
 
