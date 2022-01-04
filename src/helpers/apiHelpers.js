@@ -2,8 +2,12 @@ import {delay} from './utils';
 import {SORT, STAGE, SUBJECT} from '../index';
 import fs from 'fs-extra';
 import path from 'path-extra';
-import semver from 'semver';
 import * as Bible from '../resources/bible';
+import {
+  cleanReaddirSync,
+  getLatestVersionsAndOwners,
+  getVersionAndOwnerFromPath,
+} from './resourcesHelpers';
 
 const request = require('request');
 export const DOOR43_CATALOG = `Door43-Catalog`;

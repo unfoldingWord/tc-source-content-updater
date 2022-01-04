@@ -118,8 +118,6 @@ export const cleanReaddirSync = (path) => {
   if (fs.existsSync(path)) {
     cleanDirectories = fs.readdirSync(path)
       .filter((file) => file !== '.DS_Store');
-  } else {
-    console.warn(`no such file or directory, ${path}`);
   }
 
   return cleanDirectories;
