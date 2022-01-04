@@ -154,6 +154,7 @@ export function getLatestVersionFromList(versions, ownerStr = DOOR43_CATALOG) {
       }
 
       versions = versions.filter(version => version.endsWith(ownerStr));
+      versions = sortVersions(versions); // sort by standard version order
       return versions[versions.length - 1];
     }
   }
