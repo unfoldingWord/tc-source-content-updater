@@ -121,7 +121,7 @@ export async function getOldCatalogReleases() {
 }
 
 /**
- * get published catalog
+ * get published catalog - combines catalog next releases with old catalog
  * @return {Promise<*[]>}
  */
 export async function getCatalog() {
