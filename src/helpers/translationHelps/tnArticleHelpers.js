@@ -9,7 +9,7 @@ import {
 } from 'tsv-groupdata-parser';
 // helpers
 import * as resourcesHelpers from '../resourcesHelpers';
-import {downloadAndProcessResource} from '../resourcesDownloadHelpers';
+import {downloadAndProcessResource, removeUnusedResources} from '../resourcesDownloadHelpers';
 import {delay, getQueryStringForBibleId, getQueryVariable} from '../utils';
 // constants
 import * as errors from '../../resources/errors';
@@ -192,12 +192,11 @@ function getMissingOriginalResource(resourcesPath, originalLanguageId, originalL
 
       // Get the version of the other Tns original language to determine versions that should not be deleted.
       const versionsToNotDelete = getOtherTnsOLVersions(resourcesPath, originalLanguageId);
-      const versionsSubdirectory = originalBiblePath.replace(version, '');
+      const versionsSubdirectory = path.basename(originalBiblePath);
       const latestOriginalBiblePath = resourcesHelpers.getLatestVersionInPath(versionsSubdirectory);
       // if latest version is the version needed delete older versions
       if (latestOriginalBiblePath === originalBiblePath) {
-        // Old versions of the orginal language resource bible will be deleted because the tn uses the latest version and not an older version
-        resourcesHelpers.removeAllButLatestVersion(versionsSubdirectory, versionsToNotDelete);
+        removeUnusedResources(resourcesPath, originalBiblePath, originalLanguageId, version, true);
       }
       // If version needed is not in the resources download it.
       if (!fs.existsSync(originalBiblePath)) {
@@ -253,6 +252,7 @@ export function getOtherTnsOLVersions(resourcesPath, originalLanguageId) {
           const query = getQueryStringForBibleId(relation, originalLanguageId);
           if (query) {
             const version = 'v' + getQueryVariable(query, 'v');
+            // console.log(`getOtherTnsOLVersions() - for ${languageId}, found dependency: ${query}`);
             versionsToNotDelete.push(version);
           }
         }

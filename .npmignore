@@ -5,3 +5,5 @@ testSetUp
 coverage
 .idea
 .vscode
+temp
+src
