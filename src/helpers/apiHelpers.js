@@ -8,6 +8,7 @@ import {
   getLatestVersionsAndOwners,
   getVersionAndOwnerFromPath,
 } from './resourcesHelpers';
+import {RESOURCE_ID_MAP} from "./parseHelpers";
 
 const request = require('request');
 export const DOOR43_CATALOG = `Door43-Catalog`;
@@ -133,7 +134,7 @@ export async function getCatalog() {
   console.log(`found ${catalogReleases.length} items in old catalog`);
   const newCatalogReleases = await searchCatalogNext(searchParams);
   console.log(`found ${newCatalogReleases.length} items in new catalog`);
-  // merge catalogs together - catalog new takes precident
+  // merge catalogs together - catalog new takes precedence
   for (const item of newCatalogReleases) {
     const index = catalogReleases.findIndex(oldItem => (item.full_name === oldItem.full_name));
     if (index >= 0) {
@@ -312,6 +313,26 @@ export async function downloadManifestData(owner, repo, retries=5) {
 }
 
 
+function addLocalResource(tHelpsLatestVersion, pathTotHelpsManifestFile, languageId, resourceId, localResourceList) {
+  const {version, owner} = getVersionAndOwnerFromPath(tHelpsLatestVersion);
+
+  if (fs.existsSync(pathTotHelpsManifestFile)) {
+    const resourceManifest = fs.readJsonSync(pathTotHelpsManifestFile);
+    const localResource = {
+      languageId,
+      resourceId,
+      owner,
+      version,
+      modifiedTime: resourceManifest.catalog_modified_time,
+      manifest: resourceManifest,
+    };
+
+    localResourceList.push(localResource);
+  } else {
+    console.log(`getLocalResourceList(): no such file or directory, ${pathTotHelpsManifestFile}`);
+  }
+}
+
 /**
  * get local resources
  * @param {string} resourcesPath
@@ -367,32 +388,23 @@ export const getLocalResourceList = (resourcesPath) => {
 
       tHelpsResources.forEach((tHelpsId) => {
         const tHelpResource = path.join(tHelpsPath, tHelpsId);
-        const owners = getLatestVersionsAndOwners(tHelpResource) || {};
-        for (const owner of Object.keys(owners)) {
-          const tHelpsLatestVersion = owners[owner];
+        const latestVersions = getLatestVersionsAndOwners(tHelpResource) || {};
+        const resourceId = RESOURCE_ID_MAP[tHelpsId] || tHelpsId; // map resource names to ids
+        for (const owner of Object.keys(latestVersions)) {
+          const tHelpsLatestVersion = latestVersions[owner];
 
           if (tHelpsLatestVersion) {
             const pathTotHelpsManifestFile = path.join(tHelpsLatestVersion, 'manifest.json');
-            const {version, owner} = getVersionAndOwnerFromPath(tHelpsLatestVersion);
-
-            if (fs.existsSync(pathTotHelpsManifestFile)) {
-              const resourceManifest = fs.readJsonSync(pathTotHelpsManifestFile);
-              const localResource = {
-                languageId,
-                resourceId: tHelpsId,
-                owner,
-                version,
-                modifiedTime: resourceManifest.catalog_modified_time,
-                manifest: resourceManifest,
-              };
-
-              localResourceList.push(localResource);
-            } else {
-              console.warn(`getLocalResourceList(): no such file or directory, ${pathTotHelpsManifestFile}`);
+            addLocalResource(tHelpsLatestVersion, pathTotHelpsManifestFile, languageId, resourceId, localResourceList);
+            if (resourceId === 'tw') { // if tw, then also check for twl
+              const pathTwlManifestFile = path.join(tHelpsLatestVersion, 'twl_manifest.json');
+              addLocalResource(tHelpsLatestVersion, pathTwlManifestFile, languageId, 'twl', localResourceList);
             }
           } else {
             console.log(`getLocalResourceList(): tHelpsLatestVersion is ${tHelpsLatestVersion}.`);
           }
+
+
         }
       });
     }

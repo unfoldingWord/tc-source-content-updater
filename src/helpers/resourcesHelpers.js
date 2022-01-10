@@ -15,6 +15,7 @@ import * as packageParseHelpers from './packageParseHelpers';
 import * as errors from '../resources/errors';
 import * as Bible from '../resources/bible';
 import {DOOR43_CATALOG, OWNER_SEPARATOR} from './apiHelpers';
+import {processTranslationWordsTSV} from "./translationHelps/twArticleHelpers";
 
 export const TRANSLATION_HELPS_INDEX = {
   ta: 'translationAcademy',
@@ -344,6 +345,9 @@ export async function processResource(resource, sourcePath, resourcesPath, downl
     switch (resource.subject) {
       case 'Translation_Words':
         twArticleHelpers.processTranslationWords(resource, sourcePath, processedFilesPath);
+        break;
+      case 'TSV_Translation_Words_Links':
+        twArticleHelpers.processTranslationWordsTSV(resource, sourcePath, processedFilesPath, resourcesPath);
         break;
       case 'TSV_Translation_Notes':
         await tnArticleHelpers.processTranslationNotes(resource, sourcePath, processedFilesPath, resourcesPath, downloadErrors);

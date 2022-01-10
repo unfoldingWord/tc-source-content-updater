@@ -299,6 +299,39 @@ export const downloadResources = (languageList, resourcesPath, resources, downlo
 };
 
 /**
+ * find order for resourceId
+ * @param {Array.<string>} resourcePrecedence
+ * @param {string} resourceId
+ * @return {*}
+ */
+function getResourcePrecidence(resourcePrecedence, resourceId) {
+  let index = resourcePrecedence.indexOf(resourceId);
+  if (index < 0) {
+    index = 1000000;
+  }
+  return index;
+}
+
+/**
+ * Return book code with highest precedence to sort method
+ * @param {*} a - First book code of 2
+ * @param {*} b - second book code
+ */
+export function resourceSort(a, b) {
+  const resourcePrecedence = ['ta', 'ult', 'glt', 'tw', 'twl', 'tn']; // we should download these resources in this order, others will just be alphabetical
+
+  const indexA = getResourcePrecidence(resourcePrecedence, a);
+  const indexB = getResourcePrecidence(resourcePrecedence, b);
+  let diff = 0;
+  if (indexA === indexB) { // same resource types or both not in list
+    diff = a < b ? 1 : a > b ? -1 : 0;
+  } else {
+    diff = indexB - indexA; // this plays off the fact other resources will be high index value
+  }
+  return diff;
+}
+
+/**
  * Sorts the list of downloadable resources. Sorts by language and moves tA
  * to the front of the array in order to be downloaded before tN
  * since tN will use tA articles to generate the groupsIndex files.
@@ -307,8 +340,6 @@ export const downloadResources = (languageList, resourcesPath, resources, downlo
  */
 const sortDownloableResources = (downloadableResources) => {
   return downloadableResources.sort((resourceA, resourceB) => {
-    const firstResource = 'ta';// move ta to the front of the array so that it is downloaded before tn.
-
     const langA = resourceA.languageId;
     const langB = resourceB.languageId;
     if (langB > langA) {
@@ -316,9 +347,8 @@ const sortDownloableResources = (downloadableResources) => {
     } else if (langB === langA) {
       const idA = resourceA.resourceId.toLowerCase();
       const idB = resourceB.resourceId.toLowerCase();
-
-      const compareResult = (idA == firstResource) ? -1 : (idB == firstResource) ? 1 : 0;
-      console.log(compareResult);
+      const compareResult = resourceSort(idA, idB);
+      // console.log(compareResult);
       return compareResult;
     } else { // langB < langA
       return 1;

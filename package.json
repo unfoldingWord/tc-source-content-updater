@@ -79,6 +79,7 @@
     "promise-parallel-throttle": "^3.3.0",
     "request": "^2.87.0",
     "url": "^0.11.0",
+    "uw-tsv-parser": "1.0.3-alpha",
     "yamljs": "^0.3.0"
   },
   "peerDependencies": {

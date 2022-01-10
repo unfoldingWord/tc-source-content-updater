@@ -32,7 +32,84 @@ export const JSON_OPTS = {spaces: 2};
 // nock.restore();
 // nock.cleanAll();
 
-describe.skip('test API', () => {
+describe('test API', () => {
+  // it('process TSV', {
+  //   const srcFile = path.join('fixtures/en_twl/twl_TIT.tsv')
+  // });
+
+  it('test TWL', async () => {
+    const filterByOwner = null; // ['Door43-Catalog']; // set to null to do all owners
+    // const langsToUpdate = ['es-419', 'en', 'el-x-koine', 'hi', 'hbo']; // set to null to update all
+    // const allAlignedBibles = false; // if true then also download all aligned bibles
+    const langsToUpdate = ['en']; // ['es-419', 'en', 'el-x-koine', 'hi', 'hbo']; // set to null to update all
+    const allAlignedBibles = false; // if true then also download all aligned bibles
+    const resourcesPath = './temp/updates';
+    // const resourcesPath = USER_RESOURCES;
+    const sourceContentUpdater = new Updater();
+    const localResourceList = apiHelpers.getLocalResourceList(resourcesPath);
+    const initialResourceList = saveResources(resourcesPath, localResourceList, 'initial');
+    const updatedLanguages = await sourceContentUpdater.getLatestResources(localResourceList, filterByOwner);
+    saveResources(resourcesPath, updatedLanguages, 'updated');
+    // console.log(sourceContentUpdater.updatedCatalogResources);
+    const resourceStatus = _.cloneDeep(localResourceList);
+    let remoteResources = sourceContentUpdater.remoteCatalog;
+    let updatedRemoteResources = sourceContentUpdater.updatedCatalogResources;
+    if (langsToUpdate) {
+      remoteResources = sourceContentUpdater.remoteCatalog.filter(item => langsToUpdate.includes(item.language));
+      updatedRemoteResources = sourceContentUpdater.updatedCatalogResources.filter(item => langsToUpdate.includes(item.languageId));
+    }
+    // const langsToUpdate = ['en', 'el-x-koine', 'es-419', 'hbo', 'ru'];
+    for (const langId of langsToUpdate) {
+      if (updatedLanguages.find(item => (item.languageId === langId))) {
+        for (const remote of sourceContentUpdater.updatedCatalogResources) {
+          if (remote.languageId === langId) {
+            const match = resourceStatus.find(local => (local.languageId === remote.languageId && local.resourceId === remote.resourceId));
+            if (match) {
+              match.remoteModifiedTime = remote.remoteModifiedTime;
+            } else {
+              resourceStatus.push({
+                languageId: remote.languageId,
+                resourceId: remote.resourceId,
+                version: remote.version,
+                remoteModifiedTime: remote.remoteModifiedTime,
+              });
+            }
+            console.log('stuff');
+          }
+        }
+      }
+    }
+    let downloadErrors = null;
+    try {
+      await sourceContentUpdater.downloadResources(langsToUpdate, resourcesPath, sourceContentUpdater.updatedCatalogResources, allAlignedBibles);
+    } catch (e) {
+      downloadErrors = e.toString();
+    }
+    // console.log(updatedLanguages);
+    const localResourceListAfter = apiHelpers.getLocalResourceList(resourcesPath);
+    const finalResourceList = saveResources(resourcesPath, localResourceListAfter, 'final');
+    const sourceContentUpdater2 = new Updater();
+    const newUpdatedLanguages = await sourceContentUpdater2.getLatestResources(localResourceListAfter, filterByOwner);
+    const failedUpdates = [];
+    for (const langId of langsToUpdate) {
+      const match = newUpdatedLanguages.find(item => (item.languageId === langId));
+      if (match) {
+        console.error(`Language didn't get updated: ${match.languageId}`);
+        for (const resource of match.resources) {
+          const description = `${resource.owner}/${resource.languageId}_${resource.resourceId}`;
+          console.error(`Missing: ${description}`);
+          failedUpdates.push(description);
+        }
+      }
+    }
+    if (downloadErrors) {
+      console.error(`Download errors: ${downloadErrors}`);
+    }
+    expect(failedUpdates.length).toEqual(0);
+    expect(downloadErrors).toBeFalsy();
+    console.log('Test finally Done');
+  }, 6000000);
+
   it('test searchCatalogNext', async () => {
     const sourceContentUpdater = new Updater();
     const searchParams = {
@@ -100,7 +177,7 @@ describe.skip('test API', () => {
     fs.outputJsonSync(path.join(outputFolder, outputFile + '.json'), items, JSON_OPTS);
   }, 60000);
 
-  it('test search & download CatalogNext', async () => {
+  it.skip('test search & download CatalogNext', async () => {
     const sourceContentUpdater = new Updater();
     const searchParams = {
       subject: SUBJECT.ALL_TC_RESOURCES,

@@ -28,13 +28,13 @@ export const STAGE = {
 
 export const SUBJECT = {
   ALL_RESOURCES: null,
-  ALL_TC_RESOURCES: 'Bible,Aligned Bible,Greek New Testament,Hebrew Old Testament,Translation Words,TSV Translation Notes,Translation Academy',
+  ALL_TC_RESOURCES: 'Bible,Aligned Bible,Greek New Testament,Hebrew Old Testament,Translation Words,TSV Translation Words Links,TSV Translation Notes,Translation Academy',
   ALL_BIBLES: 'Bible,Aligned Bible,Greek New Testament,Hebrew Old Testament',
   ORIGINAL_LANGUAGE_BIBLES: 'Greek New Testament,Hebrew Old Testament',
   ALIGNED_BIBLES: 'Aligned Bible',
   UNALIGNED_BIBLES: 'Bible',
   ALL_TC_HELPS: 'Translation Words,TSV Translation Notes,Translation Academy',
-  TRANSLATION_WORDS: 'Translation Words',
+  TRANSLATION_WORDS: 'Translation Words,TSV Translation Words Links',
   TRANSLATION_NOTES: 'TSV Translation Notes',
   TRANSLATION_ACADEMY: 'Translation Academy',
 };

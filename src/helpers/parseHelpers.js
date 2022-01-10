@@ -11,6 +11,7 @@ export const TC_RESOURCES = [
   'TSV_Translation_Notes',
   'Bible_translation_comprehension_questions',
   'Translation_Words',
+  'TSV_Translation_Words_Links',
   'Translation_Academy',
 ];
 
