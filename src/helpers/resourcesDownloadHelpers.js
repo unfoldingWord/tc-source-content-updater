@@ -38,6 +38,26 @@ export function addDownloadError(downloadErrors, parseError, errorMessage, downl
 }
 
 /**
+ * if not original language resource, removes all but latest.  If original language resource, only removes unused old original language resources
+ * @param {string} resourcesPath - path to all resources
+ * @param {string} currentResourcePath - path for current download resource version
+ * @param {string} originalLanguageId
+ * @param {string} version
+ * @param {boolean} isGreekOrHebrew - true if original language resource
+ */
+export function removeUnusedResources(resourcesPath, currentResourcePath, originalLanguageId, version, isGreekOrHebrew) {
+  let versionsToNotDelete = [];
+  const resourceVersionsPath = path.dirname(currentResourcePath); // get folder for all the versions
+  // Get the version numbers of the original language used by other tNs so that needed versions are not deleted.
+  if (isGreekOrHebrew) {
+    versionsToNotDelete = getOtherTnsOLVersions(resourcesPath, originalLanguageId);
+  }
+  // Make sure that the resource currently being downloaded is not deleted
+  versionsToNotDelete.push('v' + version);
+  removeAllButLatestVersion(resourceVersionsPath, versionsToNotDelete);
+}
+
+/**
  * @description Downloads the resources that need to be updated for a given language using the DCS API
  * @param {Object.<{
  *             languageId: String,
@@ -100,23 +120,18 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
         const twGroupDataResourcesPath = path.join(resourcesPath, resource.languageId, 'translationHelps', 'translationWords', 'v' + resource.version);
         try {
           await moveResourcesHelpers.moveResources(twGroupDataPath, twGroupDataResourcesPath);
-          removeAllButLatestVersion(path.dirname(twGroupDataResourcesPath));
+          removeUnusedResources(resourcesPath, twGroupDataResourcesPath, resource.languageId, resource.version, isGreekOrHebrew);
         } catch (err) {
           throw Error(appendError(errors.UNABLE_TO_CREATE_TW_GROUP_DATA, err));
         }
       }
-      const resourcePath = getActualResourcePath(resource, resourcesPath);
+      const currentResourcePath = getActualResourcePath(resource, resourcesPath);
       try {
-        await moveResourcesHelpers.moveResources(processedFilesPath, resourcePath);
+        await moveResourcesHelpers.moveResources(processedFilesPath, currentResourcePath);
       } catch (err) {
         throw Error(appendError(errors.UNABLE_TO_MOVE_RESOURCE_INTO_RESOURCES, err));
       }
-      let versionsToNotDelete = [];
-      // Get the version numbers of the original language used by other tNs so that needed versions are not deleted.
-      if (isGreekOrHebrew) versionsToNotDelete = getOtherTnsOLVersions(resourcePath, resource.languageId);
-      // Make sure that the resource currently being downloaded is not deleted
-      versionsToNotDelete.push('v' + resource.version);
-      removeAllButLatestVersion(path.dirname(resourcePath), versionsToNotDelete);
+      removeUnusedResources(resourcesPath, currentResourcePath, resource.languageId, resource.version, isGreekOrHebrew);
     } else {
       throw Error(errors.FAILED_TO_PROCESS_RESOURCE);
     }
