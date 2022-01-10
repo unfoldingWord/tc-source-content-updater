@@ -17,6 +17,7 @@ import {
 import * as parseHelpers from './parseHelpers';
 import * as downloadHelpers from './downloadHelpers';
 import * as moveResourcesHelpers from './moveResourcesHelpers';
+import {getOtherTnsOLVersions} from './translationHelps/tnArticleHelpers';
 // constants
 import * as errors from '../resources/errors';
 import * as Bible from '../resources/bible';
@@ -35,6 +36,26 @@ export function addDownloadError(downloadErrors, parseError, errorMessage, downl
     errorMessage,
     downloadUrl,
   });
+}
+
+/**
+ * if not original language resource, removes all but latest.  If original language resource, only removes unused old original language resources
+ * @param {string} resourcesPath - path to all resources
+ * @param {string} currentResourcePath - path for current download resource version
+ * @param {string} originalLanguageId
+ * @param {string} version
+ * @param {boolean} isGreekOrHebrew - true if original language resource
+ */
+export function removeUnusedResources(resourcesPath, currentResourcePath, originalLanguageId, version, isGreekOrHebrew) {
+  let versionsToNotDelete = [];
+  const resourceVersionsPath = path.dirname(currentResourcePath); // get folder for all the versions
+  // Get the version numbers of the original language used by other tNs so that needed versions are not deleted.
+  if (isGreekOrHebrew) {
+    versionsToNotDelete = getOtherTnsOLVersions(resourcesPath, originalLanguageId);
+  }
+  // Make sure that the resource currently being downloaded is not deleted
+  versionsToNotDelete.push('v' + version);
+  removeAllButLatestVersion(resourceVersionsPath, versionsToNotDelete);
 }
 
 /**
@@ -106,30 +127,26 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
     if (processedFilesPath) {
       const ownerStr = encodeURIComponent(resource.owner || '');
 
-      // Extra step if the resource is the Greek UGNT or Hebrew UHB
       const version = 'v' + resource.version;
       const versionDir = ownerStr ? `${version}_${ownerStr}` : version;
+      // Extra step if the resource is the Greek UGNT or Hebrew UHB
       if (isGreekOrHebrew) {
         const twGroupDataPath = makeTwGroupDataResource(resource, processedFilesPath);
         const twGroupDataResourcesPath = path.join(resourcesPath, resource.languageId, 'translationHelps', 'translationWords', versionDir);
         try {
           await moveResourcesHelpers.moveResources(twGroupDataPath, twGroupDataResourcesPath);
+          removeUnusedResources(resourcesPath, twGroupDataResourcesPath, resource.languageId, resource.version, isGreekOrHebrew);
         } catch (err) {
           throw Error(appendError(errors.UNABLE_TO_CREATE_TW_GROUP_DATA, err));
         }
       }
-      const resourcePath = getActualResourcePath(resource, resourcesPath);
+      const currentResourcePath = getActualResourcePath(resource, resourcesPath);
       try {
-        await moveResourcesHelpers.moveResources(processedFilesPath, resourcePath);
+        await moveResourcesHelpers.moveResources(processedFilesPath, currentResourcePath);
       } catch (err) {
         throw Error(appendError(errors.UNABLE_TO_MOVE_RESOURCE_INTO_RESOURCES, err));
       }
-      const versionsToNotDelete = [];
-      if (!isGreekOrHebrew) {
-        // Make sure that the resource currently being downloaded is not deleted
-        versionsToNotDelete.push(versionDir);
-        removeAllButLatestVersion(path.dirname(resourcePath), versionsToNotDelete, ownerStr);
-      }
+      removeUnusedResources(resourcesPath, currentResourcePath, resource.languageId, resource.version, isGreekOrHebrew);
     } else {
       throw Error(errors.FAILED_TO_PROCESS_RESOURCE);
     }
