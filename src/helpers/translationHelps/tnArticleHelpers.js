@@ -23,6 +23,7 @@ import {
 } from '../../resources/bible';
 import {makeSureResourceUnzipped} from '../unzipFileHelpers';
 import {DOOR43_CATALOG} from '../apiHelpers';
+import {getLatestVersionsAndOwners} from '../resourcesHelpers';
 
 /**
  * search to see if we need to get any missing resources needed for tN processing
@@ -199,7 +200,7 @@ function getMissingOriginalResource(resourcesPath, originalLanguageId, originalL
       const latestOriginalBiblePath = resourcesHelpers.getLatestVersionInPath(versionsSubdirectory);
       // if latest version is the version needed delete older versions
       if (latestOriginalBiblePath === originalBiblePath) {
-        removeUnusedResources(resourcesPath, originalBiblePath, originalLanguageId, version, true);
+        removeUnusedResources(resourcesPath, originalBiblePath, originalLanguageId, version, true, DOOR43_CATALOG);
       }
       // If version needed is not in the resources download it.
       if (!fs.existsSync(originalBiblePath)) {
@@ -247,17 +248,20 @@ export function getOtherTnsOLVersions(resourcesPath, originalLanguageId) {
   languageIds.forEach((languageId) => {
     const tnHelpsPath = path.join(resourcesPath, languageId, 'translationHelps', 'translationNotes');
     if (fs.existsSync(tnHelpsPath)) {
-      const tnHelpsVersionPath = resourcesHelpers.getLatestVersionInPath(tnHelpsPath);
-      if (tnHelpsVersionPath) {
-        const tnManifestPath = path.join(tnHelpsVersionPath, 'manifest.json');
-        if (fs.existsSync(tnManifestPath)) {
-          const manifest = fs.readJsonSync(tnManifestPath);
-          const {relation} = manifest.dublin_core || {};
-          const query = getQueryStringForBibleId(relation, originalLanguageId);
-          if (query) {
-            const version = 'v' + getQueryVariable(query, 'v');
-            // console.log(`getOtherTnsOLVersions() - for ${languageId}, found dependency: ${query}`);
-            versionsToNotDelete.push(version);
+      const owners = getLatestVersionsAndOwners(tnHelpsPath) || {};
+      for (const owner of Object.keys(owners)) {
+        const tnHelpsVersionPath = owners[owner];
+        if (tnHelpsVersionPath) {
+          const tnManifestPath = path.join(tnHelpsVersionPath, 'manifest.json');
+          if (fs.existsSync(tnManifestPath)) {
+            const manifest = fs.readJsonSync(tnManifestPath);
+            const {relation} = manifest.dublin_core || {};
+            const query = getQueryStringForBibleId(relation, originalLanguageId);
+            if (query) {
+              const version = 'v' + getQueryVariable(query, 'v');
+              // console.log(`getOtherTnsOLVersions() - for ${languageId}, found dependency: ${query}`);
+              versionsToNotDelete.push(version);
+            }
           }
         }
       }

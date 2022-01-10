@@ -45,8 +45,10 @@ export function addDownloadError(downloadErrors, parseError, errorMessage, downl
  * @param {string} originalLanguageId
  * @param {string} version
  * @param {boolean} isGreekOrHebrew - true if original language resource
+ * @param {string} owner
  */
-export function removeUnusedResources(resourcesPath, currentResourcePath, originalLanguageId, version, isGreekOrHebrew) {
+export function removeUnusedResources(resourcesPath, currentResourcePath, originalLanguageId,
+                                      version, isGreekOrHebrew, owner) {
   let versionsToNotDelete = [];
   const resourceVersionsPath = path.dirname(currentResourcePath); // get folder for all the versions
   // Get the version numbers of the original language used by other tNs so that needed versions are not deleted.
@@ -55,7 +57,7 @@ export function removeUnusedResources(resourcesPath, currentResourcePath, origin
   }
   // Make sure that the resource currently being downloaded is not deleted
   versionsToNotDelete.push('v' + version);
-  removeAllButLatestVersion(resourceVersionsPath, versionsToNotDelete);
+  removeAllButLatestVersion(resourceVersionsPath, versionsToNotDelete, owner);
 }
 
 /**
