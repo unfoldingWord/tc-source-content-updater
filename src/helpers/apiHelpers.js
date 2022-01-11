@@ -360,7 +360,7 @@ export const getLocalResourceList = (resourcesPath) => {
               console.warn(`getLocalResourceList(): no such file or directory, ${pathToBibleManifestFile}`);
             }
           } else {
-            console.log(`getLocalResourceList(): $bibleLatestVersion is ${bibleLatestVersion}.`);
+            console.log(`getLocalResourceList(): bibleLatestVersion is ${bibleLatestVersion}.`);
           }
         }
       });
