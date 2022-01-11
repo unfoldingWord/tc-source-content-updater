@@ -238,6 +238,7 @@ Updater.prototype.downloadAllResources = async function(resourcesPath,
   }
 
   this.downloadErrors = [];
+  // generate list of all languages in resources
   const languageList = [];
   for (const resource of resources) {
     const languageId = resource.languageId;

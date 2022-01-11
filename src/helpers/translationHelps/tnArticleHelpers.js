@@ -23,7 +23,6 @@ import {
 } from '../../resources/bible';
 import {makeSureResourceUnzipped} from '../unzipFileHelpers';
 import {DOOR43_CATALOG} from '../apiHelpers';
-import {getLatestVersionsAndOwners} from '../resourcesHelpers';
 
 /**
  * search to see if we need to get any missing resources needed for tN processing
@@ -248,7 +247,7 @@ export function getOtherTnsOLVersions(resourcesPath, originalLanguageId) {
   languageIds.forEach((languageId) => {
     const tnHelpsPath = path.join(resourcesPath, languageId, 'translationHelps', 'translationNotes');
     if (fs.existsSync(tnHelpsPath)) {
-      const owners = getLatestVersionsAndOwners(tnHelpsPath) || {};
+      const owners = resourcesHelpers.getLatestVersionsAndOwners(tnHelpsPath) || {};
       for (const owner of Object.keys(owners)) {
         const tnHelpsVersionPath = owners[owner];
         if (tnHelpsVersionPath) {

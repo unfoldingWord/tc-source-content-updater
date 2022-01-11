@@ -183,10 +183,10 @@ describe.skip('test API', () => {
 
   it('test Updater', async () => {
     const filterByOwner = ['Door43-Catalog']; // set to null to do all owners
-    // const langsToUpdate = ['es-419', 'en', 'el-x-koine', 'hi', 'hbo']; // set to null to update all
+    // const langsToUpdate = ['es-419', 'en', 'el-x-koine', 'hi', 'hbo'];
     // const allAlignedBibles = false; // if true then also download all aligned bibles
-    const langsToUpdate = null; // ['es-419', 'en', 'el-x-koine', 'hi', 'hbo']; // set to null to update all
-    const allAlignedBibles = true; // if true then also download all aligned bibles
+    const langsToUpdate = ['es-419', 'en', 'el-x-koine', 'hi', 'hbo'];
+    const allAlignedBibles = false; // if true then also download all aligned bibles
     const resourcesPath = './temp/updates';
     // const resourcesPath = USER_RESOURCES;
     const sourceContentUpdater = new Updater();
