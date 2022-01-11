@@ -103,7 +103,7 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
   let downloadComplete = false;
   try {
     try {
-      const zipFileName = resource.languageId + '_' + resource.resourceId + '_v' + resource.version + '.zip';
+      const zipFileName = `${resource.languageId}_${resource.resourceId}_v${resource.version}_${encodeURIComponent(resource.owner)}.zip`;
       zipFilePath = path.join(importsPath, zipFileName);
       console.log('Downloading: ' + resource.downloadUrl);
       const results = await downloadHelpers.download(resource.downloadUrl, zipFilePath);
@@ -318,26 +318,66 @@ export const downloadResources = (languageList, resourcesPath, resources, downlo
 };
 
 /**
- * Sorts the list of downloadable resources. Sorts by language and moves tA
+ * find order for resourceId
+ * @param {Array.<string>} resourcePrecedence
+ * @param {string} resourceId
+ * @return {*}
+ */
+function getResourcePrecidence(resourcePrecedence, resourceId) {
+  let index = resourcePrecedence.indexOf(resourceId);
+  if (index < 0) {
+    index = 1000000;
+  }
+  return index;
+}
+
+/**
+ * Return book code with highest precedence to sort method
+ * @param {*} a - First book code of 2
+ * @param {*} b - second book code
+ * @return {Number}
+ */
+export function resourceSort(a, b) {
+  const resourcePrecedence = ['ta', 'ult', 'glt', 'tw', 'twl', 'tn']; // we should download these resources in this order, others will just be alphabetical
+
+  const indexA = getResourcePrecidence(resourcePrecedence, a);
+  const indexB = getResourcePrecidence(resourcePrecedence, b);
+  let diff = 0;
+  if (indexA === indexB) { // same resource types or both not in list
+    diff = a < b ? -1 : a > b ? 1 : 0;
+  } else {
+    diff = indexA - indexB; // this plays off the fact other resources will be high index value
+  }
+  return diff;
+}
+
+/**
+ * Sorts the list of downloadable resources. Sorts by language, then owner and moves tA
  * to the front of the array in order to be downloaded before tN
  * since tN will use tA articles to generate the groupsIndex files.
  * @param {array} downloadableResources list of downloadable resources.
  * @return {array} sorted list of downloadable resources.
  */
-const sortDownloableResources = (downloadableResources) => {
+export const sortDownloableResources = (downloadableResources) => {
   return downloadableResources.sort((resourceA, resourceB) => {
-    const firstResource = 'ta';// move ta to the front of the array so that it is downloaded before tn.
-
     const langA = resourceA.languageId;
     const langB = resourceB.languageId;
     if (langB > langA) {
       return -1;
     } else if (langB === langA) {
-      const idA = resourceA.resourceId.toLowerCase();
-      const idB = resourceB.resourceId.toLowerCase();
-
-      const compareResult = (idA === firstResource) ? -1 : (idB === firstResource) ? 1 : 0;
-      return compareResult;
+      const ownerA = resourceA.owner;
+      const ownerB = resourceB.owner;
+      if (ownerB > ownerA) {
+        return -1;
+      } else if (ownerB === ownerA) {
+        const idA = resourceA.resourceId.toLowerCase();
+        const idB = resourceB.resourceId.toLowerCase();
+        const compareResult = resourceSort(idA, idB);
+        // console.log(compareResult);
+        return compareResult;
+      } else { // ownerB < ownerA
+        return 1;
+      }
     } else { // langB < langA
       return 1;
     }
