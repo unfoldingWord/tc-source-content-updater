@@ -336,8 +336,7 @@ const sortDownloableResources = (downloadableResources) => {
       const idA = resourceA.resourceId.toLowerCase();
       const idB = resourceB.resourceId.toLowerCase();
 
-      const compareResult = (idA == firstResource) ? -1 : (idB == firstResource) ? 1 : 0;
-      console.log(compareResult);
+      const compareResult = (idA === firstResource) ? -1 : (idB === firstResource) ? 1 : 0;
       return compareResult;
     } else { // langB < langA
       return 1;
