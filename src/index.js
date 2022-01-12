@@ -119,6 +119,17 @@ Updater.prototype.getLatestDownloadErrorsStr = function() {
 };
 
 /**
+ * @typedef {Object} ResourceType
+ * @property {String} languageId
+ * @property {String} resourceId
+ * @property {String} remoteModifiedTime
+ * @property {String} downloadUrl
+ * @property {String} version
+ * @property {String} subject
+ * @property {String} owner
+ */
+
+/**
  * Used to initiate a load of the latest resource so that the user can then select which ones
  * they would like to update.
  * Note: This function only returns the resources that are not up to date on the user machine
@@ -128,17 +139,19 @@ Updater.prototype.getLatestDownloadErrorsStr = function() {
  *                  resourceId: String,
  *                  modifiedTime: String,
  *                  }>} localResourceList - list of resources that are on the users local machine already {}
+ * @param {array} filterByOwner - if given, a list of owners to allow for download, updatedCatalogResources and returned list will be limited to these owners
  * @return {
  *          Array.<{
  *                   languageId: String,
  *                   localModifiedTime: String,
- *                   remoteModifiedTime: String
+ *                   remoteModifiedTime: String,
+ *                   resources: Array.<{ResourceType}>
  *                 }>
  *         }} - list of languages that have updates in catalog (throws exception on error)
  */
-Updater.prototype.getLatestResources = async function(localResourceList) {
+Updater.prototype.getLatestResources = async function(localResourceList, filterByOwner= null ) {
   await this.updateCatalog();
-  this.updatedCatalogResources = parseHelpers.getLatestResources(this.remoteCatalog, localResourceList);
+  this.updatedCatalogResources = parseHelpers.getLatestResources(this.remoteCatalog, localResourceList, filterByOwner);
   return parseHelpers.getUpdatedLanguageList(this.updatedCatalogResources);
 };
 
@@ -225,6 +238,7 @@ Updater.prototype.downloadAllResources = async function(resourcesPath,
   }
 
   this.downloadErrors = [];
+  // generate list of all languages in resources
   const languageList = [];
   for (const resource of resources) {
     const languageId = resource.languageId;

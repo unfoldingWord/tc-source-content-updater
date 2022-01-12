@@ -79,6 +79,7 @@
     ],
     "creator": "Door43 World Missions Community",
     "description": "A basic Bible lexicon that provides translators with clear, concise definitions and translation suggestions for every important word in the Bible. It provides translators and checkers with essential lexical information to help them make the best possible translation decisions.",
+    "downloadUrl": "https://git.door43.org/Door43-Catalog/ceb_tw/archive/master.zip",
     "formats": [
       {
         "format": "application/zip; type=dict content=text/markdown conformsto=rc0.2",
@@ -116,7 +117,11 @@
     ],
     "owner": "Door43-Catalog",
     "repo": "ceb_tw",
-    "language": "ceb"
+    "languageId": "ceb",
+    "resourceId": "tw",
+    "foundInCatalog": "OLD",
+    "full_name": "Door43-Catalog/ceb_tw",
+    "checking_level": "3"
   },
   {
     "identifier": "udb",
@@ -145,6 +150,7 @@
     ],
     "creator": "Door43 World Missions Community",
     "description": "An unrestricted dynamic Bible",
+    "downloadUrl": "https://git.door43.org/Door43-Catalog/ceb_udb/archive/master.zip",
     "formats": [
       {
         "format": "application/zip; type=bundle content=text/usfm conformsto=rc0.2",
@@ -180,7 +186,11 @@
     ],
     "owner": "Door43-Catalog",
     "repo": "ceb_udb",
-    "language": "ceb"
+    "languageId": "ceb",
+    "resourceId": "udb",
+    "foundInCatalog": "OLD",
+    "full_name": "Door43-Catalog/ceb_udb",
+    "checking_level": "3"
   },
   {
     "identifier": "ulb",
@@ -243,6 +253,7 @@
     ],
     "creator": "Door43 World Missions Community",
     "description": "An unrestricted literal Bible",
+    "downloadUrl": "https://git.door43.org/Door43-Catalog/ceb_ulb/archive/master.zip",
     "formats": [
       {
         "format": "application/zip; type=bundle content=text/usfm conformsto=rc0.2",
@@ -932,7 +943,11 @@
     ],
     "owner": "Door43-Catalog",
     "repo": "ceb_ulb",
-    "language": "ceb"
+    "languageId": "ceb",
+    "resourceId": "ulb",
+    "foundInCatalog": "OLD",
+    "full_name": "Door43-Catalog/ceb_ulb",
+    "checking_level": "3"
   },
   {
     "identifier": "ugnt",
@@ -956,6 +971,7 @@
     ],
     "creator": "unfoldingWord",
     "description": "An open-licensed, lexically tagged, morphologically parsed critical Greek New Testament with full apparatus. It enables the global Church to have access to the original texts of the New Testament.",
+    "downloadUrl": "https://git.door43.org/Door43-Catalog/el-x-koine_ugnt/archive/master.zip",
     "formats": [
       {
         "format": "application/zip; type=bundle content=text/usfm3 conformsto=rc0.2",
@@ -1254,7 +1270,11 @@
     ],
     "owner": "Door43-Catalog",
     "repo": "el-x-koine_ugnt",
-    "language": "el-x-koine"
+    "languageId": "el-x-koine",
+    "resourceId": "ugnt",
+    "foundInCatalog": "OLD",
+    "full_name": "Door43-Catalog/el-x-koine_ugnt",
+    "checking_level": "3"
   },
   {
     "identifier": "ta",
@@ -1287,6 +1307,7 @@
     ],
     "creator": "Door43 World Missions Community",
     "description": "A modular handbook that provides a condensed explanation of Bible translation and checking principles that the global Church has implicitly affirmed define trustworthy translations. It enables translators to learn how to create trustworthy translations of the Bible in their own language.",
+    "downloadUrl": "https://git.door43.org/Door43-Catalog/en_ta/archive/master.zip",
     "formats": [
       {
         "format": "application/zip; type=man content=text/markdown conformsto=rc0.2",
@@ -1357,7 +1378,11 @@
     ],
     "owner": "Door43-Catalog",
     "repo": "en_ta",
-    "language": "en"
+    "languageId": "en",
+    "resourceId": "ta",
+    "foundInCatalog": "OLD",
+    "full_name": "Door43-Catalog/en_ta",
+    "checking_level": "3"
   },
   {
     "identifier": "tw",
@@ -1386,6 +1411,7 @@
     ],
     "creator": "Door43 World Missions Community",
     "description": "A basic Bible lexicon that provides translators with clear, concise definitions and translation suggestions for every important word in the Bible. It provides translators and checkers with essential lexical information to help them make the best possible translation decisions.",
+    "downloadUrl": "https://git.door43.org/Door43-Catalog/en_tw/archive/master.zip",
     "formats": [
       {
         "format": "application/zip; type=dict content=text/markdown conformsto=rc0.2",
@@ -1425,7 +1451,11 @@
     ],
     "owner": "Door43-Catalog",
     "repo": "en_tw",
-    "language": "en"
+    "languageId": "en",
+    "resourceId": "tw",
+    "foundInCatalog": "OLD",
+    "full_name": "Door43-Catalog/en_tw",
+    "checking_level": "3"
   },
   {
     "identifier": "ult",
@@ -1491,6 +1521,7 @@
     ],
     "creator": "unfoldingWord",
     "description": "An open-licensed update of the ASV, intended to provide a ‘form-centric’ understanding of the Bible. It increases the translator's understanding of the lexical and grammatical composition of the underlying text by adhering closely to the word order and structure of the originals.",
+    "downloadUrl": "https://git.door43.org/Door43-Catalog/en_ult/archive/master.zip",
     "formats": [
       {
         "format": "application/zip; type=bundle content=text/usfm3 conformsto=rc0.2",
@@ -2200,7 +2231,11 @@
     ],
     "owner": "Door43-Catalog",
     "repo": "en_ult",
-    "language": "en"
+    "languageId": "en",
+    "resourceId": "ult",
+    "foundInCatalog": "OLD",
+    "full_name": "Door43-Catalog/en_ult",
+    "checking_level": "3"
   },
   {
     "identifier": "ust",
@@ -2260,6 +2295,7 @@
     ],
     "creator": "Door43 World Missions Community",
     "description": "An open-licensed translation, intended to provide a ‘functional’ understanding of the Bible. It increases the translator’s understanding of the text by translating theological terms as descriptive phrases.",
+    "downloadUrl": "https://git.door43.org/Door43-Catalog/en_ust/archive/master.zip",
     "formats": [
       {
         "format": "application/zip; type=bundle content=text/usfm3 conformsto=rc0.2",
@@ -2959,7 +2995,11 @@
     ],
     "owner": "Door43-Catalog",
     "repo": "en_ust",
-    "language": "en"
+    "languageId": "en",
+    "resourceId": "ust",
+    "foundInCatalog": "OLD",
+    "full_name": "Door43-Catalog/en_ust",
+    "checking_level": "3"
   },
   {
     "identifier": "uhb",
@@ -2982,6 +3022,7 @@
     ],
     "creator": "unfoldingWord",
     "description": "An open-licensed, lexically tagged, morphologically parsed Hebrew Old Testament. It enables the global Church to have access to the original texts of the Old Testament.",
+    "downloadUrl": "https://git.door43.org/Door43-Catalog/hbo_uhb/archive/master.zip",
     "formats": [
       {
         "format": "application/zip; type=bundle content=text/usfm3 conformsto=rc0.2",
@@ -3400,7 +3441,11 @@
     ],
     "owner": "Door43-Catalog",
     "repo": "hbo_uhb",
-    "language": "hbo"
+    "languageId": "hbo",
+    "resourceId": "uhb",
+    "foundInCatalog": "OLD",
+    "full_name": "Door43-Catalog/hbo_uhb",
+    "checking_level": "3"
   },
   {
     "identifier": "glt",
@@ -3445,6 +3490,7 @@
     ],
     "creator": "Door43 World Missions Community",
     "description": "",
+    "downloadUrl": "https://git.door43.org/Door43-Catalog/hi_glt/archive/master.zip",
     "formats": [
       {
         "format": "application/zip; type=bundle content=text/usfm3 conformsto=rc0.2",
@@ -3612,7 +3658,11 @@
     ],
     "owner": "Door43-Catalog",
     "repo": "hi_glt",
-    "language": "hi"
+    "languageId": "hi",
+    "resourceId": "glt",
+    "foundInCatalog": "OLD",
+    "full_name": "Door43-Catalog/hi_glt",
+    "checking_level": "3"
   },
   {
     "identifier": "gst",
@@ -3641,6 +3691,7 @@
     ],
     "creator": "Door43 World Missions Community",
     "description": "An open-licensed translation, aligned to the original Greek",
+    "downloadUrl": "https://git.door43.org/Door43-Catalog/hi_gst/archive/master.zip",
     "formats": [
       {
         "format": "application/zip; type=bundle content=text/usfm3 conformsto=rc0.2",
@@ -3798,6 +3849,10 @@
     ],
     "owner": "Door43-Catalog",
     "repo": "hi_gst",
-    "language": "hi"
+    "languageId": "hi",
+    "resourceId": "gst",
+    "foundInCatalog": "OLD",
+    "full_name": "Door43-Catalog/hi_gst",
+    "checking_level": "3"
   }
 ]

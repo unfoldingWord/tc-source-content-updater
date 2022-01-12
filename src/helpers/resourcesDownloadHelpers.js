@@ -17,6 +17,7 @@ import {
 import * as parseHelpers from './parseHelpers';
 import * as downloadHelpers from './downloadHelpers';
 import * as moveResourcesHelpers from './moveResourcesHelpers';
+import {getOtherTnsOLVersions} from './translationHelps/tnArticleHelpers';
 // constants
 import * as errors from '../resources/errors';
 import * as Bible from '../resources/bible';
@@ -35,6 +36,28 @@ export function addDownloadError(downloadErrors, parseError, errorMessage, downl
     errorMessage,
     downloadUrl,
   });
+}
+
+/**
+ * if not original language resource, removes all but latest.  If original language resource, only removes unused old original language resources
+ * @param {string} resourcesPath - path to all resources
+ * @param {string} currentResourcePath - path for current download resource version
+ * @param {string} originalLanguageId
+ * @param {string} version
+ * @param {boolean} isGreekOrHebrew - true if original language resource
+ * @param {string} owner
+ */
+export function removeUnusedResources(resourcesPath, currentResourcePath, originalLanguageId,
+                                      version, isGreekOrHebrew, owner) {
+  let versionsToNotDelete = [];
+  const resourceVersionsPath = path.dirname(currentResourcePath); // get folder for all the versions
+  // Get the version numbers of the original language used by other tNs so that needed versions are not deleted.
+  if (isGreekOrHebrew) {
+    versionsToNotDelete = getOtherTnsOLVersions(resourcesPath, originalLanguageId);
+  }
+  // Make sure that the resource currently being downloaded is not deleted
+  versionsToNotDelete.push('v' + version);
+  removeAllButLatestVersion(resourceVersionsPath, versionsToNotDelete, owner);
 }
 
 /**
@@ -60,9 +83,9 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
     throw Error(formatError(resource, errors.RESOURCES_PATH_NOT_GIVEN));
   }
 
+  const resourceData = resource.catalogEntry ? resource.catalogEntry.resource : resource;
   if (!resource.version || (resource.version === 'master')) {
-    const resourceData = resource.catalogEntry ? resource.catalogEntry.resource : resource;
-    const manifest = await downloadManifestData(resourceData.owner, resourceData.name);
+    const manifest = await downloadManifestData(resourceData.owner || resource.owner, resourceData.name);
     const version = manifest && manifest.dublin_core && manifest.dublin_core.version;
     if (version) {
       resource.version = version;
@@ -80,7 +103,7 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
   let downloadComplete = false;
   try {
     try {
-      const zipFileName = resource.languageId + '_' + resource.resourceId + '_v' + resource.version + '.zip';
+      const zipFileName = `${resource.languageId}_${resource.resourceId}_v${resource.version}_${encodeURIComponent(resource.owner)}.zip`;
       zipFilePath = path.join(importsPath, zipFileName);
       console.log('Downloading: ' + resource.downloadUrl);
       const results = await downloadHelpers.download(resource.downloadUrl, zipFilePath);
@@ -104,28 +127,28 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
     const importSubdirPath = getSubdirOfUnzippedResource(importPath);
     const processedFilesPath = await processResource(resource, importSubdirPath, resourcesPath, downloadErrors);
     if (processedFilesPath) {
+      const ownerStr = encodeURIComponent(resource.owner || '');
+
+      const version = 'v' + resource.version;
+      const versionDir = ownerStr ? `${version}_${ownerStr}` : version;
       // Extra step if the resource is the Greek UGNT or Hebrew UHB
       if (isGreekOrHebrew) {
         const twGroupDataPath = makeTwGroupDataResource(resource, processedFilesPath);
-        const twGroupDataResourcesPath = path.join(resourcesPath, resource.languageId, 'translationHelps', 'translationWords', 'v' + resource.version);
+        const twGroupDataResourcesPath = path.join(resourcesPath, resource.languageId, 'translationHelps', 'translationWords', versionDir);
         try {
           await moveResourcesHelpers.moveResources(twGroupDataPath, twGroupDataResourcesPath);
+          removeUnusedResources(resourcesPath, twGroupDataResourcesPath, resource.languageId, resource.version, isGreekOrHebrew);
         } catch (err) {
           throw Error(appendError(errors.UNABLE_TO_CREATE_TW_GROUP_DATA, err));
         }
       }
-      const resourcePath = getActualResourcePath(resource, resourcesPath);
+      const currentResourcePath = getActualResourcePath(resource, resourcesPath);
       try {
-        await moveResourcesHelpers.moveResources(processedFilesPath, resourcePath);
+        await moveResourcesHelpers.moveResources(processedFilesPath, currentResourcePath);
       } catch (err) {
         throw Error(appendError(errors.UNABLE_TO_MOVE_RESOURCE_INTO_RESOURCES, err));
       }
-      const versionsToNotDelete = [];
-      if (!isGreekOrHebrew) {
-        // Make sure that the resource currently being downloaded is not deleted
-        versionsToNotDelete.push('v' + resource.version);
-        removeAllButLatestVersion(path.dirname(resourcePath), versionsToNotDelete);
-      }
+      removeUnusedResources(resourcesPath, currentResourcePath, resource.languageId, resource.version, isGreekOrHebrew);
     } else {
       throw Error(errors.FAILED_TO_PROCESS_RESOURCE);
     }
@@ -295,18 +318,68 @@ export const downloadResources = (languageList, resourcesPath, resources, downlo
 };
 
 /**
- * Sorts the list of downloadable resources. Specifically moves tA
+ * find order for resourceId
+ * @param {Array.<string>} resourcePrecedence
+ * @param {string} resourceId
+ * @return {*}
+ */
+function getResourcePrecidence(resourcePrecedence, resourceId) {
+  let index = resourcePrecedence.indexOf(resourceId);
+  if (index < 0) {
+    index = 1000000;
+  }
+  return index;
+}
+
+/**
+ * Return book code with highest precedence to sort method
+ * @param {*} a - First book code of 2
+ * @param {*} b - second book code
+ * @return {Number}
+ */
+export function resourceSort(a, b) {
+  const resourcePrecedence = ['ta', 'ult', 'glt', 'tw', 'twl', 'tn']; // we should download these resources in this order, others will just be alphabetical
+
+  const indexA = getResourcePrecidence(resourcePrecedence, a);
+  const indexB = getResourcePrecidence(resourcePrecedence, b);
+  let diff = 0;
+  if (indexA === indexB) { // same resource types or both not in list
+    diff = a < b ? -1 : a > b ? 1 : 0;
+  } else {
+    diff = indexA - indexB; // this plays off the fact other resources will be high index value
+  }
+  return diff;
+}
+
+/**
+ * Sorts the list of downloadable resources. Sorts by language, then owner and moves tA
  * to the front of the array in order to be downloaded before tN
  * since tN will use tA articles to generate the groupsIndex files.
  * @param {array} downloadableResources list of downloadable resources.
  * @return {array} sorted list of downloadable resources.
  */
-const sortDownloableResources = (downloadableResources) => {
+export const sortDownloableResources = (downloadableResources) => {
   return downloadableResources.sort((resourceA, resourceB) => {
-    const firstResource = 'ta';// move ta to the front of the array so that it is downloaded before tn.
-    const idA = resourceA.resourceId.toLowerCase();
-    const idB = resourceB.resourceId.toLowerCase();
-
-    return idA == firstResource ? -1 : idB == firstResource ? 1 : 0;
+    const langA = resourceA.languageId;
+    const langB = resourceB.languageId;
+    if (langB > langA) {
+      return -1;
+    } else if (langB === langA) {
+      const ownerA = resourceA.owner;
+      const ownerB = resourceB.owner;
+      if (ownerB > ownerA) {
+        return -1;
+      } else if (ownerB === ownerA) {
+        const idA = resourceA.resourceId.toLowerCase();
+        const idB = resourceB.resourceId.toLowerCase();
+        const compareResult = resourceSort(idA, idB);
+        // console.log(compareResult);
+        return compareResult;
+      } else { // ownerB < ownerA
+        return 1;
+      }
+    } else { // langB < langA
+      return 1;
+    }
   });
 };

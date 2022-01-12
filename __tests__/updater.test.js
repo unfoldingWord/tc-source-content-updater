@@ -20,10 +20,10 @@ describe('Updater.downloadResources', () => {
   it('should resolve for hbo', async () => {
     loadMockedResources(updater);
     let languageID = 'hbo';
-    const hebrewSubject = updater.remoteCatalog.find(item => (item.language === languageID));
+    const hebrewSubject = updater.remoteCatalog.find(item => (item.languageId === languageID));
     const resources = await updater.downloadResources([languageID], resourcesPath);
     expect(resources.length).toEqual(1);
-    expect(hebrewSubject.languageId).toEqual(resources[0].language);
+    expect(hebrewSubject.languageId).toEqual(resources[0].languageId);
     expect(hebrewSubject.subject).toEqual(resources[0].subject);
   });
 

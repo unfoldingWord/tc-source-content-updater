@@ -1,5 +1,6 @@
 /* eslint-disable camelcase,no-empty,no-negated-condition */
 import * as ERROR from '../resources/errors';
+import {sortDownloableResources} from './resourcesDownloadHelpers';
 
 // the following are the subject found in the door43 catalog.
 // if a subject isn't found in this list then it will be ignored by the source content updater
@@ -114,6 +115,7 @@ export function getUpdatedLanguageList(updatedRemoteResources) {
  *                  resourceId: String,
  *                  modifiedTime: String,
  *                  }>} localResourceList - list of resources that are on the users local machine already {}
+ * @param {array} filterByOwner - if given, a list of owners to allow for download, returned list will be limited to these owners
  * @return {Array.<{
  *                   languageId: String,
  *                   resourceId: String,
@@ -125,11 +127,11 @@ export function getUpdatedLanguageList(updatedRemoteResources) {
  *                   catalogEntry: {subject, resource, format}
  *                 }>} updated resources  (throws exception on error)
  */
-export function getLatestResources(catalog, localResourceList) {
+export function getLatestResources(catalog, localResourceList, filterByOwner = null) {
   if (!catalog || !Array.isArray(localResourceList)) {
     throw new Error(ERROR.PARAMETER_ERROR);
   }
-  const tCoreResources = parseCatalogResources(catalog, true, TC_RESOURCES);
+  let tCoreResources = parseCatalogResources(catalog, true, TC_RESOURCES);
   // remove resources that are already up to date
   for (const localResource of localResourceList) {
     let resourceId = localResource.resourceId;
@@ -137,6 +139,7 @@ export function getLatestResources(catalog, localResourceList) {
       resourceId = RESOURCE_ID_MAP[resourceId] || resourceId; // map resource names to ids
       const index = tCoreResources.findIndex((remoteResource) =>
         ((localResource.languageId.toLowerCase() === remoteResource.languageId.toLowerCase()) &&
+          (localResource.owner === remoteResource.owner) &&
           (remoteResource.resourceId === resourceId))
       );
 
@@ -153,8 +156,14 @@ export function getLatestResources(catalog, localResourceList) {
     }
   }
 
-  return tCoreResources.sort((a, b) =>
-    ((a.languageId > b.languageId) ? 1 : -1)); // resources that are already up to date have been removed, sort by language
+  if (filterByOwner) { // we need to remove resources that are not in owner list
+    const filteredResources = tCoreResources.filter(resource => (filterByOwner.includes(resource.owner)));
+    const itemsRemoved = tCoreResources.length - filteredResources.length;
+    console.log(`${itemsRemoved} items removed from filtered list, new length is ${filteredResources.length}`);
+    tCoreResources = filteredResources;
+  }
+
+  return sortDownloableResources(tCoreResources);
 }
 
 /**
@@ -215,9 +224,9 @@ export function parseCatalogResources(catalog, ignoreObsResources = true, subjec
   for (let i = 0, len = catalog.length; i < len; i++) {
     const catalogItem = catalog[i];
     const subject = catalogItem.subject;
-    const languageId = catalogItem.language.toLowerCase();
-    const isCheckingLevel2 = catalogItem.checking.checking_level >= 2;
-    let resourceId = catalogItem.identifier;
+    const languageId = catalogItem.languageId.toLowerCase();
+    const isCheckingLevel2 = catalogItem.checking_level >= 2;
+    let resourceId = catalogItem.resourceId || '';
     if (resourceId.includes('_')) {
       // try to strip off languageId
       const [, resourceId_] = resourceId.split('_');
@@ -229,15 +238,7 @@ export function parseCatalogResources(catalog, ignoreObsResources = true, subjec
       // console.log(`skipping OBS item: ${catalogItem.full_name}`);
       continue;
     }
-    let downloadUrl = catalogItem.downloadUrl;
-    if (!downloadUrl) {
-      const formats = catalogItem.formats;
-      if (formats && formats.length > 1) {
-        console.log('too many');
-      }
-      const firstFormat = formats && formats[0];
-      downloadUrl = firstFormat.url;
-    }
+    const downloadUrl = catalogItem.downloadUrl;
     const remoteModifiedTime = catalogItem.modified;
     const isDesiredSubject = !subjectFilters ||
       subjectFilters.includes(subject);
@@ -259,12 +260,15 @@ export function parseCatalogResources(catalog, ignoreObsResources = true, subjec
         downloadUrl,
         version,
         subject,
+        owner: catalogItem.owner,
         catalogEntry: {
           subject,
           resource: catalogItem,
         },
       };
       catalogResources.push(foundResource);
+    } else {
+      // console.log(`skipping: ${JSON.stringify(catalogItem)}`);
     }
   }
   console.log(`filtered catalog length: ${catalogResources.length}`);

@@ -3,6 +3,7 @@ import fs from 'fs-extra';
 import path from 'path-extra';
 import yaml from 'yamljs';
 import {isObject} from 'util';
+import semver from 'semver';
 // helpers
 import * as zipFileHelpers from './zipFileHelpers';
 import * as twArticleHelpers from './translationHelps/twArticleHelpers';
@@ -13,8 +14,9 @@ import * as packageParseHelpers from './packageParseHelpers';
 // constants
 import * as errors from '../resources/errors';
 import * as Bible from '../resources/bible';
+import {DOOR43_CATALOG, OWNER_SEPARATOR} from './apiHelpers';
 
-const translationHelps = {
+export const TRANSLATION_HELPS_INDEX = {
   ta: 'translationAcademy',
   tn: 'translationNotes',
   tw: 'translationWords',
@@ -82,17 +84,155 @@ export function getResourceManifestFromYaml(resourcePath) {
 /**
  * Returns an array of versions found in the path that start with [vV]\d
  * @param {String} resourcePath - base path to search for versions
+ * @param {string} ownerStr - optional owner to filter by
  * @return {Array} - array of versions, e.g. ['v1', 'v10', 'v1.1']
  */
-export function getVersionsInPath(resourcePath) {
+export function getVersionsInPath(resourcePath, ownerStr = DOOR43_CATALOG) {
   if (!resourcePath || !fs.pathExistsSync(resourcePath)) {
     return null;
   }
+
+  if (ownerStr[0] !== OWNER_SEPARATOR) { // prefix the separator character if missing
+    ownerStr = OWNER_SEPARATOR + ownerStr;
+  }
+
   const isVersionDirectory = (name) => {
     const fullPath = path.join(resourcePath, name);
-    return fs.lstatSync(fullPath).isDirectory() && name.match(/^v\d/i);
+    let isMatch = fs.lstatSync(fullPath).isDirectory() && name.match(/^v\d/i);
+    if (isMatch && ownerStr) { // if we need to filter by owner
+      isMatch = name.endsWith(ownerStr);
+    }
+    return isMatch;
   };
   return sortVersions(fs.readdirSync(resourcePath).filter(isVersionDirectory));
+}
+
+/**
+ * reads files names from folder and remove system files
+ * @param {string} path
+ * @return {*[]}
+ */
+export const cleanReaddirSync = (path) => {
+  let cleanDirectories = [];
+
+  if (fs.existsSync(path)) {
+    cleanDirectories = fs.readdirSync(path)
+      .filter((file) => file !== '.DS_Store');
+  }
+
+  return cleanDirectories;
+};
+
+/**
+ * takes path that has version and owner such as `~/resources/bible/v1.1_unfoldingWord` and extracts the version and owner.
+ * @param {string} versionPath
+ * @return {{owner: string, version: string}}
+ */
+export function getVersionAndOwnerFromPath(versionPath) {
+  if (versionPath) {
+    const versionAndOwner = path.base(versionPath, true);
+    return splitVersionAndOwner(versionAndOwner);
+  }
+  return {};
+}
+
+/**
+ * takes string that has version and owner such as `v1.1_unfoldingWord` and splits into version and owner.
+ * @param {string} versionAndOwner
+ * @return {{owner: string, version: string}}
+ */
+export function splitVersionAndOwner(versionAndOwner) {
+  let version = versionAndOwner;
+  let owner = '';
+  const pos = versionAndOwner.indexOf(OWNER_SEPARATOR);
+  if (pos >= 0) {
+    owner = decodeURIComponent(versionAndOwner.substr(pos + 1));
+    version = versionAndOwner.substr(0, pos);
+  }
+  return {version, owner};
+}
+
+/**
+ * Returns the versioned folder within the directory with the highest value.
+ * e.g. `v10` is greater than `v9`
+ * @param {string} dir - the directory to read
+ * @return {string} the full path to the latest version directory.
+ */
+export function getLatestVersionsAndOwners(dir) {
+  const versionAndOwners = listVersions(dir, true);
+  const orgs = {};
+
+  for (const versionAndOwner of versionAndOwners) {
+    const {owner} = splitVersionAndOwner(versionAndOwner);
+    if (!orgs[owner]) {
+      orgs[owner] = [];
+    }
+    orgs[owner].push(versionAndOwner);
+  }
+
+  const orgsKeys = Object.keys(orgs);
+  for (const org of orgsKeys) {
+    const versions = orgs[org];
+    const latest = path.join(dir, versions[0]);
+    orgs[org] = latest;
+  }
+
+  if (orgsKeys.length > 0) {
+    return orgs;
+  } else {
+    return null;
+  }
+}
+
+/**
+ * sorts array by version number
+ * @param {Array} versionedDirs
+ * @param {boolean} inverted - if true then do reverse sort
+ * @return {*}
+ */
+export function sortVersionsByNumber(versionedDirs, inverted = false) {
+  if (inverted) {
+    return versionedDirs.sort((a, b) =>
+      -compareVersions(a, b), // do inverted sort
+    );
+  }
+  return versionedDirs.sort((a, b) =>
+    compareVersions(a, b), // do regular sort
+  );
+}
+
+/**
+ * Returns an array of paths found in the directory filtered and sorted by version
+ * @param {string} dir
+ * @param {boolean} inverted - if true then do reverse sort
+ * @return {string[]}
+ */
+export function listVersions(dir, inverted = false) {
+  if (fs.pathExistsSync(dir)) {
+    const versionedDirs = fs.readdirSync(dir).filter((file) => fs.lstatSync(path.join(dir, file)).isDirectory() &&
+      file.match(/^v\d/i));
+    return sortVersionsByNumber(versionedDirs, inverted);
+  }
+  return [];
+}
+
+/**
+ * compares version numbers, if a > b returns 1; if a < b return -1; else are equal and return 0
+ * @param {String} a
+ * @param {String} b
+ * @return {number}
+ */
+export function compareVersions(a, b) {
+  const cleanA = semver.coerce(a);
+  const cleanB = semver.coerce(b);
+
+  if (semver.gt(cleanA, cleanB)) {
+    return 1;
+  } else if (semver.lt(cleanA, cleanB)) {
+    return -1;
+  } else {
+    return 0;
+  }
 }
 
 /**
@@ -105,27 +245,49 @@ export function sortVersions(versions) {
   if (!versions || !Array.isArray(versions)) {
     return versions;
   }
-  // Only sort of all items are strings
+  // Only sort if all items are strings
   for (let i = 0; i < versions.length; ++i) {
     if (typeof versions[i] !== 'string') {
       return versions;
     }
   }
-  versions.sort((a, b) => String(a).localeCompare(b, undefined, {numeric: true}));
+  versions = sortVersionsByNumber(versions); // sort by standard version order
   return versions;
 }
 
 /**
  * Return the full path to the highest version folder in resource path
  * @param {String} resourcePath - base path to search for versions
+ * @param {string} ownerStr - optional owner to filter by
  * @return {String} - path to highest version
  */
-export function getLatestVersionInPath(resourcePath) {
-  const versions = sortVersions(getVersionsInPath(resourcePath));
+export function getLatestVersionInPath(resourcePath, ownerStr = DOOR43_CATALOG) {
+  const versions = sortVersions(getVersionsInPath(resourcePath, ownerStr));
   if (versions && versions.length) {
     return path.join(resourcePath, versions[versions.length - 1]);
   }
   return null; // return illegal path
+}
+
+/**
+ * returns the highest version for array that matches owner
+ * @param {Array} versions - base path to search for versions
+ * @param {string} ownerStr - optional owner to filter by, default to DOOR43_CATALOG
+ * @return {String} - highest version
+ */
+export function getLatestVersionFromList(versions, ownerStr = DOOR43_CATALOG) {
+  if (Array.isArray(versions)) {
+    if (versions.length) {
+      if (ownerStr[0] !== OWNER_SEPARATOR) { // prefix the separator character if missing
+        ownerStr = OWNER_SEPARATOR + ownerStr;
+      }
+
+      versions = versions.filter(version => version.endsWith(ownerStr));
+      versions = sortVersions(versions); // sort by standard version order
+      return versions[versions.length - 1];
+    }
+  }
+  return null;
 }
 
 /**
@@ -223,11 +385,14 @@ export function getActualResourcePath(resource, resourcesPath) {
   const languageId = resource.languageId;
   let resourceName = resource.resourceId;
   let type = 'bibles';
-  if (translationHelps[resourceName]) {
-    resourceName = translationHelps[resourceName];
+  if (TRANSLATION_HELPS_INDEX[resourceName]) {
+    resourceName = TRANSLATION_HELPS_INDEX[resourceName];
     type = 'translationHelps';
   }
-  const actualResourcePath = path.join(resourcesPath, languageId, type, resourceName, 'v' + resource.version);
+  const version = 'v' + resource.version;
+  const ownerStr = encodeURIComponent(resource.owner || '');
+  const versionDir = ownerStr ? `${version}_${ownerStr}` : version;
+  const actualResourcePath = path.join(resourcesPath, languageId, type, resourceName, versionDir);
   fs.ensureDirSync(actualResourcePath);
   return actualResourcePath;
 }
@@ -269,11 +434,12 @@ return twGroupDataPath
  * Removes all version directories except the latest
  * @param {String} resourcePath Path to the resource directory that has subdirs of versions
  * @param {array} versionsToNotDelete List of versions not to be deleted.
+ * @param {string} ownerStr - optional owner to filter by
  * @return {Boolean} True if versions were deleted, false if nothing was touched
  */
-export function removeAllButLatestVersion(resourcePath, versionsToNotDelete = []) {
-  // Remove the previoius verison(s)
-  const versionDirs = getVersionsInPath(resourcePath);
+export function removeAllButLatestVersion(resourcePath, versionsToNotDelete = [], ownerStr = '') {
+  // Remove the previous version(s)
+  const versionDirs = getVersionsInPath(resourcePath, ownerStr);
   if (versionDirs && versionDirs.length > 1) {
     const lastVersion = versionDirs[versionDirs.length - 1];
     versionDirs.forEach((versionDir) => {
@@ -301,7 +467,7 @@ export function formatError(resource, errMessage) {
       resourceId: 'unknown',
     };
   }
-  return resource.languageId + '_' + resource.resourceId + ': ' + errMessage;
+  return resource.owner + '/' + resource.languageId + '_' + resource.resourceId + ': ' + errMessage;
 }
 
 /**
