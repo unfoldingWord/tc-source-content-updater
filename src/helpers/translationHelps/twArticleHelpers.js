@@ -3,7 +3,7 @@ import fs from 'fs-extra';
 import path from 'path-extra';
 import {isObject} from 'util';
 import * as tsvparser from 'uw-tsv-parser';
-import {formatAndSaveGroupData, tsvObjectsToGroupData} from 'tsv-groupdata-parser';
+import {categorizeGroupData, generateGroupDataItem} from 'tsv-groupdata-parser';
 // helpers
 import * as resourcesHelpers from '../resourcesHelpers';
 // eslint-disable-next-line no-duplicate-imports
@@ -16,6 +16,8 @@ import {getVersionFolder} from '../resourcesDownloadHelpers';
 import ManageResourceAPI from 'tsv-groupdata-parser/lib/helpers/ManageResourceAPI';
 import {BIBLE_BOOKS, NT_ORIG_LANG, NT_ORIG_LANG_BIBLE, OT_ORIG_LANG, OT_ORIG_LANG_BIBLE} from '../../resources/bible';
 import {getMissingOriginalResource, getMissingResources} from './tnArticleHelpers';
+import ManageResource from 'tsv-groupdata-parser/lib/helpers/ManageResourceAPI';
+import {cleanGroupId} from 'tsv-groupdata-parser/lib/tsvToGroupData';
 
 
 /**
@@ -83,6 +85,69 @@ function tsvLineToObject(tableObject, tsvLine) {
 }
 
 /**
+ * Parses list of tsv items and returns an object holding the lists of group ids.
+ * @param {Array} tsvItems - list of items to process
+ * @param {string} originalBiblePath path to original bible.
+ *        e.g. /resources/el-x-koine/bibles/ugnt/v0.11
+ * @param {string} resourcesPath path to the resources dir
+ *      e.g. /User/john/translationCore/resources
+ * @param {string} bookId
+ * @param {string} langId
+ * @param {string} toolName tC tool name.
+ * @param {object} params When it includes { categorized: true }
+ *      then it returns the object organized by tn article category.
+ * @return {Object} - groupData
+ */
+function tsvObjectsToGroupData(tsvItems, originalBiblePath, resourcesPath, bookId, langId, toolName, params) {
+  const groupData = {};
+  const twLinkMatch = /^rc:\/\/\*\/tw\/dict\/bible\/(\w+)\/([\w\d]+)/;
+  const twLinkRE = new RegExp(twLinkMatch);
+  bookId = bookId.toLowerCase();
+  const resourceApi = new ManageResource(originalBiblePath, bookId);
+
+  for (const tsvItem of tsvItems) {
+    if (tsvItem.Reference && tsvItem.ID && tsvItem.OrigWords && tsvItem.Occurrence && tsvItem.TWLink) {
+      const tags = cleanGroupId(tsvItem.Tags) || 'other';
+      const twLink = tsvItem.TWLink.match(twLinkRE);
+      if (!twLink) {
+        console.warn('tsvObjectsToGroupData() - invalid TWLink: ${tsvItem.TWLink}');
+        continue;
+      }
+
+      let [chapter, verse] = tsvItem.Reference.split(':');
+      tsvItem.Book = bookId;
+      tsvItem.Chapter = chapter;
+      tsvItem.Verse = verse;
+      tsvItem.Catagory = twLink[1];
+      tsvItem.SupportReference = twLink[2];
+      tsvItem.OrigQuote = tsvItem.OrigWords;
+      let verseString = null;
+
+      try {
+        chapter = parseInt(chapter, 10);
+        verse = parseInt(verse, 10);
+        verseString = resourceApi.getVerseString(chapter, verse);
+      } catch (e) {
+        console.warn(`tsvObjectsToGroupData() - error getting verse string: chapter ${chapter}, verse ${verse} from ${JSON.stringify(tsvItem)}`, e);
+      }
+
+      if (verseString) {
+        if (groupData[tags]) {
+          groupData[tags].push(generateGroupDataItem(tsvItem, toolName, verseString));
+        } else {
+          groupData[tags] = [generateGroupDataItem(tsvItem, toolName, verseString)];
+        }
+      }
+    } else {
+      console.warn('tsvToGroupData() - error processing item:', JSON.stringify(tsvItem));
+    }
+  }
+
+  const results = params && params.categorized ? categorizeGroupData(groupData) : groupData;
+  return results;
+}
+
+/**
  * process the TSV file into index files
  * @param tsvPath
  * @param project
@@ -114,7 +179,17 @@ async function twlTsvToGroupData(tsvPath, project, resourcesPath, originalBibleP
     console.warn(`twArticleHelpers.generateIndexForTSV() - table parse errors found: ${results}`);
   }
   try {
-    groupData = tsvObjectsToGroupData(tableObject.data, originalBiblePath, resourcesPath, bookId, project.languageId, 'translationWords', {categorized: true});
+    const tsvItems = tableObject.data.map(line => {
+      const tsvItem = {};
+      const l = tableObject.header.length;
+      for (let i = 0; i < l; i++) {
+        const key = tableObject.header[i];
+        const value = line[i] || '';
+        tsvItem[key] = value.trim();
+      }
+      return tsvItem;
+    });
+    groupData = tsvObjectsToGroupData(tsvItems, originalBiblePath, resourcesPath, bookId, project.languageId, 'translationWords', {categorized: true});
     await formatAndSaveGroupData(groupData, outputPath, bookId);
   } catch (e) {
     console.error(`tsvToGroupData() - error processing filepath: ${tsvPath}`, e);
@@ -200,6 +275,7 @@ export async function processTranslationWordsTSV(resource, sourcePath, outputPat
       tnErrors.push(message + e.toString());
     }
   }
+  throw 'not finished';
   return true;
 }
 
