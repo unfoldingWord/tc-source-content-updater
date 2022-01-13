@@ -61,6 +61,20 @@ export function removeUnusedResources(resourcesPath, currentResourcePath, origin
 }
 
 /**
+ *
+ * @param {object} resource
+ * @return {string}
+ */
+export function getVersionFolder(resource) {
+  let versionDir = 'v' + resource.version;
+  if (resource.owner) {
+    const ownerStr = encodeURIComponent(resource.owner || '');
+    versionDir += `_${ownerStr}`;
+  }
+  return versionDir;
+}
+
+/**
  * @description Downloads the resources that need to be updated for a given language using the DCS API
  * @param {Object.<{
  *             languageId: String,
@@ -127,10 +141,7 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
     const importSubdirPath = getSubdirOfUnzippedResource(importPath);
     const processedFilesPath = await processResource(resource, importSubdirPath, resourcesPath, downloadErrors);
     if (processedFilesPath) {
-      const ownerStr = encodeURIComponent(resource.owner || '');
-
-      const version = 'v' + resource.version;
-      const versionDir = ownerStr ? `${version}_${ownerStr}` : version;
+      const versionDir = getVersionFolder(resource);
       // Extra step if the resource is the Greek UGNT or Hebrew UHB
       if (isGreekOrHebrew) {
         const twGroupDataPath = makeTwGroupDataResource(resource, processedFilesPath);

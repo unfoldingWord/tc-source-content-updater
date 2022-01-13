@@ -84,7 +84,7 @@
   },
   "peerDependencies": {
     "string-punctuation-tokenizer": "^2.2.0",
-    "tsv-groupdata-parser": "^0.10.0",
+    "tsv-groupdata-parser": "^0.10.3-alpha",
     "usfm-js": "^2.1.0"
   }
 }

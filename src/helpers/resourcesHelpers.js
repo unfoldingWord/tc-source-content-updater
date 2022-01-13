@@ -263,8 +263,9 @@ export function sortVersions(versions) {
  * @return {String} - path to highest version
  */
 export function getLatestVersionInPath(resourcePath, ownerStr = DOOR43_CATALOG) {
-  const versions = sortVersions(getVersionsInPath(resourcePath, ownerStr));
+  const versions = getVersionsInPath(resourcePath, ownerStr);
   if (versions && versions.length) {
+    // versions = sortVersions(versions);
     return path.join(resourcePath, versions[versions.length - 1]);
   }
   return null; // return illegal path
@@ -347,7 +348,7 @@ export async function processResource(resource, sourcePath, resourcesPath, downl
         twArticleHelpers.processTranslationWords(resource, sourcePath, processedFilesPath);
         break;
       case 'TSV_Translation_Words_Links':
-        twArticleHelpers.processTranslationWordsTSV(resource, sourcePath, processedFilesPath, resourcesPath);
+        await twArticleHelpers.processTranslationWordsTSV(resource, sourcePath, processedFilesPath, resourcesPath, downloadErrors);
         break;
       case 'TSV_Translation_Notes':
         await tnArticleHelpers.processTranslationNotes(resource, sourcePath, processedFilesPath, resourcesPath, downloadErrors);

@@ -183,7 +183,7 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
  * @param {Array} downloadErrors - parsed list of download errors with details such as if the download completed (vs. parsing error), error, and url
  * @return {Promise}
  */
-function getMissingOriginalResource(resourcesPath, originalLanguageId, originalLanguageBibleId, version, downloadErrors) {
+export function getMissingOriginalResource(resourcesPath, originalLanguageId, originalLanguageBibleId, version, downloadErrors) {
   return new Promise(async (resolve, reject) => {
     try {
       const originalBiblePath = path.join(

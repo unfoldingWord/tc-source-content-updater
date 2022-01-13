@@ -312,12 +312,19 @@ export async function downloadManifestData(owner, repo, retries=5) {
   }
 }
 
+/**
+ *
+ * @param resourceLatestPath
+ * @param pathToResourceManifestFile
+ * @param languageId
+ * @param resourceId
+ * @param localResourceList
+ */
+function addLocalResource(resourceLatestPath, pathToResourceManifestFile, languageId, resourceId, localResourceList) {
+  const {version, owner} = getVersionAndOwnerFromPath(resourceLatestPath);
 
-function addLocalResource(tHelpsLatestVersion, pathTotHelpsManifestFile, languageId, resourceId, localResourceList) {
-  const {version, owner} = getVersionAndOwnerFromPath(tHelpsLatestVersion);
-
-  if (fs.existsSync(pathTotHelpsManifestFile)) {
-    const resourceManifest = fs.readJsonSync(pathTotHelpsManifestFile);
+  if (fs.existsSync(pathToResourceManifestFile)) {
+    const resourceManifest = fs.readJsonSync(pathToResourceManifestFile);
     const localResource = {
       languageId,
       resourceId,
@@ -329,7 +336,7 @@ function addLocalResource(tHelpsLatestVersion, pathTotHelpsManifestFile, languag
 
     localResourceList.push(localResource);
   } else {
-    console.log(`getLocalResourceList(): no such file or directory, ${pathTotHelpsManifestFile}`);
+    console.log(`getLocalResourceList(): no such file or directory, ${pathToResourceManifestFile}`);
   }
 }
 
@@ -362,26 +369,9 @@ export const getLocalResourceList = (resourcesPath) => {
           const bibleLatestVersion = owners[owner];
           if (bibleLatestVersion) {
             const pathToBibleManifestFile = path.join(bibleLatestVersion, 'manifest.json');
-            const {version, owner} = getVersionAndOwnerFromPath(bibleLatestVersion);
-
-            if (fs.existsSync(pathToBibleManifestFile)) {
-              const resourceManifest = fs.readJsonSync(pathToBibleManifestFile);
-              const remoteModifiedTime = (resourceManifest.remoteModifiedTime !== EMPTY_TIME) && resourceManifest.remoteModifiedTime;
-              const localResource = {
-                languageId,
-                resourceId: bibleId,
-                owner,
-                version,
-                modifiedTime: remoteModifiedTime || resourceManifest.catalog_modified_time,
-                manifest: resourceManifest,
-              };
-
-              localResourceList.push(localResource);
-            } else {
-              console.warn(`getLocalResourceList(): no such file or directory, ${pathToBibleManifestFile}`);
-            }
+            addLocalResource(bibleLatestVersion, pathToBibleManifestFile, languageId, bibleId, localResourceList);
           } else {
-            console.log(`getLocalResourceList(): bibleLatestVersion is ${bibleLatestVersion}.`);
+            console.log(`getLocalResourceList(): bibleLatestVersion is not found.`);
           }
         }
       });
