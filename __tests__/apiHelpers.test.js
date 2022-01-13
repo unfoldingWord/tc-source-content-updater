@@ -20,7 +20,7 @@ describe('apiHelpers.getCatalog', () => {
         expectMemberType(item, idx, 'downloadUrl', 'string');
       });
     });
-  }, 10000);
+  }, 60000);
 });
 
 /**

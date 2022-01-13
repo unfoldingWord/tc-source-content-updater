@@ -8,7 +8,7 @@ import {
   getLatestVersionsAndOwners,
   getVersionAndOwnerFromPath,
 } from './resourcesHelpers';
-import {RESOURCE_ID_MAP} from "./parseHelpers";
+import {RESOURCE_ID_MAP} from './parseHelpers';
 
 const request = require('request');
 export const DOOR43_CATALOG = `Door43-Catalog`;
@@ -381,7 +381,7 @@ export const getLocalResourceList = (resourcesPath) => {
               console.warn(`getLocalResourceList(): no such file or directory, ${pathToBibleManifestFile}`);
             }
           } else {
-            console.log(`getLocalResourceList(): $bibleLatestVersion is ${bibleLatestVersion}.`);
+            console.log(`getLocalResourceList(): bibleLatestVersion is ${bibleLatestVersion}.`);
           }
         }
       });
@@ -403,8 +403,6 @@ export const getLocalResourceList = (resourcesPath) => {
           } else {
             console.log(`getLocalResourceList(): tHelpsLatestVersion is ${tHelpsLatestVersion}.`);
           }
-
-
         }
       });
     }

@@ -1,5 +1,6 @@
 /* eslint-disable camelcase,no-empty,no-negated-condition */
 import * as ERROR from '../resources/errors';
+import {sortDownloableResources} from './resourcesDownloadHelpers';
 
 // the following are the subject found in the door43 catalog.
 // if a subject isn't found in this list then it will be ignored by the source content updater
@@ -163,8 +164,7 @@ export function getLatestResources(catalog, localResourceList, filterByOwner = n
     tCoreResources = filteredResources;
   }
 
-  return tCoreResources.sort((a, b) =>
-    ((a.languageId > b.languageId) ? 1 : -1)); // resources that are already up to date have been removed, sort by language
+  return sortDownloableResources(tCoreResources);
 }
 
 /**

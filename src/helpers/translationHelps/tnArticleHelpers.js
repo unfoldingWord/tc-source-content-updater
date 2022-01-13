@@ -9,7 +9,7 @@ import {
 } from 'tsv-groupdata-parser';
 // helpers
 import * as resourcesHelpers from '../resourcesHelpers';
-import {downloadAndProcessResource} from '../resourcesDownloadHelpers';
+import {downloadAndProcessResource, removeUnusedResources} from '../resourcesDownloadHelpers';
 import {delay, getQueryStringForBibleId, getQueryVariable} from '../utils';
 // constants
 import * as errors from '../../resources/errors';
@@ -194,6 +194,14 @@ function getMissingOriginalResource(resourcesPath, originalLanguageId, originalL
         `${version}_${DOOR43_CATALOG}`
       );
 
+      // Get the version of the other Tns original language to determine versions that should not be deleted.
+      const versionsSubdirectory = path.basename(originalBiblePath);
+      const latestOriginalBiblePath = resourcesHelpers.getLatestVersionInPath(versionsSubdirectory);
+      // if latest version is the version needed delete older versions
+      if (latestOriginalBiblePath === originalBiblePath) {
+        removeUnusedResources(resourcesPath, originalBiblePath, originalLanguageId, version, true, DOOR43_CATALOG);
+      }
+      // If version needed is not in the resources download it.
       if (!fs.existsSync(originalBiblePath)) {
         // Download orig. lang. resource
         const downloadUrl = `https://cdn.door43.org/${originalLanguageId}/${originalLanguageBibleId}/${version}/${originalLanguageBibleId}.zip`;
@@ -239,16 +247,20 @@ export function getOtherTnsOLVersions(resourcesPath, originalLanguageId) {
   languageIds.forEach((languageId) => {
     const tnHelpsPath = path.join(resourcesPath, languageId, 'translationHelps', 'translationNotes');
     if (fs.existsSync(tnHelpsPath)) {
-      const tnHelpsVersionPath = resourcesHelpers.getLatestVersionInPath(tnHelpsPath);
-      if (tnHelpsVersionPath) {
-        const tnManifestPath = path.join(tnHelpsVersionPath, 'manifest.json');
-        if (fs.existsSync(tnManifestPath)) {
-          const manifest = fs.readJsonSync(tnManifestPath);
-          const {relation} = manifest.dublin_core || {};
-          const query = getQueryStringForBibleId(relation, originalLanguageId);
-          if (query) {
-            const version = 'v' + getQueryVariable(query, 'v');
-            versionsToNotDelete.push(version);
+      const owners = resourcesHelpers.getLatestVersionsAndOwners(tnHelpsPath) || {};
+      for (const owner of Object.keys(owners)) {
+        const tnHelpsVersionPath = owners[owner];
+        if (tnHelpsVersionPath) {
+          const tnManifestPath = path.join(tnHelpsVersionPath, 'manifest.json');
+          if (fs.existsSync(tnManifestPath)) {
+            const manifest = fs.readJsonSync(tnManifestPath);
+            const {relation} = manifest.dublin_core || {};
+            const query = getQueryStringForBibleId(relation, originalLanguageId);
+            if (query) {
+              const version = 'v' + getQueryVariable(query, 'v');
+              // console.log(`getOtherTnsOLVersions() - for ${languageId}, found dependency: ${query}`);
+              versionsToNotDelete.push(version);
+            }
           }
         }
       }
