@@ -386,10 +386,6 @@ export const getLocalResourceList = (resourcesPath) => {
           if (tHelpsLatestVersion) {
             const pathTotHelpsManifestFile = path.join(tHelpsLatestVersion, 'manifest.json');
             addLocalResource(tHelpsLatestVersion, pathTotHelpsManifestFile, languageId, resourceId, localResourceList);
-            if (resourceId === 'tw') { // if tw, then also check for twl
-              const pathTwlManifestFile = path.join(tHelpsLatestVersion, 'twl_manifest.json');
-              addLocalResource(tHelpsLatestVersion, pathTwlManifestFile, languageId, 'twl', localResourceList);
-            }
           } else {
             console.log(`getLocalResourceList(): tHelpsLatestVersion is ${tHelpsLatestVersion}.`);
           }

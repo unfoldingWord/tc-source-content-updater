@@ -21,6 +21,7 @@ export const TRANSLATION_HELPS_INDEX = {
   ta: 'translationAcademy',
   tn: 'translationNotes',
   tw: 'translationWords',
+  twl: 'translationWordsLinks',
   tq: 'translationQuestions',
 };
 

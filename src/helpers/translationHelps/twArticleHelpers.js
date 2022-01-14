@@ -3,7 +3,11 @@ import fs from 'fs-extra';
 import path from 'path-extra';
 import {isObject} from 'util';
 import * as tsvparser from 'uw-tsv-parser';
-import {categorizeGroupData, generateGroupDataItem} from 'tsv-groupdata-parser';
+import {
+  cleanGroupId, formatAndSaveGroupData,
+  generateGroupDataItem,
+  ManageResource, saveGroupsIndex,
+} from 'tsv-groupdata-parser';
 // helpers
 import * as resourcesHelpers from '../resourcesHelpers';
 // eslint-disable-next-line no-duplicate-imports
@@ -12,13 +16,9 @@ import {getResourceManifest} from '../resourcesHelpers';
 import * as errors from '../../resources/errors';
 import {DOOR43_CATALOG} from '../apiHelpers';
 import {makeSureResourceUnzipped} from '../unzipFileHelpers';
-import {getVersionFolder} from '../resourcesDownloadHelpers';
-import ManageResourceAPI from 'tsv-groupdata-parser/lib/helpers/ManageResourceAPI';
 import {BIBLE_BOOKS, NT_ORIG_LANG, NT_ORIG_LANG_BIBLE, OT_ORIG_LANG, OT_ORIG_LANG_BIBLE} from '../../resources/bible';
 import {getMissingOriginalResource, getMissingResources} from './tnArticleHelpers';
-import ManageResource from 'tsv-groupdata-parser/lib/helpers/ManageResourceAPI';
-import {cleanGroupId} from 'tsv-groupdata-parser/lib/tsvToGroupData';
-
+import {delay} from '../utils';
 
 /**
  * @description Processes the extracted files for translationWord to create the folder
@@ -68,21 +68,34 @@ export function processTranslationWords(resource, sourcePath, outputPath) {
 }
 
 /**
- * convert line to object
- * @param {object} tableObject - from parser
- * @param {array} tsvLine
- * @return {{tsvObject: {}, length: *}}
+ *
+ * @param groupData
+ * @return {Object}
  */
-function tsvLineToObject(tableObject, tsvLine) {
-  const tsvObject = {};
-  const length = tableObject.header.length;
-  for (let i = 0; i < length; i++) {
-    const key = tableObject.header[i];
-    const value = tsvLine[i];
-    tsvObject[key] = value;
-  }
-  return {tsvObject, length};
-}
+const categorizeGroupData = groupData => {
+  const categorizedGroupData = {
+    kt: {},
+    names: {},
+    other: {},
+  };
+  Object.keys(groupData).forEach(category_ => {
+    let category = category_;
+    const items = groupData[category];
+    if (!categorizedGroupData[category]) {
+      category = 'other'; // unknown categories go in other
+    }
+    for (const item of items) {
+      const groupId = item.contextId && item.contextId.groupId;
+      if (groupId) {
+        if (!categorizedGroupData[category][groupId]) {
+          categorizedGroupData[category][groupId] = [];
+        }
+        categorizedGroupData[category][groupId].push(item);
+      }
+    }
+  });
+  return categorizedGroupData;
+};
 
 /**
  * Parses list of tsv items and returns an object holding the lists of group ids.
@@ -103,48 +116,60 @@ function tsvObjectsToGroupData(tsvItems, originalBiblePath, resourcesPath, bookI
   const twLinkMatch = /^rc:\/\/\*\/tw\/dict\/bible\/(\w+)\/([\w\d]+)/;
   const twLinkRE = new RegExp(twLinkMatch);
   bookId = bookId.toLowerCase();
-  const resourceApi = new ManageResource(originalBiblePath, bookId);
 
-  for (const tsvItem of tsvItems) {
-    if (tsvItem.Reference && tsvItem.ID && tsvItem.OrigWords && tsvItem.Occurrence && tsvItem.TWLink) {
-      const tags = cleanGroupId(tsvItem.Tags) || 'other';
-      const twLink = tsvItem.TWLink.match(twLinkRE);
-      if (!twLink) {
-        console.warn('tsvObjectsToGroupData() - invalid TWLink: ${tsvItem.TWLink}');
-        continue;
-      }
+  try {
+    const resourceApi = new ManageResource(originalBiblePath, bookId);
 
-      let [chapter, verse] = tsvItem.Reference.split(':');
-      tsvItem.Book = bookId;
-      tsvItem.Chapter = chapter;
-      tsvItem.Verse = verse;
-      tsvItem.Catagory = twLink[1];
-      tsvItem.SupportReference = twLink[2];
-      tsvItem.OrigQuote = tsvItem.OrigWords;
-      let verseString = null;
-
-      try {
-        chapter = parseInt(chapter, 10);
-        verse = parseInt(verse, 10);
-        verseString = resourceApi.getVerseString(chapter, verse);
-      } catch (e) {
-        console.warn(`tsvObjectsToGroupData() - error getting verse string: chapter ${chapter}, verse ${verse} from ${JSON.stringify(tsvItem)}`, e);
-      }
-
-      if (verseString) {
-        if (groupData[tags]) {
-          groupData[tags].push(generateGroupDataItem(tsvItem, toolName, verseString));
-        } else {
-          groupData[tags] = [generateGroupDataItem(tsvItem, toolName, verseString)];
+    for (const tsvItem of tsvItems) {
+      if (tsvItem.Reference && tsvItem.ID && tsvItem.OrigWords && tsvItem.Occurrence && tsvItem.TWLink) {
+        const tags = cleanGroupId(tsvItem.Tags) || 'other';
+        const twLink = tsvItem.TWLink.match(twLinkRE);
+        if (!twLink) {
+          console.warn('tsvObjectsToGroupData() - invalid TWLink: ${tsvItem.TWLink}');
+          continue;
         }
-      }
-    } else {
-      console.warn('tsvToGroupData() - error processing item:', JSON.stringify(tsvItem));
-    }
-  }
 
-  const results = params && params.categorized ? categorizeGroupData(groupData) : groupData;
-  return results;
+        let [chapter, verse] = tsvItem.Reference.split(':');
+        tsvItem.Book = bookId;
+        tsvItem.Chapter = chapter;
+        tsvItem.Verse = verse;
+        tsvItem.OrigQuote = tsvItem.OrigWords;
+        tsvItem.Catagory = twLink[1];
+        tsvItem.SupportReference = twLink[2];
+        let verseString = null;
+
+        if (!tsvItem.Catagory || !tsvItem.SupportReference) {
+          console.warn('tsvObjectsToGroupData() - invalid TWLink: ${tsvItem.TWLink}');
+          continue;
+        }
+
+        try {
+          chapter = parseInt(chapter, 10);
+          verse = parseInt(verse, 10);
+          verseString = resourceApi.getVerseString(chapter, verse);
+        } catch (e) {
+          console.warn(`tsvObjectsToGroupData() - error getting verse string: chapter ${chapter}, verse ${verse} from ${JSON.stringify(tsvItem)}`, e);
+        }
+
+        if (verseString) {
+          const key = tsvItem.Catagory;
+          const groupDataItem = generateGroupDataItem(tsvItem, toolName, verseString);
+          if (groupData[key]) {
+            groupData[key].push(groupDataItem);
+          } else {
+            groupData[key] = [groupDataItem];
+          }
+        }
+      } else {
+        console.warn('tsvObjectsToGroupData() - error processing item:', JSON.stringify(tsvItem));
+      }
+    }
+
+    return params && params.categorized ? categorizeGroupData(groupData) : groupData;
+  } catch (e) {
+    console.error(`tsvObjectsToGroupData() - error processing filepath: ${filepath}`, e);
+    throw e;
+  }
 }
 
 /**
@@ -176,7 +201,7 @@ async function twlTsvToGroupData(tsvPath, project, resourcesPath, originalBibleP
       results += `\n\n${msg}:`;
       results += '\n' + tableObject.data[rownum].join(',');
     }
-    console.warn(`twArticleHelpers.generateIndexForTSV() - table parse errors found: ${results}`);
+    console.warn(`twArticleHelpers.twlTsvToGroupData() - table parse errors found: ${results}`);
   }
   try {
     const tsvItems = tableObject.data.map(line => {
@@ -192,7 +217,7 @@ async function twlTsvToGroupData(tsvPath, project, resourcesPath, originalBibleP
     groupData = tsvObjectsToGroupData(tsvItems, originalBiblePath, resourcesPath, bookId, project.languageId, 'translationWords', {categorized: true});
     await formatAndSaveGroupData(groupData, outputPath, bookId);
   } catch (e) {
-    console.error(`tsvToGroupData() - error processing filepath: ${tsvPath}`, e);
+    console.error(`twArticleHelpers.twlTsvToGroupData() - error processing filepath: ${tsvPath}`, e);
     throw e;
   }
   return groupData;
@@ -209,74 +234,87 @@ async function twlTsvToGroupData(tsvPath, project, resourcesPath, originalBibleP
  * @return {Boolean} true if success
  */
 export async function processTranslationWordsTSV(resource, sourcePath, outputPath, resourcesPath, downloadErrors) {
-  if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId)
-    throw Error(resourcesHelpers.formatError(resource, errors.RESOURCE_NOT_GIVEN));
-  if (!sourcePath)
-    throw Error(resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_GIVEN));
-  if (!fs.pathExistsSync(sourcePath))
-    throw Error(resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_EXIST));
-  if (!outputPath)
-    throw Error(resourcesHelpers.formatError(resource, errors.OUTPUT_PATH_NOT_GIVEN));
-  if (fs.pathExistsSync(outputPath))
-    fs.removeSync(outputPath);
-  const {otQuery, ntQuery} = await getMissingResources(sourcePath, resourcesPath, getMissingOriginalResource, downloadErrors, resource.languageId, resource.owner);
+  try {
+    if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId)
+      throw Error(resourcesHelpers.formatError(resource, errors.RESOURCE_NOT_GIVEN));
+    if (!sourcePath)
+      throw Error(resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_GIVEN));
+    if (!fs.pathExistsSync(sourcePath))
+      throw Error(resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_EXIST));
+    if (!outputPath)
+      throw Error(resourcesHelpers.formatError(resource, errors.OUTPUT_PATH_NOT_GIVEN));
+    if (fs.pathExistsSync(outputPath))
+      fs.removeSync(outputPath);
+    const {otQuery, ntQuery} = await getMissingResources(sourcePath, resourcesPath, getMissingOriginalResource, downloadErrors, resource.languageId, resource.owner, false);
 
-  // make sure tW is already installed
-  const twPath = path.join(
-    resourcesPath,
-    resource.languageId,
-    'translationHelps/translationWords'
-  );
-  const twVersionPath = resourcesHelpers.getLatestVersionInPath(twPath, resource.owner);
-  if (fs.existsSync(twVersionPath)) {
-    makeSureResourceUnzipped(twVersionPath);
-  } else {
-    throw new Error(`processTranslationWordsTSV() - cannot find tW at ${twPath} for ${resource.owner}`);
-  }
-
-  const manifest = getResourceManifest(sourcePath);
-  if (!(manifest && Array.isArray(manifest.projects))) {
-    throw new Error(`processTranslationWordsTSV() - no projects in manifest at ${sourcePath} for ${resource.owner}`);
-  }
-
-  const tnErrors = [];
-
-  for (const project of manifest.projects) {
-    const tsvPath = path.join(sourcePath, project.path);
-    try {
-      const bookId = project.identifier;
-      const isNewTestament = BIBLE_BOOKS.newTestament[project.identifier];
-      const originalLanguageId = isNewTestament ? NT_ORIG_LANG : OT_ORIG_LANG;
-      const originalLanguageBibleId = isNewTestament ? NT_ORIG_LANG_BIBLE : OT_ORIG_LANG_BIBLE;
-      const version = isNewTestament && ntQuery ? ('v' + ntQuery) : otQuery ? ('v' + otQuery) : null;
-      if (!version) {
-        console.warn('There was a missing version for book ' + bookId + ' of resource ' + originalLanguageBibleId + ' from ' + resource.downloadUrl);
-        continue;
-      }
-      const originalBiblePath = path.join(
-        resourcesPath,
-        originalLanguageId,
-        'bibles',
-        originalLanguageBibleId,
-        `${version}_${DOOR43_CATALOG}`
-      );
-
-      if (fs.existsSync(originalBiblePath)) {
-        const groupData = await twlTsvToGroupData(tsvPath, project, resourcesPath, originalBiblePath, outputPath);
-        // generateGroupsIndex(typePath, outputPath, tsvFile);
-      } else {
-        const message = `processTranslationWordsTSV() - cannot find original bible ${originalBiblePath}:`;
-        console.error(message);
-        tnErrors.push(message);
-      }
-    } catch (e) {
-      const message = `processTranslationWordsTSV() - error processing ${tsvPath}:`;
-      console.error(message, e);
-      tnErrors.push(message + e.toString());
+    // make sure tW is already installed
+    const twPath = path.join(
+      resourcesPath,
+      resource.languageId,
+      'translationHelps/translationWords'
+    );
+    const twVersionPath = resourcesHelpers.getLatestVersionInPath(twPath, resource.owner);
+    if (fs.existsSync(twVersionPath)) {
+      makeSureResourceUnzipped(twVersionPath);
+    } else {
+      throw new Error(`processTranslationWordsTSV() - cannot find tW at ${twPath} for ${resource.owner}`);
     }
+
+    const manifest = getResourceManifest(sourcePath);
+    if (!(manifest && Array.isArray(manifest.projects))) {
+      throw new Error(`processTranslationWordsTSV() - no projects in manifest at ${sourcePath} for ${resource.owner}`);
+    }
+
+    const twlErrors = [];
+
+    for (const project of manifest.projects) {
+      const tsvPath = path.join(sourcePath, project.path);
+      try {
+        const bookId = project.identifier;
+        const isNewTestament = BIBLE_BOOKS.newTestament[project.identifier];
+        const originalLanguageId = isNewTestament ? NT_ORIG_LANG : OT_ORIG_LANG;
+        const originalLanguageBibleId = isNewTestament ? NT_ORIG_LANG_BIBLE : OT_ORIG_LANG_BIBLE;
+        const version = isNewTestament && ntQuery ? ('v' + ntQuery) : otQuery ? ('v' + otQuery) : null;
+        if (!version) {
+          console.warn('There was a missing version for book ' + bookId + ' of resource ' + originalLanguageBibleId + ' from ' + resource.downloadUrl);
+          continue;
+        }
+        const originalBiblePath = path.join(
+          resourcesPath,
+          originalLanguageId,
+          'bibles',
+          originalLanguageBibleId,
+          `${version}_${DOOR43_CATALOG}`
+        );
+
+        if (fs.existsSync(originalBiblePath)) {
+          const groupData = await twlTsvToGroupData(tsvPath, project, resourcesPath, originalBiblePath, outputPath);
+          await formatAndSaveGroupData(groupData, outputPath, bookId);
+        } else {
+          const message = `processTranslationWordsTSV() - cannot find original bible ${originalBiblePath}:`;
+          console.error(message);
+          twlErrors.push(message);
+        }
+      } catch (e) {
+        const message = `processTranslationWordsTSV() - error processing ${tsvPath}:`;
+        console.error(message, e);
+        twlErrors.push(message + e.toString());
+      }
+    }
+
+    await delay(200);
+
+    if (twlErrors.length) { // report errors
+      const message = `processTranslationWordsTSV() - error processing ${sourcePath}`;
+      console.error(message);
+      throw new Error(`${message}:\n${twlErrors.join('\n')}`);
+    }
+
+    saveGroupsIndex(groupData, outputPath);
+  } catch (error) {
+    console.error('processTranslationWordsTSV() - error:', error);
+    throw error;
   }
-  throw 'not finished';
-  return true;
 }
 
 /**

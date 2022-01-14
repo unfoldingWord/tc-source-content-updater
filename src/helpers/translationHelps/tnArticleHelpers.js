@@ -35,7 +35,7 @@ import {DOOR43_CATALOG} from '../apiHelpers';
  * @param {String} ownerStr
  * @return {Promise<{otQuery: string, ntQuery: string}>}
  */
-export async function getMissingResources(sourcePath, resourcesPath, getMissingOriginalResource, downloadErrors, languageId, ownerStr) {
+export async function getMissingResources(sourcePath, resourcesPath, getMissingOriginalResource, downloadErrors, languageId, ownerStr, needTa = true) {
   const tsvManifest = resourcesHelpers.getResourceManifestFromYaml(sourcePath);
   // array of related resources used to generated the tsv.
   const tsvRelations = tsvManifest.dublin_core.relation;
@@ -63,18 +63,21 @@ export async function getMissingResources(sourcePath, resourcesPath, getMissingO
 
   await delay(500);
 
-  // make sure tA is unzipped
-  const tAPath = path.join(
-    resourcesPath,
-    languageId,
-    'translationHelps/translationAcademy'
-  );
-  const taVersionPath = resourcesHelpers.getLatestVersionInPath(tAPath, ownerStr);
-  if (taVersionPath) {
-    makeSureResourceUnzipped(taVersionPath);
-  } else {
-    throw new Error(`getMissingResources() - cannot find tA at ${tAPath} for ${ownerStr}`);
+  if (needTa) {
+    // make sure tA is unzipped
+    const tAPath = path.join(
+      resourcesPath,
+      languageId,
+      'translationHelps/translationAcademy'
+    );
+    const taVersionPath = resourcesHelpers.getLatestVersionInPath(tAPath, ownerStr);
+    if (taVersionPath) {
+      makeSureResourceUnzipped(taVersionPath);
+    } else {
+      throw new Error(`getMissingResources() - cannot find tA at ${tAPath} for ${ownerStr}`);
+    }
   }
+
   return {otQuery, ntQuery};
 }
 
