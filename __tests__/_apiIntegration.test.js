@@ -27,6 +27,15 @@ jest.unmock('../src/helpers/zipFileHelpers');
 const HOME_DIR = os.homedir();
 const USER_RESOURCES = path.join(HOME_DIR, `translationCore/resources`);
 export const JSON_OPTS = {spaces: 2};
+const updatedTwl = {
+  "languageId": "en",
+  "resourceId": "twl",
+  "remoteModifiedTime": "2021-11-24T19:32:49Z",
+  "downloadUrl": "https://git.door43.org/unfoldingWord/en_twl/archive/v9.zip",
+  "version": "9",
+  "subject": "TSV_Translation_Words_Links",
+  "owner": "unfoldingWord",
+};
 
 // // disable nock failed
 // nock.restore();
@@ -80,6 +89,8 @@ describe('test API', () => {
       }
     }
     let downloadErrors = null;
+    // TODO: testing - test only this download
+    sourceContentUpdater.updatedCatalogResources=[updatedTwl];
     try {
       await sourceContentUpdater.downloadResources(langsToUpdate, resourcesPath, sourceContentUpdater.updatedCatalogResources, allAlignedBibles);
     } catch (e) {

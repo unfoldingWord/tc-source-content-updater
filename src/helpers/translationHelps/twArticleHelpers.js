@@ -4,9 +4,10 @@ import path from 'path-extra';
 import {isObject} from 'util';
 import * as tsvparser from 'uw-tsv-parser';
 import {
-  cleanGroupId, formatAndSaveGroupData,
+  cleanGroupId,
+  formatAndSaveGroupData,
   generateGroupDataItem,
-  ManageResource, saveGroupsIndex,
+  ManageResource,
 } from 'tsv-groupdata-parser';
 // helpers
 import * as resourcesHelpers from '../resourcesHelpers';
@@ -40,7 +41,7 @@ export function processTranslationWords(resource, sourcePath, outputPath) {
   if (fs.pathExistsSync(outputPath))
     fs.removeSync(outputPath);
 
-  const door43 = resource.owner === DOOR43_CATALOG;
+  const isDoor43 = resource.owner === DOOR43_CATALOG;
   const typesPath = path.join(sourcePath, 'bible');
   const isDirectory = (item) => fs.lstatSync(path.join(typesPath, item)).isDirectory();
   let typeDirs = [];
@@ -50,7 +51,7 @@ export function processTranslationWords(resource, sourcePath, outputPath) {
   typeDirs.forEach((typeDir) => {
     const typePath = path.join(typesPath, typeDir);
     const files = fs.readdirSync(typePath).filter((filename) => path.extname(filename) === '.md');
-    if (door43) { // if not in D43 catalog we will generate index from twl
+    if (isDoor43) { // if not in D43 catalog we will generate index from twl
       generateGroupsIndex(typePath, outputPath, typeDir);
     }
     files.forEach((fileName) => {
@@ -309,8 +310,6 @@ export async function processTranslationWordsTSV(resource, sourcePath, outputPat
       console.error(message);
       throw new Error(`${message}:\n${twlErrors.join('\n')}`);
     }
-
-    saveGroupsIndex(groupData, outputPath);
   } catch (error) {
     console.error('processTranslationWordsTSV() - error:', error);
     throw error;
