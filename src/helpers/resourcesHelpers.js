@@ -14,8 +14,7 @@ import * as packageParseHelpers from './packageParseHelpers';
 // constants
 import * as errors from '../resources/errors';
 import * as Bible from '../resources/bible';
-import {DOOR43_CATALOG, OWNER_SEPARATOR} from './apiHelpers';
-import {processTranslationWordsTSV} from "./translationHelps/twArticleHelpers";
+import {DEFAULT_OWNER, OWNER_SEPARATOR} from './apiHelpers';
 
 export const TRANSLATION_HELPS_INDEX = {
   ta: 'translationAcademy',
@@ -87,9 +86,10 @@ export function getResourceManifestFromYaml(resourcePath) {
  * Returns an array of versions found in the path that start with [vV]\d
  * @param {String} resourcePath - base path to search for versions
  * @param {string} ownerStr - optional owner to filter by
+ * @param {boolean} fallbackToDefaultOwner
  * @return {Array} - array of versions, e.g. ['v1', 'v10', 'v1.1']
  */
-export function getVersionsInPath(resourcePath, ownerStr = DOOR43_CATALOG) {
+export function getVersionsInPath(resourcePath, ownerStr = DEFAULT_OWNER, fallbackToDefaultOwner = false) {
   if (!resourcePath || !fs.pathExistsSync(resourcePath)) {
     return null;
   }
@@ -106,7 +106,11 @@ export function getVersionsInPath(resourcePath, ownerStr = DOOR43_CATALOG) {
     }
     return isMatch;
   };
-  return sortVersions(fs.readdirSync(resourcePath).filter(isVersionDirectory));
+  let versions = sortVersions(fs.readdirSync(resourcePath).filter(isVersionDirectory));
+  if ((!versions || !versions.length) && fallbackToDefaultOwner) {
+    versions = getVersionsInPath(resourcePath, DEFAULT_OWNER);
+  }
+  return versions;
 }
 
 /**
@@ -261,10 +265,11 @@ export function sortVersions(versions) {
  * Return the full path to the highest version folder in resource path
  * @param {String} resourcePath - base path to search for versions
  * @param {string} ownerStr - optional owner to filter by
+ * @param {boolean} fallbackToDefaultOwner - if version not found for owner, then fall back to using default owner
  * @return {String} - path to highest version
  */
-export function getLatestVersionInPath(resourcePath, ownerStr = DOOR43_CATALOG) {
-  const versions = getVersionsInPath(resourcePath, ownerStr);
+export function getLatestVersionInPath(resourcePath, ownerStr = DEFAULT_OWNER, fallbackToDefaultOwner= false) {
+  const versions = getVersionsInPath(resourcePath, ownerStr, fallbackToDefaultOwner);
   if (versions && versions.length) {
     // versions = sortVersions(versions);
     return path.join(resourcePath, versions[versions.length - 1]);
@@ -278,7 +283,7 @@ export function getLatestVersionInPath(resourcePath, ownerStr = DOOR43_CATALOG) 
  * @param {string} ownerStr - optional owner to filter by, default to DOOR43_CATALOG
  * @return {String} - highest version
  */
-export function getLatestVersionFromList(versions, ownerStr = DOOR43_CATALOG) {
+export function getLatestVersionFromList(versions, ownerStr = DEFAULT_OWNER) {
   if (Array.isArray(versions)) {
     if (versions.length) {
       if (ownerStr[0] !== OWNER_SEPARATOR) { // prefix the separator character if missing

@@ -84,13 +84,22 @@ export function parseBiblePackage(resource, sourcePath, outputPath) {
     const savePath = path.join(outputPath, 'manifest.json');
     fs.writeFileSync(savePath, JSON.stringify(manifest, null, 2));
     const projects = manifest.projects || [];
+    let foundBooks = false;
     for (const project of projects) {
       if (project.identifier && project.path) {
         const identifier = project.identifier.toLowerCase();
         const bookPath = path.join(outputPath, identifier);
+        if (!fs.existsSync(bookPath)) {
+          console.warn(`parseBiblePackage() - book missing at ${bookPath}`);
+          continue;
+        }
+        foundBooks = true;
         parseUsfmOfBook(path.join(sourcePath, project.path), bookPath);
         indexBook(bookPath, index, identifier, isOL);
       }
+    }
+    if (!foundBooks) {
+      throw Error(`parseBiblePackage() - no books found`);
     }
     saveIndex(outputPath, index);
   } catch (error) {

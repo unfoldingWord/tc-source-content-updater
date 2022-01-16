@@ -12,6 +12,7 @@ import {RESOURCE_ID_MAP} from './parseHelpers';
 
 const request = require('request');
 export const DOOR43_CATALOG = `Door43-Catalog`;
+export const DEFAULT_OWNER = DOOR43_CATALOG;
 export const TRANSLATION_HELPS = 'translationHelps';
 export const EMPTY_TIME = '0001-01-01T00:00:00+00:00';
 export const OWNER_SEPARATOR = '_';
