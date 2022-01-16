@@ -5,6 +5,7 @@ import fs from 'fs-extra';
 import path from 'path-extra';
 import os from 'os';
 import _ from 'lodash';
+import rimraf from 'rimraf';
 import * as apiHelpers from '../src/helpers/apiHelpers';
 import Updater, {SORT, STAGE, SUBJECT} from '../src';
 import {
@@ -54,6 +55,7 @@ describe('test API', () => {
     const langsToUpdate = ['en', 'el-x-koine', 'es-419', 'hbo', 'ru'];
     const allAlignedBibles = false; // if true then also download all aligned bibles
     const resourcesPath = './temp/updates';
+    rimraf.sync(path.join(resourcesPath, 'imports'), fs);
     // const resourcesPath = USER_RESOURCES;
     const sourceContentUpdater = new Updater();
     const localResourceList = apiHelpers.getLocalResourceList(resourcesPath);
