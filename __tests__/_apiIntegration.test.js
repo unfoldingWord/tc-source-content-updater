@@ -50,7 +50,8 @@ describe('test API', () => {
     const filterByOwner = null; // ['Door43-Catalog']; // set to null to do all owners
     // const langsToUpdate = ['es-419', 'en', 'el-x-koine', 'hi', 'hbo']; // set to null to update all
     // const allAlignedBibles = false; // if true then also download all aligned bibles
-    const langsToUpdate = ['en']; // ['es-419', 'en', 'el-x-koine', 'hi', 'hbo']; // set to null to update all
+    // const langsToUpdate = ['en']; // ['es-419', 'en', 'el-x-koine', 'hi', 'hbo']; // set to null to update all
+    const langsToUpdate = ['en', 'el-x-koine', 'es-419', 'hbo', 'ru'];
     const allAlignedBibles = false; // if true then also download all aligned bibles
     const resourcesPath = './temp/updates';
     // const resourcesPath = USER_RESOURCES;
@@ -67,8 +68,7 @@ describe('test API', () => {
       remoteResources = sourceContentUpdater.remoteCatalog.filter(item => langsToUpdate.includes(item.language));
       updatedRemoteResources = sourceContentUpdater.updatedCatalogResources.filter(item => langsToUpdate.includes(item.languageId));
     }
-    // const langsToUpdate = ['en', 'el-x-koine', 'es-419', 'hbo', 'ru'];
-    for (const langId of langsToUpdate) {
+     for (const langId of langsToUpdate) {
       if (updatedLanguages.find(item => (item.languageId === langId))) {
         for (const remote of sourceContentUpdater.updatedCatalogResources) {
           if (remote.languageId === langId) {
@@ -89,8 +89,8 @@ describe('test API', () => {
       }
     }
     let downloadErrors = null;
-    // TODO: testing - test only this download
-    sourceContentUpdater.updatedCatalogResources=[updatedTwl];
+    // // test only this download
+    // sourceContentUpdater.updatedCatalogResources=[updatedTwl];
     try {
       await sourceContentUpdater.downloadResources(langsToUpdate, resourcesPath, sourceContentUpdater.updatedCatalogResources, allAlignedBibles);
     } catch (e) {

@@ -18,6 +18,7 @@ export const TC_RESOURCES = [
 
 export const RESOURCE_ID_MAP = {
   translationWords: 'tw',
+  translationWordsLinks: 'twl',
   translationNotes: 'tn',
   translationAcademy: 'ta',
 };
