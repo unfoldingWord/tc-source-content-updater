@@ -1,0 +1,49 @@
+name: Node CI
+
+env:
+  UPDATE_RESOURCES: true
+  REPOSITORY: ${{ github.repository }}
+  REF: ${{ github.ref }}
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+      - release-*
+      - sandbox-*
+  pull_request:
+    branches:
+      - master
+      - develop
+      - release-*
+      - sandbox-*
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    container: neutrinog/concourse-tasks:latest
+    env:
+      CI: true
+
+    steps:
+#     - name: Dump GitHub context
+#       env:
+#         GITHUB_CONTEXT: ${{ toJson(github) }}
+#       run: echo "$GITHUB_CONTEXT"
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '16.4.2'
+    - name: Node version
+      run: |
+        node --version
+        npm --version
+
+    - name: npm install
+      run: npm i
+
+    - name: npm test
+      run: npm run test
+
+

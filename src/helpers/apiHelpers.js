@@ -314,12 +314,12 @@ export async function downloadManifestData(owner, repo, retries=5) {
 }
 
 /**
- *
- * @param resourceLatestPath
- * @param pathToResourceManifestFile
- * @param languageId
- * @param resourceId
- * @param localResourceList
+ * add resource to list
+ * @param {string} resourceLatestPath
+ * @param {string} pathToResourceManifestFile
+ * @param {string} languageId
+ * @param {string} resourceId
+ * @param {array} localResourceList
  */
 function addLocalResource(resourceLatestPath, pathToResourceManifestFile, languageId, resourceId, localResourceList) {
   const {version, owner} = getVersionAndOwnerFromPath(resourceLatestPath);

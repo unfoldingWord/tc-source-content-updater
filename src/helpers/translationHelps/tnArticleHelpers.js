@@ -33,6 +33,7 @@ import {DOOR43_CATALOG} from '../apiHelpers';
  * @param {Array} downloadErrors - parsed list of download errors with details such as if the download completed (vs. parsing error), error, and url
  * @param {String} languageId - language ID for tA
  * @param {String} ownerStr
+ * @param {boolean} needTa - set to false if resource does not depend on TA
  * @return {Promise<{otQuery: string, ntQuery: string}>}
  */
 export async function getMissingResources(sourcePath, resourcesPath, getMissingOriginalResource, downloadErrors, languageId, ownerStr, needTa = true) {

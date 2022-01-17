@@ -42,7 +42,7 @@ const updatedTwl = {
 // nock.restore();
 // nock.cleanAll();
 
-describe('test API', () => {
+describe.skip('test API', () => {
   // it('process TSV', {
   //   const srcFile = path.join('fixtures/en_twl/twl_TIT.tsv')
   // });

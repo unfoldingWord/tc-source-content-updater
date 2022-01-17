@@ -69,8 +69,8 @@ export function processTranslationWords(resource, sourcePath, outputPath) {
 }
 
 /**
- *
- * @param groupData
+ * organize group data by catalogories and groupID
+ * @param {array} groupData
  * @return {Object}
  */
 const categorizeGroupData = groupData => {
@@ -175,11 +175,11 @@ function tsvObjectsToGroupData(tsvItems, originalBiblePath, resourcesPath, bookI
 
 /**
  * process the TSV file into index files
- * @param tsvPath
- * @param project
- * @param resourcesPath
- * @param originalBiblePath
- * @param outputPath
+ * @param {string} tsvPath
+ * @param {object} project
+ * @param {string} resourcesPath
+ * @param {string} originalBiblePath
+ * @param {string} outputPath
  */
 async function twlTsvToGroupData(tsvPath, project, resourcesPath, originalBiblePath, outputPath) {
   const bookId = project.identifier;
@@ -230,8 +230,8 @@ async function twlTsvToGroupData(tsvPath, project, resourcesPath, originalBibleP
  * @param {Object} resource - Resource object
  * @param {String} sourcePath - Path to the extracted files that came from the zip file from the catalog
  * @param {String} outputPath - Path to place the processed resource files WIHTOUT the version in the path
- * @param resourcesPath
- * @param downloadErrors
+ * @param {string} resourcesPath
+ * @param {Array} downloadErrors - parsed list of download errors with details such as if the download completed (vs. parsing error), error, and url
  * @return {Boolean} true if success
  */
 export async function processTranslationWordsTSV(resource, sourcePath, outputPath, resourcesPath, downloadErrors) {
