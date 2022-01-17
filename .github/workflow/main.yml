@@ -28,10 +28,9 @@ jobs:
       CI: true
 
     steps:
-#     - name: Dump GitHub context
-#       env:
-#         GITHUB_CONTEXT: ${{ toJson(github) }}
-#       run: echo "$GITHUB_CONTEXT"
+    - name: Check out repository code
+      uses: actions/checkout@v2
+
     - uses: actions/setup-node@v1
       with:
         node-version: '16.4.2'
