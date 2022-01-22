@@ -121,6 +121,7 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
       const zipFileName = `${resource.languageId}_${resource.resourceId}_v${resource.version}_${encodeURIComponent(resource.owner)}.zip`;
       zipFilePath = path.join(importsPath, zipFileName);
       if (getCancelState && getCancelState()) {
+        console.warn(`downloadAndProcessResource() download of ${resource.downloadUrl} cancelled`);
         return; // if user cancelled then skip
       }
       console.log('Downloading: ' + resource.downloadUrl);
@@ -137,6 +138,7 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
     }
     try {
       if (getCancelState && getCancelState()) {
+        console.warn(`downloadAndProcessResource() unzipping of ${resource.downloadUrl} cancelled`);
         return; // if user cancelled then skip
       }
       console.log('Unzipping: ' + resource.downloadUrl);
@@ -145,6 +147,7 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
       throw Error(appendError(errors.UNABLE_TO_UNZIP_RESOURCES, err));
     }
     if (getCancelState && getCancelState()) {
+      console.warn(`downloadAndProcessResource() processing of ${resource.downloadUrl} cancelled`);
       return; // if user cancelled then skip
     }
     console.log('Processing: ' + resource.downloadUrl);

@@ -178,6 +178,7 @@ export function getResourcesForLanguage(languageId) {
  * called to cancel a pending download
  */
 Updater.prototype.cancelDownload = function() {
+  console.warn(`Setting flag to cancel download`);
   this.cancelDownload_ = true;
 };
 
@@ -186,7 +187,8 @@ Updater.prototype.cancelDownload = function() {
  * @return {boolean}
  */
 Updater.prototype.getCancelState = function() {
-  return this.cancelDownload_;
+  const downloadCancelled = this.cancelDownload_;
+  return downloadCancelled;
 };
 
 
@@ -211,12 +213,11 @@ Updater.prototype.getCancelState = function() {
  * (the latter is useful for getting all resources for a set of languages, such as including all resources of
  * 'en' and 'hi' in a build)
  * @param {Boolean} allAlignedBibles - if true all aligned Bibles from all languages are updated also
- * @param {function} getCancelState - function to check if user cancelled download
  * @return {Promise} Promise that resolves to return all the resources updated or rejects if a resource failed to download
  */
 Updater.prototype.downloadResources = async function(languageList, resourcesPath,
                                                      resources = this.updatedCatalogResources,
-                                                     allAlignedBibles = false, getCancelState = null) {
+                                                     allAlignedBibles = false) {
   if (!resources) {
     await this.getLatestResources([]);
     resources = this.updatedCatalogResources;
@@ -224,6 +225,7 @@ Updater.prototype.downloadResources = async function(languageList, resourcesPath
   this.downloadErrors = [];
   this.cancelDownload_ = false;
   let results = null;
+  const getCancelState = this.getCancelState.bind(this);
   try {
     results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors, allAlignedBibles, getCancelState);
   } catch (e) {
@@ -246,12 +248,10 @@ Updater.prototype.downloadResources = async function(languageList, resourcesPath
  * If getLatestResources() was never called or resources = null, function will get all resources for the given language(s)
  * (the latter is useful for getting all resources for a set of languages, such as including all resources of
  * 'en' and 'hi' in a build)
- * @param {function} getCancelState - function to check if user cancelled download
  * @return {Promise<Array|null>} Promise that resolves to return all the resources updated or rejects if a resource failed to download
  */
 Updater.prototype.downloadAllResources = async function(resourcesPath,
-                                                        resources,
-                                                        getCancelState = null) {
+                                                        resources) {
   if (!resources || !resources.length) {
     console.log('Source Content Update Failed - Resources Empty');
     return null;
@@ -268,6 +268,7 @@ Updater.prototype.downloadAllResources = async function(resourcesPath,
     }
   }
   let results = null;
+  const getCancelState = this.getCancelState.bind(this);
   try {
     results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors, false, getCancelState);
   } catch (e) {
