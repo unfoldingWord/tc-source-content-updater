@@ -123,7 +123,7 @@ function tsvObjectsToGroupData(tsvItems, originalBiblePath, resourcesPath, bookI
 
     for (const tsvItem of tsvItems) {
       if (tsvItem.Reference && tsvItem.ID && tsvItem.OrigWords && tsvItem.Occurrence && tsvItem.TWLink) {
-        const tags = cleanGroupId(tsvItem.Tags) || 'other';
+//        const tags = cleanGroupId(tsvItem.Tags) || 'other';
         const twLink = tsvItem.TWLink.match(twLinkRE);
         if (!twLink) {
           console.warn('tsvObjectsToGroupData() - invalid TWLink: ${tsvItem.TWLink}');
@@ -168,7 +168,7 @@ function tsvObjectsToGroupData(tsvItems, originalBiblePath, resourcesPath, bookI
 
     return params && params.categorized ? categorizeGroupData(groupData) : groupData;
   } catch (e) {
-    console.error(`tsvObjectsToGroupData() - error processing filepath: ${filepath}`, e);
+    console.error(`tsvObjectsToGroupData() - error processing TSVs`, e);
     throw e;
   }
 }

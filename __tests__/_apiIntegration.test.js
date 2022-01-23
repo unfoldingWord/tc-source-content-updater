@@ -43,7 +43,7 @@ const updatedTwl = {
 // nock.restore();
 // nock.cleanAll();
 
-describe('test API', () => {
+describe.skip('test API', () => {
   // it('process TSV', {
   //   const srcFile = path.join('fixtures/en_twl/twl_TIT.tsv')
   // });
@@ -95,10 +95,10 @@ describe('test API', () => {
     // // test only this download
     // sourceContentUpdater.updatedCatalogResources=[updatedTwl];
     try {
-      // disable this if you don't want to cancel the download
-      delay(60*1000).then(() => { // cancel after a minute
-        sourceContentUpdater.cancelDownload();
-      });
+      // // disable this if you don't want to cancel the download
+      // delay(60*1000).then(() => { // cancel after a minute
+      //   sourceContentUpdater.cancelDownload();
+      // });
       await sourceContentUpdater.downloadResources(langsToUpdate, resourcesPath, sourceContentUpdater.updatedCatalogResources, allAlignedBibles);
     } catch (e) {
       downloadErrors = e.toString();
