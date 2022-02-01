@@ -94,6 +94,8 @@ export function getVersionsInPath(resourcePath, ownerStr = DEFAULT_OWNER, fallba
     return null;
   }
 
+  ownerStr = encodeOwnerStr(ownerStr);
+
   if (ownerStr[0] !== OWNER_SEPARATOR) { // prefix the separator character if missing
     ownerStr = OWNER_SEPARATOR + ownerStr;
   }
@@ -286,6 +288,8 @@ export function getLatestVersionInPath(resourcePath, ownerStr = DEFAULT_OWNER, f
 export function getLatestVersionFromList(versions, ownerStr = DEFAULT_OWNER) {
   if (Array.isArray(versions)) {
     if (versions.length) {
+      ownerStr = encodeOwnerStr(ownerStr);
+
       if (ownerStr[0] !== OWNER_SEPARATOR) { // prefix the separator character if missing
         ownerStr = OWNER_SEPARATOR + ownerStr;
       }
@@ -387,6 +391,28 @@ export async function processResource(resource, sourcePath, resourcesPath, downl
 }
 
 /**
+ * encode owner to string without characters unsupported by file system
+ * @param {string} owner
+ * @return {string}
+ */
+export function encodeOwnerStr(owner) {
+  const ownerStr = encodeURIComponent(owner || '');
+  return ownerStr;
+}
+
+/**
+ * combine owner with key
+ * @param {string} key
+ * @param {string} owner
+ * @return {string|*}
+ */
+export function addOwnerToKey(key, owner) {
+  const ownerStr = encodeOwnerStr(owner);
+  const versionDir = ownerStr ? `${key}${OWNER_SEPARATOR}${ownerStr}` : key;
+  return versionDir;
+}
+
+/**
  * @description Gets the actual path to a resource based on the resource object
  * @param {Object} resource The resource object
  * @param {String} resourcesPath The path to the resources directory
@@ -401,8 +427,7 @@ export function getActualResourcePath(resource, resourcesPath) {
     type = 'translationHelps';
   }
   const version = 'v' + resource.version;
-  const ownerStr = encodeURIComponent(resource.owner || '');
-  const versionDir = ownerStr ? `${version}_${ownerStr}` : version;
+  const versionDir = addOwnerToKey(version, resource.owner);
   const actualResourcePath = path.join(resourcesPath, languageId, type, resourceName, versionDir);
   fs.ensureDirSync(actualResourcePath);
   return actualResourcePath;
