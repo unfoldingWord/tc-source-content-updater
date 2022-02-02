@@ -7,7 +7,7 @@ import os from 'os';
 import _ from 'lodash';
 import rimraf from 'rimraf';
 import * as apiHelpers from '../src/helpers/apiHelpers';
-import Updater, {SORT, STAGE, SUBJECT} from '../src';
+import Updater, {SUBJECT} from '../src';
 import {
   addCsvItem,
   addCsvItem2,
@@ -18,7 +18,6 @@ import {
   writeCsv2,
   writeToTsv,
 } from './_apiIntegrationHelpers';
-import {delay} from '../src/helpers/utils';
 
 // require('os').homedir()
 
@@ -29,41 +28,19 @@ jest.unmock('../src/helpers/zipFileHelpers');
 const HOME_DIR = os.homedir();
 const USER_RESOURCES = path.join(HOME_DIR, `translationCore/resources`);
 export const JSON_OPTS = {spaces: 2};
-const updatedTwl = {
-  "languageId": "en",
-  "resourceId": "twl",
-  "remoteModifiedTime": "2021-11-24T19:32:49Z",
-  "downloadUrl": "https://git.door43.org/unfoldingWord/en_twl/archive/v9.zip",
-  "version": "9",
-  "subject": "TSV_Translation_Words_Links",
-  "owner": "unfoldingWord",
-};
-
-// // disable nock failed
-// nock.restore();
-// nock.cleanAll();
 
 describe.skip('test API', () => {
-  // it('process TSV', {
-  //   const srcFile = path.join('fixtures/en_twl/twl_TIT.tsv')
-  // });
-
   it('test TWL', async () => {
     const filterByOwner = null; // ['Door43-Catalog']; // set to null to do all owners
-    // const langsToUpdate = ['es-419', 'en', 'el-x-koine', 'hi', 'hbo']; // set to null to update all
-    // const allAlignedBibles = false; // if true then also download all aligned bibles
-    // const langsToUpdate = ['en']; // ['es-419', 'en', 'el-x-koine', 'hi', 'hbo']; // set to null to update all
-    const langsToUpdate = ['en', 'el-x-koine', 'es-419', 'hbo', 'ru'];
+    const langsToUpdate = ['en', 'el-x-koine', 'es-419', 'hbo', 'ru']; // set to null to update all
     const allAlignedBibles = false; // if true then also download all aligned bibles
     const resourcesPath = './temp/updates';
     rimraf.sync(path.join(resourcesPath, 'imports'), fs);
-    // const resourcesPath = USER_RESOURCES;
     const sourceContentUpdater = new Updater();
     const localResourceList = apiHelpers.getLocalResourceList(resourcesPath);
     const initialResourceList = saveResources(resourcesPath, localResourceList, 'initial');
     const updatedLanguages = await sourceContentUpdater.getLatestResources(localResourceList, filterByOwner);
     saveResources(resourcesPath, updatedLanguages, 'updated');
-    // console.log(sourceContentUpdater.updatedCatalogResources);
     const resourceStatus = _.cloneDeep(localResourceList);
     let remoteResources = sourceContentUpdater.remoteCatalog;
     let updatedRemoteResources = sourceContentUpdater.updatedCatalogResources;
@@ -92,18 +69,11 @@ describe.skip('test API', () => {
       }
     }
     let downloadErrors = null;
-    // // test only this download
-    // sourceContentUpdater.updatedCatalogResources=[updatedTwl];
     try {
-      // // disable this if you don't want to cancel the download
-      // delay(60*1000).then(() => { // cancel after a minute
-      //   sourceContentUpdater.cancelDownload();
-      // });
       await sourceContentUpdater.downloadResources(langsToUpdate, resourcesPath, sourceContentUpdater.updatedCatalogResources, allAlignedBibles);
     } catch (e) {
       downloadErrors = e.toString();
     }
-    // console.log(updatedLanguages);
     const localResourceListAfter = apiHelpers.getLocalResourceList(resourcesPath);
     const finalResourceList = saveResources(resourcesPath, localResourceListAfter, 'final');
     const sourceContentUpdater2 = new Updater();
@@ -278,8 +248,6 @@ describe.skip('test API', () => {
 
   it('test Updater', async () => {
     const filterByOwner = ['Door43-Catalog']; // set to null to do all owners
-    // const langsToUpdate = ['es-419', 'en', 'el-x-koine', 'hi', 'hbo'];
-    // const allAlignedBibles = false; // if true then also download all aligned bibles
     const langsToUpdate = ['en', 'el-x-koine', 'hi', 'hbo'];
     const allAlignedBibles = true; // if true then also download all aligned bibles
     const resourcesPath = './temp/updates';
@@ -289,7 +257,6 @@ describe.skip('test API', () => {
     const initialResourceList = saveResources(resourcesPath, localResourceList, 'initial');
     const updatedLanguages = await sourceContentUpdater.getLatestResources(localResourceList, filterByOwner);
     saveResources(resourcesPath, updatedLanguages, 'updated');
-    // console.log(sourceContentUpdater.updatedCatalogResources);
     const resourceStatus = _.cloneDeep(localResourceList);
     let remoteResources = sourceContentUpdater.remoteCatalog;
     let updatedRemoteResources = sourceContentUpdater.updatedCatalogResources;
@@ -297,7 +264,6 @@ describe.skip('test API', () => {
       remoteResources = sourceContentUpdater.remoteCatalog.filter(item => langsToUpdate.includes(item.language));
       updatedRemoteResources = sourceContentUpdater.updatedCatalogResources.filter(item => langsToUpdate.includes(item.languageId));
     }
-    // const langsToUpdate = ['en', 'el-x-koine', 'es-419', 'hbo', 'ru'];
     for (const langId of langsToUpdate) {
       if (updatedLanguages.find(item => (item.languageId === langId))) {
         for (const remote of sourceContentUpdater.updatedCatalogResources) {
@@ -324,7 +290,6 @@ describe.skip('test API', () => {
     } catch (e) {
       downloadErrors = e.toString();
     }
-    // console.log(updatedLanguages);
     const localResourceListAfter = apiHelpers.getLocalResourceList(resourcesPath);
     const finalResourceList = saveResources(resourcesPath, localResourceListAfter, 'final');
     const sourceContentUpdater2 = new Updater();
@@ -411,7 +376,6 @@ describe.skip('apiHelpers compare pivoted.json with CN', () => {
       const languageId = item.language;
       const repo = item.repo;
       const url = item.formats && item.formats[0] && item.formats[0].url;
-      // const parts = url.split('/');
       const owner = item.owner;
       const item_ = {owner, repo, subject, resourceId, languageId};
       const itemJson = JSON.stringify(item_);
@@ -445,10 +409,7 @@ describe.skip('apiHelpers compare pivoted.json with CN', () => {
 
 describe.skip('apiHelpers.getCatalogCN', () => {
   it('should get the CN catalog', async () => {
-    const filteredSearch = 'https://git.door43.org/api/catalog/v5/search?subject=Bible%2CAligned%20Bible%2CGreek_New_Testament%2CHebrew_Old_Testament%2CTranslation%20Words%2CTranslation%20Notes%2CTranslation%20Academy&sort=subject&limit=50';
     const unFilteredSearch = 'https://git.door43.org/api/catalog/v5/search?sort=subject&limit=50';
-    // const latestD43Catalog = 'https://git.door43.org/api/catalog/v5/search/Door43-Catalog?stage=latest&limit=50';
-    const latestD43Catalog = 'http://qa.door43.org/api/catalog/v5?owner=Door43-Catalog&stage=latest';
     const data = await apiHelpers.doMultipartQuery(unFilteredSearch);
     console.log(`Catalog Next Found ${data.length} total items`);
     expect(data.length).toBeTruthy();
