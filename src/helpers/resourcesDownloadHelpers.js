@@ -5,6 +5,7 @@ import * as Throttle from 'promise-parallel-throttle';
 // helpers
 import {
   appendError,
+  encodeOwnerStr,
   formatError,
   getActualResourcePath,
   getErrorMessage,
@@ -21,7 +22,7 @@ import {getOtherTnsOLVersions} from './translationHelps/tnArticleHelpers';
 // constants
 import * as errors from '../resources/errors';
 import * as Bible from '../resources/bible';
-import {downloadManifestData} from './apiHelpers';
+import {downloadManifestData, OWNER_SEPARATOR} from './apiHelpers';
 
 /**
  * add download error keeping track of error message, download url, and if parse error type (if not parse error, then download error)
@@ -68,8 +69,8 @@ export function removeUnusedResources(resourcesPath, currentResourcePath, origin
 export function getVersionFolder(resource) {
   let versionDir = 'v' + resource.version;
   if (resource.owner) {
-    const ownerStr = encodeURIComponent(resource.owner || '');
-    versionDir += `_${ownerStr}`;
+    const ownerStr = encodeOwnerStr(resource.owner);
+    versionDir += `${OWNER_SEPARATOR}${ownerStr}`;
   }
   return versionDir;
 }

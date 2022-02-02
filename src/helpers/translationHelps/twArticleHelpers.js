@@ -4,7 +4,6 @@ import path from 'path-extra';
 import {isObject} from 'util';
 import * as tsvparser from 'uw-tsv-parser';
 import {
-  cleanGroupId,
   formatAndSaveGroupData,
   generateGroupDataItem,
   ManageResource,
@@ -246,6 +245,7 @@ export async function processTranslationWordsTSV(resource, sourcePath, outputPat
       throw Error(resourcesHelpers.formatError(resource, errors.OUTPUT_PATH_NOT_GIVEN));
     if (fs.pathExistsSync(outputPath))
       fs.removeSync(outputPath);
+
     const {otQuery, ntQuery} = await getMissingResources(sourcePath, resourcesPath, getMissingOriginalResource, downloadErrors, resource.languageId, resource.owner, false);
 
     // make sure tW is already installed

@@ -56,7 +56,7 @@ export async function getMissingResources(sourcePath, resourcesPath, getMissingO
         origLangId,
         'bibles',
         origLangBibleId,
-        origLangVersion
+        resourcesHelpers.addOwnerToKey(origLangVersion, DOOR43_CATALOG),
       );
       makeSureResourceUnzipped(originalBiblePath);
     }
