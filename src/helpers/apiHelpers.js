@@ -12,6 +12,7 @@ import {RESOURCE_ID_MAP} from './parseHelpers';
 
 const request = require('request');
 export const DOOR43_CATALOG = `Door43-Catalog`;
+export const DEFAULT_OWNER = DOOR43_CATALOG;
 export const TRANSLATION_HELPS = 'translationHelps';
 export const EMPTY_TIME = '0001-01-01T00:00:00+00:00';
 export const OWNER_SEPARATOR = '_';
@@ -313,6 +314,34 @@ export async function downloadManifestData(owner, repo, retries=5) {
 }
 
 /**
+ * add resource to list
+ * @param {string} resourceLatestPath
+ * @param {string} pathToResourceManifestFile
+ * @param {string} languageId
+ * @param {string} resourceId
+ * @param {array} localResourceList
+ */
+function addLocalResource(resourceLatestPath, pathToResourceManifestFile, languageId, resourceId, localResourceList) {
+  const {version, owner} = getVersionAndOwnerFromPath(resourceLatestPath);
+
+  if (fs.existsSync(pathToResourceManifestFile)) {
+    const resourceManifest = fs.readJsonSync(pathToResourceManifestFile);
+    const localResource = {
+      languageId,
+      resourceId,
+      owner,
+      version,
+      modifiedTime: resourceManifest.catalog_modified_time,
+      manifest: resourceManifest,
+    };
+
+    localResourceList.push(localResource);
+  } else {
+    console.log(`getLocalResourceList(): no such file or directory, ${pathToResourceManifestFile}`);
+  }
+}
+
+/**
  * get local resources
  * @param {string} resourcesPath
  * @return {null|*[]}
@@ -341,26 +370,9 @@ export const getLocalResourceList = (resourcesPath) => {
           const bibleLatestVersion = owners[owner];
           if (bibleLatestVersion) {
             const pathToBibleManifestFile = path.join(bibleLatestVersion, 'manifest.json');
-            const {version, owner} = getVersionAndOwnerFromPath(bibleLatestVersion);
-
-            if (fs.existsSync(pathToBibleManifestFile)) {
-              const resourceManifest = fs.readJsonSync(pathToBibleManifestFile);
-              const remoteModifiedTime = (resourceManifest.remoteModifiedTime !== EMPTY_TIME) && resourceManifest.remoteModifiedTime;
-              const localResource = {
-                languageId,
-                resourceId: bibleId,
-                owner,
-                version,
-                modifiedTime: remoteModifiedTime || resourceManifest.catalog_modified_time,
-                manifest: resourceManifest,
-              };
-
-              localResourceList.push(localResource);
-            } else {
-              console.warn(`getLocalResourceList(): no such file or directory, ${pathToBibleManifestFile}`);
-            }
+            addLocalResource(bibleLatestVersion, pathToBibleManifestFile, languageId, bibleId, localResourceList);
           } else {
-            console.log(`getLocalResourceList(): bibleLatestVersion is ${bibleLatestVersion}.`);
+            console.log(`getLocalResourceList(): bibleLatestVersion is not found.`);
           }
         }
       });
@@ -374,22 +386,7 @@ export const getLocalResourceList = (resourcesPath) => {
 
           if (tHelpsLatestVersion) {
             const pathTotHelpsManifestFile = path.join(tHelpsLatestVersion, 'manifest.json');
-            const {version, owner} = getVersionAndOwnerFromPath(tHelpsLatestVersion);
-
-            if (fs.existsSync(pathTotHelpsManifestFile)) {
-              const resourceManifest = fs.readJsonSync(pathTotHelpsManifestFile);
-              const localResource = {
-                languageId,
-                resourceId,
-                owner,
-                version,
-                modifiedTime: resourceManifest.catalog_modified_time,
-                manifest: resourceManifest,
-              };
-              localResourceList.push(localResource);
-            } else {
-              console.log(`getLocalResourceList(): no such file or directory, ${pathTotHelpsManifestFile}`);
-            }
+            addLocalResource(tHelpsLatestVersion, pathTotHelpsManifestFile, languageId, resourceId, localResourceList);
           } else {
             console.log(`getLocalResourceList(): tHelpsLatestVersion is ${tHelpsLatestVersion}.`);
           }

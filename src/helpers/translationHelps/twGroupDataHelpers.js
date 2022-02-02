@@ -38,6 +38,21 @@ export const generateTwGroupDataFromAlignedBible = (resource, sourcePath, output
 };
 
 /**
+ *
+ * @param {object} twData
+ * @param {string} outputPath
+ * @param {string} bookId
+ */
+function saveTwData(twData, outputPath, bookId) {
+  for (const category in twData) {
+    for (const groupId in twData[category]) {
+      const groupPath = path.join(outputPath, category, 'groups', bookId, groupId + '.json');
+      fs.outputFileSync(groupPath, JSON.stringify(twData[category][groupId], null, 2));
+    }
+  }
+}
+
+/**
  * @description Gets verseObjects of a book and converts to a tW data object to save to file
  * @param {String} sourcePath Usually path to the UGNT
  * @param {String} outputPath The output path for tW files
@@ -63,12 +78,7 @@ function convertBookVerseObjectsToTwData(sourcePath, outputPath, bookName) {
         }
       }
     }
-    for (const category in twData) {
-      for (const groupId in twData[category]) {
-        const groupPath = path.join(outputPath, category, 'groups', bookId, groupId + '.json');
-        fs.outputFileSync(groupPath, JSON.stringify(twData[category][groupId], null, 2));
-      }
-    }
+    saveTwData(twData, outputPath, bookId);
   }
 }
 

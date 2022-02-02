@@ -6,12 +6,14 @@ import * as twArticleHelpers from '../src/helpers/translationHelps/twArticleHelp
 import * as resourcesHelpers from '../src/helpers/resourcesHelpers';
 // constants
 import * as errors from '../src/resources/errors';
+import {DOOR43_CATALOG} from '../src/helpers/apiHelpers';
 
 describe('Tests for twArticleHelpers', function() {
   const resource = {
     languageId: 'en',
     resourceId: 'tw',
-    version: '8'
+    version: '8',
+    owner: DOOR43_CATALOG,
   };
 
   beforeEach(() => {

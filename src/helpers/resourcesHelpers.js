@@ -14,12 +14,13 @@ import * as packageParseHelpers from './packageParseHelpers';
 // constants
 import * as errors from '../resources/errors';
 import * as Bible from '../resources/bible';
-import {DOOR43_CATALOG, OWNER_SEPARATOR} from './apiHelpers';
+import {DEFAULT_OWNER, OWNER_SEPARATOR} from './apiHelpers';
 
 export const TRANSLATION_HELPS_INDEX = {
   ta: 'translationAcademy',
   tn: 'translationNotes',
   tw: 'translationWords',
+  twl: 'translationWordsLinks',
   tq: 'translationQuestions',
 };
 
@@ -85,12 +86,15 @@ export function getResourceManifestFromYaml(resourcePath) {
  * Returns an array of versions found in the path that start with [vV]\d
  * @param {String} resourcePath - base path to search for versions
  * @param {string} ownerStr - optional owner to filter by
+ * @param {boolean} fallbackToDefaultOwner
  * @return {Array} - array of versions, e.g. ['v1', 'v10', 'v1.1']
  */
-export function getVersionsInPath(resourcePath, ownerStr = DOOR43_CATALOG) {
+export function getVersionsInPath(resourcePath, ownerStr = DEFAULT_OWNER, fallbackToDefaultOwner = false) {
   if (!resourcePath || !fs.pathExistsSync(resourcePath)) {
     return null;
   }
+
+  ownerStr = encodeOwnerStr(ownerStr);
 
   if (ownerStr[0] !== OWNER_SEPARATOR) { // prefix the separator character if missing
     ownerStr = OWNER_SEPARATOR + ownerStr;
@@ -104,7 +108,11 @@ export function getVersionsInPath(resourcePath, ownerStr = DOOR43_CATALOG) {
     }
     return isMatch;
   };
-  return sortVersions(fs.readdirSync(resourcePath).filter(isVersionDirectory));
+  let versions = sortVersions(fs.readdirSync(resourcePath).filter(isVersionDirectory));
+  if ((!versions || !versions.length) && fallbackToDefaultOwner) {
+    versions = getVersionsInPath(resourcePath, DEFAULT_OWNER);
+  }
+  return versions;
 }
 
 /**
@@ -259,11 +267,13 @@ export function sortVersions(versions) {
  * Return the full path to the highest version folder in resource path
  * @param {String} resourcePath - base path to search for versions
  * @param {string} ownerStr - optional owner to filter by
+ * @param {boolean} fallbackToDefaultOwner - if version not found for owner, then fall back to using default owner
  * @return {String} - path to highest version
  */
-export function getLatestVersionInPath(resourcePath, ownerStr = DOOR43_CATALOG) {
-  const versions = sortVersions(getVersionsInPath(resourcePath, ownerStr));
+export function getLatestVersionInPath(resourcePath, ownerStr = DEFAULT_OWNER, fallbackToDefaultOwner= false) {
+  const versions = getVersionsInPath(resourcePath, ownerStr, fallbackToDefaultOwner);
   if (versions && versions.length) {
+    // versions = sortVersions(versions);
     return path.join(resourcePath, versions[versions.length - 1]);
   }
   return null; // return illegal path
@@ -275,9 +285,11 @@ export function getLatestVersionInPath(resourcePath, ownerStr = DOOR43_CATALOG) 
  * @param {string} ownerStr - optional owner to filter by, default to DOOR43_CATALOG
  * @return {String} - highest version
  */
-export function getLatestVersionFromList(versions, ownerStr = DOOR43_CATALOG) {
+export function getLatestVersionFromList(versions, ownerStr = DEFAULT_OWNER) {
   if (Array.isArray(versions)) {
     if (versions.length) {
+      ownerStr = encodeOwnerStr(ownerStr);
+
       if (ownerStr[0] !== OWNER_SEPARATOR) { // prefix the separator character if missing
         ownerStr = OWNER_SEPARATOR + ownerStr;
       }
@@ -345,6 +357,9 @@ export async function processResource(resource, sourcePath, resourcesPath, downl
       case 'Translation_Words':
         twArticleHelpers.processTranslationWords(resource, sourcePath, processedFilesPath);
         break;
+      case 'TSV_Translation_Words_Links':
+        await twArticleHelpers.processTranslationWordsTSV(resource, sourcePath, processedFilesPath, resourcesPath, downloadErrors);
+        break;
       case 'TSV_Translation_Notes':
         await tnArticleHelpers.processTranslationNotes(resource, sourcePath, processedFilesPath, resourcesPath, downloadErrors);
         break;
@@ -376,6 +391,28 @@ export async function processResource(resource, sourcePath, resourcesPath, downl
 }
 
 /**
+ * encode owner to string without characters unsupported by file system
+ * @param {string} owner
+ * @return {string}
+ */
+export function encodeOwnerStr(owner) {
+  const ownerStr = encodeURIComponent(owner || '');
+  return ownerStr;
+}
+
+/**
+ * combine owner with key
+ * @param {string} key
+ * @param {string} owner
+ * @return {string|*}
+ */
+export function addOwnerToKey(key, owner) {
+  const ownerStr = encodeOwnerStr(owner);
+  const versionDir = ownerStr ? `${key}${OWNER_SEPARATOR}${ownerStr}` : key;
+  return versionDir;
+}
+
+/**
  * @description Gets the actual path to a resource based on the resource object
  * @param {Object} resource The resource object
  * @param {String} resourcesPath The path to the resources directory
@@ -390,8 +427,7 @@ export function getActualResourcePath(resource, resourcesPath) {
     type = 'translationHelps';
   }
   const version = 'v' + resource.version;
-  const ownerStr = encodeURIComponent(resource.owner || '');
-  const versionDir = ownerStr ? `${version}_${ownerStr}` : version;
+  const versionDir = addOwnerToKey(version, resource.owner);
   const actualResourcePath = path.join(resourcesPath, languageId, type, resourceName, versionDir);
   fs.ensureDirSync(actualResourcePath);
   return actualResourcePath;

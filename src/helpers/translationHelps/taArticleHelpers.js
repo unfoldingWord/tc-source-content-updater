@@ -33,7 +33,12 @@ export function processTranslationAcademy(resource, sourcePath, outputPath) {
     const articleDirs = fs.readdirSync(folderPath).filter(isDirectory);
     articleDirs.forEach((articleDir) => {
       let content = '# ' + fs.readFileSync(path.join(folderPath, articleDir, 'title.md'), 'utf8') + ' #\n';
-      content += fs.readFileSync(path.join(folderPath, articleDir, '01.md'), 'utf8');
+      const articlePath = path.join(folderPath, articleDir, '01.md');
+      if (!fs.existsSync(articlePath)) {
+        console.warn(`processTranslationAcademy() - file missing: ${articlePath}`);
+        return;
+      }
+      content += fs.readFileSync(articlePath, 'utf8');
       const destinationPath = path.join(
         outputPath,
         project.path,

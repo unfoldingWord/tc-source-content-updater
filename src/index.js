@@ -28,13 +28,13 @@ export const STAGE = {
 
 export const SUBJECT = {
   ALL_RESOURCES: null,
-  ALL_TC_RESOURCES: 'Bible,Aligned Bible,Greek New Testament,Hebrew Old Testament,Translation Words,TSV Translation Notes,Translation Academy',
+  ALL_TC_RESOURCES: 'Bible,Aligned Bible,Greek New Testament,Hebrew Old Testament,Translation Words,TSV Translation Words Links,TSV Translation Notes,Translation Academy',
   ALL_BIBLES: 'Bible,Aligned Bible,Greek New Testament,Hebrew Old Testament',
   ORIGINAL_LANGUAGE_BIBLES: 'Greek New Testament,Hebrew Old Testament',
   ALIGNED_BIBLES: 'Aligned Bible',
   UNALIGNED_BIBLES: 'Bible',
   ALL_TC_HELPS: 'Translation Words,TSV Translation Notes,Translation Academy',
-  TRANSLATION_WORDS: 'Translation Words',
+  TRANSLATION_WORDS: 'Translation Words,TSV Translation Words Links',
   TRANSLATION_NOTES: 'TSV Translation Notes',
   TRANSLATION_ACADEMY: 'Translation Academy',
 };
@@ -175,6 +175,24 @@ export function getResourcesForLanguage(languageId) {
 }
 
 /**
+ * called to cancel a pending download
+ */
+Updater.prototype.cancelDownload = function() {
+  console.warn(`Setting flag to cancel download`);
+  this.cancelDownload_ = true;
+};
+
+/**
+ * called to get current cancel state
+ * @return {boolean}
+ */
+Updater.prototype.getCancelState = function() {
+  const downloadCancelled = this.cancelDownload_;
+  return downloadCancelled;
+};
+
+
+/**
  * @typedef {Object} ResourceType
  * @property {String} languageId
  * @property {String} resourceId
@@ -205,9 +223,11 @@ Updater.prototype.downloadResources = async function(languageList, resourcesPath
     resources = this.updatedCatalogResources;
   }
   this.downloadErrors = [];
+  this.cancelDownload_ = false;
   let results = null;
+  const getCancelState = this.getCancelState.bind(this);
   try {
-    results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors, allAlignedBibles);
+    results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors, allAlignedBibles, getCancelState);
   } catch (e) {
     const errors = this.getLatestDownloadErrorsStr(); // get detailed errors and log
     if (errors) {
@@ -231,12 +251,13 @@ Updater.prototype.downloadResources = async function(languageList, resourcesPath
  * @return {Promise<Array|null>} Promise that resolves to return all the resources updated or rejects if a resource failed to download
  */
 Updater.prototype.downloadAllResources = async function(resourcesPath,
-                                                        resources ) {
+                                                        resources) {
   if (!resources || !resources.length) {
     console.log('Source Content Update Failed - Resources Empty');
     return null;
   }
 
+  this.cancelDownload_ = false;
   this.downloadErrors = [];
   // generate list of all languages in resources
   const languageList = [];
@@ -247,8 +268,9 @@ Updater.prototype.downloadAllResources = async function(resourcesPath,
     }
   }
   let results = null;
+  const getCancelState = this.getCancelState.bind(this);
   try {
-    results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors, false);
+    results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors, false, getCancelState);
   } catch (e) {
     const errors = this.getLatestDownloadErrorsStr(); // get detailed errors and log
     if (errors) {

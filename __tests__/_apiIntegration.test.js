@@ -5,8 +5,9 @@ import fs from 'fs-extra';
 import path from 'path-extra';
 import os from 'os';
 import _ from 'lodash';
+import rimraf from 'rimraf';
 import * as apiHelpers from '../src/helpers/apiHelpers';
-import Updater, {SORT, STAGE, SUBJECT} from '../src';
+import Updater, {SUBJECT} from '../src';
 import {
   addCsvItem,
   addCsvItem2,
@@ -28,11 +29,75 @@ const HOME_DIR = os.homedir();
 const USER_RESOURCES = path.join(HOME_DIR, `translationCore/resources`);
 export const JSON_OPTS = {spaces: 2};
 
-// // disable nock failed
-// nock.restore();
-// nock.cleanAll();
-
 describe.skip('test API', () => {
+  it('test TWL', async () => {
+    const filterByOwner = null; // ['Door43-Catalog']; // set to null to do all owners
+    const langsToUpdate = ['en', 'el-x-koine', 'es-419', 'hbo', 'ru']; // set to null to update all
+    const allAlignedBibles = false; // if true then also download all aligned bibles
+    const resourcesPath = './temp/updates';
+    rimraf.sync(path.join(resourcesPath, 'imports'), fs);
+    const sourceContentUpdater = new Updater();
+    const localResourceList = apiHelpers.getLocalResourceList(resourcesPath);
+    const initialResourceList = saveResources(resourcesPath, localResourceList, 'initial');
+    const updatedLanguages = await sourceContentUpdater.getLatestResources(localResourceList, filterByOwner);
+    saveResources(resourcesPath, updatedLanguages, 'updated');
+    const resourceStatus = _.cloneDeep(localResourceList);
+    let remoteResources = sourceContentUpdater.remoteCatalog;
+    let updatedRemoteResources = sourceContentUpdater.updatedCatalogResources;
+    if (langsToUpdate) {
+      remoteResources = sourceContentUpdater.remoteCatalog.filter(item => langsToUpdate.includes(item.language));
+      updatedRemoteResources = sourceContentUpdater.updatedCatalogResources.filter(item => langsToUpdate.includes(item.languageId));
+    }
+     for (const langId of langsToUpdate) {
+      if (updatedLanguages.find(item => (item.languageId === langId))) {
+        for (const remote of sourceContentUpdater.updatedCatalogResources) {
+          if (remote.languageId === langId) {
+            const match = resourceStatus.find(local => (local.languageId === remote.languageId && local.resourceId === remote.resourceId));
+            if (match) {
+              match.remoteModifiedTime = remote.remoteModifiedTime;
+            } else {
+              resourceStatus.push({
+                languageId: remote.languageId,
+                resourceId: remote.resourceId,
+                version: remote.version,
+                remoteModifiedTime: remote.remoteModifiedTime,
+              });
+            }
+            console.log('stuff');
+          }
+        }
+      }
+    }
+    let downloadErrors = null;
+    try {
+      await sourceContentUpdater.downloadResources(langsToUpdate, resourcesPath, sourceContentUpdater.updatedCatalogResources, allAlignedBibles);
+    } catch (e) {
+      downloadErrors = e.toString();
+    }
+    const localResourceListAfter = apiHelpers.getLocalResourceList(resourcesPath);
+    const finalResourceList = saveResources(resourcesPath, localResourceListAfter, 'final');
+    const sourceContentUpdater2 = new Updater();
+    const newUpdatedLanguages = await sourceContentUpdater2.getLatestResources(localResourceListAfter, filterByOwner);
+    const failedUpdates = [];
+    for (const langId of langsToUpdate) {
+      const match = newUpdatedLanguages.find(item => (item.languageId === langId));
+      if (match) {
+        console.error(`Language didn't get updated: ${match.languageId}`);
+        for (const resource of match.resources) {
+          const description = `${resource.owner}/${resource.languageId}_${resource.resourceId}`;
+          console.error(`Missing: ${description}`);
+          failedUpdates.push(description);
+        }
+      }
+    }
+    if (downloadErrors) {
+      console.error(`Download errors: ${downloadErrors}`);
+    }
+    expect(failedUpdates.length).toEqual(0);
+    expect(downloadErrors).toBeFalsy();
+    console.log('Test finally Done');
+  }, 6000000);
+
   it('test searchCatalogNext', async () => {
     const sourceContentUpdater = new Updater();
     const searchParams = {
@@ -100,7 +165,7 @@ describe.skip('test API', () => {
     fs.outputJsonSync(path.join(outputFolder, outputFile + '.json'), items, JSON_OPTS);
   }, 60000);
 
-  it('test search & download CatalogNext', async () => {
+  it.skip('test search & download CatalogNext', async () => {
     const sourceContentUpdater = new Updater();
     const searchParams = {
       subject: SUBJECT.ALL_TC_RESOURCES,
@@ -183,10 +248,8 @@ describe.skip('test API', () => {
 
   it('test Updater', async () => {
     const filterByOwner = ['Door43-Catalog']; // set to null to do all owners
-    // const langsToUpdate = ['es-419', 'en', 'el-x-koine', 'hi', 'hbo'];
-    // const allAlignedBibles = false; // if true then also download all aligned bibles
-    const langsToUpdate = ['es-419', 'en', 'el-x-koine', 'hi', 'hbo'];
-    const allAlignedBibles = false; // if true then also download all aligned bibles
+    const langsToUpdate = ['en', 'el-x-koine', 'hi', 'hbo'];
+    const allAlignedBibles = true; // if true then also download all aligned bibles
     const resourcesPath = './temp/updates';
     // const resourcesPath = USER_RESOURCES;
     const sourceContentUpdater = new Updater();
@@ -194,7 +257,6 @@ describe.skip('test API', () => {
     const initialResourceList = saveResources(resourcesPath, localResourceList, 'initial');
     const updatedLanguages = await sourceContentUpdater.getLatestResources(localResourceList, filterByOwner);
     saveResources(resourcesPath, updatedLanguages, 'updated');
-    // console.log(sourceContentUpdater.updatedCatalogResources);
     const resourceStatus = _.cloneDeep(localResourceList);
     let remoteResources = sourceContentUpdater.remoteCatalog;
     let updatedRemoteResources = sourceContentUpdater.updatedCatalogResources;
@@ -202,7 +264,6 @@ describe.skip('test API', () => {
       remoteResources = sourceContentUpdater.remoteCatalog.filter(item => langsToUpdate.includes(item.language));
       updatedRemoteResources = sourceContentUpdater.updatedCatalogResources.filter(item => langsToUpdate.includes(item.languageId));
     }
-    // const langsToUpdate = ['en', 'el-x-koine', 'es-419', 'hbo', 'ru'];
     for (const langId of langsToUpdate) {
       if (updatedLanguages.find(item => (item.languageId === langId))) {
         for (const remote of sourceContentUpdater.updatedCatalogResources) {
@@ -229,7 +290,6 @@ describe.skip('test API', () => {
     } catch (e) {
       downloadErrors = e.toString();
     }
-    // console.log(updatedLanguages);
     const localResourceListAfter = apiHelpers.getLocalResourceList(resourcesPath);
     const finalResourceList = saveResources(resourcesPath, localResourceListAfter, 'final');
     const sourceContentUpdater2 = new Updater();
@@ -316,7 +376,6 @@ describe.skip('apiHelpers compare pivoted.json with CN', () => {
       const languageId = item.language;
       const repo = item.repo;
       const url = item.formats && item.formats[0] && item.formats[0].url;
-      // const parts = url.split('/');
       const owner = item.owner;
       const item_ = {owner, repo, subject, resourceId, languageId};
       const itemJson = JSON.stringify(item_);
@@ -350,10 +409,7 @@ describe.skip('apiHelpers compare pivoted.json with CN', () => {
 
 describe.skip('apiHelpers.getCatalogCN', () => {
   it('should get the CN catalog', async () => {
-    const filteredSearch = 'https://git.door43.org/api/catalog/v5/search?subject=Bible%2CAligned%20Bible%2CGreek_New_Testament%2CHebrew_Old_Testament%2CTranslation%20Words%2CTranslation%20Notes%2CTranslation%20Academy&sort=subject&limit=50';
     const unFilteredSearch = 'https://git.door43.org/api/catalog/v5/search?sort=subject&limit=50';
-    // const latestD43Catalog = 'https://git.door43.org/api/catalog/v5/search/Door43-Catalog?stage=latest&limit=50';
-    const latestD43Catalog = 'http://qa.door43.org/api/catalog/v5?owner=Door43-Catalog&stage=latest';
     const data = await apiHelpers.doMultipartQuery(unFilteredSearch);
     console.log(`Catalog Next Found ${data.length} total items`);
     expect(data.length).toBeTruthy();

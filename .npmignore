@@ -8,3 +8,4 @@ coverage
 src
 temp
 /jest-results.json
+.github
