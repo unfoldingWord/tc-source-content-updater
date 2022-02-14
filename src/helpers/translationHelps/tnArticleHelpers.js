@@ -168,7 +168,7 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
       'translationAcademy'
     );
 
-    const taCategoriesPath = resourcesHelpers.getLatestVersionInPath(translationAcademyPath);
+    const taCategoriesPath = resourcesHelpers.getLatestVersionInPath(translationAcademyPath, resource.owner);
     makeSureResourceUnzipped(taCategoriesPath);
     const categorizedGroupsIndex = generateGroupsIndex(outputPath, taCategoriesPath);
     saveGroupsIndex(categorizedGroupsIndex, outputPath);

@@ -1,6 +1,7 @@
 import fs from 'fs-extra';
 import path from 'path-extra';
 import ospath from 'ospath';
+import _ from 'lodash';
 // helpers
 import * as twArticleHelpers from '../src/helpers/translationHelps/twArticleHelpers';
 import * as resourcesHelpers from '../src/helpers/resourcesHelpers';
@@ -34,21 +35,68 @@ describe('Tests for twArticleHelpers', function() {
       {id: 'apostle', name: 'apostle, apostles, apostleship'},
       {id: 'god', name: 'God'}, {id: 'sanctify', name: 'sanctify, sanctifies, sanctification'}
     ];
+    const resource_ = _.cloneDeep(resource);
 
     // when
-    const result = twArticleHelpers.processTranslationWords(resource, path.join(mockedExtractedPath, resource.languageId + '_' + resource.resourceId), outputPath);
-    const indexFile = path.join(outputPath, 'kt', 'index.json');
-    const indexJson = fs.readJsonSync(indexFile);
+    const result = twArticleHelpers.processTranslationWords(resource_, path.join(mockedExtractedPath, resource_.languageId + '_' + resource_.resourceId), outputPath);
     const typeList = fs.readdirSync(outputPath);
     const ktArticleList = fs.readdirSync(path.join(outputPath, 'kt', 'articles'));
     const namesArticleList = fs.readdirSync(path.join(outputPath, 'names', 'articles'));
     const godFile = path.join(outputPath, 'kt', 'articles', 'god.md');
     const godArticle = fs.readFileSync(godFile, 'utf8');
+    const isDoor43 = resource_.owner === DOOR43_CATALOG;
 
     // then
     expect(result).toBeTruthy();
-    expect(fs.existsSync(indexFile)).toBeTruthy();
-    expect(indexJson).toEqual(expectedIndexJson);
+    if (!isDoor43) {
+      const indexFile = path.join(outputPath, 'kt', 'index.json');
+      const indexJson = fs.readJsonSync(indexFile);
+      expect(fs.existsSync(indexFile)).toBeTruthy();
+      expect(indexJson).toEqual(expectedIndexJson);
+    }
+    expect(fs.existsSync(godFile)).toBeTruthy();
+    expect(typeList).toEqual(expectedTypeList);
+    expect(ktArticleList.length).toEqual(expectedKtArticleListLength);
+    expect(ktArticleList).toMatchSnapshot();
+    expect(godArticle).toMatchSnapshot();
+    expect(namesArticleList.length).toEqual(expectedNamesArticleListLength);
+    expect(namesArticleList).toMatchSnapshot();
+  });
+
+  it('Test twArticleHelpers.processTranslationWords() for en unfoldingWord', () => {
+    // given
+    const actualExtractedPath = path.join(__dirname, 'fixtures/translationHelps/twExtractedFromCDN');
+    const mockedExtractedPath = path.join(ospath.home(), 'translationCore/resources/imports');
+    fs.__loadDirIntoMockFs(actualExtractedPath, mockedExtractedPath);
+    const outputPath = path.join(ospath.home(), 'translationCore/resources', resource.languageId, 'translationHelps/translationWords', 'v' + resource.version);
+    fs.ensureDirSync(outputPath);
+    const expectedTypeList = ['kt', 'names', 'other'];
+    const expectedKtArticleListLength = 3;
+    const expectedNamesArticleListLength = 2;
+    const expectedIndexJson = [
+      {id: 'apostle', name: 'apostle, apostles, apostleship'},
+      {id: 'god', name: 'God'}, {id: 'sanctify', name: 'sanctify, sanctifies, sanctification'}
+    ];
+    const resource_ = _.cloneDeep(resource);
+    resource_.owner = 'unfoldingWord';
+
+    // when
+    const result = twArticleHelpers.processTranslationWords(resource_, path.join(mockedExtractedPath, resource_.languageId + '_' + resource_.resourceId), outputPath);
+    const typeList = fs.readdirSync(outputPath);
+    const ktArticleList = fs.readdirSync(path.join(outputPath, 'kt', 'articles'));
+    const namesArticleList = fs.readdirSync(path.join(outputPath, 'names', 'articles'));
+    const godFile = path.join(outputPath, 'kt', 'articles', 'god.md');
+    const godArticle = fs.readFileSync(godFile, 'utf8');
+    const isDoor43 = resource_.owner === DOOR43_CATALOG;
+
+    // then
+    expect(result).toBeTruthy();
+    if (!isDoor43) {
+      const indexFile = path.join(outputPath, 'kt', 'index.json');
+      const indexJson = fs.readJsonSync(indexFile);
+      expect(fs.existsSync(indexFile)).toBeTruthy();
+      expect(indexJson).toEqual(expectedIndexJson);
+    }
     expect(fs.existsSync(godFile)).toBeTruthy();
     expect(typeList).toEqual(expectedTypeList);
     expect(ktArticleList.length).toEqual(expectedKtArticleListLength);
