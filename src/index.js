@@ -373,13 +373,14 @@ Updater.prototype.processTranslationNotes = function(resource, sourcePath, outpu
  * @return {Promise} Promise that resolves to return all the resources updated or rejects if a resource failed to download.
  */
 Updater.prototype.downloadAndProcessResource = async function(resourceDetails, resourcesPath) {
-  const {languageId, resourceId, version} = resourceDetails;
+  const {languageId, resourceId, version, owner} = resourceDetails;
   const downloadUrl = `https://cdn.door43.org/${languageId}/${resourceId}/v${version}/${resourceId}.zip`;
   const resource = {
     languageId,
     resourceId,
     version,
     downloadUrl,
+    owner: owner || apiHelpers.DOOR43_CATALOG,
     remoteModifiedTime: '0001-01-01T00:00:00+00:00',
     subject: 'Bible',
     catalogEntry: {
