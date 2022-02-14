@@ -50,7 +50,7 @@ export function processTranslationWords(resource, sourcePath, outputPath) {
   typeDirs.forEach((typeDir) => {
     const typePath = path.join(typesPath, typeDir);
     const files = fs.readdirSync(typePath).filter((filename) => path.extname(filename) === '.md');
-    if (isDoor43) { // if not in D43 catalog we will generate index from twl
+    if (!isDoor43) { // if not in D43 catalog we will generate index from twl
       generateGroupsIndex(typePath, outputPath, typeDir);
     }
     files.forEach((fileName) => {
