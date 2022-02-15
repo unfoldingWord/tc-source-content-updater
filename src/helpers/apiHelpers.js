@@ -150,7 +150,7 @@ export async function getCatalog() {
     const isGreekOrHebrew = (resource.languageId === Bible.NT_ORIG_LANG && resource.resourceId === Bible.NT_ORIG_LANG_BIBLE) ||
       (resource.languageId === Bible.OT_ORIG_LANG && resource.resourceId === Bible.OT_ORIG_LANG_BIBLE);
 
-    if (isGreekOrHebrew) { // TODO: until we get twl support, we have to restrict original languages
+    if (isGreekOrHebrew) { // we restrict original languages to Door43-Catalog
       const isDoor43 = resource.owner === DOOR43_CATALOG;
       if (!isDoor43) {
         return false;
