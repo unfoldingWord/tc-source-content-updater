@@ -386,7 +386,7 @@ export async function processResource(resource, sourcePath, resourcesPath, downl
     return processedFilesPath;
   } catch (error) {
     console.error(error);
-    throw Error(appendError(errors.UNABLE_TO_DOWNLOAD_RESOURCES, error));
+    throw Error(appendError(errors.FAILED_TO_PROCESS_RESOURCE, error));
   }
 }
 
