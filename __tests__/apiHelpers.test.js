@@ -4,7 +4,7 @@ describe('apiHelpers.getCatalog', () => {
   it('should get the resulting catalog', () => {
     return apiHelpers.getCatalog().then(res => {
       expect(Array.isArray(res)).toBeTruthy();
-      expect(res.length).toBeGreaterThan(64);
+      expect(res.length).toBeGreaterThan(56);
       res.forEach((item, idx) => {
         if (item.version) {
           expectMemberType(item, idx, 'version', 'string');

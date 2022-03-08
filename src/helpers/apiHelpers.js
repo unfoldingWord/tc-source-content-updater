@@ -146,7 +146,7 @@ export async function getCatalog() {
     }
   }
   console.log(`now ${catalogReleases.length} items in merged catalog, before filter`);
-  const catalogReleases_ = catalogReleases.filter(resource => {
+  let catalogReleases_ = catalogReleases.filter(resource => {
     const isGreekOrHebrew = (resource.languageId === Bible.NT_ORIG_LANG && resource.resourceId === Bible.NT_ORIG_LANG_BIBLE) ||
       (resource.languageId === Bible.OT_ORIG_LANG && resource.resourceId === Bible.OT_ORIG_LANG_BIBLE);
 
@@ -167,6 +167,42 @@ export async function getCatalog() {
 
     return true;
   });
+
+  // combine tw and twl dependencies
+  catalogReleases_ = catalogReleases_.filter(resource => {
+    if (resource.owner !== 'Door43-Catalog') {
+      switch (resource.resourceId) {
+        case 'twl': {
+          const twResource = catalogReleases.find(item => {
+            return (item.owner === resource.owner) &&
+              (item.language === resource.language) &&
+              (item.resourceId === 'tw');
+          });
+          if (twResource) {
+            twResource.loadAfter = [resource];
+            return false; // combined with tw, so remove this entry
+          } else {
+            return false; // if no tw available, we cannot use the twl
+          }
+        }
+        case 'tw': {
+          const twlResource = catalogReleases.find(item => {
+            return (item.owner === resource.owner) &&
+              (item.language === resource.language) &&
+              (item.resourceId === 'twl');
+          });
+          if (twlResource) {
+            resource.loadAfter = [twlResource];
+          } else {
+            return false; // if no twl available, we cannot use the tw
+          }
+        }
+        break;
+      }
+    }
+    return true;
+  });
+
   console.log(`now ${catalogReleases_.length} items in merged catalog`);
 
   return catalogReleases_;
