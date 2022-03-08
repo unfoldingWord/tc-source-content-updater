@@ -123,6 +123,47 @@ export async function getOldCatalogReleases() {
 }
 
 /**
+ *
+ * @param {Array} catalogReleases
+ * @return {*}
+ */
+export function combineTwords(catalogReleases) {
+  return catalogReleases.filter(resource => {
+    if (resource.owner !== 'Door43-Catalog') {
+      switch (resource.resourceId) {
+        case 'twl': {
+          const twResource = catalogReleases.find(item => {
+            return (item.owner === resource.owner) &&
+              (item.language === resource.language) &&
+              (item.resourceId === 'tw');
+          });
+          if (twResource) {
+            twResource.loadAfter = [resource];
+            return false; // combined with tw, so remove this entry
+          } else {
+            return false; // if no tw available, we cannot use the twl
+          }
+        }
+        case 'tw': {
+          const twlResource = catalogReleases.find(item => {
+            return (item.owner === resource.owner) &&
+              (item.language === resource.language) &&
+              (item.resourceId === 'twl');
+          });
+          if (twlResource) {
+            resource.loadAfter = [twlResource];
+          } else {
+            return false; // if no twl available, we cannot use the tw
+          }
+        }
+          break;
+      }
+    }
+    return true;
+  });
+}
+
+/**
  * get published catalog - combines catalog next releases with old catalog
  * @return {Promise<*[]>}
  */
@@ -169,39 +210,7 @@ export async function getCatalog() {
   });
 
   // combine tw and twl dependencies
-  catalogReleases_ = catalogReleases_.filter(resource => {
-    if (resource.owner !== 'Door43-Catalog') {
-      switch (resource.resourceId) {
-        case 'twl': {
-          const twResource = catalogReleases.find(item => {
-            return (item.owner === resource.owner) &&
-              (item.language === resource.language) &&
-              (item.resourceId === 'tw');
-          });
-          if (twResource) {
-            twResource.loadAfter = [resource];
-            return false; // combined with tw, so remove this entry
-          } else {
-            return false; // if no tw available, we cannot use the twl
-          }
-        }
-        case 'tw': {
-          const twlResource = catalogReleases.find(item => {
-            return (item.owner === resource.owner) &&
-              (item.language === resource.language) &&
-              (item.resourceId === 'twl');
-          });
-          if (twlResource) {
-            resource.loadAfter = [twlResource];
-          } else {
-            return false; // if no twl available, we cannot use the tw
-          }
-        }
-        break;
-      }
-    }
-    return true;
-  });
+  catalogReleases_ = combineTwords(catalogReleases_);
 
   console.log(`now ${catalogReleases_.length} items in merged catalog`);
 
