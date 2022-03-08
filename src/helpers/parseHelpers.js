@@ -129,6 +129,8 @@ function isRemoteNewerResLookup(resourceId, tCoreResources, localResource) {
     isNewer = !localResource.modifiedTime ||
       (catalogResource.remoteModifiedTime > localResource.modifiedTime);
     catalogResource.localModifiedTime = localResource.modifiedTime;
+  } else {
+    isNewer = true; // newer if not stored locally
   }
   return {
     resourceId,
