@@ -47,12 +47,12 @@ export async function makeJsonRequestDetailed(url, retries= 5) {
       });
     } catch (e) {
       if (i >= retries) {
-        console.warn(`makeJsonRequestDetailed(${url}) - error getting manifest data`, e);
+        console.warn(`makeJsonRequestDetailed(${url}) - error getting data`, e);
         throw e;
       }
       result_ = null;
+      console.log(`makeJsonRequestDetailed(${url}) - retry ${i+1} getting data, last error`, e);
       await delay(500);
-      console.log(`makeJsonRequestDetailed(${url}) - retry ${i+1} getting manifest data, last error`, e);
     }
 
     if (result_) {
