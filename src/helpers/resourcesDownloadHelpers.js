@@ -301,7 +301,7 @@ export const downloadResources = (languageList, resourcesPath, resources, downlo
     languageList.forEach((languageId) => {
       let resourcesForLanguage = parseHelpers.getResourcesForLanguage(resources, languageId);
       resourcesForLanguage = resourcesForLanguage.sort(sortHelps); // fetch helps first
-      resourcesForLanguage?.forEach(resource => {
+      resourcesForLanguage.forEach(resource => {
         const loadAfter = resource.catalogEntry && resource.catalogEntry.resource && resource.catalogEntry.resource.loadAfter;
         if (loadAfter) {
           loadAfter.forEach(afterResource => {
