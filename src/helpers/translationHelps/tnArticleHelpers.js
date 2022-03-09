@@ -117,11 +117,12 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
       'translationAcademy'
     );
 
-    const taCategoriesPath = resourcesHelpers.getLatestVersionInPath(translationAcademyPath, resource.owner);
+    let taCategoriesPath = resourcesHelpers.getLatestVersionInPath(translationAcademyPath, resource.owner);
     if (!taCategoriesPath) {
       console.log(`tnArticleHelpers.processTranslationNotes() - download missing tA resource`);
       await getMissingHelpsResource(resourcesPath, resource, 'ta', 'Translation_Academy', downloadErrors);
       console.log(`tnArticleHelpers.processTranslationNotes() - have tA resource`);
+      taCategoriesPath = resourcesHelpers.getLatestVersionInPath(translationAcademyPath, resource.owner);
     }
 
     const {otQuery, ntQuery} = await getMissingResources(sourcePath, resourcesPath, getMissingOriginalResource, downloadErrors, resource.languageId, resource.owner);
