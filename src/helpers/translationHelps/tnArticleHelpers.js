@@ -22,7 +22,7 @@ import {
   BIBLE_LIST_NT,
 } from '../../resources/bible';
 import {makeSureResourceUnzipped} from '../unzipFileHelpers';
-import {DOOR43_CATALOG} from '../apiHelpers';
+import {DOOR43_CATALOG, downloadManifestData} from '../apiHelpers';
 
 /**
  * search to see if we need to get any missing resources needed for tN processing
@@ -255,7 +255,11 @@ export function getMissingHelpsResource(resourcesPath, parentResource, fetchReso
   return new Promise(async (resolve, reject) => {
     try {
       const resourceName = `${parentResource.languageId}_${fetchResourceId}`;
-      const downloadUrl = `https://git.door43.org/${parentResource.owner}/${resourceName}.git`;
+      // get latest version
+      const manifest = await downloadManifestData(parentResource.owner, resourceName);
+      const version = manifest && manifest.dublin_core && manifest.dublin_core.version || 'master';
+
+      const downloadUrl = `https://git.door43.org/${parentResource.owner}/${resourceName}/archive/v${version}.zip`;
       console.log(`tnArticleHelpers.getMissingHelpsResource() - downloading missing helps: ${downloadUrl}`);
       const resource = {
         languageId: parentResource.languageId,
@@ -264,6 +268,7 @@ export function getMissingHelpsResource(resourcesPath, parentResource, fetchReso
         downloadUrl,
         name: resourceName,
         owner: parentResource.owner,
+        version: version,
       };
       // Delay to try to avoid Socket timeout
       await delay(1000);
