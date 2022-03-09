@@ -254,7 +254,7 @@ export function getMissingOriginalResource(resourcesPath, originalLanguageId, or
 export function getMissingHelpsResource(resourcesPath, parentResource, fetchResourceId, downloadErrors) {
   return new Promise(async (resolve, reject) => {
     try {
-      const resourceName = `${resourceName.languageId}_${fetchResourceId}`;
+      const resourceName = `${parentResource.languageId}_${fetchResourceId}`;
       const downloadUrl = `https://git.door43.org/${parentResource.owner}/${resourceName}.git`;
       console.log(`tnArticleHelpers.getMissingHelpsResource() - downloading missing helps: ${downloadUrl}`);
       const resource = {
