@@ -120,7 +120,7 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
     const taCategoriesPath = resourcesHelpers.getLatestVersionInPath(translationAcademyPath, resource.owner);
     if (!taCategoriesPath) {
       console.log(`tnArticleHelpers.processTranslationNotes() - download missing tA resource`);
-      await getMissingHelpsResource(resourcesPath, resource, 'ta', downloadErrors);
+      await getMissingHelpsResource(resourcesPath, resource, 'ta', 'Translation_Academy', downloadErrors);
       console.log(`tnArticleHelpers.processTranslationNotes() - have tA resource`);
     }
 
@@ -248,10 +248,11 @@ export function getMissingOriginalResource(resourcesPath, originalLanguageId, or
  * @param {String} resourcesPath - resources Path
  * @param {object} parentResource - resource of object loading this as a dependency
  * @param {String} fetchResourceId - id of resource to fetch, such as 'ta'
+ * @param {String} fetchSubject - subject string of resource to fetch, such as 'Translation_Academy'
  * @param {Array} downloadErrors - parsed list of download errors with details such as if the download completed (vs. parsing error), error, and url
  * @return {Promise}
  */
-export function getMissingHelpsResource(resourcesPath, parentResource, fetchResourceId, downloadErrors) {
+export function getMissingHelpsResource(resourcesPath, parentResource, fetchResourceId, fetchSubject, downloadErrors) {
   return new Promise(async (resolve, reject) => {
     try {
       const resourceName = `${parentResource.languageId}_${fetchResourceId}`;
@@ -269,6 +270,7 @@ export function getMissingHelpsResource(resourcesPath, parentResource, fetchReso
         name: resourceName,
         owner: parentResource.owner,
         version: version,
+        subject: fetchSubject,
       };
       // Delay to try to avoid Socket timeout
       await delay(1000);
