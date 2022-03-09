@@ -263,7 +263,7 @@ export function getMissingHelpsResource(resourcesPath, parentResource, fetchReso
         remoteModifiedTime: '0001-01-01T00:00:00+00:00',
         downloadUrl,
         name: resourceName,
-        owner: resourceName.owner,
+        owner: parentResource.owner,
       };
       // Delay to try to avoid Socket timeout
       await delay(1000);
