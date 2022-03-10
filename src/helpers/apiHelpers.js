@@ -123,18 +123,71 @@ export async function getOldCatalogReleases() {
 }
 
 /**
+ * find matching resource in resourceList
+ * @param {array} resourceList
+ * @param {object} resource
+ * @return {*}
+ */
+function findResource(resourceList, resource) {
+  const foundResource = resourceList.find(item => {
+    return (item.owner === resource.owner) &&
+      (item.language === resource.language) &&
+      (item.resourceId === resource.resourceId);
+  });
+  return foundResource;
+}
+
+/**
+ * merge twl resource downloads into tw downloads
+ * @param {Array} catalogReleases
+ * @return {*}
+ */
+export function combineTwords(catalogReleases) {
+  return catalogReleases.filter(resource => {
+    if (resource.owner !== 'Door43-Catalog') {
+      switch (resource.resourceId) {
+        case 'twl': {
+          const twResource = findResource(catalogReleases, {...resource, resourceId: 'tw'});
+          if (twResource) {
+            twResource.loadAfter = [resource];
+            return false; // combined with tw, so remove this entry
+          } else {
+            return false; // if no tw available, we cannot use the twl
+          }
+        }
+        case 'tw': {
+          const twlResource = findResource(catalogReleases, {...resource, resourceId: 'twl'});
+          if (twlResource) {
+            resource.loadAfter = [twlResource];
+          } else {
+            return false; // if no twl available, we cannot use the tw
+          }
+        }
+          break;
+      }
+    }
+    return true;
+  });
+}
+
+/**
  * get published catalog - combines catalog next releases with old catalog
  * @return {Promise<*[]>}
  */
 export async function getCatalog() {
-  const catalogReleases = await getOldCatalogReleases();
-  const searchParams = {
+  let searchParams = {
+    subject: SUBJECT.ALL_TC_RESOURCES,
+    stage: STAGE.LATEST,
+    owner: 'Door43-Catalog',
+  };
+  const catalogReleases = await searchCatalogNext(searchParams);
+  console.log(`found ${catalogReleases.length} items in old Door43-Catalog`);
+  searchParams = {
     subject: SUBJECT.ALL_TC_RESOURCES,
     stage: STAGE.PROD,
   };
-  console.log(`found ${catalogReleases.length} items in old catalog`);
   const newCatalogReleases = await searchCatalogNext(searchParams);
-  console.log(`found ${newCatalogReleases.length} items in new catalog`);
+  console.log(`found ${newCatalogReleases.length} items in catalog next`);
   // merge catalogs together - catalog new takes precedence
   for (const item of newCatalogReleases) {
     const index = catalogReleases.findIndex(oldItem => (item.full_name === oldItem.full_name));
@@ -146,7 +199,7 @@ export async function getCatalog() {
     }
   }
   console.log(`now ${catalogReleases.length} items in merged catalog, before filter`);
-  const catalogReleases_ = catalogReleases.filter(resource => {
+  let catalogReleases_ = catalogReleases.filter(resource => {
     const isGreekOrHebrew = (resource.languageId === Bible.NT_ORIG_LANG && resource.resourceId === Bible.NT_ORIG_LANG_BIBLE) ||
       (resource.languageId === Bible.OT_ORIG_LANG && resource.resourceId === Bible.OT_ORIG_LANG_BIBLE);
 
@@ -167,7 +220,11 @@ export async function getCatalog() {
 
     return true;
   });
-  console.log(`now ${catalogReleases_.length} items in merged catalog`);
+
+  // combine tw and twl dependencies
+  catalogReleases_ = combineTwords(catalogReleases_);
+
+  console.log(`now ${catalogReleases_.length} items in filtered catalog`);
 
   return catalogReleases_;
 }

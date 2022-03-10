@@ -1,10 +1,13 @@
 /* eslint-env jest */
 /* eslint-disable camelcase,no-empty */
+import _ from 'lodash';
 import * as parseHelpers from '../src/helpers/parseHelpers';
 import * as ERROR from '../src/resources/errors';
-import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
+import {combineTwords} from '../src/helpers/apiHelpers';
 
 const catalog = require('./fixtures/catalogNext');
+const catalogUW_ = require('./fixtures/catalogNextUW');
+const catalogUW = combineTwords(_.cloneDeep(catalogUW_));
 
 describe('parseCatalogResources()', () => {
   it('should find Bibles', () => {
@@ -80,7 +83,7 @@ describe('getLatestResources()', () => {
     const resourceList = [
       {languageId: 'fr', resourceId: 'f10', modifiedTime: '2018-04-27T18:51:26+00:00'}
     ];
-    const results = parseHelpers.getLatestResources(catalog, resourceList);
+    const results = parseHelpers.getLatestResources(catalogUW, resourceList);
     expect(results.length).toEqual(11);
 
     const greekResources = getResourcesForLanguageAndResource(results, 'el-x-koine');

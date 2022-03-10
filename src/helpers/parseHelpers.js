@@ -108,6 +108,39 @@ export function getUpdatedLanguageList(updatedRemoteResources) {
 }
 
 /**
+ * search remote resources for match similar to local resource, but with given resourceId
+ * @param {String} resourceId
+ * @param {Array} remoteResources
+ * @param {Object} localResource
+ * @return {{resourceId, catalogResource, isNewer: boolean, index: *}}
+ */
+function isRemoteNewerResLookup(resourceId, remoteResources, localResource) {
+  resourceId = RESOURCE_ID_MAP[resourceId] || resourceId; // map resource names to ids
+  const index = remoteResources.findIndex((remoteResource) =>
+    ((localResource.languageId.toLowerCase() === remoteResource.languageId.toLowerCase()) &&
+      (localResource.owner === remoteResource.owner) &&
+      (remoteResource.resourceId === resourceId))
+  );
+
+  let isNewer = false;
+  let catalogResource;
+  if (index >= 0) {
+    catalogResource = remoteResources[index];
+    isNewer = !localResource.modifiedTime ||
+      (catalogResource.remoteModifiedTime > localResource.modifiedTime);
+    catalogResource.localModifiedTime = localResource.modifiedTime;
+  } else {
+    isNewer = true; // newer if not stored locally
+  }
+  return {
+    resourceId,
+    index,
+    isNewer,
+    catalogResource,
+  };
+}
+
+/**
  * Gets the list of all new resources in remoteCatalog, except for
  * the ones already up to date in the given list
  *
@@ -136,24 +169,32 @@ export function getLatestResources(catalog, localResourceList, filterByOwner = n
   let tCoreResources = parseCatalogResources(catalog, true, TC_RESOURCES);
   // remove resources that are already up to date
   for (const localResource of localResourceList) {
-    let resourceId = localResource.resourceId;
+    const resourceId = localResource.resourceId;
     if (localResource.languageId && resourceId) {
-      resourceId = RESOURCE_ID_MAP[resourceId] || resourceId; // map resource names to ids
-      const index = tCoreResources.findIndex((remoteResource) =>
-        ((localResource.languageId.toLowerCase() === remoteResource.languageId.toLowerCase()) &&
-          (localResource.owner === remoteResource.owner) &&
-          (remoteResource.resourceId === resourceId))
-      );
+      const {
+        index,
+        isNewer,
+      } = isRemoteNewerResLookup(resourceId, tCoreResources, localResource);
 
-      if (index >= 0) {
-        const catalogResource = tCoreResources[index];
-        const isNewer = !localResource.modifiedTime ||
-          (catalogResource.remoteModifiedTime > localResource.modifiedTime);
-        if (!isNewer) { // if resource up to date, remove it from resource list
-          tCoreResources.splice(index, 1);
-        } else {
-          catalogResource.localModifiedTime = localResource.modifiedTime;
+      let isNewer_ = isNewer;
+      if (!isNewer_ && (index >= 0)) {
+        const resource = tCoreResources[index];
+        if (resource.loadAfter) {
+          const resourceAfter = resource.loadAfter;
+          const localResource = localResourceList.find((localeResource) =>
+            ((localResource.languageId.toLowerCase() === resourceAfter.languageId.toLowerCase()) &&
+              (localResource.owner === resourceAfter.owner) &&
+              (localResource.resourceId === resourceAfter.resourceId))
+          );
+          if (localResource) {
+            const isNewer = !localResource.modifiedTime ||
+              (resourceAfter.remoteModifiedTime > resourceAfter.modifiedTime);
+            isNewer_ = isNewer;
+          }
         }
+      }
+      if (!isNewer_) { // if resource up to date, remove it from resource list
+        tCoreResources.splice(index, 1);
       }
     }
   }

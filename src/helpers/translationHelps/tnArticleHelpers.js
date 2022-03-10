@@ -22,7 +22,7 @@ import {
   BIBLE_LIST_NT,
 } from '../../resources/bible';
 import {makeSureResourceUnzipped} from '../unzipFileHelpers';
-import {DOOR43_CATALOG} from '../apiHelpers';
+import {DOOR43_CATALOG, downloadManifestData} from '../apiHelpers';
 
 /**
  * search to see if we need to get any missing resources needed for tN processing
@@ -110,6 +110,21 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
       fs.removeSync(outputPath);
     }
 
+    const translationAcademyPath = path.join(
+      resourcesPath,
+      resource.languageId,
+      'translationHelps',
+      'translationAcademy'
+    );
+
+    let taCategoriesPath = resourcesHelpers.getLatestVersionInPath(translationAcademyPath, resource.owner);
+    if (!taCategoriesPath) {
+      console.log(`tnArticleHelpers.processTranslationNotes() - download missing tA resource`);
+      await getMissingHelpsResource(resourcesPath, resource, 'ta', 'Translation_Academy', downloadErrors);
+      console.log(`tnArticleHelpers.processTranslationNotes() - have tA resource`);
+      taCategoriesPath = resourcesHelpers.getLatestVersionInPath(translationAcademyPath, resource.owner);
+    }
+
     const {otQuery, ntQuery} = await getMissingResources(sourcePath, resourcesPath, getMissingOriginalResource, downloadErrors, resource.languageId, resource.owner);
     console.log(`tnArticleHelpers.processTranslationNotes() - have needed original bibles for ${sourcePath}, starting processing`);
     const tsvFiles = fs.readdirSync(sourcePath).filter((filename) => path.extname(filename) === '.tsv');
@@ -161,14 +176,6 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
     }
 
     // Generate groupsIndex using tN groupData & tA articles.
-    const translationAcademyPath = path.join(
-      resourcesPath,
-      resource.languageId,
-      'translationHelps',
-      'translationAcademy'
-    );
-
-    const taCategoriesPath = resourcesHelpers.getLatestVersionInPath(translationAcademyPath, resource.owner);
     makeSureResourceUnzipped(taCategoriesPath);
     const categorizedGroupsIndex = generateGroupsIndex(outputPath, taCategoriesPath);
     saveGroupsIndex(categorizedGroupsIndex, outputPath);
@@ -231,6 +238,45 @@ export function getMissingOriginalResource(resourcesPath, originalLanguageId, or
       } else {
         resolve();
       }
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+
+/**
+ * download a missing missing resource that matches parentResource, but has fetchResourceId
+ * @param {String} resourcesPath - resources Path
+ * @param {object} parentResource - resource of object loading this as a dependency
+ * @param {String} fetchResourceId - id of resource to fetch, such as 'ta'
+ * @param {String} fetchSubject - subject string of resource to fetch, such as 'Translation_Academy'
+ * @param {Array} downloadErrors - parsed list of download errors with details such as if the download completed (vs. parsing error), error, and url
+ * @return {Promise}
+ */
+export function getMissingHelpsResource(resourcesPath, parentResource, fetchResourceId, fetchSubject, downloadErrors) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const resourceName = `${parentResource.languageId}_${fetchResourceId}`;
+      // get latest version
+      const manifest = await downloadManifestData(parentResource.owner, resourceName);
+      const version = manifest && manifest.dublin_core && manifest.dublin_core.version || 'master';
+
+      const downloadUrl = `https://git.door43.org/${parentResource.owner}/${resourceName}/archive/v${version}.zip`;
+      console.log(`tnArticleHelpers.getMissingHelpsResource() - downloading missing helps: ${downloadUrl}`);
+      const resource = {
+        languageId: parentResource.languageId,
+        resourceId: fetchResourceId,
+        remoteModifiedTime: '0001-01-01T00:00:00+00:00',
+        downloadUrl,
+        name: resourceName,
+        owner: parentResource.owner,
+        version: version,
+        subject: fetchSubject,
+      };
+      // Delay to try to avoid Socket timeout
+      await delay(1000);
+      await downloadAndProcessResource(resource, resourcesPath, downloadErrors);
+      resolve();
     } catch (error) {
       reject(error);
     }
