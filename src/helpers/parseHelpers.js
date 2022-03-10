@@ -108,13 +108,13 @@ export function getUpdatedLanguageList(updatedRemoteResources) {
 }
 
 /**
- * search remote resources for match similar to local resource, but with given resourceId
+ * search remote resources for match similar to local resource, but with given resourceId.  Return true if local resource is newer
  * @param {String} resourceId
  * @param {Array} remoteResources
  * @param {Object} localResource
  * @return {{resourceId, catalogResource, isNewer: boolean, index: *}}
  */
-function isRemoteNewerResLookup(resourceId, remoteResources, localResource) {
+function isLocalNewerResLookup(resourceId, remoteResources, localResource) {
   resourceId = RESOURCE_ID_MAP[resourceId] || resourceId; // map resource names to ids
   const index = remoteResources.findIndex((remoteResource) =>
     ((localResource.languageId.toLowerCase() === remoteResource.languageId.toLowerCase()) &&
@@ -174,7 +174,7 @@ export function getLatestResources(catalog, localResourceList, filterByOwner = n
       const {
         index,
         isNewer,
-      } = isRemoteNewerResLookup(resourceId, tCoreResources, localResource);
+      } = isLocalNewerResLookup(resourceId, tCoreResources, localResource);
 
       let isNewer_ = isNewer;
       if (!isNewer_ && (index >= 0)) {
