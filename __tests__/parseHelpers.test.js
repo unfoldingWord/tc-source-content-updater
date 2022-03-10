@@ -6,10 +6,8 @@ import * as ERROR from '../src/resources/errors';
 import {combineTwords} from '../src/helpers/apiHelpers';
 
 const catalog = require('./fixtures/catalogNext');
-const catalogUW = combineTwords(_.cloneDeep(catalog).map(item => {
-  item.owner = 'unfoldingWord';
-  return item;
-}));
+const catalogUW_ = require('./fixtures/catalogNextUW');
+const catalogUW = combineTwords(_.cloneDeep(catalogUW_));
 
 describe('parseCatalogResources()', () => {
   it('should find Bibles', () => {

@@ -115,7 +115,7 @@
         "version": "6"
       }
     ],
-    "owner": "Door43-Catalog",
+    "owner": "unfoldingWord",
     "repo": "ceb_tw",
     "languageId": "ceb",
     "resourceId": "tw",
@@ -184,7 +184,7 @@
         "version": "4"
       }
     ],
-    "owner": "Door43-Catalog",
+    "owner": "unfoldingWord",
     "repo": "ceb_udb",
     "languageId": "ceb",
     "resourceId": "udb",
@@ -941,7 +941,7 @@
         "version": "4"
       }
     ],
-    "owner": "Door43-Catalog",
+    "owner": "unfoldingWord",
     "repo": "ceb_ulb",
     "languageId": "ceb",
     "resourceId": "ulb",
@@ -1268,7 +1268,7 @@
         "version": "0"
       }
     ],
-    "owner": "Door43-Catalog",
+    "owner": "unfoldingWord",
     "repo": "el-x-koine_ugnt",
     "languageId": "el-x-koine",
     "resourceId": "ugnt",
@@ -1376,7 +1376,7 @@
         "version": "23"
       }
     ],
-    "owner": "Door43-Catalog",
+    "owner": "unfoldingWord",
     "repo": "en_ta",
     "languageId": "en",
     "resourceId": "ta",
@@ -1449,12 +1449,85 @@
         "version": "26"
       }
     ],
-    "owner": "Door43-Catalog",
+    "owner": "unfoldingWord",
     "repo": "en_tw",
     "languageId": "en",
     "resourceId": "tw",
     "foundInCatalog": "OLD",
     "full_name": "Door43-Catalog/en_tw",
+    "checking_level": "3"
+  },
+  {
+    "identifier": "twl",
+    "title": "unfoldingWord® Translation Words Links",
+    "subject": "TSV_Translation_Words_Links",
+    "version": "27",
+    "checking": {
+      "checking_entity": [
+        "unfoldingWord"
+      ],
+      "checking_level": "3"
+    },
+    "comment": "",
+    "contributor": [
+      "Andrew Belcher",
+      "David Book",
+      "Jesse Griffin, BA Biblical Studies, MA Biblical Languages",
+      "Henry Whitney, Bible translator, Papua New Guinea, 1982–2000",
+      "Larry Sallee, Th.M Dallas Theological Seminary, D.Min. Columbia Biblical Seminary",
+      "Lizz Carlton",
+      "Jan Zanutto",
+      "Matthew Latham",
+      "Perry Oakes, PhD in Old Testament, MA in Linguistics",
+      "Richard Joki",
+      "Door43 World Missions Community"
+    ],
+    "creator": "Door43 World Missions Community",
+    "description": "A basic Bible lexicon that provides translators with clear, concise definitions and translation suggestions for every important word in the Bible. It provides translators and checkers with essential lexical information to help them make the best possible translation decisions.",
+    "downloadUrl": "https://git.door43.org/Door43-Catalog/en_twl/archive/master.zip",
+    "formats": [
+      {
+        "format": "application/zip; type=dict content=text/markdown conformsto=rc0.2",
+        "modified": "2021-11-24T19:06:32Z",
+        "signature": "",
+        "size": 0,
+        "url": "https://git.door43.org/Door43-Catalog/en_twl/archive/master.zip"
+      }
+    ],
+    "issued": "2021-11-25T00:00:00Z",
+    "modified": "2021-11-25T00:00:00Z",
+    "projects": [
+      {
+        "categories": null,
+        "identifier": "bible",
+        "path": "./bible",
+        "sort": 0,
+        "title": "unfoldingWord® Translation Words",
+        "versification": null
+      }
+    ],
+    "publisher": "unfoldingWord",
+    "relation": [
+      "en/ult",
+      "en/ust",
+      "en/obs",
+      "el-x-koine/ugnt?v=0.22",
+      "hbo/uhb?v=2.1.23"
+    ],
+    "rights": "CC BY-SA 4.0",
+    "source": [
+      {
+        "identifier": "twl",
+        "language": "en",
+        "version": "26"
+      }
+    ],
+    "owner": "unfoldingWord",
+    "repo": "en_twl",
+    "languageId": "en",
+    "resourceId": "twl",
+    "foundInCatalog": "OLD",
+    "full_name": "Door43-Catalog/en_twl",
     "checking_level": "3"
   },
   {
@@ -2229,7 +2302,7 @@
         "version": "0.22"
       }
     ],
-    "owner": "Door43-Catalog",
+    "owner": "unfoldingWord",
     "repo": "en_ult",
     "languageId": "en",
     "resourceId": "ult",
@@ -2993,7 +3066,7 @@
         "version": "0.22"
       }
     ],
-    "owner": "Door43-Catalog",
+    "owner": "unfoldingWord",
     "repo": "en_ust",
     "languageId": "en",
     "resourceId": "ust",
@@ -3439,7 +3512,7 @@
         "version": "2.1"
       }
     ],
-    "owner": "Door43-Catalog",
+    "owner": "unfoldingWord",
     "repo": "hbo_uhb",
     "languageId": "hbo",
     "resourceId": "uhb",
@@ -3656,7 +3729,7 @@
         "version": "2021"
       }
     ],
-    "owner": "Door43-Catalog",
+    "owner": "unfoldingWord",
     "repo": "hi_glt",
     "languageId": "hi",
     "resourceId": "glt",
@@ -3847,7 +3920,7 @@
         "version": "2021"
       }
     ],
-    "owner": "Door43-Catalog",
+    "owner": "unfoldingWord",
     "repo": "hi_gst",
     "languageId": "hi",
     "resourceId": "gst",
