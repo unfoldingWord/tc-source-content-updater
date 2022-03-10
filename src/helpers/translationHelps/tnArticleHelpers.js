@@ -245,7 +245,7 @@ export function getMissingOriginalResource(resourcesPath, originalLanguageId, or
 }
 
 /**
- *
+ * download a missing missing resource that matches parentResource, but has fetchResourceId
  * @param {String} resourcesPath - resources Path
  * @param {object} parentResource - resource of object loading this as a dependency
  * @param {String} fetchResourceId - id of resource to fetch, such as 'ta'

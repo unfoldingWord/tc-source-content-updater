@@ -138,7 +138,7 @@ function findResource(resourceList, resource) {
 }
 
 /**
- *
+ * merge twl resource downloads into tw downloads
  * @param {Array} catalogReleases
  * @return {*}
  */
