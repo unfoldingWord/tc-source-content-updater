@@ -75,7 +75,8 @@ export async function getMissingResources(sourcePath, resourcesPath, getMissingO
     if (taVersionPath) {
       makeSureResourceUnzipped(taVersionPath);
     } else {
-      throw new Error(`tnArticleHelpers.getMissingResources() - cannot find tA at ${tAPath} for ${ownerStr}`);
+      const resource = `${ownerStr}/${languageId}_ta`;
+      throw new Error(`tnArticleHelpers.getMissingResources() - cannot find '${resource}', at ${tAPath} for ${ownerStr}`);
     }
   }
 
@@ -156,7 +157,8 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
           const groupData = await tsvToGroupData(filepath, 'translationNotes', {categorized: true}, originalBiblePath, resourcesPath, resource.languageId);
           await formatAndSaveGroupData(groupData, outputPath, bookId);
         } else {
-          const message = `tnArticleHelpers.processTranslationNotes() - cannot find original bible ${originalBiblePath}:`;
+          const resource = `${DOOR43_CATALOG}/${originalLanguageId}_${originalLanguageBibleId}`;
+          const message = `tnArticleHelpers.processTranslationNotes() - cannot find '${resource}' at ${originalBiblePath}:`;
           console.error(message);
           tnErrors.push(message);
         }

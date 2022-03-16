@@ -258,7 +258,8 @@ export async function processTranslationWordsTSV(resource, sourcePath, outputPat
     if (fs.existsSync(twVersionPath)) {
       makeSureResourceUnzipped(twVersionPath);
     } else {
-      throw new Error(`processTranslationWordsTSV() - cannot find tW at ${twPath} for ${resource.owner}`);
+      const resource = `${resource.owner}/${resource.languageId}_tw`;
+      throw new Error(`processTranslationWordsTSV() - cannot find '${resource}' at ${twPath} for ${resource.owner}`);
     }
 
     const manifest = getResourceManifest(sourcePath);
@@ -292,7 +293,8 @@ export async function processTranslationWordsTSV(resource, sourcePath, outputPat
           const groupData = await twlTsvToGroupData(tsvPath, project, resourcesPath, originalBiblePath, outputPath);
           await formatAndSaveGroupData(groupData, outputPath, bookId);
         } else {
-          const message = `processTranslationWordsTSV() - cannot find original bible ${originalBiblePath}:`;
+          const resource = `${DOOR43_CATALOG}/${originalLanguageId}_${originalLanguageBibleId}`;
+          const message = `processTranslationWordsTSV() - cannot find '${resource}' at ${originalBiblePath}:`;
           console.error(message);
           twlErrors.push(message);
         }
