@@ -120,7 +120,8 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
   try {
     try {
       const zipFileName = `${resource.languageId}_${resource.resourceId}_v${resource.version}_${encodeURIComponent(resource.owner)}.zip`;
-      if (resource.resourceId) {
+      if (resource.resourceId === 'ta') {
+        console.log('ta forced failure');
         throw 'ta forced failure'; //TODO blm: remove - for testing only
       }
       zipFilePath = path.join(importsPath, zipFileName);
