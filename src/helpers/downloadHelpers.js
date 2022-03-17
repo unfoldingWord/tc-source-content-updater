@@ -39,6 +39,10 @@ export function download(uri, dest, progressCallback, retries = 0) {
   }
 
   return new Promise((resolve, reject) => {
+    if (!navigator.onLine) {
+      reject('Internet offline');
+    }
+
     const req = makeRequest(options, (response) => {
       const size = response.headers['content-length'];
       let progress = 0;
