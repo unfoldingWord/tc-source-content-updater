@@ -259,28 +259,34 @@ Updater.prototype.downloadAllResources = async function(resourcesPath,
 
   this.cancelDownload_ = false;
   this.downloadErrors = [];
-  // generate list of all languages in resources
-  const languageList = [];
-  for (const resource of resources) {
-    const languageId = resource.languageId;
-    if (languageId && ! languageList.includes(languageId)) {
-      languageList.push(languageId);
-    }
+
+  for (let i = 0; i < 100; i++) {
+    resourcesDownloadHelpers.addDownloadError(this.downloadErrors, false, 'simulated error', 'resource.downloadUrl');
   }
-  let results = null;
-  const getCancelState = this.getCancelState.bind(this);
-  try {
-    results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors, false, getCancelState);
-  } catch (e) {
-    const errors = this.getLatestDownloadErrorsStr(); // get detailed errors and log
-    if (errors) {
-      const message = `Source Content Update Errors caught!!!\n${errors}`;
-      console.error(message);
-    }
-    throw e; // return error summary
-  }
-  console.log('Source Content Update Successful');
-  return results;
+  throw 'error';
+
+  // // generate list of all languages in resources
+  // const languageList = [];
+  // for (const resource of resources) {
+  //   const languageId = resource.languageId;
+  //   if (languageId && ! languageList.includes(languageId)) {
+  //     languageList.push(languageId);
+  //   }
+  // }
+  // let results = null;
+  // const getCancelState = this.getCancelState.bind(this);
+  // try {
+  //   results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors, false, getCancelState);
+  // } catch (e) {
+  //   const errors = this.getLatestDownloadErrorsStr(); // get detailed errors and log
+  //   if (errors) {
+  //     const message = `Source Content Update Errors caught!!!\n${errors}`;
+  //     console.error(message);
+  //   }
+  //   throw e; // return error summary
+  // }
+  // console.log('Source Content Update Successful');
+  // return results;
 };
 
 /**
