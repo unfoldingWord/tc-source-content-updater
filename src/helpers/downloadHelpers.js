@@ -39,6 +39,10 @@ export function download(uri, dest, progressCallback, retries = 0) {
   }
 
   return new Promise((resolve, reject) => {
+    if (!navigator.onLine) {
+      reject('Internet offline');
+    }
+
     const req = makeRequest(options, (response) => {
       const size = response.headers['content-length'];
       let progress = 0;
@@ -73,7 +77,7 @@ export function download(uri, dest, progressCallback, retries = 0) {
       file.end();
       rimraf.sync(dest);
       req.end();
-      if (retries < MAX_RETRIES) {
+      if ((retries < MAX_RETRIES) && navigator.onLine) {
         console.warn(`error on resource ${uri} retrying, error: ${error}`);
         setTimeout(() => {
           download(uri, dest, progressCallback, retries + 1).then(resolve).catch(reject);

@@ -99,8 +99,18 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
     throw Error(formatError(resource, errors.RESOURCES_PATH_NOT_GIVEN));
   }
 
+  if (getCancelState && getCancelState()) {
+    console.warn(`downloadAndProcessResource() download of ${resource.downloadUrl} cancelled`);
+    return; // if user cancelled then skip
+  }
+
   const resourceData = resource.catalogEntry ? resource.catalogEntry.resource : resource;
   if (!resource.version || (resource.version === 'master')) {
+    if (!navigator.onLine) {
+      const message = `Download ${resource.downloadUrl} error, disconnected from internet`;
+      console.log(message);
+      throw message;
+    }
     const manifest = await downloadManifestData(resourceData.owner || resource.owner, resourceData.name);
     const version = manifest && manifest.dublin_core && manifest.dublin_core.version;
     if (version) {
@@ -121,11 +131,12 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
     try {
       const zipFileName = `${resource.languageId}_${resource.resourceId}_v${resource.version}_${encodeURIComponent(resource.owner)}.zip`;
       zipFilePath = path.join(importsPath, zipFileName);
-      if (getCancelState && getCancelState()) {
-        console.warn(`downloadAndProcessResource() download of ${resource.downloadUrl} cancelled`);
-        return; // if user cancelled then skip
-      }
       console.log('Downloading: ' + resource.downloadUrl);
+      if (!navigator.onLine) {
+        const message = `Download ${resource.downloadUrl} error, disconnected from internet`;
+        console.log(message);
+        throw message;
+      }
       const results = await downloadHelpers.download(resource.downloadUrl, zipFilePath);
       if (results.status === 200) {
         downloadComplete = true;
