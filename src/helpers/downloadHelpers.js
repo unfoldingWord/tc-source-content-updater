@@ -73,7 +73,7 @@ export function download(uri, dest, progressCallback, retries = 0) {
       file.end();
       rimraf.sync(dest);
       req.end();
-      if (retries < MAX_RETRIES) {
+      if ((retries < MAX_RETRIES) && navigator.onLine) {
         console.warn(`error on resource ${uri} retrying, error: ${error}`);
         setTimeout(() => {
           download(uri, dest, progressCallback, retries + 1).then(resolve).catch(reject);
