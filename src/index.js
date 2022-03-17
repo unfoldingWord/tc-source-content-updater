@@ -251,7 +251,7 @@ Updater.prototype.downloadResources = async function(languageList, resourcesPath
  * @return {Promise<Array|null>} Promise that resolves to return all the resources updated or rejects if a resource failed to download
  */
 Updater.prototype.downloadAllResources = async function(resourcesPath,
-                                                        resources) {
+                                                        resources, errorCnt = 5) {
   if (!resources || !resources.length) {
     console.log('Source Content Update Failed - Resources Empty');
     return null;
@@ -260,7 +260,7 @@ Updater.prototype.downloadAllResources = async function(resourcesPath,
   this.cancelDownload_ = false;
   this.downloadErrors = [];
 
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < errorCnt; i++) {
     resourcesDownloadHelpers.addDownloadError(this.downloadErrors, false, 'simulated error', 'resource.downloadUrl');
   }
   throw 'error';
