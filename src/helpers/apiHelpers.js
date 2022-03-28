@@ -12,6 +12,7 @@ import {RESOURCE_ID_MAP} from './parseHelpers';
 
 const request = require('request');
 export const DOOR43_CATALOG = `Door43-Catalog`;
+export const CN_CATALOG = `unfoldingWord`;
 export const DEFAULT_OWNER = DOOR43_CATALOG;
 export const TRANSLATION_HELPS = 'translationHelps';
 export const EMPTY_TIME = '0001-01-01T00:00:00+00:00';
@@ -202,13 +203,6 @@ export async function getCatalog() {
   let catalogReleases_ = catalogReleases.filter(resource => {
     const isGreekOrHebrew = (resource.languageId === Bible.NT_ORIG_LANG && resource.resourceId === Bible.NT_ORIG_LANG_BIBLE) ||
       (resource.languageId === Bible.OT_ORIG_LANG && resource.resourceId === Bible.OT_ORIG_LANG_BIBLE);
-
-    if (isGreekOrHebrew) { // we restrict original languages to Door43-Catalog
-      const isDoor43 = resource.owner === DOOR43_CATALOG;
-      if (!isDoor43) {
-        return false;
-      }
-    }
 
     if (resource.branch_or_tag_name) { // check for version
       const firstChar = resource.branch_or_tag_name[0];
@@ -456,3 +450,13 @@ export const getLocalResourceList = (resourcesPath) => {
     return null;
   }
 };
+
+/**
+ * determine owner for original language resource
+ * @param {object} resource
+ * @return {string}
+ */
+export function getOwnerForOriginalLanguage(resource) {
+  const origLangOwner = (resource.owner !== DOOR43_CATALOG) ? CN_CATALOG : DOOR43_CATALOG;
+  return origLangOwner;
+}

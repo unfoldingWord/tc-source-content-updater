@@ -14,7 +14,7 @@ import * as resourcesHelpers from '../resourcesHelpers';
 import {getResourceManifest} from '../resourcesHelpers';
 // constants
 import * as errors from '../../resources/errors';
-import {DOOR43_CATALOG} from '../apiHelpers';
+import {DOOR43_CATALOG, getOwnerForOriginalLanguage} from '../apiHelpers';
 import {makeSureResourceUnzipped} from '../unzipFileHelpers';
 import {BIBLE_BOOKS, NT_ORIG_LANG, NT_ORIG_LANG_BIBLE, OT_ORIG_LANG, OT_ORIG_LANG_BIBLE} from '../../resources/bible';
 import {getMissingOriginalResource, getMissingResources} from './tnArticleHelpers';
@@ -278,22 +278,23 @@ export async function processTranslationWordsTSV(resource, sourcePath, outputPat
         const originalLanguageBibleId = isNewTestament ? NT_ORIG_LANG_BIBLE : OT_ORIG_LANG_BIBLE;
         const version = isNewTestament && ntQuery ? ('v' + ntQuery) : otQuery ? ('v' + otQuery) : null;
         if (!version) {
-          console.warn('There was a missing version for book ' + bookId + ' of resource ' + originalLanguageBibleId + ' from ' + resource.downloadUrl);
+          console.warn('processTranslationWordsTSV() - There was a missing version for book ' + bookId + ' of resource ' + originalLanguageBibleId + ' from ' + resource.downloadUrl);
           continue;
         }
+        const originalLanguageOwner = getOwnerForOriginalLanguage(resource);
         const originalBiblePath = path.join(
           resourcesPath,
           originalLanguageId,
           'bibles',
           originalLanguageBibleId,
-          `${version}_${DOOR43_CATALOG}`
+          `${version}_${originalLanguageOwner}`
         );
 
         if (fs.existsSync(originalBiblePath)) {
           const groupData = await twlTsvToGroupData(tsvPath, project, resourcesPath, originalBiblePath, outputPath);
           await formatAndSaveGroupData(groupData, outputPath, bookId);
         } else {
-          const resource = `${DOOR43_CATALOG}/${originalLanguageId}_${originalLanguageBibleId}`;
+          const resource = `${originalLanguageOwner}/${originalLanguageId}_${originalLanguageBibleId}`;
           const message = `processTranslationWordsTSV() - cannot find '${resource}' at ${originalBiblePath}:`;
           console.error(message);
           twlErrors.push(message);
