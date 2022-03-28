@@ -218,14 +218,16 @@ export function getMissingOriginalResource(resourcesPath, originalLanguageId, or
       }
       // If version needed is not in the resources download it.
       if (!fs.existsSync(originalBiblePath)) {
+        const resourceName = `${originalLanguageId}_${originalLanguageBibleId}`;
         // Download orig. lang. resource
-        const downloadUrl = `https://cdn.door43.org/${originalLanguageId}/${originalLanguageBibleId}/${version}/${originalLanguageBibleId}.zip`;
+        const downloadUrl = `https://git.door43.org/${ownerStr}/${resourceName}/archive/v${version}.zip`;
         console.log(`tnArticleHelpers.getMissingOriginalResource() - downloading missing original bible: ${downloadUrl}`);
         const resource = {
           languageId: originalLanguageId,
           resourceId: originalLanguageBibleId,
           remoteModifiedTime: '0001-01-01T00:00:00+00:00',
           downloadUrl,
+          name: resourceName,
           version: version.replace('v', ''),
           subject: 'Bible',
           owner: ownerStr,
