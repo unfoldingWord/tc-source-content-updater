@@ -22,7 +22,11 @@ import {
   BIBLE_LIST_NT,
 } from '../../resources/bible';
 import {makeSureResourceUnzipped} from '../unzipFileHelpers';
-import {downloadManifestData, getOwnerForOriginalLanguage} from '../apiHelpers';
+import {
+  downloadManifestData,
+  formatVersion,
+  getOwnerForOriginalLanguage,
+} from '../apiHelpers';
 
 /**
  * search to see if we need to get any missing resources needed for tN processing
@@ -47,7 +51,7 @@ export async function getMissingResources(sourcePath, resourcesPath, getMissingO
   for (const isNewTestament of [false, true]) {
     const query = isNewTestament ? ntQuery : otQuery;
     if (query) {
-      const origLangVersion = 'v' + query;
+      const origLangVersion = formatVersion(query);
       const origLangId = isNewTestament ? NT_ORIG_LANG : OT_ORIG_LANG;
       const origLangBibleId = isNewTestament ? NT_ORIG_LANG_BIBLE: OT_ORIG_LANG_BIBLE;
       const originalLanguageOwner = getOwnerForOriginalLanguage(ownerStr);
@@ -266,8 +270,9 @@ export function getMissingHelpsResource(resourcesPath, parentResource, fetchReso
       // get latest version
       const manifest = await downloadManifestData(parentResource.owner, resourceName);
       const version = manifest && manifest.dublin_core && manifest.dublin_core.version || 'master';
+      const version_ = formatVersion(version);
 
-      const downloadUrl = `https://git.door43.org/${parentResource.owner}/${resourceName}/archive/${version}.zip`;
+      const downloadUrl = `https://git.door43.org/${parentResource.owner}/${resourceName}/archive/${version_}.zip`;
       console.log(`tnArticleHelpers.getMissingHelpsResource() - downloading missing helps: ${downloadUrl}`);
       const resource = {
         languageId: parentResource.languageId,
@@ -276,7 +281,7 @@ export function getMissingHelpsResource(resourcesPath, parentResource, fetchReso
         downloadUrl,
         name: resourceName,
         owner: parentResource.owner,
-        version: version,
+        version: version_,
         subject: fetchSubject,
       };
       // Delay to try to avoid Socket timeout

@@ -460,3 +460,13 @@ export function getOwnerForOriginalLanguage(resource) {
   const origLangOwner = (resource.owner !== DOOR43_CATALOG) ? CN_CATALOG : DOOR43_CATALOG;
   return origLangOwner;
 }
+
+/**
+ * make sure version starts with v
+ * @param {string} version
+ * @return {string}
+ */
+export function formatVersion(version) {
+  const version_ = (version[0] === 'v') ? version : 'v' + version;
+  return version_;
+}
