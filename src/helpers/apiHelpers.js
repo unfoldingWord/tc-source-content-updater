@@ -466,7 +466,17 @@ export function getOwnerForOriginalLanguage(resource) {
  * @param {string} version
  * @return {string}
  */
-export function formatVersion(version) {
+export function formatVersionWithV(version) {
   const version_ = (version[0] === 'v') ? version : 'v' + version;
+  return version_;
+}
+
+/**
+ * make sure version does not start with v
+ * @param {string} version
+ * @return {string}
+ */
+export function formatVersionWithoutV(version) {
+  const version_ = (version[0] === 'v') ? version.substring(1) : version;
   return version_;
 }

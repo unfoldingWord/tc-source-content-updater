@@ -24,7 +24,8 @@ import {
 import {makeSureResourceUnzipped} from '../unzipFileHelpers';
 import {
   downloadManifestData,
-  formatVersion,
+  formatVersionWithoutV,
+  formatVersionWithV,
   getOwnerForOriginalLanguage,
 } from '../apiHelpers';
 
@@ -51,7 +52,7 @@ export async function getMissingResources(sourcePath, resourcesPath, getMissingO
   for (const isNewTestament of [false, true]) {
     const query = isNewTestament ? ntQuery : otQuery;
     if (query) {
-      const origLangVersion = formatVersion(query);
+      const origLangVersion = formatVersionWithV(query);
       const origLangId = isNewTestament ? NT_ORIG_LANG : OT_ORIG_LANG;
       const origLangBibleId = isNewTestament ? NT_ORIG_LANG_BIBLE: OT_ORIG_LANG_BIBLE;
       const originalLanguageOwner = getOwnerForOriginalLanguage(ownerStr);
@@ -205,12 +206,13 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
 export function getMissingOriginalResource(resourcesPath, originalLanguageId, originalLanguageBibleId, version, downloadErrors, ownerStr) {
   return new Promise(async (resolve, reject) => {
     try {
+      const version_ = formatVersionWithV(version);
       const originalBiblePath = path.join(
         resourcesPath,
         originalLanguageId,
         'bibles',
         originalLanguageBibleId,
-        `${version}_${ownerStr}`
+        `${version_}_${ownerStr}`
       );
 
       // Get the version of the other Tns original language to determine versions that should not be deleted.
@@ -218,13 +220,13 @@ export function getMissingOriginalResource(resourcesPath, originalLanguageId, or
       const latestOriginalBiblePath = resourcesHelpers.getLatestVersionInPath(versionsSubdirectory);
       // if latest version is the version needed delete older versions
       if (latestOriginalBiblePath === originalBiblePath) {
-        removeUnusedResources(resourcesPath, originalBiblePath, originalLanguageId, version, true, ownerStr);
+        removeUnusedResources(resourcesPath, originalBiblePath, originalLanguageId, formatVersionWithoutV(version), true, ownerStr);
       }
       // If version needed is not in the resources download it.
       if (!fs.existsSync(originalBiblePath)) {
         const resourceName = `${originalLanguageId}_${originalLanguageBibleId}`;
         // Download orig. lang. resource
-        const downloadUrl = `https://git.door43.org/${ownerStr}/${resourceName}/archive/v${version}.zip`;
+        const downloadUrl = `https://git.door43.org/${ownerStr}/${resourceName}/archive/${version_}.zip`;
         console.log(`tnArticleHelpers.getMissingOriginalResource() - downloading missing original bible: ${downloadUrl}`);
         const resource = {
           languageId: originalLanguageId,
@@ -232,7 +234,7 @@ export function getMissingOriginalResource(resourcesPath, originalLanguageId, or
           remoteModifiedTime: '0001-01-01T00:00:00+00:00',
           downloadUrl,
           name: resourceName,
-          version: version.replace('v', ''),
+          version: formatVersionWithoutV(version),
           subject: 'Bible',
           owner: ownerStr,
           catalogEntry: {
@@ -270,7 +272,7 @@ export function getMissingHelpsResource(resourcesPath, parentResource, fetchReso
       // get latest version
       const manifest = await downloadManifestData(parentResource.owner, resourceName);
       const version = manifest && manifest.dublin_core && manifest.dublin_core.version || 'master';
-      const version_ = formatVersion(version);
+      const version_ = formatVersionWithV(version);
 
       const downloadUrl = `https://git.door43.org/${parentResource.owner}/${resourceName}/archive/${version_}.zip`;
       console.log(`tnArticleHelpers.getMissingHelpsResource() - downloading missing helps: ${downloadUrl}`);
@@ -281,7 +283,7 @@ export function getMissingHelpsResource(resourcesPath, parentResource, fetchReso
         downloadUrl,
         name: resourceName,
         owner: parentResource.owner,
-        version: version_,
+        version: formatVersionWithoutV(version),
         subject: fetchSubject,
       };
       // Delay to try to avoid Socket timeout
