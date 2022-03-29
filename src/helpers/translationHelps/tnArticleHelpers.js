@@ -267,7 +267,7 @@ export function getMissingHelpsResource(resourcesPath, parentResource, fetchReso
       const manifest = await downloadManifestData(parentResource.owner, resourceName);
       const version = manifest && manifest.dublin_core && manifest.dublin_core.version || 'master';
 
-      const downloadUrl = `https://git.door43.org/${parentResource.owner}/${resourceName}/archive/v${version}.zip`;
+      const downloadUrl = `https://git.door43.org/${parentResource.owner}/${resourceName}/archive/${version}.zip`;
       console.log(`tnArticleHelpers.getMissingHelpsResource() - downloading missing helps: ${downloadUrl}`);
       const resource = {
         languageId: parentResource.languageId,
