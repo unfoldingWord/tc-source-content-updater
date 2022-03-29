@@ -22,7 +22,11 @@ import {getOtherTnsOLVersions} from './translationHelps/tnArticleHelpers';
 // constants
 import * as errors from '../resources/errors';
 import * as Bible from '../resources/bible';
-import {downloadManifestData, OWNER_SEPARATOR} from './apiHelpers';
+import {
+  DOOR43_CATALOG,
+  OWNER_SEPARATOR,
+  downloadManifestData,
+} from './apiHelpers';
 
 /**
  * add download error keeping track of error message, download url, and if parse error type (if not parse error, then download error)
@@ -167,8 +171,8 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
     const processedFilesPath = await processResource(resource, importSubdirPath, resourcesPath, downloadErrors);
     if (processedFilesPath) {
       const versionDir = getVersionFolder(resource);
-      // Extra step if the resource is the Greek UGNT or Hebrew UHB
-      if (isGreekOrHebrew) {
+      // Extra step if the resource is the Greek UGNT or Hebrew UHB and in Door43 catalog
+      if (isGreekOrHebrew && (resource.owner === DOOR43_CATALOG)) {
         const twGroupDataPath = makeTwGroupDataResource(resource, processedFilesPath);
         const twGroupDataResourcesPath = path.join(resourcesPath, resource.languageId, 'translationHelps', 'translationWords', versionDir);
         try {

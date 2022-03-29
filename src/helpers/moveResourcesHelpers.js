@@ -5,7 +5,7 @@ import path from 'path';
  * @description transfer an entire resource from source to target directory
  * @param {string} resourceSourcePath - current position of resource
  * @param {string} resourceTargetPath - folder where resources are moved
- * @return {Promse} Move directory Promise
+ * @return {Promise} Move directory Promise
  */
 export function moveResources(resourceSourcePath, resourceTargetPath) {
   return new Promise((resolve, reject) => {
