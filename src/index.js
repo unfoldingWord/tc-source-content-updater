@@ -374,11 +374,13 @@ Updater.prototype.processTranslationNotes = function(resource, sourcePath, outpu
  */
 Updater.prototype.downloadAndProcessResource = async function(resourceDetails, resourcesPath) {
   const {languageId, resourceId, version, owner} = resourceDetails;
-  const downloadUrl = `https://cdn.door43.org/${languageId}/${resourceId}/v${version}/${resourceId}.zip`;
+  const resourceName = `${languageId}_${resourceId}`;
+  const version_ = apiHelpers.formatVersionWithV(version);
+  const downloadUrl = `https://git.door43.org/${owner}/${resourceName}/archive/${version_}.zip`;
   const resource = {
     languageId,
     resourceId,
-    version,
+    version: apiHelpers.formatVersionWithoutV(version),
     downloadUrl,
     owner: owner || apiHelpers.DOOR43_CATALOG,
     remoteModifiedTime: '0001-01-01T00:00:00+00:00',
