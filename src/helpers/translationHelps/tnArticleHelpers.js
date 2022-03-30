@@ -131,7 +131,7 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
       taCategoriesPath = resourcesHelpers.getLatestVersionInPath(translationAcademyPath, resource.owner);
     }
 
-    const originalLanguageOwner = getOwnerForOriginalLanguage(resource);
+    const originalLanguageOwner = getOwnerForOriginalLanguage(resource.owner);
     const {otQuery, ntQuery} = await getMissingResources(sourcePath, resourcesPath, getMissingOriginalResource, downloadErrors, resource.languageId, resource.owner);
     console.log(`tnArticleHelpers.processTranslationNotes() - have needed original bibles for ${sourcePath}, starting processing`);
     const tsvFiles = fs.readdirSync(sourcePath).filter((filename) => path.extname(filename) === '.tsv');

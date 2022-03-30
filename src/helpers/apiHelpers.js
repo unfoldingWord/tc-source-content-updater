@@ -452,12 +452,13 @@ export const getLocalResourceList = (resourcesPath) => {
 };
 
 /**
- * determine owner for original language resource
- * @param {object} resource
+ * determine owner for original language resource.  If resource owner is door43 Catalog, then the original
+ *  language resource will be the same.  Otherwise it will be unfoldingWord.
+ * @param {string} resourceOwner
  * @return {string}
  */
-export function getOwnerForOriginalLanguage(resource) {
-  const origLangOwner = (resource.owner !== DOOR43_CATALOG) ? CN_CATALOG : DOOR43_CATALOG;
+export function getOwnerForOriginalLanguage(resourceOwner) {
+  const origLangOwner = (resourceOwner !== DOOR43_CATALOG) ? CN_CATALOG : DOOR43_CATALOG;
   return origLangOwner;
 }
 

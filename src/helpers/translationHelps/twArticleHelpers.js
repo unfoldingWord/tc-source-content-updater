@@ -281,7 +281,7 @@ export async function processTranslationWordsTSV(resource, sourcePath, outputPat
           console.warn('processTranslationWordsTSV() - There was a missing version for book ' + bookId + ' of resource ' + originalLanguageBibleId + ' from ' + resource.downloadUrl);
           continue;
         }
-        const originalLanguageOwner = getOwnerForOriginalLanguage(resource);
+        const originalLanguageOwner = getOwnerForOriginalLanguage(resource.owner);
         const originalBiblePath = path.join(
           resourcesPath,
           originalLanguageId,
