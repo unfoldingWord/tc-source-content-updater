@@ -160,7 +160,13 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
         );
         if (fs.existsSync(originalBiblePath)) {
           const filepath = path.join(sourcePath, filename);
-          const groupData = await tsvToGroupData(filepath, 'translationNotes', {categorized: true}, originalBiblePath, resourcesPath, resource.languageId);
+          const isSevenCol = (filename.toLowerCase().indexOf('tn_') === 0);
+          let groupData;
+          if (isSevenCol) {
+            groupData = ; // TODO: 7 column parsing.
+          } else {
+            groupData = await tsvToGroupData(filepath, 'translationNotes', {categorized: true}, originalBiblePath, resourcesPath, resource.languageId);
+          }
           await formatAndSaveGroupData(groupData, outputPath, bookId);
         } else {
           const resource = `${originalLanguageOwner}/${originalLanguageId}_${originalLanguageBibleId}`;
