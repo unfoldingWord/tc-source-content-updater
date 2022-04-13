@@ -286,7 +286,7 @@ export function showOnlineStatus() {
   if (!global.navigator) {
     console.log('showOnlineStatus - navigator is not defined, so we will try anyway since we may be running as a script');
   } else {
-    let online = areWeOnline();
+    const online = areWeOnline();
     console.log(`showOnlineStatus - navigator is defined, and online status is ${online}`);
   }
 }
