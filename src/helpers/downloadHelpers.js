@@ -3,6 +3,7 @@ import url from 'url';
 import {https, http} from 'follow-redirects';
 import fs from 'fs-extra';
 import rimraf from 'rimraf';
+import {areWeOnline} from './utils';
 const HttpAgent = require('agentkeepalive');
 const HttpsAgent = require('agentkeepalive').HttpsAgent;
 
@@ -10,15 +11,6 @@ const httpAgent = new HttpAgent();
 const httpsAgent = new HttpsAgent();
 
 const MAX_RETRIES = 3;
-
-/**
- * check to see if we are online (connected to the internet)
- * @return {boolean}
- */
-export function areWeOnline() {
-  // if navigator is not defined, then we just treat as if we are online, otherwise we check the online status
-  return !global.navigator || global.navigator.onLine;
-}
 
 /**
  * @description Downloads a url to a file.

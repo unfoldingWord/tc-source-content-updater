@@ -32,3 +32,13 @@ export function getQueryVariable(resourceUrl = '', variable) {
 
   return null;
 }
+
+/**
+ * check to see if we are online (connected to the internet)
+ * @return {boolean}
+ */
+export function areWeOnline() {
+  // if navigator is not defined, then we just treat as if we are online, otherwise we check the online status
+  const online = !global.navigator || global.navigator.onLine;
+  return online;
+}

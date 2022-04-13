@@ -27,6 +27,7 @@ import {
   OWNER_SEPARATOR,
   downloadManifestData,
 } from './apiHelpers';
+import {areWeOnline} from './utils';
 
 /**
  * add download error keeping track of error message, download url, and if parse error type (if not parse error, then download error)
@@ -110,7 +111,7 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
 
   const resourceData = resource.catalogEntry ? resource.catalogEntry.resource : resource;
   if (!resource.version || (resource.version === 'master')) {
-    if (!downloadHelpers.areWeOnline()) {
+    if (!areWeOnline()) {
       const message = `Download ${resource.downloadUrl} error, disconnected from internet`;
       console.log(message);
       throw message;
@@ -136,7 +137,7 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
       const zipFileName = `${resource.languageId}_${resource.resourceId}_v${resource.version}_${encodeURIComponent(resource.owner)}.zip`;
       zipFilePath = path.join(importsPath, zipFileName);
       console.log('Downloading: ' + resource.downloadUrl);
-      if (!downloadHelpers.areWeOnline()) {
+      if (!areWeOnline()) {
         const message = `Download ${resource.downloadUrl} error, disconnected from internet`;
         console.log(message);
         throw message;
@@ -283,10 +284,10 @@ function sortHelps(a, b) {
  */
 export function showOnlineStatus() {
   if (!global.navigator) {
-    console.log(`downloadResources - navigator is not defined, so we will try anyway since we may be running as a script`);
+    console.log('showOnlineStatus - navigator is not defined, so we will try anyway since we may be running as a script');
   } else {
-    let online = downloadHelpers.areWeOnline();
-    console.log(`downloadResources - navigator is defined, and online status is ${online}`);
+    let online = areWeOnline();
+    console.log(`showOnlineStatus - navigator is defined, and online status is ${online}`);
   }
 }
 
