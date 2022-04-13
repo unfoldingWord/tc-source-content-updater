@@ -12,6 +12,15 @@ const httpsAgent = new HttpsAgent();
 const MAX_RETRIES = 3;
 
 /**
+ * check to see if we are online (connected to the internet)
+ * @return {boolean}
+ */
+export function areWeOnline() {
+  // if navigator is not defined, then we just treat as if we are online, otherwise we check the online status
+  return !global.navigator || global.navigator.onLine;
+}
+
+/**
  * @description Downloads a url to a file.
  * @param {String} uri the uri to download
  * @param {String} dest the file to download the uri to
@@ -39,7 +48,7 @@ export function download(uri, dest, progressCallback, retries = 0) {
   }
 
   return new Promise((resolve, reject) => {
-    if (!navigator.onLine) {
+    if (!areWeOnline()) {
       reject('Internet offline');
     }
 
@@ -77,7 +86,8 @@ export function download(uri, dest, progressCallback, retries = 0) {
       file.end();
       rimraf.sync(dest);
       req.end();
-      if ((retries < MAX_RETRIES) && navigator.onLine) {
+      const onLine = areWeOnline();
+      if ((retries < MAX_RETRIES) && onLine) {
         console.warn(`error on resource ${uri} retrying, error: ${error}`);
         setTimeout(() => {
           download(uri, dest, progressCallback, retries + 1).then(resolve).catch(reject);

@@ -394,6 +394,7 @@ Updater.prototype.downloadAndProcessResource = async function(resourceDetails, r
   this.downloadErrors = [];
   let result = null;
   try {
+    resourcesDownloadHelpers.showOnlineStatus();
     result = await resourcesDownloadHelpers.downloadAndProcessResource(resource, resourcesPath, this.downloadErrors);
     const importsPath = path.join(resourcesPath, 'imports'); // Remove imports folder
     fs.removeSync(importsPath);

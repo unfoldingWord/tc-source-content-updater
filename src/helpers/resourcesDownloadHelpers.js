@@ -110,7 +110,7 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
 
   const resourceData = resource.catalogEntry ? resource.catalogEntry.resource : resource;
   if (!resource.version || (resource.version === 'master')) {
-    if (!navigator.onLine) {
+    if (!downloadHelpers.areWeOnline()) {
       const message = `Download ${resource.downloadUrl} error, disconnected from internet`;
       console.log(message);
       throw message;
@@ -136,7 +136,7 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
       const zipFileName = `${resource.languageId}_${resource.resourceId}_v${resource.version}_${encodeURIComponent(resource.owner)}.zip`;
       zipFilePath = path.join(importsPath, zipFileName);
       console.log('Downloading: ' + resource.downloadUrl);
-      if (!navigator.onLine) {
+      if (!downloadHelpers.areWeOnline()) {
         const message = `Download ${resource.downloadUrl} error, disconnected from internet`;
         console.log(message);
         throw message;
@@ -279,6 +279,18 @@ function sortHelps(a, b) {
 }
 
 /**
+ * log the online status
+ */
+export function showOnlineStatus() {
+  if (!global.navigator) {
+    console.log(`downloadResources - navigator is not defined, so we will try anyway since we may be running as a script`);
+  } else {
+    let online = downloadHelpers.areWeOnline();
+    console.log(`downloadResources - navigator is defined, and online status is ${online}`);
+  }
+}
+
+/**
  * @description Downloads the resources that need to be updated for the given languages using the DCS API
  * @param {Array} languageList - Array of languages to download the resources for
  * @param {String} resourcesPath - Path to the resources directory where each resource will be placed
@@ -310,6 +322,7 @@ export const downloadResources = (languageList, resourcesPath, resources, downlo
       return;
     }
 
+    showOnlineStatus();
     fs.ensureDirSync(resourcesPath);
     const importsDir = path.join(resourcesPath, 'imports');
     let downloadableResources = [];
