@@ -226,7 +226,7 @@ export function getMissingOriginalResource(resourcesPath, originalLanguageId, or
       if (!fs.existsSync(originalBiblePath)) {
         const resourceName = `${originalLanguageId}_${originalLanguageBibleId}`;
         // Download orig. lang. resource
-        const downloadUrl = `https://git.door43.org/${ownerStr}/${resourceName}/archive/${version_}.zip`;
+        const downloadUrl = `https://cdn.door43.org/${originalLanguageId}/${originalLanguageBibleId}/${version_}/${originalLanguageBibleId}.zip`;
         console.log(`tnArticleHelpers.getMissingOriginalResource() - downloading missing original bible: ${downloadUrl}`);
         const resource = {
           languageId: originalLanguageId,

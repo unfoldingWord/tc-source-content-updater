@@ -179,7 +179,7 @@ export async function getCatalog() {
   let searchParams = {
     subject: SUBJECT.ALL_TC_RESOURCES,
     stage: STAGE.LATEST,
-    owner: 'Door43-Catalog',
+    owner: DOOR43_CATALOG,
   };
   const catalogReleases = await searchCatalogNext(searchParams);
   console.log(`found ${catalogReleases.length} items in old Door43-Catalog`);
@@ -204,10 +204,12 @@ export async function getCatalog() {
     const isGreekOrHebrew = (resource.languageId === Bible.NT_ORIG_LANG && resource.resourceId === Bible.NT_ORIG_LANG_BIBLE) ||
       (resource.languageId === Bible.OT_ORIG_LANG && resource.resourceId === Bible.OT_ORIG_LANG_BIBLE);
 
-    if (resource.branch_or_tag_name) { // check for version
-      const firstChar = resource.branch_or_tag_name[0];
+    const tagName = resource.branch_or_tag_name;
+    if (tagName) { // check for version
+      const firstChar = tagName[0];
       const isDigit = (firstChar >= '0') && (firstChar <= '9');
-      if ((firstChar !== 'v') && !isDigit) {
+      const isD43Master = (tagName === 'master') && (resource.owner === DOOR43_CATALOG);
+      if (!isD43Master && (firstChar !== 'v') && !isDigit) {
         return false; // reject if tag is not a version
       }
     }
