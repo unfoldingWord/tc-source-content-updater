@@ -13,8 +13,6 @@ import * as twGroupDataHelpers from './helpers/translationHelps/twGroupDataHelpe
 import * as tnArticleHelpers from './helpers/translationHelps/tnArticleHelpers';
 import * as resourcesDownloadHelpers from './helpers/resourcesDownloadHelpers';
 import * as resourcesHelpers from './helpers/resourcesHelpers';
-import * as Bible from './resources/bible';
-import {DOOR43_CATALOG} from './helpers/apiHelpers';
 export {getOtherTnsOLVersions} from './helpers/translationHelps/tnArticleHelpers';
 export {apiHelpers, parseHelpers, resourcesHelpers, resourcesDownloadHelpers};
 
@@ -379,7 +377,7 @@ Updater.prototype.downloadAndProcessResource = async function(resourceDetails, r
   const resourceName = `${languageId}_${resourceId}`;
   const version_ = apiHelpers.formatVersionWithV(version);
   let downloadUrl = `https://git.door43.org/${owner}/${resourceName}/archive/${version_}.zip`;
-  if (owner === DOOR43_CATALOG) {
+  if (owner === apiHelpers.DOOR43_CATALOG) {
     downloadUrl = `https://cdn.door43.org/${languageId}/${resourceId}/${version_}/${resourceId}.zip`;
   }
   const resource = {
