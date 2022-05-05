@@ -123,7 +123,7 @@ function tsvObjectsToGroupData(tsvItems, originalBiblePath, resourcesPath, bookI
 //        const tags = cleanGroupId(tsvItem.Tags) || 'other';
         const twLink = tsvItem.TWLink.match(twLinkRE);
         if (!twLink) {
-          console.warn('tsvObjectsToGroupData() - invalid TWLink: ${tsvItem.TWLink}');
+          console.warn(`tsvObjectsToGroupData() - invalid TWLink: ${tsvItem.TWLink}`);
           continue;
         }
 
@@ -137,7 +137,7 @@ function tsvObjectsToGroupData(tsvItems, originalBiblePath, resourcesPath, bookI
         let verseString = null;
 
         if (!tsvItem.Catagory || !tsvItem.SupportReference) {
-          console.warn('tsvObjectsToGroupData() - invalid TWLink: ${tsvItem.TWLink}');
+          console.warn(`tsvObjectsToGroupData() - invalid TWLink: ${tsvItem.TWLink}`);
           continue;
         }
 
