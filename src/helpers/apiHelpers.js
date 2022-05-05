@@ -193,7 +193,6 @@ export function combineTwords(catalogReleases) {
           const twResource = findResource(catalogReleases, {...resource, resourceId: 'tw'});
           if (twResource) {
             twResource.loadAfter = [resource];
-            return false; // combined with tw, so remove this entry
           } else {
             return false; // if no tw available, we cannot use the twl
           }
