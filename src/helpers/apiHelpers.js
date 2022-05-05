@@ -196,6 +196,7 @@ export function combineTwords(catalogReleases) {
           } else {
             return false; // if no tw available, we cannot use the twl
           }
+          break;
         }
         case 'tw': {
           const twlResource = findResource(catalogReleases, {...resource, resourceId: 'twl'});
@@ -205,7 +206,7 @@ export function combineTwords(catalogReleases) {
             return false; // if no twl available, we cannot use the tw
           }
         }
-          break;
+        break;
       }
     }
     return true;
