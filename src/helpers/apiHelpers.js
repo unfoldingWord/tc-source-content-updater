@@ -193,10 +193,10 @@ export function combineTwords(catalogReleases) {
           const twResource = findResource(catalogReleases, {...resource, resourceId: 'tw'});
           if (twResource) {
             twResource.loadAfter = [resource];
-            return false; // combined with tw, so remove this entry
           } else {
             return false; // if no tw available, we cannot use the twl
           }
+          break;
         }
         case 'tw': {
           const twlResource = findResource(catalogReleases, {...resource, resourceId: 'twl'});
@@ -206,7 +206,7 @@ export function combineTwords(catalogReleases) {
             return false; // if no twl available, we cannot use the tw
           }
         }
-          break;
+        break;
       }
     }
     return true;

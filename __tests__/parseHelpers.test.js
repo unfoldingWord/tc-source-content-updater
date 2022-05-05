@@ -84,7 +84,7 @@ describe('getLatestResources()', () => {
       {languageId: 'fr', resourceId: 'f10', modifiedTime: '2018-04-27T18:51:26+00:00'}
     ];
     const results = parseHelpers.getLatestResources(catalogUW, resourceList);
-    expect(results.length).toEqual(11);
+    expect(results.length).toEqual(12);
 
     const greekResources = getResourcesForLanguageAndResource(results, 'el-x-koine');
     expect(greekResources.length).toEqual(1);
