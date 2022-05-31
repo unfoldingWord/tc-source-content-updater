@@ -6,6 +6,7 @@ import {
   formatAndSaveGroupData,
   generateGroupsIndex,
   saveGroupsIndex,
+  tnJsonToGroupData,
 } from 'tsv-groupdata-parser';
 // helpers
 import * as resourcesHelpers from '../resourcesHelpers';
@@ -29,6 +30,7 @@ import {
   formatVersionWithV,
   getOwnerForOriginalLanguage,
 } from '../apiHelpers';
+import {tsvToObjects} from './twArticleHelpers';
 
 /**
  * search to see if we need to get any missing resources needed for tN processing
@@ -91,6 +93,58 @@ export async function getMissingResources(sourcePath, resourcesPath, getMissingO
 }
 
 /**
+ * process the 7 column tsv into group data
+ * @param {string} filepath path to tsv file.
+ * @param {string} bookId
+ * @param {string} resourcesPath path to the resources dir
+ * e.g. /User/john/translationCore/resources
+ * @param {string} langId
+ * @param {string} toolName tC tool name.
+ * @param {string} originalBiblePath path to original bible.
+ * e.g. /resources/el-x-koine/bibles/ugnt/v0.11
+ * @param {object} params When it includes { categorized: true }
+ * then it returns the object organized by tn article category.
+ * @return {Promise<{tsvItems, groupData: string}>}
+ */
+async function tsvToGroupData7Cols(filepath, bookId, resourcesPath, langId, toolName, originalBiblePath, params) {
+  let groupData;
+  const {
+    tsvItems,
+    error,
+  } = await tsvToObjects(filepath, {});
+
+  if (error) {
+    throw error;
+  }
+
+  // convert 7 column TSV format to tsvObject format
+  const tsvObjects = [];
+  for (const tsvItem of tsvItems) {
+    const reference = tsvItem && tsvItem.Reference;
+    if (reference) {
+      // for now, just support simple cases
+      let [chapter, verse] = reference.split(':');
+      chapter = chapter || '';
+      verse = verse || '';
+      tsvItem.Chapter = '' + chapter;
+      tsvItem.Verse = verse;
+      tsvItem.OrigQuote = tsvItem.Quote;
+      tsvItem.OccurrenceNote = tsvItem.Note;
+      tsvItem.Book = bookId;
+      tsvObjects.push(tsvItem);
+    }
+  }
+
+  try {
+    const groupData = tnJsonToGroupData(originalBiblePath, bookId, tsvObjects, resourcesPath, langId, toolName, params, filepath);
+    return groupData;
+  } catch (e) {
+    console.error(`tsvToGroupData7Cols() - error processing filepath: ${filepath}`, e);
+    throw e;
+  }
+}
+
+/**
  * @description Processes the extracted files for translationNotes to separate the folder
  * structure and produce the index.json file for the language with the title of each article.
  * @param {Object} resource - Resource object
@@ -140,7 +194,9 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
 
     for (const filename of tsvFiles) {
       try {
-        const bookId = filename.split('-')[1].toLowerCase().replace('.tsv', '');
+        const isSevenCol = (filename.toLowerCase().indexOf('tn_') === 0); // file names are as tn_2JN.tsv
+        const splitter = isSevenCol ? '_' : '-';
+        const bookId = filename.split(splitter)[1].toLowerCase().replace('.tsv', '');
         if (!BOOK_CHAPTER_VERSES[bookId]) console.error(`tnArticleHelpers.processTranslationNotes() - ${bookId} is not a valid book id.`);
         const bookNumberAndIdMatch = filename.match(/(\d{2}-\w{3})/ig) || [];
         const bookNumberAndId = bookNumberAndIdMatch[0];
@@ -161,12 +217,13 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
         );
         if (fs.existsSync(originalBiblePath)) {
           const filepath = path.join(sourcePath, filename);
-          const isSevenCol = (filename.toLowerCase().indexOf('tn_') === 0);
           let groupData;
+          const params = {categorized: true};
+          const toolName = 'translationNotes';
           if (isSevenCol) {
-            groupData = ; // TODO: 7 column parsing.
+            groupData = await tsvToGroupData7Cols(filepath, bookId, resourcesPath, resource.languageId, toolName, originalBiblePath, params);
           } else {
-            groupData = await tsvToGroupData(filepath, 'translationNotes', {categorized: true}, originalBiblePath, resourcesPath, resource.languageId);
+            groupData = await tsvToGroupData(filepath, toolName, params, originalBiblePath, resourcesPath, resource.languageId);
           }
           await formatAndSaveGroupData(groupData, outputPath, bookId);
         } else {

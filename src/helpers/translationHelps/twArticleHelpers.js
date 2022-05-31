@@ -175,7 +175,7 @@ function tsvObjectsToGroupData(tsvItems, originalBiblePath, resourcesPath, bookI
  * @param {string} tsvPath
  * @param {object} project
  */
-async function tsvToObjects(tsvPath, project) {
+export async function tsvToObjects(tsvPath, project) {
   const tsvLines = fs.readFileSync(tsvPath).toString();
   // console.log(tsvLines);
   let tsvItems;
