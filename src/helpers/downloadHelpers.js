@@ -3,6 +3,7 @@ import url from 'url';
 import {https, http} from 'follow-redirects';
 import fs from 'fs-extra';
 import rimraf from 'rimraf';
+import {areWeOnline} from './utils';
 const HttpAgent = require('agentkeepalive');
 const HttpsAgent = require('agentkeepalive').HttpsAgent;
 
@@ -39,7 +40,7 @@ export function download(uri, dest, progressCallback, retries = 0) {
   }
 
   return new Promise((resolve, reject) => {
-    if (!navigator.onLine) {
+    if (!areWeOnline()) {
       reject('Internet offline');
     }
 
@@ -77,7 +78,8 @@ export function download(uri, dest, progressCallback, retries = 0) {
       file.end();
       rimraf.sync(dest);
       req.end();
-      if ((retries < MAX_RETRIES) && navigator.onLine) {
+      const onLine = areWeOnline();
+      if ((retries < MAX_RETRIES) && onLine) {
         console.warn(`error on resource ${uri} retrying, error: ${error}`);
         setTimeout(() => {
           download(uri, dest, progressCallback, retries + 1).then(resolve).catch(reject);

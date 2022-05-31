@@ -17,6 +17,7 @@ export const DEFAULT_OWNER = DOOR43_CATALOG;
 export const TRANSLATION_HELPS = 'translationHelps';
 export const EMPTY_TIME = '0001-01-01T00:00:00+00:00';
 export const OWNER_SEPARATOR = '_';
+export const SEARCH_LIMIT = 250;
 
 /**
  * does http request and returns the response data parsed from JSON
@@ -64,6 +65,47 @@ export async function makeJsonRequestDetailed(url, retries= 5) {
 }
 
 /**
+ * does specific page query and returns the response data parsed from JSON
+ * @param {string} url
+ * @param {number} page
+ * @param {number} retries
+ * @return {Promise<{Object}>}
+ */
+export async function doMultipartQueryPage(url, page = 1, retries = 5) {
+  const url_ = `${url}&page=${page}`;
+  const {result, response} = await makeJsonRequestDetailed(url_, retries);
+  const pos = response && response.rawHeaders && response.rawHeaders.indexOf('X-Total-Count');
+  const totalCount = (pos >= 0) ? parseInt(response.rawHeaders[pos + 1]) : 0;
+  const items = result && result.data || null;
+  return {items, totalCount};
+}
+
+/**
+ * does multipart query and returns the response data parsed from JSON. Continues to read pages until all results are returned.
+ * @param {string} url
+ * @param {number} retries
+ * @return {Promise<{Object}>}
+ */
+export async function doMultipartQuery(url, retries = 5) {
+  let page = 1;
+  let data = [];
+  const {items, totalCount} = await doMultipartQueryPage(url, page, retries = 5);
+  let lastItems = items;
+  let totalCount_ = totalCount;
+  data = data.concat(items);
+  while (lastItems && data.length < totalCount_) {
+    const {items, totalCount} = await doMultipartQueryPage(url, ++page, retries = 5);
+    lastItems = items;
+    totalCount_ = totalCount;
+    if (items && items.length) {
+      data = data.concat(items);
+    }
+  }
+
+  return data;
+}
+
+/**
  * searching subjects
  * @param {array} subjects
  * @param {string} owner
@@ -76,7 +118,7 @@ async function searchSubjects(subjects, owner, retries=3) {
   if (owner) {
     fetchUrl += fetchUrl + `&owner=${owner}`;
   }
-  const {result} = await makeJsonRequestDetailed(fetchUrl, retries);
+  const result = await doMultipartQuery(fetchUrl, retries);
   return result;
 }
 
@@ -151,10 +193,10 @@ export function combineTwords(catalogReleases) {
           const twResource = findResource(catalogReleases, {...resource, resourceId: 'tw'});
           if (twResource) {
             twResource.loadAfter = [resource];
-            return false; // combined with tw, so remove this entry
           } else {
             return false; // if no tw available, we cannot use the twl
           }
+          break;
         }
         case 'tw': {
           const twlResource = findResource(catalogReleases, {...resource, resourceId: 'twl'});
@@ -164,7 +206,7 @@ export function combineTwords(catalogReleases) {
             return false; // if no twl available, we cannot use the tw
           }
         }
-          break;
+        break;
       }
     }
     return true;
@@ -179,7 +221,7 @@ export async function getCatalog() {
   let searchParams = {
     subject: SUBJECT.ALL_TC_RESOURCES,
     stage: STAGE.LATEST,
-    owner: 'Door43-Catalog',
+    owner: DOOR43_CATALOG,
   };
   const catalogReleases = await searchCatalogNext(searchParams);
   console.log(`found ${catalogReleases.length} items in old Door43-Catalog`);
@@ -204,10 +246,12 @@ export async function getCatalog() {
     const isGreekOrHebrew = (resource.languageId === Bible.NT_ORIG_LANG && resource.resourceId === Bible.NT_ORIG_LANG_BIBLE) ||
       (resource.languageId === Bible.OT_ORIG_LANG && resource.resourceId === Bible.OT_ORIG_LANG_BIBLE);
 
-    if (resource.branch_or_tag_name) { // check for version
-      const firstChar = resource.branch_or_tag_name[0];
+    const tagName = resource.branch_or_tag_name;
+    if (tagName) { // check for version
+      const firstChar = tagName[0];
       const isDigit = (firstChar >= '0') && (firstChar <= '9');
-      if ((firstChar !== 'v') && !isDigit) {
+      const isD43Master = (tagName === 'master') && (resource.owner === DOOR43_CATALOG);
+      if (!isD43Master && (firstChar !== 'v') && !isDigit) {
         return false; // reject if tag is not a version
       }
     }
@@ -313,7 +357,7 @@ export async function searchCatalogNext(searchParams, retries=3) {
     owner,
     languageId,
     subject,
-    limit = 100,
+    limit = SEARCH_LIMIT,
     stage = STAGE.LATEST,
     checkingLevel,
     partialMatch,
@@ -335,8 +379,7 @@ export async function searchCatalogNext(searchParams, retries=3) {
       fetchUrl += '?' + parameters;
     }
     console.log(`Searching: ${fetchUrl}`);
-    const {result} = await makeJsonRequestDetailed(fetchUrl, retries);
-    result_ = result && result.data;
+    result_ = await doMultipartQuery(fetchUrl, retries);
   } catch (e) {
     console.warn('searchCatalogNext() - error calling search API', e);
     return null;

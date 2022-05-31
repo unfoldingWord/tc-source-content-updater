@@ -78,7 +78,7 @@ describe('Tests for twArticleHelpers', function() {
       {id: 'god', name: 'God'}, {id: 'sanctify', name: 'sanctify, sanctifies, sanctification'}
     ];
     const resource_ = _.cloneDeep(resource);
-    resource_.owner = 'unfoldingWord';
+    resource_.owner = DOOR43_CATALOG;
 
     // when
     const result = twArticleHelpers.processTranslationWords(resource_, path.join(mockedExtractedPath, resource_.languageId + '_' + resource_.resourceId), outputPath);

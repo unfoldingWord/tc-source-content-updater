@@ -23,6 +23,7 @@ import {
 } from '../../resources/bible';
 import {makeSureResourceUnzipped} from '../unzipFileHelpers';
 import {
+  DOOR43_CATALOG,
   downloadManifestData,
   formatVersionWithoutV,
   formatVersionWithV,
@@ -231,8 +232,14 @@ export function getMissingOriginalResource(resourcesPath, originalLanguageId, or
       // If version needed is not in the resources download it.
       if (!fs.existsSync(originalBiblePath)) {
         const resourceName = `${originalLanguageId}_${originalLanguageBibleId}`;
-        // Download orig. lang. resource
-        const downloadUrl = `https://git.door43.org/${ownerStr}/${resourceName}/archive/${version_}.zip`;
+        let downloadUrl;
+        if (ownerStr === DOOR43_CATALOG) {
+          // Download orig. lang. resource
+          downloadUrl = `https://cdn.door43.org/${originalLanguageId}/${originalLanguageBibleId}/${version_}/${originalLanguageBibleId}.zip`;
+        } else { // otherwise we read from uW org
+          // Download orig. lang. resource
+          downloadUrl = `https://git.door43.org/unfoldingWord/${resourceName}/archive/${version_}.zip`;
+        }
         console.log(`tnArticleHelpers.getMissingOriginalResource() - downloading missing original bible: ${downloadUrl}`);
         const resource = {
           languageId: originalLanguageId,
