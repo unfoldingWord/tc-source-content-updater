@@ -200,9 +200,14 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
         const splitter = isSevenCol ? '_' : '-';
         const bookId = filename.split(splitter)[1].toLowerCase().replace('.tsv', '');
         if (!BOOK_CHAPTER_VERSES[bookId]) console.error(`tnArticleHelpers.processTranslationNotes() - ${bookId} is not a valid book id.`);
-        const bookNumberAndIdMatch = filename.match(/(\d{2}-\w{3})/ig) || [];
-        const bookNumberAndId = bookNumberAndIdMatch[0];
-        const isNewTestament = BIBLE_LIST_NT.includes(bookNumberAndId);
+        let isNewTestament = true;
+        if (isSevenCol) {
+          isNewTestament = BIBLE_LIST_NT.find(bookNumberAndId => (bookNumberAndId.split('-')[1].toLowerCase() === bookId));
+        } else {
+          const bookNumberAndIdMatch = filename.match(/(\d{2}-\w{3})/ig) || [];
+          const bookNumberAndId = bookNumberAndIdMatch[0];
+          isNewTestament = BIBLE_LIST_NT.includes(bookNumberAndId);
+        }
         const originalLanguageId = isNewTestament ? NT_ORIG_LANG : OT_ORIG_LANG;
         const originalLanguageBibleId = isNewTestament ? NT_ORIG_LANG_BIBLE : OT_ORIG_LANG_BIBLE;
         const version = isNewTestament && ntQuery ? ('v' + ntQuery) : otQuery ? ('v' + otQuery) : null;
