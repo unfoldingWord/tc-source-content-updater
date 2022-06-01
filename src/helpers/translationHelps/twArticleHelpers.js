@@ -7,6 +7,7 @@ import {
   formatAndSaveGroupData,
   generateGroupDataItem,
   ManageResource,
+  parseReference,
 } from 'tsv-groupdata-parser';
 // helpers
 import * as resourcesHelpers from '../resourcesHelpers';
@@ -17,7 +18,7 @@ import * as errors from '../../resources/errors';
 import {DOOR43_CATALOG, getOwnerForOriginalLanguage} from '../apiHelpers';
 import {makeSureResourceUnzipped} from '../unzipFileHelpers';
 import {BIBLE_BOOKS, NT_ORIG_LANG, NT_ORIG_LANG_BIBLE, OT_ORIG_LANG, OT_ORIG_LANG_BIBLE} from '../../resources/bible';
-import {getMissingOriginalResource, getMissingResources, parseReference} from './tnArticleHelpers';
+import {getMissingOriginalResource, getMissingResources} from './tnArticleHelpers';
 import {delay} from '../utils';
 
 /**

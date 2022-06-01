@@ -7,10 +7,11 @@ import {
   generateGroupsIndex,
   saveGroupsIndex,
   tnJsonToGroupData,
+  parseReference,
 } from 'tsv-groupdata-parser';
 // helpers
 import * as resourcesHelpers from '../resourcesHelpers';
-import {downloadAndProcessResource, removeUnusedResources} from '../resourcesDownloadHelpers';
+import {downloadAndProcessResource} from '../resourcesDownloadHelpers';
 import {delay, getQueryStringForBibleId, getQueryVariable} from '../utils';
 // constants
 import * as errors from '../../resources/errors';
@@ -90,57 +91,6 @@ export async function getMissingResources(sourcePath, resourcesPath, getMissingO
   }
 
   return {otQuery, ntQuery};
-}
-
-/**
- * takes a reference and splits into individual verses or verse spans.
- * @param {string} ref - reference in format such as:
- *   “2:4-5”, “2:3a”, “2-3b-4a”, “2:7,12”, “7:11-8:2”, "6:15-16;7:2"
- * @return {array}
- */
-export function parseReference(ref) {
-  const verseChunks = [];
-  const refChunks = ref.split(';');
-  for (const refChunk of refChunks) {
-    if (!refChunk) {
-      continue;
-    }
-    const [chapter_, verse_] = refChunk.split(':');
-    if (chapter_ && verse_) {
-      let verse = verse_;
-      let chapter = chapter_;
-      const chapterInt = parseInt(chapter_, 10);
-      let verseInt = parseInt(verse_, 10);
-      if (isNaN(chapterInt) || isNaN(verseInt)) {
-        verseChunks.push({chapter, verse});
-        continue;
-      }
-      chapter = '' + chapterInt;
-      const verseParts = verse_.split(',');
-      for (const versePart of verseParts) {
-        if (!versePart) {
-          continue;
-        }
-        verseInt = parseInt(versePart, 10);
-        if (isNaN(verseInt)) {
-          verseChunks.push({chapter, verse: versePart});
-          continue;
-        }
-        verse = '' + verseInt;
-        const pos = versePart.indexOf('-');
-        let isRange = pos >= 0;
-        if (isRange) {
-          let verseEnd = versePart.substring(pos + 1);
-          const verseEndInt = parseInt(verseEnd, 10);
-          if (!isNaN(verseInt)) {
-            verse += '-' + verseEndInt;
-          }
-        }
-        verseChunks.push({chapter, verse});
-      }
-    }
-  }
-  return verseChunks;
 }
 
 /**
