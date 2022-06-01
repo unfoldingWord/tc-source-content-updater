@@ -147,7 +147,9 @@ function tsvObjectsToGroupData(tsvItems, originalBiblePath, resourcesPath, bookI
           verse = parseInt(verse, 10);
           verseString = resourceApi.getVerseString(chapter, verse);
         } catch (e) {
-          console.warn(`tsvObjectsToGroupData() - error getting verse string: chapter ${chapter}, verse ${verse} from ${JSON.stringify(tsvItem)}`, e);
+          if (chapter && verse) {
+            console.warn(`tsvObjectsToGroupData() - error getting verse string: chapter ${chapter}, verse ${verse} from ${JSON.stringify(tsvItem)}`, e);
+          }
         }
 
         if (verseString) {
