@@ -93,6 +93,57 @@ export async function getMissingResources(sourcePath, resourcesPath, getMissingO
 }
 
 /**
+ * takes a reference and splits into individual verses or verse spans.
+ * @param {string} ref - reference in format such as:
+ *   “2:4-5”, “2:3a”, “2-3b-4a”, “2:7,12”, “7:11-8:2”, "6:15-16;7:2"
+ * @return {array}
+ */
+export function parseReference(ref) {
+  const verseChunks = [];
+  const refChunks = ref.split(';');
+  for (const refChunk of refChunks) {
+    if (!refChunk) {
+      continue;
+    }
+    const [chapter_, verse_] = refChunk.split(':');
+    if (chapter_ && verse_) {
+      let verse = verse_;
+      let chapter = chapter_;
+      const chapterInt = parseInt(chapter_, 10);
+      let verseInt = parseInt(verse_, 10);
+      if (isNaN(chapterInt) || isNaN(verseInt)) {
+        verseChunks.push({chapter, verse});
+        continue;
+      }
+      chapter = '' + chapterInt;
+      const verseParts = verse_.split(',');
+      for (const versePart of verseParts) {
+        if (!versePart) {
+          continue;
+        }
+        verseInt = parseInt(versePart, 10);
+        if (isNaN(verseInt)) {
+          verseChunks.push({chapter, verse: versePart});
+          continue;
+        }
+        verse = '' + verseInt;
+        const pos = versePart.indexOf('-');
+        let isRange = pos >= 0;
+        if (isRange) {
+          let verseEnd = versePart.substring(pos + 1);
+          const verseEndInt = parseInt(verseEnd, 10);
+          if (!isNaN(verseInt)) {
+            verse += '-' + verseEndInt;
+          }
+        }
+        verseChunks.push({chapter, verse});
+      }
+    }
+  }
+  return verseChunks;
+}
+
+/**
  * process the 7 column tsv into group data
  * @param {string} filepath path to tsv file.
  * @param {string} bookId
@@ -107,7 +158,6 @@ export async function getMissingResources(sourcePath, resourcesPath, getMissingO
  * @return {Promise<{tsvItems, groupData: string}>}
  */
 async function tsvToGroupData7Cols(filepath, bookId, resourcesPath, langId, toolName, originalBiblePath, params) {
-  let groupData;
   const {
     tsvItems,
     error,
@@ -122,16 +172,18 @@ async function tsvToGroupData7Cols(filepath, bookId, resourcesPath, langId, tool
   for (const tsvItem of tsvItems) {
     const reference = tsvItem && tsvItem.Reference;
     if (reference) {
-      // for now, just support simple cases
-      let [chapter, verse] = reference.split(':');
-      chapter = chapter || '';
-      verse = verse || '';
-      tsvItem.Chapter = '' + chapter;
-      tsvItem.Verse = verse;
       tsvItem.OrigQuote = tsvItem.Quote;
       tsvItem.OccurrenceNote = tsvItem.Note;
       tsvItem.Book = bookId;
-      tsvObjects.push(tsvItem);
+      const refParts = parseReference(reference);
+      for (const part of refParts) {
+        const tsvObject = {
+          ...tsvItem,
+          Chapter: part.chapter,
+          Verse: part.verse,
+        };
+        tsvObjects.push(tsvObject);
+      }
     }
   }
 
@@ -279,13 +331,6 @@ export function getMissingOriginalResource(resourcesPath, originalLanguageId, or
         `${version_}_${ownerStr}`
       );
 
-      // Get the version of the other Tns original language to determine versions that should not be deleted.
-      const versionsSubdirectory = path.dirname(originalBiblePath);
-      const latestOriginalBiblePath = resourcesHelpers.getLatestVersionInPath(versionsSubdirectory);
-      // if latest version is the version needed delete older versions
-      if (latestOriginalBiblePath === originalBiblePath) {
-        removeUnusedResources(resourcesPath, originalBiblePath, originalLanguageId, formatVersionWithoutV(version), true, ownerStr);
-      }
       // If version needed is not in the resources download it.
       if (!fs.existsSync(originalBiblePath)) {
         const resourceName = `${originalLanguageId}_${originalLanguageBibleId}`;

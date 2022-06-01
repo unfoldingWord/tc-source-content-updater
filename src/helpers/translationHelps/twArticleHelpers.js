@@ -17,7 +17,7 @@ import * as errors from '../../resources/errors';
 import {DOOR43_CATALOG, getOwnerForOriginalLanguage} from '../apiHelpers';
 import {makeSureResourceUnzipped} from '../unzipFileHelpers';
 import {BIBLE_BOOKS, NT_ORIG_LANG, NT_ORIG_LANG_BIBLE, OT_ORIG_LANG, OT_ORIG_LANG_BIBLE} from '../../resources/bible';
-import {getMissingOriginalResource, getMissingResources} from './tnArticleHelpers';
+import {getMissingOriginalResource, getMissingResources, parseReference} from './tnArticleHelpers';
 import {delay} from '../utils';
 
 /**
@@ -244,8 +244,21 @@ async function twlTsvToGroupData(tsvPath, project, resourcesPath, originalBibleP
     throw error;
   }
 
+  const tsvItems_ = [];
+  for (const tsvItem of tsvItems) {
+    const refParts = parseReference(tsvItem.Reference);
+    for (const part of refParts) {
+      const partRef = `${part.chapter}:${part.verse}`;
+      const tsvItem_ = {
+        ...tsvItem,
+        Reference: partRef,
+      };
+      tsvItems_.push(tsvItem_);
+    }
+  }
+
   try {
-    groupData = tsvObjectsToGroupData(tsvItems, originalBiblePath, resourcesPath, bookId, project.languageId, 'translationWords', {categorized: true});
+    groupData = tsvObjectsToGroupData(tsvItems_, originalBiblePath, resourcesPath, bookId, project.languageId, 'translationWords', {categorized: true});
     await formatAndSaveGroupData(groupData, outputPath, bookId);
   } catch (e) {
     console.error(`twArticleHelpers.twlTsvToGroupData() - error processing filepath: ${tsvPath}`, e);
@@ -289,8 +302,8 @@ export async function processTranslationWordsTSV(resource, sourcePath, outputPat
     if (fs.existsSync(twVersionPath)) {
       makeSureResourceUnzipped(twVersionPath);
     } else {
-      const resource = `${resource.owner}/${resource.languageId}_tw`;
-      throw new Error(`processTranslationWordsTSV() - cannot find '${resource}' at ${twPath} for ${resource.owner}`);
+      const resource_ = `${resource.owner}/${resource.languageId}_tw`;
+      throw new Error(`processTranslationWordsTSV() - cannot find '${resource_}' at ${twPath} for ${resource.owner}`);
     }
 
     const manifest = getResourceManifest(sourcePath);

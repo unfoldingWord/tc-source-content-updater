@@ -15,6 +15,7 @@ exports[`Tests for taArticleHelpers Test taArticleHelpers.processTranslationAcad
 Array [
   "biblicalimageryta.md",
   "figs-grammar.md",
+  "figs-metaphor.md",
   "qualifications.md",
   "translate-whatis.md",
 ]

@@ -9,13 +9,43 @@ import {DOOR43_CATALOG} from '../src/helpers/apiHelpers';
 import _ from "lodash";
 import {parseUsfmOfBook} from '../src/helpers/packageParseHelpers';
 import * as taArticleHelpers from '../src/helpers/translationHelps/taArticleHelpers';
+import deepEqual from 'deep-equal';
 // constants
 
 const mockGetMissingOriginalResource = async (resourcesPath, originalLanguageId, originalLanguageBibleId, version, callLog) => {
   callLog.push({resourcesPath, originalLanguageId, originalLanguageBibleId, version}); // TRICKY - for ease of testing we are hijacking the DownloadErrors to keep track of calls
 };
 
-describe('Tests for tnArticleHelpers process', function() {
+describe('Tests parseReference', function() {
+  it('Test parseReference for test cases', async () => {
+    const tests = [
+      {ref: 'front:intro', expect: [{chapter: 'front', verse: 'intro'}]},
+      {ref: '1:intro', expect: [{chapter: '1', verse: 'intro'}]},
+      {ref: '1:1', expect: [{chapter: '1', verse: '1'}]},
+      {ref: '1:1-2', expect: [{chapter: '1', verse: '1-2'}]},
+      {ref: '1:1,3', expect: [{chapter: '1', verse: '1'}, {chapter: '1', verse: '3'}]},
+      {ref: '1:1-2,4', expect: [{chapter: '1', verse: '1-2'}, {chapter: '1', verse: '4'}]},
+      {ref: '1:1-2a,4', expect: [{chapter: '1', verse: '1-2'}, {chapter: '1', verse: '4'}]},
+      {ref: '1:1b-2a,4', expect: [{chapter: '1', verse: '1-2'}, {chapter: '1', verse: '4'}]},
+      {ref: '1:1-2,4b', expect: [{chapter: '1', verse: '1-2'}, {chapter: '1', verse: '4'}]},
+      {ref: '1:1-2,4b,5-7a', expect: [{chapter: '1', verse: '1-2'}, {chapter: '1', verse: '4'}, {chapter: '1', verse: '5-7'}]},
+      {ref: '1:1-2;2:4', expect: [{chapter: '1', verse: '1-2'}, {chapter: '2', verse: '4'}]},
+      {ref: '1:1c-2b;2:4-5', expect: [{chapter: '1', verse: '1-2'}, {chapter: '2', verse: '4-5'}]},
+    ];
+    for (const test of tests) {
+      const ref = test.ref;
+      const expect_ = test.expect;
+      const result = tnArticleHelpers.parseReference(ref);
+      if (!deepEqual(result, expect_)) {
+        console.log(`expect ${ref} to parse to ${JSON.stringify(expect_)}`);
+        console.log(`  but got ${JSON.stringify(result)}`);
+        expect(result).toEqual(expect_);
+      }
+    }
+  });
+});
+
+describe('Tests tnArticleHelpers.processTranslationNotes()', function() {
   const resource = {
     languageId: 'en',
     resourceId: 'tn',
@@ -81,7 +111,6 @@ describe('Tests for tnArticleHelpers process', function() {
     expect(typeList).toEqual(expectedTypes);
     expect(grammarArticleList).toMatchSnapshot();
   }, 20000);
-
 });
 
 describe('Tests for tnArticleHelpers.getMissingResources()', function() {
