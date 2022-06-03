@@ -1,6 +1,6 @@
 {
   "name": "tc-source-content-updater",
-  "version": "1.2.14",
+  "version": "1.2.15",
   "description": "Module that updates source content for the desktop application translationCore.",
   "main": "lib/index.js",
   "display": "library",
@@ -67,7 +67,7 @@
     "string-punctuation-tokenizer": "^2.2.0",
     "tmp": "0.0.33",
     "tsv-groupdata-parser": "0.10.4-alpha.3",
-    "usfm-js": "2.1.0"
+    "usfm-js": "3.4.0"
   },
   "dependencies": {
     "adm-zip": "^0.4.11",
@@ -85,6 +85,6 @@
   "peerDependencies": {
     "string-punctuation-tokenizer": "^2.2.0",
     "tsv-groupdata-parser": "^0.10.0",
-    "usfm-js": "^2.1.0"
+    "usfm-js": "^3.4.0"
   }
 }
