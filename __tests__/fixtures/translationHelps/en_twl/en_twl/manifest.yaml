@@ -1,0 +1,43 @@
+---
+dublin_core:
+  conformsto: 'rc0.2'
+  contributor:
+  - 'Door43 World Missions Community'
+  - 'Jesse Griffin (BA Biblical Studies, Liberty University; MA Biblical Languages, Gordon-Conwell Theological Seminary)'
+  - 'Perry Oakes (BA Biblical Studies, Taylor University; MA Theology, Fuller Seminary; MA Linguistics, University of Texas at Arlington; PhD Old Testament, Southwestern Baptist Theological Seminary)'
+  - 'Larry Sallee (Th.M Dallas Theological Seminary, D.Min. Columbia Biblical Seminary)'
+  - 'Joel D. Ruark (M.A.Th. Gordon-Conwell Theological Seminary; Th.M. Stellenbosch University; Ph.D. Candidate in Old Testament Studies, Stellenbosch University)'
+  creator: 'Door43 World Missions Community'
+  description: 'Open-licensed links from particular original languages words to Translation Words articles.'
+  format: 'text/tsv'
+  identifier: 'twl'
+  issued: '2022-04-29'
+  language:
+    direction: 'ltr'
+    identifier: 'en'
+    title: 'English'
+  modified: '2022-04-29'
+  publisher: 'unfoldingWord'
+  relation:
+  - 'el-x-koine/ugnt?v=0.24'
+  - 'hbo/uhb?v=2.1.24'
+  rights: 'CC BY-SA 4.0'
+  source:
+  - identifier: 'twl'
+    language: 'en'
+    version: '11'
+  subject: 'TSV Translation Words Links'
+  title: 'unfoldingWord® Translation Words Links'
+  type: 'help'
+  version: '12'
+checking:
+  checking_entity:
+  - 'unfoldingWord'
+  checking_level: '3'
+projects:
+- title: 'Titus'
+  versification: 'ufw'
+  identifier: 'tit'
+  sort: 56
+  path: './twl_TIT.tsv'
+  categories: ['bible-nt']

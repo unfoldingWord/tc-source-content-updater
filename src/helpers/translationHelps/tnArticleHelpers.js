@@ -6,10 +6,12 @@ import {
   formatAndSaveGroupData,
   generateGroupsIndex,
   saveGroupsIndex,
+  tnJsonToGroupData,
+  parseReference,
 } from 'tsv-groupdata-parser';
 // helpers
 import * as resourcesHelpers from '../resourcesHelpers';
-import {downloadAndProcessResource, removeUnusedResources} from '../resourcesDownloadHelpers';
+import {downloadAndProcessResource} from '../resourcesDownloadHelpers';
 import {delay, getQueryStringForBibleId, getQueryVariable} from '../utils';
 // constants
 import * as errors from '../../resources/errors';
@@ -29,6 +31,7 @@ import {
   formatVersionWithV,
   getOwnerForOriginalLanguage,
 } from '../apiHelpers';
+import {tsvToObjects} from './twArticleHelpers';
 
 /**
  * search to see if we need to get any missing resources needed for tN processing
@@ -91,6 +94,59 @@ export async function getMissingResources(sourcePath, resourcesPath, getMissingO
 }
 
 /**
+ * process the 7 column tsv into group data
+ * @param {string} filepath path to tsv file.
+ * @param {string} bookId
+ * @param {string} resourcesPath path to the resources dir
+ * e.g. /User/john/translationCore/resources
+ * @param {string} langId
+ * @param {string} toolName tC tool name.
+ * @param {string} originalBiblePath path to original bible.
+ * e.g. /resources/el-x-koine/bibles/ugnt/v0.11
+ * @param {object} params When it includes { categorized: true }
+ * then it returns the object organized by tn article category.
+ * @return {Promise<{tsvItems, groupData: string}>}
+ */
+async function tsvToGroupData7Cols(filepath, bookId, resourcesPath, langId, toolName, originalBiblePath, params) {
+  const {
+    tsvItems,
+    error,
+  } = await tsvToObjects(filepath, {});
+
+  if (error) {
+    throw error;
+  }
+
+  // convert 7 column TSV format to tsvObject format
+  const tsvObjects = [];
+  for (const tsvItem of tsvItems) {
+    const reference = tsvItem && tsvItem.Reference;
+    if (reference) {
+      tsvItem.OrigQuote = tsvItem.Quote;
+      tsvItem.OccurrenceNote = tsvItem.Note;
+      tsvItem.Book = bookId;
+      const refParts = parseReference(reference);
+      for (const part of refParts) {
+        const tsvObject = {
+          ...tsvItem,
+          Chapter: part.chapter,
+          Verse: part.verse,
+        };
+        tsvObjects.push(tsvObject);
+      }
+    }
+  }
+
+  try {
+    const groupData = tnJsonToGroupData(originalBiblePath, bookId, tsvObjects, resourcesPath, langId, toolName, params, filepath);
+    return groupData;
+  } catch (e) {
+    console.error(`tsvToGroupData7Cols() - error processing filepath: ${filepath}`, e);
+    throw e;
+  }
+}
+
+/**
  * @description Processes the extracted files for translationNotes to separate the folder
  * structure and produce the index.json file for the language with the title of each article.
  * @param {Object} resource - Resource object
@@ -140,11 +196,18 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
 
     for (const filename of tsvFiles) {
       try {
-        const bookId = filename.split('-')[1].toLowerCase().replace('.tsv', '');
+        const isSevenCol = (filename.toLowerCase().indexOf('tn_') === 0); // file names are as tn_2JN.tsv
+        const splitter = isSevenCol ? '_' : '-';
+        const bookId = filename.split(splitter)[1].toLowerCase().replace('.tsv', '');
         if (!BOOK_CHAPTER_VERSES[bookId]) console.error(`tnArticleHelpers.processTranslationNotes() - ${bookId} is not a valid book id.`);
-        const bookNumberAndIdMatch = filename.match(/(\d{2}-\w{3})/ig) || [];
-        const bookNumberAndId = bookNumberAndIdMatch[0];
-        const isNewTestament = BIBLE_LIST_NT.includes(bookNumberAndId);
+        let isNewTestament = true;
+        if (isSevenCol) {
+          isNewTestament = BIBLE_LIST_NT.find(bookNumberAndId => (bookNumberAndId.split('-')[1].toLowerCase() === bookId));
+        } else {
+          const bookNumberAndIdMatch = filename.match(/(\d{2}-\w{3})/ig) || [];
+          const bookNumberAndId = bookNumberAndIdMatch[0];
+          isNewTestament = BIBLE_LIST_NT.includes(bookNumberAndId);
+        }
         const originalLanguageId = isNewTestament ? NT_ORIG_LANG : OT_ORIG_LANG;
         const originalLanguageBibleId = isNewTestament ? NT_ORIG_LANG_BIBLE : OT_ORIG_LANG_BIBLE;
         const version = isNewTestament && ntQuery ? ('v' + ntQuery) : otQuery ? ('v' + otQuery) : null;
@@ -161,7 +224,14 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
         );
         if (fs.existsSync(originalBiblePath)) {
           const filepath = path.join(sourcePath, filename);
-          const groupData = await tsvToGroupData(filepath, 'translationNotes', {categorized: true}, originalBiblePath, resourcesPath, resource.languageId);
+          let groupData;
+          const params = {categorized: true};
+          const toolName = 'translationNotes';
+          if (isSevenCol) {
+            groupData = await tsvToGroupData7Cols(filepath, bookId, resourcesPath, resource.languageId, toolName, originalBiblePath, params);
+          } else {
+            groupData = await tsvToGroupData(filepath, toolName, params, originalBiblePath, resourcesPath, resource.languageId);
+          }
           await formatAndSaveGroupData(groupData, outputPath, bookId);
         } else {
           const resource = `${originalLanguageOwner}/${originalLanguageId}_${originalLanguageBibleId}`;
@@ -216,13 +286,6 @@ export function getMissingOriginalResource(resourcesPath, originalLanguageId, or
         `${version_}_${ownerStr}`
       );
 
-      // Get the version of the other Tns original language to determine versions that should not be deleted.
-      const versionsSubdirectory = path.dirname(originalBiblePath);
-      const latestOriginalBiblePath = resourcesHelpers.getLatestVersionInPath(versionsSubdirectory);
-      // if latest version is the version needed delete older versions
-      if (latestOriginalBiblePath === originalBiblePath) {
-        removeUnusedResources(resourcesPath, originalBiblePath, originalLanguageId, formatVersionWithoutV(version), true, ownerStr);
-      }
       // If version needed is not in the resources download it.
       if (!fs.existsSync(originalBiblePath)) {
         const resourceName = `${originalLanguageId}_${originalLanguageBibleId}`;
