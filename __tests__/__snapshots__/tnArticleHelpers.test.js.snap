@@ -7,7 +7,7 @@ Array [
     "contextId": Object {
       "checkId": "xy18",
       "glQuote": "",
-      "groupId": "rc://*/ta/man/translate/figs-exclusive",
+      "groupId": "figs-exclusive",
       "occurrence": 1,
       "occurrenceNote": "This includes Paul, Titus, and all Christians. (See: [[rc://*/ta/man/translate/figs-exclusive]])",
       "quote": "ἡμῶν",
@@ -29,7 +29,7 @@ Array [
     "contextId": Object {
       "checkId": "xy17",
       "glQuote": "",
-      "groupId": "rc://*/ta/man/translate/figs-exclusive",
+      "groupId": "figs-exclusive",
       "occurrence": 1,
       "occurrenceNote": "This includes Paul, Titus, and all Christians. (See: [[rc://*/ta/man/translate/figs-exclusive]])",
       "quote": "ἡμῶν",
@@ -51,7 +51,7 @@ Array [
     "contextId": Object {
       "checkId": "xy15",
       "glQuote": "",
-      "groupId": "rc://*/ta/man/translate/figs-exclusive",
+      "groupId": "figs-exclusive",
       "occurrence": 1,
       "occurrenceNote": "This includes Paul, Titus, and all Christians. (See: [[rc://*/ta/man/translate/figs-exclusive]])",
       "quote": "ἡμῶν",
@@ -73,7 +73,7 @@ Array [
     "contextId": Object {
       "checkId": "xy16",
       "glQuote": "",
-      "groupId": "rc://*/ta/man/translate/figs-exclusive",
+      "groupId": "figs-exclusive",
       "occurrence": 1,
       "occurrenceNote": "Here, **our** is inclusive of Paul, Titus, and all Christians (See: [[rc://*/ta/man/translate/figs-exclusive]])",
       "quote": "ἡμῶν",
@@ -95,7 +95,7 @@ Array [
     "contextId": Object {
       "checkId": "abce",
       "glQuote": "",
-      "groupId": "rc://*/ta/man/translate/figs-exclusive",
+      "groupId": "figs-exclusive",
       "occurrence": 1,
       "occurrenceNote": "This includes Paul, Titus, and all Christians. (See: [[rc://*/ta/man/translate/figs-exclusive]])",
       "quote": "ἡμᾶς",
@@ -117,7 +117,7 @@ Array [
     "contextId": Object {
       "checkId": "xy20",
       "glQuote": "",
-      "groupId": "rc://*/ta/man/translate/figs-exclusive",
+      "groupId": "figs-exclusive",
       "occurrence": 1,
       "occurrenceNote": "This includes Paul, Titus, and all Christians. (See: [[rc://*/ta/man/translate/figs-exclusive]])",
       "quote": "ἡμῶν",
@@ -139,7 +139,7 @@ Array [
     "contextId": Object {
       "checkId": "xy21",
       "glQuote": "",
-      "groupId": "rc://*/ta/man/translate/figs-exclusive",
+      "groupId": "figs-exclusive",
       "occurrence": 1,
       "occurrenceNote": "This includes Paul, Titus, and all Christians. (See: [[rc://*/ta/man/translate/figs-exclusive]])",
       "quote": "ἡμᾶς",
@@ -161,7 +161,7 @@ Array [
     "contextId": Object {
       "checkId": "bl8e",
       "glQuote": "",
-      "groupId": "rc://*/ta/man/translate/figs-exclusive",
+      "groupId": "figs-exclusive",
       "occurrence": 1,
       "occurrenceNote": "“even we” or “we ourselves” This includes Paul, Titus, and all Christians, referring to the time before they trusted in Christ. (See: [[rc://*/ta/man/translate/figs-exclusive]])",
       "quote": "ἡμεῖς",
@@ -183,7 +183,7 @@ Array [
     "contextId": Object {
       "checkId": "abch",
       "glQuote": "",
-      "groupId": "rc://*/ta/man/translate/figs-exclusive",
+      "groupId": "figs-exclusive",
       "occurrence": 1,
       "occurrenceNote": "This includes Paul, Titus, and all Christians. (See: [[rc://*/ta/man/translate/figs-exclusive]])",
       "quote": "ἡμῶν",
@@ -205,7 +205,7 @@ Array [
     "contextId": Object {
       "checkId": "xy24",
       "glQuote": "",
-      "groupId": "rc://*/ta/man/translate/figs-exclusive",
+      "groupId": "figs-exclusive",
       "occurrence": 1,
       "occurrenceNote": "This includes Paul, Titus, and all Christians. (See: [[rc://*/ta/man/translate/figs-exclusive]])",
       "quote": "ἡμᾶς",
@@ -227,7 +227,7 @@ Array [
     "contextId": Object {
       "checkId": "xy23",
       "glQuote": "",
-      "groupId": "rc://*/ta/man/translate/figs-exclusive",
+      "groupId": "figs-exclusive",
       "occurrence": 1,
       "occurrenceNote": "This includes Paul, Titus, and all Christians. (See: [[rc://*/ta/man/translate/figs-exclusive]])",
       "quote": "ἡμῶν",
@@ -249,7 +249,7 @@ Array [
     "contextId": Object {
       "checkId": "xy33",
       "glQuote": "",
-      "groupId": "rc://*/ta/man/translate/figs-exclusive",
+      "groupId": "figs-exclusive",
       "occurrence": 1,
       "occurrenceNote": "Here, **our** includes Paul and Titus. The form should be either dual or inclusive. (See: [[rc://*/ta/man/translate/figs-exclusive]])",
       "quote": Array [
@@ -280,7 +280,7 @@ Array [
     "contextId": Object {
       "checkId": "xy35",
       "glQuote": "",
-      "groupId": "rc://*/ta/man/translate/figs-exclusive",
+      "groupId": "figs-exclusive",
       "occurrence": 1,
       "occurrenceNote": "Here, **us** is probably exclusive and refers to Paul and the group of Christians with him. Paul is sending greetings from this group to the group of Christians that is with Titus on Crete. (See: [[rc://*/ta/man/translate/figs-exclusive]])",
       "quote": "ἡμᾶς",
