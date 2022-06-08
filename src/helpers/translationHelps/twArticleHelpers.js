@@ -247,7 +247,7 @@ async function twlTsvToGroupData(tsvPath, project, resourcesPath, originalBibleP
 
   const tsvItems_ = [];
   for (const tsvItem of tsvItems) {
-    const refParts = parseReference(tsvItem.Reference);
+    const refParts = parseReference(tsvItem.Reference, true);
     for (const part of refParts) {
       const partRef = `${part.chapter}:${part.verse}`;
       const tsvItem_ = {
