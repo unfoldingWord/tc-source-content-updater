@@ -125,7 +125,7 @@ async function tsvToGroupData7Cols(filepath, bookId, resourcesPath, langId, tool
       tsvItem.OrigQuote = tsvItem.Quote;
       tsvItem.OccurrenceNote = tsvItem.Note;
       tsvItem.Book = bookId;
-      const refParts = parseReference(reference);
+      const refParts = parseReference(reference, true);
       for (const part of refParts) {
         const tsvObject = {
           ...tsvItem,
