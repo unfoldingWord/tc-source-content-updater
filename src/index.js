@@ -58,6 +58,7 @@ function Updater() {
   this.remoteCatalog = null;
   this.updatedCatalogResources = null;
   this.downloadErrors = [];
+  this.latestManifestKey = {};
 }
 
 Updater.prototype = {};
@@ -155,6 +156,7 @@ Updater.prototype.getLatestDownloadErrorsStr = function () {
  *         }} - list of languages that have updates in catalog (throws exception on error)
  */
 Updater.prototype.getLatestResources = async function (localResourceList, filterByOwner= null, latestManifestKey= {} ) {
+  this.latestManifestKey = latestManifestKey; // save for downloads
   await this.updateCatalog();
   this.updatedCatalogResources = parseHelpers.getLatestResources(this.remoteCatalog, localResourceList, filterByOwner, latestManifestKey);
   return parseHelpers.getUpdatedLanguageList(this.updatedCatalogResources);
@@ -233,7 +235,7 @@ Updater.prototype.downloadResources = async function (languageList, resourcesPat
   const getCancelState = this.getCancelState.bind(this);
 
   try {
-    results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors, allAlignedBibles, getCancelState);
+    results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors, allAlignedBibles, getCancelState, this.latestManifestKey);
   } catch (e) {
     const errors = this.getLatestDownloadErrorsStr(); // get detailed errors and log
 
@@ -281,7 +283,7 @@ Updater.prototype.downloadAllResources = async function (resourcesPath,
   const getCancelState = this.getCancelState.bind(this);
 
   try {
-    results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors, false, getCancelState);
+    results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors, false, getCancelState, this.latestManifestKey);
   } catch (e) {
     const errors = this.getLatestDownloadErrorsStr(); // get detailed errors and log
 

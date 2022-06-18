@@ -337,8 +337,9 @@ export function getSubdirOfUnzippedResource(extractedFilesPath) {
  * @param {String} resourcesPath Path to user resources folder
  * @return {String} Path to the directory of the processed files
  * @param {Array} downloadErrors - parsed list of download errors with details such as if the download completed (vs. parsing error), error, and url
+ * @param {object} latestManifestKey - for resource type make sure manifest key is at specific version, by subject
  */
-export async function processResource(resource, sourcePath, resourcesPath, downloadErrors) {
+export async function processResource(resource, sourcePath, resourcesPath, downloadErrors, latestManifestKey = {}) {
   try {
     if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId) {
       throw Error(formatError(resource, errors.RESOURCE_NOT_GIVEN));

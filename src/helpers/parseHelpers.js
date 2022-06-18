@@ -161,6 +161,33 @@ export function compareVersions(a, b) {
 }
 
 /**
+ * determine if manifest key for local resource is outdated
+ * @param {object} localResource
+ * @param {object} latestManifestKey
+ *  @param {boolean} isRemoteNewer
+ * @returns {boolean} - returns true if manifest key is missing or outdated
+ */
+function isLocalResourceManifestKeyOutdated(localResource, latestManifestKey, isRemoteNewer) {
+  const subject = localResource?.manifest?.subject;
+  const manifestKeys = latestManifestKey?.[subject];
+
+  if (manifestKeys) {
+    const keys = Object.keys(manifestKeys);
+    const manifestKey = keys.length ? keys[0] : null;
+
+    if (manifestKey) {
+      const localResourceKey = localResource?.manifest?.[manifestKey];
+      const minimumManifestKey = manifestKeys[manifestKey];
+
+      if (!localResourceKey || (compareVersions(localResourceKey, minimumManifestKey) < 0)) { // if local manifest key is less than minimum
+        isRemoteNewer = true;
+      }
+    }
+  }
+  return isRemoteNewer;
+}
+
+/**
  * Gets the list of all new resources in remoteCatalog, except for
  * the ones already up to date in the given list
  *
@@ -187,17 +214,23 @@ export function getLatestResources(catalog, localResourceList, filterByOwner = n
   if (!catalog || !Array.isArray(localResourceList)) {
     throw new Error(ERROR.PARAMETER_ERROR);
   }
+
   const bibleKey = latestManifestKey?.['Bible'];
+
   if (bibleKey) { // if Bible type, copy to all bible types
     const otherBibleTypes = ['Aligned Bible', 'Greek New Testament', 'Hebrew Old Testament'];
+
     for (const type of otherBibleTypes) {
       latestManifestKey[type] = bibleKey;
     }
   }
+
   let tCoreResources = parseCatalogResources(catalog, true, TC_RESOURCES);
   // remove resources that are already up to date
+
   for (const localResource of localResourceList) {
     const resourceId = localResource.resourceId;
+
     if (localResource.languageId && resourceId) {
       const {
         index,
@@ -205,20 +238,9 @@ export function getLatestResources(catalog, localResourceList, filterByOwner = n
       } = isRemoteNewerResLookup(resourceId, tCoreResources, localResource);
 
       let isRemoteNewer_ = isNewer;
+
       if (!isRemoteNewer_ && Object.keys(latestManifestKey).length) {
-        const subject = localResource?.manifest?.subject;
-        const manifestKeys = latestManifestKey?.[subject];
-        if (manifestKeys) {
-          const keys = Object.keys(manifestKeys);
-          const manifestKey = keys.length ? keys[0] : null;
-          if (manifestKey) {
-            const localResourceKey = localResource?.manifest?.[manifestKey];
-            const minimumManifestKey = manifestKeys[manifestKey];
-            if (!localResourceKey || (compareVersions(localResourceKey, minimumManifestKey) < 0)) { // if local manifest key is less than minimum
-              isRemoteNewer_ = true;
-            }
-          }
-        }
+        isRemoteNewer_ = isLocalResourceManifestKeyOutdated(localResource, latestManifestKey, isRemoteNewer_);
       }
 
       if (!isRemoteNewer_ && (index >= 0)) {
