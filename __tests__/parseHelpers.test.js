@@ -87,13 +87,9 @@ describe('getLatestResources()', () => {
         modifiedTime: '2021-12-06T00:00:00Z',
         owner: 'unfoldingWord',
         manifest: { subject: 'Aligned Bible' },
-      }
+      },
     ];
-    const latestManifestKey = {
-      Bible: {
-        usfmjs: '1.0.0',
-      }
-    }
+    const latestManifestKey = { Bible: { usfmjs: '1.0.0' } };
     const results = parseHelpers.getLatestResources(catalogUW, resourceList, null, latestManifestKey);
     expect(results.length).toEqual(12);
 
@@ -101,7 +97,7 @@ describe('getLatestResources()', () => {
     expect(EnUltResources.length).toEqual(1);
   });
 
-  it('should remove en/ult since Bible matches manifest key', () => {
+  it('should remove en/ult since Bible manifest key is current', () => {
     const resourceList = [
       {
         languageId: 'en',
@@ -112,13 +108,9 @@ describe('getLatestResources()', () => {
           subject: 'Aligned Bible',
           usfmjs: '1.0.0',
         },
-      }
+      },
     ];
-    const latestManifestKey = {
-      Bible: {
-        usfmjs: '1.0.0',
-      }
-    }
+    const latestManifestKey = { Bible: { usfmjs: '1.0.0' } };
     const results = parseHelpers.getLatestResources(catalogUW, resourceList, null, latestManifestKey);
     expect(results.length).toEqual(11);
 
@@ -137,13 +129,9 @@ describe('getLatestResources()', () => {
           subject: 'Aligned Bible',
           usfmjs: '9.0.0',
         },
-      }
+      },
     ];
-    const latestManifestKey = {
-      Bible: {
-        usfmjs: '10.0.0',
-      }
-    }
+    const latestManifestKey = { Bible: { usfmjs: '10.0.0' } };
     const results = parseHelpers.getLatestResources(catalogUW, resourceList, null, latestManifestKey);
     expect(results.length).toEqual(12);
 
