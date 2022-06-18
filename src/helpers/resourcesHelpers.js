@@ -371,7 +371,7 @@ export async function processResource(resource, sourcePath, resourcesPath, downl
       case 'Aligned_Bible':
       case 'Greek_New_Testament':
       case 'Hebrew_Old_Testament':
-        packageParseHelpers.parseBiblePackage(resource, sourcePath, processedFilesPath);
+        packageParseHelpers.parseBiblePackage(resource, sourcePath, processedFilesPath, latestManifestKey);
         break;
       default:
         fs.copySync(sourcePath, processedFilesPath);
