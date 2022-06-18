@@ -1,4 +1,4 @@
-/* eslint-disable quote-props */
+/* eslint-disable quote-props,object-curly-newline */
 export const NT_ORIG_LANG = 'el-x-koine';
 export const NT_ORIG_LANG_BIBLE = 'ugnt';
 export const OT_ORIG_LANG = 'hbo';

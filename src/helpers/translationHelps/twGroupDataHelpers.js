@@ -1,8 +1,8 @@
 /* eslint-disable curly */
+import { isObject } from 'util';
 import fs from 'fs-extra';
 import path from 'path-extra';
 import * as bible from '../../resources/bible';
-import {isObject} from 'util';
 // helpers
 import * as resourcesHelpers from '../resourcesHelpers';
 // constants
@@ -18,19 +18,26 @@ import * as errors from '../../resources/errors';
 export const generateTwGroupDataFromAlignedBible = (resource, sourcePath, outputPath) => {
   if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId)
     throw Error(resourcesHelpers.formatError(resource, errors.RESOURCE_NOT_GIVEN));
+
   if (!sourcePath)
     throw Error(resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_GIVEN));
+
   if (!fs.pathExistsSync(sourcePath))
     throw Error(resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_EXIST));
+
   if (!outputPath)
     throw Error(resourcesHelpers.formatError(resource, errors.OUTPUT_PATH_NOT_GIVEN));
+
   if (fs.pathExistsSync(outputPath))
     fs.removeSync(outputPath);
   const version = resourcesHelpers.getVersionFromManifest(sourcePath);
+
   if (!version) {
     return false;
   }
+
   const books = resource.languageId === 'hbo' ? bible.BIBLE_LIST_OT.slice(0) : bible.BIBLE_LIST_NT.slice(0);
+
   books.forEach((bookName) => {
     convertBookVerseObjectsToTwData(sourcePath, outputPath, bookName);
   });
@@ -62,15 +69,20 @@ function convertBookVerseObjectsToTwData(sourcePath, outputPath, bookName) {
   const bookId = getbookId(bookName);
   const twData = {};
   const bookDir = path.join(sourcePath, bookId);
+
   if (fs.existsSync(bookDir)) {
     const chapters = Object.keys(bible.BOOK_CHAPTER_VERSES[bookId]).length;
+
     for (let chapter = 1; chapter <= chapters; chapter++) {
       const chapterFile = path.join(bookDir, chapter + '.json');
+
       if (fs.existsSync(chapterFile)) {
         const json = JSON.parse(fs.readFileSync(chapterFile));
+
         for (const verse in json) {
           const groupData = {};
           const words = [];
+
           for (let i = 0, l = json[verse].verseObjects.length; i < l; i++ ) {
             populateGroupDataFromVerseObject(groupData, json[verse].verseObjects[i], words);
           }
@@ -90,6 +102,7 @@ function convertBookVerseObjectsToTwData(sourcePath, outputPath, bookName) {
  */
 function getWordOccurrence(wordObjects, verseObject) {
   let occurrence = 1;
+
   for (let i = 0, l = wordObjects.length; i < l; i++) {
     if (wordObjects[i] === verseObject.text) {
       occurrence++;
@@ -112,31 +125,37 @@ function populateGroupDataFromVerseObject(groupData, verseObject, words, isMiles
     strong: [],
   };
   const isWord = (verseObject.type === 'word');
+
   if (verseObject.type === 'milestone' || (isWord && (verseObject.tw || isMilestone))) {
     if (verseObject.type === 'milestone') {
       if (verseObject.text) {
         myGroupData.text.push(verseObject.text);
       }
+
       for (let i = 0, l = verseObject.children.length; i < l; i++) {
         const childVerseObject = verseObject.children[i];
         const childGroupData = populateGroupDataFromVerseObject(groupData, childVerseObject, words, true);
+
         if (childGroupData) {
           myGroupData.quote = myGroupData.quote.concat(childGroupData.quote);
           myGroupData.strong = myGroupData.strong.concat(childGroupData.strong);
         }
       }
     } else if (isWord) {
-      myGroupData.quote.push({word: verseObject.text, occurrence: getWordOccurrence(words, verseObject)});
+      myGroupData.quote.push({ word: verseObject.text, occurrence: getWordOccurrence(words, verseObject) });
       myGroupData.strong.push(verseObject.strong);
     }
+
     if (myGroupData.quote.length) {
       if (verseObject.tw) {
         const twLinkItems = verseObject.tw.split('/');
         const groupId = twLinkItems.pop();
         const category = twLinkItems.pop();
+
         if (!groupData[category]) {
           groupData[category] = {};
         }
+
         if (!groupData[category][groupId]) {
           groupData[category][groupId] = [];
         }
@@ -147,6 +166,7 @@ function populateGroupDataFromVerseObject(groupData, verseObject, words, isMiles
       }
     }
   }
+
   if (isWord && verseObject.text) {
     words.push(verseObject.text); // keep track of words found so far in verse
   }
@@ -166,14 +186,18 @@ function populateTwDataFromGroupData(twData, groupData, bookId, chapter, verse) 
     if (!twData[category]) {
       twData[category] = [];
     }
+
     let quote = null;
     let occurrence = 0;
+
     for (const groupId in groupData[category]) {
       if (!twData[category][groupId]) {
         twData[category][groupId] = [];
       }
+
       for (let i = 0, l = groupData[category][groupId].length; i < l; i++) {
         const item = groupData[category][groupId][i];
+
         if (item.quote.length > 1) {
           quote = item.quote;
           occurrence = 1;

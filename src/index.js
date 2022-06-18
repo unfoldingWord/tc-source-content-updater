@@ -13,8 +13,10 @@ import * as twGroupDataHelpers from './helpers/translationHelps/twGroupDataHelpe
 import * as tnArticleHelpers from './helpers/translationHelps/tnArticleHelpers';
 import * as resourcesDownloadHelpers from './helpers/resourcesDownloadHelpers';
 import * as resourcesHelpers from './helpers/resourcesHelpers';
-export {getOtherTnsOLVersions} from './helpers/translationHelps/tnArticleHelpers';
-export {apiHelpers, parseHelpers, resourcesHelpers, resourcesDownloadHelpers};
+export { getOtherTnsOLVersions } from './helpers/translationHelps/tnArticleHelpers';
+export {
+  apiHelpers, parseHelpers, resourcesHelpers, resourcesDownloadHelpers,
+};
 
 // ============================
 // defines useful for searching
@@ -64,7 +66,7 @@ Updater.prototype = {};
  * Method to manually fetch the latest remoteCatalog for the current
  * Updater instance. This function has no return value
  */
-Updater.prototype.updateCatalog = async function() {
+Updater.prototype.updateCatalog = async function () {
   this.remoteCatalog = await apiHelpers.getCatalog();
 };
 
@@ -91,15 +93,16 @@ Updater.prototype.updateCatalog = async function() {
  * @param {number} retries - number of times to retry calling search API, default 3
  * @return {Promise<*[]|null>}
  */
-Updater.prototype.searchCatalogNext = async function(searchParams, retries=3) {
-  return await apiHelpers.searchCatalogNext(searchParams, retries);
+// eslint-disable-next-line require-await
+Updater.prototype.searchCatalogNext = async function (searchParams, retries=3) {
+  return apiHelpers.searchCatalogNext(searchParams, retries);
 };
 
 /**
  * Method to manually fetch the detailed error list for recent download
  * @return {Array|null} any download/parse errors from last download attempt
  */
-Updater.prototype.getLatestDownloadErrors = function() {
+Updater.prototype.getLatestDownloadErrors = function () {
   return this.downloadErrors;
 };
 
@@ -107,8 +110,9 @@ Updater.prototype.getLatestDownloadErrors = function() {
  * Method to manually fetch the detailed error list for recent download and return as string
  * @return {String} any download/parse errors from last download attempt
  */
-Updater.prototype.getLatestDownloadErrorsStr = function() {
+Updater.prototype.getLatestDownloadErrorsStr = function () {
   let errors = '';
+
   if (this.downloadErrors && this.downloadErrors.length) {
     for (const error of this.downloadErrors) {
       const errType = error.parseError ? 'Parse Error' : 'Download Error';
@@ -130,7 +134,7 @@ Updater.prototype.getLatestDownloadErrorsStr = function() {
  */
 
 /**
- * Used to initiate a load of the latest resource so that the user can then select which ones
+ * Used to create a list of newest remote resources so that the user can then select which ones
  * they would like to update.
  * Note: This function only returns the resources that are not up to date on the user machine
  * before the request
@@ -140,6 +144,7 @@ Updater.prototype.getLatestDownloadErrorsStr = function() {
  *                  modifiedTime: String,
  *                  }>} localResourceList - list of resources that are on the users local machine already {}
  * @param {array} filterByOwner - if given, a list of owners to allow for download, updatedCatalogResources and returned list will be limited to these owners
+ * @param {object} latestManifestKey - for resource type make sure manifest key is at specific version, by subject
  * @return {
  *          Array.<{
  *                   languageId: String,
@@ -149,9 +154,9 @@ Updater.prototype.getLatestDownloadErrorsStr = function() {
  *                 }>
  *         }} - list of languages that have updates in catalog (throws exception on error)
  */
-Updater.prototype.getLatestResources = async function(localResourceList, filterByOwner= null ) {
+Updater.prototype.getLatestResources = async function (localResourceList, filterByOwner= null, latestManifestKey= {} ) {
   await this.updateCatalog();
-  this.updatedCatalogResources = parseHelpers.getLatestResources(this.remoteCatalog, localResourceList, filterByOwner);
+  this.updatedCatalogResources = parseHelpers.getLatestResources(this.remoteCatalog, localResourceList, filterByOwner, latestManifestKey);
   return parseHelpers.getUpdatedLanguageList(this.updatedCatalogResources);
 };
 
@@ -177,7 +182,7 @@ export function getResourcesForLanguage(languageId) {
 /**
  * called to cancel a pending download
  */
-Updater.prototype.cancelDownload = function() {
+Updater.prototype.cancelDownload = function () {
   console.warn(`Setting flag to cancel download`);
   this.cancelDownload_ = true;
 };
@@ -186,7 +191,7 @@ Updater.prototype.cancelDownload = function() {
  * called to get current cancel state
  * @return {boolean}
  */
-Updater.prototype.getCancelState = function() {
+Updater.prototype.getCancelState = function () {
   const downloadCancelled = this.cancelDownload_;
   return downloadCancelled;
 };
@@ -215,9 +220,9 @@ Updater.prototype.getCancelState = function() {
  * @param {Boolean} allAlignedBibles - if true all aligned Bibles from all languages are updated also
  * @return {Promise} Promise that resolves to return all the resources updated or rejects if a resource failed to download
  */
-Updater.prototype.downloadResources = async function(languageList, resourcesPath,
-                                                     resources = this.updatedCatalogResources,
-                                                     allAlignedBibles = false) {
+Updater.prototype.downloadResources = async function (languageList, resourcesPath,
+  resources = this.updatedCatalogResources,
+  allAlignedBibles = false) {
   if (!resources) {
     await this.getLatestResources([]);
     resources = this.updatedCatalogResources;
@@ -226,10 +231,12 @@ Updater.prototype.downloadResources = async function(languageList, resourcesPath
   this.cancelDownload_ = false;
   let results = null;
   const getCancelState = this.getCancelState.bind(this);
+
   try {
     results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors, allAlignedBibles, getCancelState);
   } catch (e) {
     const errors = this.getLatestDownloadErrorsStr(); // get detailed errors and log
+
     if (errors) {
       const message = `Source Content Update Errors caught!!!\n${errors}`;
       console.error(message);
@@ -250,8 +257,8 @@ Updater.prototype.downloadResources = async function(languageList, resourcesPath
  * 'en' and 'hi' in a build)
  * @return {Promise<Array|null>} Promise that resolves to return all the resources updated or rejects if a resource failed to download
  */
-Updater.prototype.downloadAllResources = async function(resourcesPath,
-                                                        resources) {
+Updater.prototype.downloadAllResources = async function (resourcesPath,
+  resources) {
   if (!resources || !resources.length) {
     console.log('Source Content Update Failed - Resources Empty');
     return null;
@@ -261,18 +268,23 @@ Updater.prototype.downloadAllResources = async function(resourcesPath,
   this.downloadErrors = [];
   // generate list of all languages in resources
   const languageList = [];
+
   for (const resource of resources) {
     const languageId = resource.languageId;
+
     if (languageId && ! languageList.includes(languageId)) {
       languageList.push(languageId);
     }
   }
+
   let results = null;
   const getCancelState = this.getCancelState.bind(this);
+
   try {
     results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors, false, getCancelState);
   } catch (e) {
     const errors = this.getLatestDownloadErrorsStr(); // get detailed errors and log
+
     if (errors) {
       const message = `Source Content Update Errors caught!!!\n${errors}`;
       console.error(message);
@@ -289,7 +301,8 @@ Updater.prototype.downloadAllResources = async function(resourcesPath,
  * @param {String} languageCode - language of resource like en or hi
  * @return {Promise} Promise to move directory
  */
-Updater.prototype.moveResources = async function(resourceSourcePath, languageCode) {
+// eslint-disable-next-line require-await
+Updater.prototype.moveResources = async function (resourceSourcePath, languageCode) {
   const resourceTargetPath = path.join(
     ospath.home(), 'translationCore', 'resources', languageCode);
   return moveResourcesHelpers.move(resourceSourcePath, resourceTargetPath);
@@ -311,7 +324,7 @@ Updater.prototype.moveResources = async function(resourceSourcePath, languageCod
  * @param {String} resultsPath - path to store processed bible
  * @return {Boolean} true if success
  */
-Updater.prototype.parseBiblePackage = function(resourceEntry, extractedFilesPath, resultsPath) {
+Updater.prototype.parseBiblePackage = function (resourceEntry, extractedFilesPath, resultsPath) {
   return packageParseHelpers.parseBiblePackage(resourceEntry, extractedFilesPath, resultsPath);
 };
 
@@ -323,7 +336,7 @@ Updater.prototype.parseBiblePackage = function(resourceEntry, extractedFilesPath
  * @param {String} outputPath - Path to place the processed files WITHOUT version in the path
  * @return {String} The path to the processed translationAcademy files with version
  */
-Updater.prototype.processTranslationAcademy = function(resource, extractedFilesPath, outputPath) {
+Updater.prototype.processTranslationAcademy = function (resource, extractedFilesPath, outputPath) {
   return taArticleHelpers.processTranslationAcademy(resource, extractedFilesPath, outputPath);
 };
 
@@ -335,7 +348,7 @@ Updater.prototype.processTranslationAcademy = function(resource, extractedFilesP
  * @param {String} outputPath - Path to place the processed resource files WIHTOUT the version in the path
  * @return {String} Path to the processed translationWords files with version
  */
-Updater.prototype.processTranslationWords = function(resource, extractedFilesPath, outputPath) {
+Updater.prototype.processTranslationWords = function (resource, extractedFilesPath, outputPath) {
   return twArticleHelpers.processTranslationWords(resource, extractedFilesPath, outputPath);
 };
 
@@ -346,7 +359,7 @@ Updater.prototype.processTranslationWords = function(resource, extractedFilesPat
  * @param {string} outputPath Path where the translationWords group data is to be placed WITHOUT version
  * @return {string} Path where tW was generated with version
  */
-Updater.prototype.generateTwGroupDataFromAlignedBible = function(resource, biblePath, outputPath) {
+Updater.prototype.generateTwGroupDataFromAlignedBible = function (resource, biblePath, outputPath) {
   return twGroupDataHelpers.generateTwGroupDataFromAlignedBible(resource, biblePath, outputPath);
 };
 
@@ -358,7 +371,7 @@ Updater.prototype.generateTwGroupDataFromAlignedBible = function(resource, bible
  * @param {String} outputPath - Path to place the processed resource files WITHOUT the version in the path
  * @param {String} resourcesPath Path to resources folder
  */
-Updater.prototype.processTranslationNotes = function(resource, sourcePath, outputPath, resourcesPath) {
+Updater.prototype.processTranslationNotes = function (resource, sourcePath, outputPath, resourcesPath) {
   tnArticleHelpers.processTranslationNotes(resource, sourcePath, outputPath, resourcesPath, this.downloadErrors);
 };
 
@@ -372,14 +385,18 @@ Updater.prototype.processTranslationNotes = function(resource, sourcePath, outpu
  * @param {string} resourcesPath - Path to the resources directory where each resource will be placed
  * @return {Promise} Promise that resolves to return all the resources updated or rejects if a resource failed to download.
  */
-Updater.prototype.downloadAndProcessResource = async function(resourceDetails, resourcesPath) {
-  const {languageId, resourceId, version, owner} = resourceDetails;
+Updater.prototype.downloadAndProcessResource = async function (resourceDetails, resourcesPath) {
+  const {
+    languageId, resourceId, version, owner,
+  } = resourceDetails;
   const resourceName = `${languageId}_${resourceId}`;
   const version_ = apiHelpers.formatVersionWithV(version);
   let downloadUrl = `https://git.door43.org/${owner}/${resourceName}/archive/${version_}.zip`;
+
   if (owner === apiHelpers.DOOR43_CATALOG) {
     downloadUrl = `https://cdn.door43.org/${languageId}/${resourceId}/${version_}/${resourceId}.zip`;
   }
+
   const resource = {
     languageId,
     resourceId,
@@ -396,6 +413,7 @@ Updater.prototype.downloadAndProcessResource = async function(resourceDetails, r
   };
   this.downloadErrors = [];
   let result = null;
+
   try {
     resourcesDownloadHelpers.showOnlineStatus();
     result = await resourcesDownloadHelpers.downloadAndProcessResource(resource, resourcesPath, this.downloadErrors);
@@ -403,6 +421,7 @@ Updater.prototype.downloadAndProcessResource = async function(resourceDetails, r
     fs.removeSync(importsPath);
   } catch (e) {
     const errors = this.getLatestDownloadErrorsStr(); // get detailed errors and log
+
     if (errors) {
       const message = `Source Content Update Errors caught!!!\n${errors}`;
       console.error(message);

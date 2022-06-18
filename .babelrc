@@ -1,22 +1,15 @@
 {
   "presets": [
-    [
-      "env",
-      {
-        "targets": {
-          "node": "6.10"
-        }
-      }
-    ]
+    "@babel/preset-env",
+    "@babel/preset-react"
   ],
   "plugins": [
-    [
-      "transform-object-rest-spread",
-      "transform-decorators-legacy",
-      "jest-hoist",
-      {
-        "useBuiltIns": true
-      }
-    ]
-  ]
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-proposal-object-rest-spread",
+    "@babel/plugin-transform-async-to-generator",
+    "@babel/plugin-transform-regenerator",
+    "@babel/plugin-transform-runtime",
+    "jest-hoist"
+  ],
+  "sourceMaps": "inline"
 }

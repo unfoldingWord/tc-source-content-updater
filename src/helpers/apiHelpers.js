@@ -1,14 +1,15 @@
-import {delay} from './utils';
-import {SORT, STAGE, SUBJECT} from '../index';
 import fs from 'fs-extra';
 import path from 'path-extra';
-import * as Bible from '../resources/bible';
+import {
+  SORT, STAGE, SUBJECT,
+} from '../index';
+import { delay } from './utils';
 import {
   cleanReaddirSync,
   getLatestVersionsAndOwners,
   getVersionAndOwnerFromPath,
 } from './resourcesHelpers';
-import {RESOURCE_ID_MAP} from './parseHelpers';
+import { RESOURCE_ID_MAP } from './parseHelpers';
 
 const request = require('request');
 export const DOOR43_CATALOG = `Door43-Catalog`;
@@ -27,21 +28,26 @@ export const SEARCH_LIMIT = 250;
  */
 export async function makeJsonRequestDetailed(url, retries= 5) {
   let result_;
+
   for (let i = 1; i <= retries; i++) {
     result_ = null;
+
     try {
       result_ = await new Promise((resolve, reject) => {
-        request(url, function(error, response, body) {
-          if (error)
+        request(url, function (error, response, body) {
+          if (error) {
             reject(error);
-          else if (response.statusCode === 200) {
+          } else if (response.statusCode === 200) {
             let result = body;
+
             try {
               result = JSON.parse(body);
             } catch (e) {
               reject(e);
             }
-            resolve({result, response, body});
+            resolve({
+              result, response, body,
+            });
           } else {
             reject(`fetch error ${response.statusCode}`);
           }
@@ -73,11 +79,11 @@ export async function makeJsonRequestDetailed(url, retries= 5) {
  */
 export async function doMultipartQueryPage(url, page = 1, retries = 5) {
   const url_ = `${url}&page=${page}`;
-  const {result, response} = await makeJsonRequestDetailed(url_, retries);
+  const { result, response } = await makeJsonRequestDetailed(url_, retries);
   const pos = response && response.rawHeaders && response.rawHeaders.indexOf('X-Total-Count');
   const totalCount = (pos >= 0) ? parseInt(response.rawHeaders[pos + 1]) : 0;
   const items = result && result.data || null;
-  return {items, totalCount};
+  return { items, totalCount };
 }
 
 /**
@@ -89,14 +95,16 @@ export async function doMultipartQueryPage(url, page = 1, retries = 5) {
 export async function doMultipartQuery(url, retries = 5) {
   let page = 1;
   let data = [];
-  const {items, totalCount} = await doMultipartQueryPage(url, page, retries = 5);
+  const { items, totalCount } = await doMultipartQueryPage(url, page, retries);
   let lastItems = items;
   let totalCount_ = totalCount;
   data = data.concat(items);
+
   while (lastItems && data.length < totalCount_) {
-    const {items, totalCount} = await doMultipartQueryPage(url, ++page, retries = 5);
+    const { items, totalCount } = await doMultipartQueryPage(url, ++page, retries);
     lastItems = items;
     totalCount_ = totalCount;
+
     if (items && items.length) {
       data = data.concat(items);
     }
@@ -115,9 +123,11 @@ export async function doMultipartQuery(url, retries = 5) {
 async function searchSubjects(subjects, owner, retries=3) {
   const subjectParam = encodeURI(subjects.join(','));
   let fetchUrl = `https://git.door43.org/api/catalog/v3/search?subject=${subjectParam}`;
+
   if (owner) {
     fetchUrl += fetchUrl + `&owner=${owner}`;
   }
+
   const result = await doMultipartQuery(fetchUrl, retries);
   return result;
 }
@@ -136,26 +146,30 @@ export async function getOldCatalogReleases() {
     const result = await searchSubjects(subjectList, owner, 5);
     let repos = 0;
     const languages = result && result.languages || [];
+
     for (const language of languages) {
-        const languageId = language.identifier;
-        const resources = language.resources || [];
-        for (const resource of resources) {
-          resource.languageId = languageId;
-          resource.resourceId = resource.identifier;
-          resource.foundInCatalog = 'OLD';
-          resource.full_name = resource.full_name || `${resource.owner}/${resource.repo}`;
-          resource.checking_level = resource.checking && resource.checking.checking_level;
-          const formats = resource.formats;
-          if (formats && formats.length > 1) {
-            console.log('too many');
-          }
-          const firstFormat = formats && formats[0];
-          resource.downloadUrl = firstFormat && firstFormat.url;
-          released.push(resource);
-          repos++;
+      const languageId = language.identifier;
+      const resources = language.resources || [];
+
+      for (const resource of resources) {
+        resource.languageId = languageId;
+        resource.resourceId = resource.identifier;
+        resource.foundInCatalog = 'OLD';
+        resource.full_name = resource.full_name || `${resource.owner}/${resource.repo}`;
+        resource.checking_level = resource.checking && resource.checking.checking_level;
+        const formats = resource.formats;
+
+        if (formats && formats.length > 1) {
+          console.log('too many');
         }
+
+        const firstFormat = formats && formats[0];
+        resource.downloadUrl = firstFormat && firstFormat.url;
+        released.push(resource);
+        repos++;
       }
-      console.log(`has ${repos} items`);
+    }
+    console.log(`has ${repos} items`);
     console.log(`released catalog has ${released.length} items`);
   } catch (e) {
     console.error('getCatalog() - error getting catalog', e);
@@ -172,11 +186,9 @@ export async function getOldCatalogReleases() {
  * @return {*}
  */
 function findResource(resourceList, resource) {
-  const foundResource = resourceList.find(item => {
-    return (item.owner === resource.owner) &&
+  const foundResource = resourceList.find(item => (item.owner === resource.owner) &&
       (item.language === resource.language) &&
-      (item.resourceId === resource.resourceId);
-  });
+      (item.resourceId === resource.resourceId));
   return foundResource;
 }
 
@@ -189,23 +201,25 @@ export function combineTwords(catalogReleases) {
   return catalogReleases.filter(resource => {
     if (resource.owner !== 'Door43-Catalog') {
       switch (resource.resourceId) {
-        case 'twl': {
-          const twResource = findResource(catalogReleases, {...resource, resourceId: 'tw'});
-          if (twResource) {
-            twResource.loadAfter = [resource];
-          } else {
-            return false; // if no tw available, we cannot use the twl
-          }
-          break;
+      case 'twl': {
+        const twResource = findResource(catalogReleases, { ...resource, resourceId: 'tw' });
+
+        if (twResource) {
+          twResource.loadAfter = [resource];
+        } else {
+          return false; // if no tw available, we cannot use the twl
         }
-        case 'tw': {
-          const twlResource = findResource(catalogReleases, {...resource, resourceId: 'twl'});
-          if (twlResource) {
-            resource.loadAfter = [twlResource];
-          } else {
-            return false; // if no twl available, we cannot use the tw
-          }
+        break;
+      }
+      case 'tw': {
+        const twlResource = findResource(catalogReleases, { ...resource, resourceId: 'twl' });
+
+        if (twlResource) {
+          resource.loadAfter = [twlResource];
+        } else {
+          return false; // if no twl available, we cannot use the tw
         }
+      }
         break;
       }
     }
@@ -229,11 +243,14 @@ export async function getCatalog() {
     subject: SUBJECT.ALL_TC_RESOURCES,
     stage: STAGE.PROD,
   };
+
   const newCatalogReleases = await searchCatalogNext(searchParams);
   console.log(`found ${newCatalogReleases.length} items in catalog next`);
+
   // merge catalogs together - catalog new takes precedence
   for (const item of newCatalogReleases) {
     const index = catalogReleases.findIndex(oldItem => (item.full_name === oldItem.full_name));
+
     if (index >= 0) {
       catalogReleases[index] = item; // overwrite item in old catalog
       catalogReleases[index].foundInCatalog = 'NEW+OLD';
@@ -243,14 +260,16 @@ export async function getCatalog() {
   }
   console.log(`now ${catalogReleases.length} items in merged catalog, before filter`);
   let catalogReleases_ = catalogReleases.filter(resource => {
-    const isGreekOrHebrew = (resource.languageId === Bible.NT_ORIG_LANG && resource.resourceId === Bible.NT_ORIG_LANG_BIBLE) ||
-      (resource.languageId === Bible.OT_ORIG_LANG && resource.resourceId === Bible.OT_ORIG_LANG_BIBLE);
+    // const isGreekOrHebrew = (resource.languageId === Bible.NT_ORIG_LANG && resource.resourceId === Bible.NT_ORIG_LANG_BIBLE) ||
+    //   (resource.languageId === Bible.OT_ORIG_LANG && resource.resourceId === Bible.OT_ORIG_LANG_BIBLE);
 
     const tagName = resource.branch_or_tag_name;
+
     if (tagName) { // check for version
       const firstChar = tagName[0];
       const isDigit = (firstChar >= '0') && (firstChar <= '9');
       const isD43Master = (tagName === 'master') && (resource.owner === DOOR43_CATALOG);
+
       if (!isD43Master && (firstChar !== 'v') && !isDigit) {
         return false; // reject if tag is not a version
       }
@@ -291,6 +310,7 @@ function addUrlParameter(value, parameters, tag) {
  */
 function getCompatibleResourceList(resources) {
   const supported = [];
+
   for (const item of resources || []) {
     // add fields for backward compatibility
     const languageId = item.language;
@@ -305,21 +325,26 @@ function getCompatibleResourceList(resources) {
     if (item.zipball_url) {
       item.downloadUrl = item.zipball_url;
     }
+
     // check for version. if there is one, it will save having to fetch it from DCS later.
     if (item.release) { // if released
       const tagName = item.release.tag_name;
+
       if (tagName && (tagName[0] === 'v')) {
         item.version = tagName.substr(1);
       }
     } else {
       const branchOrTagName = item.branch_or_tag_name;
+
       if (branchOrTagName && (branchOrTagName[0] === 'v')) {
         item.version = branchOrTagName.substr(1);
       }
     }
+
     if (item.subject) {
       item.subject = item.subject.replaceAll(' ', '_');
     }
+
     // add supported resources to returned list
     if (item.downloadUrl && item.subject && item.name && item.full_name) {
       supported.push(item);
@@ -375,6 +400,7 @@ export async function searchCatalogNext(searchParams, retries=3) {
     parameters = addUrlParameter(checkingLevel, parameters, 'checkingLevel');
     parameters = addUrlParameter(partialMatch, parameters, 'partialMatch');
     parameters = addUrlParameter(sort, parameters, 'sort');
+
     if (parameters) {
       fetchUrl += '?' + parameters;
     }
@@ -398,8 +424,9 @@ export async function searchCatalogNext(searchParams, retries=3) {
  */
 export async function downloadManifestData(owner, repo, retries=5) {
   const fetchUrl = `https://git.door43.org/api/catalog/v5/entry/${owner}/${repo}/master/metadata`;
+
   try {
-    const {result} = await makeJsonRequestDetailed(fetchUrl, retries);
+    const { result } = await makeJsonRequestDetailed(fetchUrl, retries);
     return result;
   } catch (e) {
     console.warn('getManifestData() - error getting manifest data', e);
@@ -416,7 +443,7 @@ export async function downloadManifestData(owner, repo, retries=5) {
  * @param {array} localResourceList
  */
 function addLocalResource(resourceLatestPath, pathToResourceManifestFile, languageId, resourceId, localResourceList) {
-  const {version, owner} = getVersionAndOwnerFromPath(resourceLatestPath);
+  const { version, owner } = getVersionAndOwnerFromPath(resourceLatestPath);
 
   if (fs.existsSync(pathToResourceManifestFile)) {
     const resourceManifest = fs.readJsonSync(pathToResourceManifestFile);
@@ -460,8 +487,10 @@ export const getLocalResourceList = (resourcesPath) => {
       bibleIds.forEach((bibleId) => {
         const bibleIdPath = path.join(biblesPath, bibleId);
         const owners = getLatestVersionsAndOwners(bibleIdPath) || {};
+
         for (const owner of Object.keys(owners)) {
           const bibleLatestVersion = owners[owner];
+
           if (bibleLatestVersion) {
             const pathToBibleManifestFile = path.join(bibleLatestVersion, 'manifest.json');
             addLocalResource(bibleLatestVersion, pathToBibleManifestFile, languageId, bibleId, localResourceList);
@@ -475,6 +504,7 @@ export const getLocalResourceList = (resourcesPath) => {
         const tHelpResource = path.join(tHelpsPath, tHelpsId);
         const latestVersions = getLatestVersionsAndOwners(tHelpResource) || {};
         const resourceId = RESOURCE_ID_MAP[tHelpsId] || tHelpsId; // map resource names to ids
+
         for (const owner of Object.keys(latestVersions)) {
           const tHelpsLatestVersion = latestVersions[owner];
 

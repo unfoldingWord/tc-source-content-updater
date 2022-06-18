@@ -3,7 +3,7 @@
 import _ from 'lodash';
 import * as parseHelpers from '../src/helpers/parseHelpers';
 import * as ERROR from '../src/resources/errors';
-import {combineTwords} from '../src/helpers/apiHelpers';
+import { combineTwords } from '../src/helpers/apiHelpers';
 
 const catalog = require('./fixtures/catalogNext');
 const catalogUW_ = require('./fixtures/catalogNextUW');
@@ -77,6 +77,78 @@ describe('getLatestResources()', () => {
 
     const frenchResources = getResourcesForLanguageAndResource(results, 'fr', 'f10');
     expect(frenchResources.length).toEqual(0);
+  });
+
+  it('should not remove en/ult since Bible does not have manifest key', () => {
+    const resourceList = [
+      {
+        languageId: 'en',
+        resourceId: 'ult',
+        modifiedTime: '2021-12-06T00:00:00Z',
+        owner: 'unfoldingWord',
+        manifest: { subject: 'Aligned Bible' },
+      }
+    ];
+    const latestManifestKey = {
+      Bible: {
+        usfmjs: '1.0.0',
+      }
+    }
+    const results = parseHelpers.getLatestResources(catalogUW, resourceList, null, latestManifestKey);
+    expect(results.length).toEqual(12);
+
+    const EnUltResources = getResourcesForLanguageAndResource(results, 'en', 'ult');
+    expect(EnUltResources.length).toEqual(1);
+  });
+
+  it('should remove en/ult since Bible matches manifest key', () => {
+    const resourceList = [
+      {
+        languageId: 'en',
+        resourceId: 'ult',
+        modifiedTime: '2021-12-06T00:00:00Z',
+        owner: 'unfoldingWord',
+        manifest: {
+          subject: 'Aligned Bible',
+          usfmjs: '1.0.0',
+        },
+      }
+    ];
+    const latestManifestKey = {
+      Bible: {
+        usfmjs: '1.0.0',
+      }
+    }
+    const results = parseHelpers.getLatestResources(catalogUW, resourceList, null, latestManifestKey);
+    expect(results.length).toEqual(11);
+
+    const EnUltResources = getResourcesForLanguageAndResource(results, 'en', 'ult');
+    expect(EnUltResources.length).toEqual(0);
+  });
+
+  it('should not remove en/ult since Bible has older manifest key', () => {
+    const resourceList = [
+      {
+        languageId: 'en',
+        resourceId: 'ult',
+        modifiedTime: '2021-12-06T00:00:00Z',
+        owner: 'unfoldingWord',
+        manifest: {
+          subject: 'Aligned Bible',
+          usfmjs: '9.0.0',
+        },
+      }
+    ];
+    const latestManifestKey = {
+      Bible: {
+        usfmjs: '10.0.0',
+      }
+    }
+    const results = parseHelpers.getLatestResources(catalogUW, resourceList, null, latestManifestKey);
+    expect(results.length).toEqual(12);
+
+    const EnUltResources = getResourcesForLanguageAndResource(results, 'en', 'ult');
+    expect(EnUltResources.length).toEqual(1);
   });
 
   it('should not remove french/f10 since newer in catalog', () => {

@@ -119,6 +119,7 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
     const manifest = await downloadManifestData(resourceData.owner || resource.owner, resourceData.name);
     const version = manifest && manifest.dublin_core && manifest.dublin_core.version;
     if (version) {
+      // eslint-disable-next-line require-atomic-updates
       resource.version = version;
     }
   }

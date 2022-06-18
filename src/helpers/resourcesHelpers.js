@@ -460,9 +460,8 @@ export function makeTwGroupDataResource(resource, sourcePath) {
     const twGroupDataPath = path.join(sourcePath + '_tw_group_data_' + resource.languageId + '_v' + resource.version);
     const result = twGroupDataHelpers.generateTwGroupDataFromAlignedBible(resource, sourcePath, twGroupDataPath);
     if (result) {
-return twGroupDataPath
-;
-}
+      return twGroupDataPath;
+    }
   }
 }
 
