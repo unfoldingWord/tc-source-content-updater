@@ -1,7 +1,7 @@
 /* eslint-disable curly */
-import { isObject } from 'util';
 import fs from 'fs-extra';
 import path from 'path-extra';
+import {isObject} from 'util';
 import * as tsvparser from 'uw-tsv-parser';
 import {
   formatAndSaveGroupData,
@@ -12,16 +12,14 @@ import {
 // helpers
 import * as resourcesHelpers from '../resourcesHelpers';
 // eslint-disable-next-line no-duplicate-imports
-import { getResourceManifest } from '../resourcesHelpers';
+import {getResourceManifest} from '../resourcesHelpers';
 // constants
 import * as errors from '../../resources/errors';
-import { getOwnerForOriginalLanguage } from '../apiHelpers';
-import { makeSureResourceUnzipped } from '../unzipFileHelpers';
-import {
-  BIBLE_BOOKS, NT_ORIG_LANG, NT_ORIG_LANG_BIBLE, OT_ORIG_LANG, OT_ORIG_LANG_BIBLE,
-} from '../../resources/bible';
-import { delay } from '../utils';
-import { getMissingOriginalResource, getMissingResources } from './tnArticleHelpers';
+import {DOOR43_CATALOG, getOwnerForOriginalLanguage} from '../apiHelpers';
+import {makeSureResourceUnzipped} from '../unzipFileHelpers';
+import {BIBLE_BOOKS, NT_ORIG_LANG, NT_ORIG_LANG_BIBLE, OT_ORIG_LANG, OT_ORIG_LANG_BIBLE} from '../../resources/bible';
+import {getMissingOriginalResource, getMissingResources} from './tnArticleHelpers';
+import {delay} from '../utils';
 
 /**
  * @description Processes the extracted files for translationWord to create the folder
@@ -34,23 +32,19 @@ import { getMissingOriginalResource, getMissingResources } from './tnArticleHelp
 export function processTranslationWords(resource, sourcePath, outputPath) {
   if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId)
     throw Error(resourcesHelpers.formatError(resource, errors.RESOURCE_NOT_GIVEN));
-
   if (!sourcePath)
     throw Error(resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_GIVEN));
-
   if (!fs.pathExistsSync(sourcePath))
     throw Error(resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_EXIST));
-
   if (!outputPath)
     throw Error(resourcesHelpers.formatError(resource, errors.OUTPUT_PATH_NOT_GIVEN));
-
   if (fs.pathExistsSync(outputPath))
     fs.removeSync(outputPath);
 
+  const isDoor43 = resource.owner === DOOR43_CATALOG;
   const typesPath = path.join(sourcePath, 'bible');
   const isDirectory = (item) => fs.lstatSync(path.join(typesPath, item)).isDirectory();
   let typeDirs = [];
-
   if (fs.existsSync(typesPath)) {
     typeDirs = fs.readdirSync(typesPath).filter(isDirectory);
   }
@@ -83,18 +77,14 @@ const categorizeGroupData = groupData => {
     names: {},
     other: {},
   };
-
   Object.keys(groupData).forEach(category_ => {
     let category = category_;
     const items = groupData[category];
-
     if (!categorizedGroupData[category]) {
       category = 'other'; // unknown categories go in other
     }
-
     for (const item of items) {
       const groupId = item.contextId && item.contextId.groupId;
-
       if (groupId) {
         if (!categorizedGroupData[category][groupId]) {
           categorizedGroupData[category][groupId] = [];
@@ -131,9 +121,8 @@ function tsvObjectsToGroupData(tsvItems, originalBiblePath, resourcesPath, bookI
 
     for (const tsvItem of tsvItems) {
       if (tsvItem.Reference && tsvItem.ID && tsvItem.OrigWords && tsvItem.Occurrence && tsvItem.TWLink) {
-        //        const tags = cleanGroupId(tsvItem.Tags) || 'other';
+//        const tags = cleanGroupId(tsvItem.Tags) || 'other';
         const twLink = tsvItem.TWLink.match(twLinkRE);
-
         if (!twLink) {
           console.warn(`tsvObjectsToGroupData() - invalid TWLink: ${tsvItem.TWLink}`);
           continue;
@@ -164,7 +153,6 @@ function tsvObjectsToGroupData(tsvItems, originalBiblePath, resourcesPath, bookI
         if (verseString) {
           const key = tsvItem.Catagory;
           const groupDataItem = generateGroupDataItem(tsvItem, toolName, verseString);
-
           if (groupData[key]) {
             groupData[key].push(groupDataItem);
           } else {
@@ -186,9 +174,9 @@ function tsvObjectsToGroupData(tsvItems, originalBiblePath, resourcesPath, bookI
 /**
  * process the TSV file into index files
  * @param {string} tsvPath
+ * @param {object} project
  */
-// eslint-disable-next-line require-await
-export async function tsvToObjects(tsvPath) {
+export async function tsvToObjects(tsvPath, project) {
   const tsvLines = fs.readFileSync(tsvPath).toString();
   // console.log(tsvLines);
   let tsvItems;
@@ -196,16 +184,13 @@ export async function tsvToObjects(tsvPath) {
   let error;
   let expectedColumns = 0;
   const tableObject = tsvparser.tsvStringToTable(tsvLines);
-
   if ( tableObject.errors.length > 0 ) {
     parseErrorMsg = '';
     expectedColumns = tableObject.header.length;
-
     for (let i=0; i<tableObject.errors.length; i++) {
       let msg;
       const rownum = tableObject.errors[i][0] - 1; // adjust for data table without header row
       const colsfound = tableObject.errors[i][1];
-
       if ( colsfound > expectedColumns ) {
         msg = 'Row is too long';
       } else {
@@ -221,7 +206,6 @@ export async function tsvToObjects(tsvPath) {
     tsvItems = tableObject.data.map(line => {
       const tsvItem = {};
       const l = tableObject.header.length;
-
       for (let i = 0; i < l; i++) {
         const key = tableObject.header[i];
         const value = line[i] || '';
@@ -262,10 +246,8 @@ async function twlTsvToGroupData(tsvPath, project, resourcesPath, originalBibleP
   }
 
   const tsvItems_ = [];
-
   for (const tsvItem of tsvItems) {
     const refParts = parseReference(tsvItem.Reference, true);
-
     for (const part of refParts) {
       const partRef = `${part.chapter}:${part.verse}`;
       const tsvItem_ = {
@@ -277,7 +259,7 @@ async function twlTsvToGroupData(tsvPath, project, resourcesPath, originalBibleP
   }
 
   try {
-    groupData = tsvObjectsToGroupData(tsvItems_, originalBiblePath, resourcesPath, bookId, project.languageId, 'translationWords', { categorized: true });
+    groupData = tsvObjectsToGroupData(tsvItems_, originalBiblePath, resourcesPath, bookId, project.languageId, 'translationWords', {categorized: true});
     await formatAndSaveGroupData(groupData, outputPath, bookId);
   } catch (e) {
     console.error(`twArticleHelpers.twlTsvToGroupData() - error processing filepath: ${tsvPath}`, e);
@@ -300,20 +282,16 @@ export async function processTranslationWordsTSV(resource, sourcePath, outputPat
   try {
     if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId)
       throw Error(resourcesHelpers.formatError(resource, errors.RESOURCE_NOT_GIVEN));
-
     if (!sourcePath)
       throw Error(resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_GIVEN));
-
     if (!fs.pathExistsSync(sourcePath))
       throw Error(resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_EXIST));
-
     if (!outputPath)
       throw Error(resourcesHelpers.formatError(resource, errors.OUTPUT_PATH_NOT_GIVEN));
-
     if (fs.pathExistsSync(outputPath))
       fs.removeSync(outputPath);
 
-    const { otQuery, ntQuery } = await getMissingResources(sourcePath, resourcesPath, getMissingOriginalResource, downloadErrors, resource.languageId, resource.owner, false);
+    const {otQuery, ntQuery} = await getMissingResources(sourcePath, resourcesPath, getMissingOriginalResource, downloadErrors, resource.languageId, resource.owner, false);
 
     // make sure tW is already installed
     const twPath = path.join(
@@ -322,7 +300,6 @@ export async function processTranslationWordsTSV(resource, sourcePath, outputPat
       'translationHelps/translationWords'
     );
     const twVersionPath = resourcesHelpers.getLatestVersionInPath(twPath, resource.owner);
-
     if (fs.existsSync(twVersionPath)) {
       makeSureResourceUnzipped(twVersionPath);
     } else {
@@ -331,7 +308,6 @@ export async function processTranslationWordsTSV(resource, sourcePath, outputPat
     }
 
     const manifest = getResourceManifest(sourcePath);
-
     if (!(manifest && Array.isArray(manifest.projects))) {
       throw new Error(`processTranslationWordsTSV() - no projects in manifest at ${sourcePath} for ${resource.owner}`);
     }
@@ -340,19 +316,16 @@ export async function processTranslationWordsTSV(resource, sourcePath, outputPat
 
     for (const project of manifest.projects) {
       const tsvPath = path.join(sourcePath, project.path);
-
       try {
         const bookId = project.identifier;
         const isNewTestament = BIBLE_BOOKS.newTestament[project.identifier];
         const originalLanguageId = isNewTestament ? NT_ORIG_LANG : OT_ORIG_LANG;
         const originalLanguageBibleId = isNewTestament ? NT_ORIG_LANG_BIBLE : OT_ORIG_LANG_BIBLE;
         const version = isNewTestament && ntQuery ? ('v' + ntQuery) : otQuery ? ('v' + otQuery) : null;
-
         if (!version) {
           console.warn('processTranslationWordsTSV() - There was a missing version for book ' + bookId + ' of resource ' + originalLanguageBibleId + ' from ' + resource.downloadUrl);
           continue;
         }
-
         const originalLanguageOwner = getOwnerForOriginalLanguage(resource.owner);
         const originalBiblePath = path.join(
           resourcesPath,
@@ -399,8 +372,9 @@ export async function processTranslationWordsTSV(resource, sourcePath, outputPat
  */
 function generateGroupsIndex(filesPath, twOutputPath, folderName) {
   const groupsIndex = [];
-  const groupIds = fs.readdirSync(filesPath).filter((filename) => filename.split('.').pop() === 'md');
-
+  const groupIds = fs.readdirSync(filesPath).filter((filename) => {
+    return filename.split('.').pop() === 'md';
+  });
   groupIds.forEach((fileName) => {
     const groupObject = {};
     const filePath = path.join(filesPath, fileName);
@@ -419,7 +393,7 @@ function generateGroupsIndex(filesPath, twOutputPath, folderName) {
     'index.json',
   );
 
-  fs.outputJsonSync(groupsIndexOutputPath, groupsIndex, { spaces: 2 });
+  fs.outputJsonSync(groupsIndexOutputPath, groupsIndex, {spaces: 2});
 }
 
 /**
@@ -431,16 +405,13 @@ function generateGroupsIndex(filesPath, twOutputPath, folderName) {
 function compareByFirstUniqueWord(a, b) {
   const aWords = a.name.toUpperCase().split(',');
   const bWords = b.name.toUpperCase().split(',');
-
   while (aWords.length || bWords.length) {
     if (!aWords.length)
       return -1;
-
     if (!bWords.length)
       return 1;
     const aWord = aWords.shift().trim();
     const bWord = bWords.shift().trim();
-
     if (aWord !== bWord)
       return (aWord < bWord ? -1 : 1);
   }

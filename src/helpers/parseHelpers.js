@@ -1,7 +1,7 @@
 /* eslint-disable camelcase,no-empty,no-negated-condition */
 import semver from 'semver';
 import * as ERROR from '../resources/errors';
-import { sortDownloableResources } from './resourcesDownloadHelpers';
+import {sortDownloableResources} from './resourcesDownloadHelpers';
 
 // the following are the subject found in the door43 catalog.
 // if a subject isn't found in this list then it will be ignored by the source content updater
@@ -143,8 +143,8 @@ function isRemoteNewerResLookup(resourceId, remoteResources, localResource) {
 
 /**
  * compares version numbers, if a > b returns 1; if a < b return -1; else are equal and return 0
- * @param a
- * @param b
+ * @param {string} a
+ * @param {string} b
  * @return {number}
  */
 export function compareVersions(a, b) {
@@ -164,23 +164,26 @@ export function compareVersions(a, b) {
  * determine if manifest key for local resource is outdated
  * @param {object} localResource
  * @param {object} latestManifestKey
- *  @param {boolean} isRemoteNewer
- * @returns {boolean} - returns true if manifest key is missing or outdated
+ * @param {boolean} isRemoteNewer
+ * @return {boolean} - returns true if manifest key is missing or outdated
  */
 function isLocalResourceManifestKeyOutdated(localResource, latestManifestKey, isRemoteNewer) {
-  const subject = localResource?.manifest?.subject;
-  const manifestKeys = latestManifestKey?.[subject];
+  const manifest = localResource && localResource.manifest;
+  if (latestManifestKey && manifest) {
+    const subject = manifest.subject;
+    const manifestKeys = latestManifestKey[subject];
 
-  if (manifestKeys) {
-    const keys = Object.keys(manifestKeys);
-    const manifestKey = keys.length ? keys[0] : null;
+    if (manifestKeys) {
+      const keys = Object.keys(manifestKeys);
+      const manifestKey = keys.length ? keys[0] : null;
 
-    if (manifestKey) {
-      const localResourceKey = localResource?.manifest?.[manifestKey];
-      const minimumManifestKey = manifestKeys[manifestKey];
+      if (manifestKey) {
+        const localResourceKey = manifest[manifestKey];
+        const minimumManifestKey = manifestKeys[manifestKey];
 
-      if (!localResourceKey || (compareVersions(localResourceKey, minimumManifestKey) < 0)) { // if local manifest key is less than minimum
-        isRemoteNewer = true;
+        if (!localResourceKey || (compareVersions(localResourceKey, minimumManifestKey) < 0)) { // if local manifest key is less than minimum
+          isRemoteNewer = true;
+        }
       }
     }
   }
@@ -215,7 +218,7 @@ export function getLatestResources(catalog, localResourceList, filterByOwner = n
     throw new Error(ERROR.PARAMETER_ERROR);
   }
 
-  const bibleKey = latestManifestKey?.['Bible'];
+  const bibleKey = latestManifestKey && latestManifestKey['Bible'];
 
   if (bibleKey) { // if Bible type, copy to all bible types
     const otherBibleTypes = ['Aligned Bible', 'Greek New Testament', 'Hebrew Old Testament'];

@@ -3,7 +3,7 @@
 import _ from 'lodash';
 import * as parseHelpers from '../src/helpers/parseHelpers';
 import * as ERROR from '../src/resources/errors';
-import { combineTwords } from '../src/helpers/apiHelpers';
+import {combineTwords} from '../src/helpers/apiHelpers';
 
 const catalog = require('./fixtures/catalogNext');
 const catalogUW_ = require('./fixtures/catalogNextUW');

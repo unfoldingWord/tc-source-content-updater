@@ -75,7 +75,7 @@ export function parseBiblePackage(resource, sourcePath, outputPath, latestManife
     throw Error(resourcesHelpers.formatError(resource, errors.OUTPUT_PATH_NOT_GIVEN));
   }
   fs.ensureDirSync(outputPath);
-  const bibleManifestKey = latestManifestKey?.['Bible'];
+  const bibleManifestKey = latestManifestKey && latestManifestKey['Bible'];
   let manifestKey = null;
   let manifestKeyMinValue = null;
 
