@@ -95,9 +95,10 @@ export function getVersionFolder(resource) {
  * @param {String} resourcesPath Path to the user resources directory
  * @param {Array} downloadErrors - parsed list of download errors with details such as if the download completed (vs. parsing error), error, and url
  * @param {function} getCancelState - function to check if user cancelled download
+ * @param {object} latestManifestKey - for resource type make sure manifest key is at specific version, by subject
  * @return {Promise} Download promise
  */
-export const downloadAndProcessResource = async (resource, resourcesPath, downloadErrors, getCancelState = null) => {
+export const downloadAndProcessResource = async (resource, resourcesPath, downloadErrors, getCancelState = null, latestManifestKey = {}) => {
   if (!resource) {
     throw Error(errors.RESOURCE_NOT_GIVEN);
   } else if (!resourcesPath) {
@@ -169,7 +170,7 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
     }
     console.log('Processing: ' + resource.downloadUrl);
     const importSubdirPath = getSubdirOfUnzippedResource(importPath);
-    const processedFilesPath = await processResource(resource, importSubdirPath, resourcesPath, downloadErrors);
+    const processedFilesPath = await processResource(resource, importSubdirPath, resourcesPath, downloadErrors, latestManifestKey);
     if (processedFilesPath) {
       const versionDir = getVersionFolder(resource);
       // Extra step if the resource is the Greek UGNT or Hebrew UHB and in Door43 catalog
@@ -217,12 +218,13 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
  * @param {Array} errorList - keeps track of errors
  * @param {Array} downloadErrors - parsed list of download errors with details such as if the download completed (vs. parsing error), error, and url
  * @param {function} getCancelState - function to check if user cancelled download
+ * @param {object} latestManifestKey - for resource type make sure manifest key is at specific version, by subject
  * @return {Promise} promise
  */
-export const downloadAndProcessResourceWithCatch = async (resource, resourcesPath, errorList, downloadErrors, getCancelState = null) => {
+export const downloadAndProcessResourceWithCatch = async (resource, resourcesPath, errorList, downloadErrors, getCancelState = null, latestManifestKey = {}) => {
   let result = null;
   try {
-    result = await downloadAndProcessResource(resource, resourcesPath, downloadErrors, getCancelState);
+    result = await downloadAndProcessResource(resource, resourcesPath, downloadErrors, getCancelState, latestManifestKey);
     console.log('Update Success: ' + resource.downloadUrl);
   } catch (e) {
     console.log('Update Error:');
@@ -308,10 +310,11 @@ export function showOnlineStatus() {
  * @param {Array} downloadErrors - parsed list of download errors with details such as if the download completed (vs. parsing error), error, and url
  * @param {Boolean} allAlignedBibles - if true all aligned Bibles from all languages are updated also
  * @param {function} getCancelState - function to check if user cancelled download
+ * @param {object} latestManifestKey - for resource type make sure manifest key is at specific version, by subject
  * @return {Promise} Promise that returns a list of all the resources updated, rejects if
  * any fail
  */
-export const downloadResources = (languageList, resourcesPath, resources, downloadErrors, allAlignedBibles = false, getCancelState = null) => {
+export const downloadResources = (languageList, resourcesPath, resources, downloadErrors, allAlignedBibles = false, getCancelState = null, latestManifestKey = {}) => {
   return new Promise((resolve, reject) => {
     if (!allAlignedBibles && (!languageList || !languageList.length)) {
       reject(errors.LANGUAGE_LIST_EMPTY);
@@ -362,7 +365,7 @@ export const downloadResources = (languageList, resourcesPath, resources, downlo
     downloadableResources = sortDownloableResources(downloadableResources.filter((resource) => resource));
 
     const queue = downloadableResources.map((resource) =>
-      () => downloadAndProcessResourceWithCatch(resource, resourcesPath, errorList, downloadErrors, getCancelState));
+      () => downloadAndProcessResourceWithCatch(resource, resourcesPath, errorList, downloadErrors, getCancelState, latestManifestKey));
     Throttle.all(queue, {maxInProgress: 2})
       .then((result) => {
         rimraf.sync(importsDir, fs);

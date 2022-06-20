@@ -56,6 +56,7 @@ function Updater() {
   this.remoteCatalog = null;
   this.updatedCatalogResources = null;
   this.downloadErrors = [];
+  this.latestManifestKey = {};
 }
 
 Updater.prototype = {};
@@ -130,7 +131,7 @@ Updater.prototype.getLatestDownloadErrorsStr = function() {
  */
 
 /**
- * Used to initiate a load of the latest resource so that the user can then select which ones
+ * Used to create a list of newest remote resources so that the user can then select which ones
  * they would like to update.
  * Note: This function only returns the resources that are not up to date on the user machine
  * before the request
@@ -140,6 +141,7 @@ Updater.prototype.getLatestDownloadErrorsStr = function() {
  *                  modifiedTime: String,
  *                  }>} localResourceList - list of resources that are on the users local machine already {}
  * @param {array} filterByOwner - if given, a list of owners to allow for download, updatedCatalogResources and returned list will be limited to these owners
+ * @param {object} latestManifestKey - for resource type make sure manifest key is at specific version, by subject
  * @return {
  *          Array.<{
  *                   languageId: String,
@@ -149,9 +151,10 @@ Updater.prototype.getLatestDownloadErrorsStr = function() {
  *                 }>
  *         }} - list of languages that have updates in catalog (throws exception on error)
  */
-Updater.prototype.getLatestResources = async function(localResourceList, filterByOwner= null ) {
+Updater.prototype.getLatestResources = async function (localResourceList, filterByOwner= null, latestManifestKey= {} ) {
+  this.latestManifestKey = latestManifestKey; // save for downloads
   await this.updateCatalog();
-  this.updatedCatalogResources = parseHelpers.getLatestResources(this.remoteCatalog, localResourceList, filterByOwner);
+  this.updatedCatalogResources = parseHelpers.getLatestResources(this.remoteCatalog, localResourceList, filterByOwner, latestManifestKey);
   return parseHelpers.getUpdatedLanguageList(this.updatedCatalogResources);
 };
 
@@ -227,7 +230,7 @@ Updater.prototype.downloadResources = async function(languageList, resourcesPath
   let results = null;
   const getCancelState = this.getCancelState.bind(this);
   try {
-    results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors, allAlignedBibles, getCancelState);
+    results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors, allAlignedBibles, getCancelState, this.latestManifestKey);
   } catch (e) {
     const errors = this.getLatestDownloadErrorsStr(); // get detailed errors and log
     if (errors) {

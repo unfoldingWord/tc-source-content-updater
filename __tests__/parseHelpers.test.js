@@ -79,6 +79,66 @@ describe('getLatestResources()', () => {
     expect(frenchResources.length).toEqual(0);
   });
 
+  it('should not remove en/ult since Bible does not have manifest key', () => {
+    const resourceList = [
+      {
+        languageId: 'en',
+        resourceId: 'ult',
+        modifiedTime: '2021-12-06T00:00:00Z',
+        owner: 'unfoldingWord',
+        manifest: { subject: 'Aligned Bible' },
+      },
+    ];
+    const latestManifestKey = { Bible: { usfmjs: '1.0.0' } };
+    const results = parseHelpers.getLatestResources(catalogUW, resourceList, null, latestManifestKey);
+    expect(results.length).toEqual(12);
+
+    const EnUltResources = getResourcesForLanguageAndResource(results, 'en', 'ult');
+    expect(EnUltResources.length).toEqual(1);
+  });
+
+  it('should remove en/ult since Bible manifest key is current', () => {
+    const resourceList = [
+      {
+        languageId: 'en',
+        resourceId: 'ult',
+        modifiedTime: '2021-12-06T00:00:00Z',
+        owner: 'unfoldingWord',
+        manifest: {
+          subject: 'Aligned Bible',
+          usfmjs: '1.0.0',
+        },
+      },
+    ];
+    const latestManifestKey = { Bible: { usfmjs: '1.0.0' } };
+    const results = parseHelpers.getLatestResources(catalogUW, resourceList, null, latestManifestKey);
+    expect(results.length).toEqual(11);
+
+    const EnUltResources = getResourcesForLanguageAndResource(results, 'en', 'ult');
+    expect(EnUltResources.length).toEqual(0);
+  });
+
+  it('should not remove en/ult since Bible has older manifest key', () => {
+    const resourceList = [
+      {
+        languageId: 'en',
+        resourceId: 'ult',
+        modifiedTime: '2021-12-06T00:00:00Z',
+        owner: 'unfoldingWord',
+        manifest: {
+          subject: 'Aligned Bible',
+          usfmjs: '9.0.0',
+        },
+      },
+    ];
+    const latestManifestKey = { Bible: { usfmjs: '10.0.0' } };
+    const results = parseHelpers.getLatestResources(catalogUW, resourceList, null, latestManifestKey);
+    expect(results.length).toEqual(12);
+
+    const EnUltResources = getResourcesForLanguageAndResource(results, 'en', 'ult');
+    expect(EnUltResources.length).toEqual(1);
+  });
+
   it('should not remove french/f10 since newer in catalog', () => {
     const resourceList = [
       {languageId: 'fr', resourceId: 'f10', modifiedTime: '2018-04-27T18:51:26+00:00'}

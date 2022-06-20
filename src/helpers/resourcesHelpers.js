@@ -337,8 +337,9 @@ export function getSubdirOfUnzippedResource(extractedFilesPath) {
  * @param {String} resourcesPath Path to user resources folder
  * @return {String} Path to the directory of the processed files
  * @param {Array} downloadErrors - parsed list of download errors with details such as if the download completed (vs. parsing error), error, and url
+ * @param {object} latestManifestKey - for resource type make sure manifest key is at specific version, by subject
  */
-export async function processResource(resource, sourcePath, resourcesPath, downloadErrors) {
+export async function processResource(resource, sourcePath, resourcesPath, downloadErrors, latestManifestKey = {}) {
   try {
     if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId) {
       throw Error(formatError(resource, errors.RESOURCE_NOT_GIVEN));
@@ -370,7 +371,7 @@ export async function processResource(resource, sourcePath, resourcesPath, downl
       case 'Aligned_Bible':
       case 'Greek_New_Testament':
       case 'Hebrew_Old_Testament':
-        packageParseHelpers.parseBiblePackage(resource, sourcePath, processedFilesPath);
+        packageParseHelpers.parseBiblePackage(resource, sourcePath, processedFilesPath, latestManifestKey);
         break;
       default:
         fs.copySync(sourcePath, processedFilesPath);
@@ -460,9 +461,8 @@ export function makeTwGroupDataResource(resource, sourcePath) {
     const twGroupDataPath = path.join(sourcePath + '_tw_group_data_' + resource.languageId + '_v' + resource.version);
     const result = twGroupDataHelpers.generateTwGroupDataFromAlignedBible(resource, sourcePath, twGroupDataPath);
     if (result) {
-return twGroupDataPath
-;
-}
+      return twGroupDataPath;
+    }
   }
 }
 
