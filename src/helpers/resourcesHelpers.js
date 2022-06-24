@@ -377,10 +377,21 @@ export async function processResource(resource, sourcePath, resourcesPath, downl
         fs.copySync(sourcePath, processedFilesPath);
     }
 
-    const manifest = getResourceManifest(sourcePath);
-
-    if (!getResourceManifest(processedFilesPath) && manifest) {
-      manifest.catalog_modified_time = resource.remoteModifiedTime;
+    let manifest = getResourceManifest(processedFilesPath);
+    if (!manifest) { // if manifest not found, create
+      manifest = getResourceManifest(sourcePath);
+      if (manifest) {
+        if (resource.version) {
+          manifest.version = resource.version;
+        }
+        manifest.catalog_modified_time = resource.remoteModifiedTime;
+        fs.outputJsonSync(path.join(processedFilesPath, 'manifest.json'), manifest, {spaces: 2});
+      }
+    } else { // if manifest found, make sure it has the version and data from catalog next
+      if (resource.version) {
+        manifest.version = resource.version;
+      }
+      manifest.modifiedTime = resource.remoteModifiedTime;
       fs.outputJsonSync(path.join(processedFilesPath, 'manifest.json'), manifest, {spaces: 2});
     }
 
