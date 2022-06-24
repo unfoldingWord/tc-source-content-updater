@@ -273,7 +273,7 @@ Updater.prototype.downloadAllResources = async function(resourcesPath,
   let results = null;
   const getCancelState = this.getCancelState.bind(this);
   try {
-    results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors, false, getCancelState);
+    results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors, false, getCancelState, this.latestManifestKey);
   } catch (e) {
     const errors = this.getLatestDownloadErrorsStr(); // get detailed errors and log
     if (errors) {
