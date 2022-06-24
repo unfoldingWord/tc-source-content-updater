@@ -384,14 +384,14 @@ export async function processResource(resource, sourcePath, resourcesPath, downl
         if (resource.version) {
           manifest.version = resource.version;
         }
-        manifest.catalog_modified_time = resource.remoteModifiedTime;
+        manifest.modifiedTime = manifest.catalog_modified_time = resource.remoteModifiedTime;
         fs.outputJsonSync(path.join(processedFilesPath, 'manifest.json'), manifest, {spaces: 2});
       }
     } else { // if manifest found, make sure it has the version and data from catalog next
       if (resource.version) {
         manifest.version = resource.version;
       }
-      manifest.modifiedTime = resource.remoteModifiedTime;
+      manifest.modifiedTime = manifest.catalog_modified_time = resource.remoteModifiedTime;
       fs.outputJsonSync(path.join(processedFilesPath, 'manifest.json'), manifest, {spaces: 2});
     }
 
