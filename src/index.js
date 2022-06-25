@@ -252,7 +252,7 @@ Updater.prototype.getConfig = function() {
     latestManifestKey: this.latestManifestKey,
   };
   return config;
-}
+};
 
 /**
  * @description Downloads and processes each item in resources list along with dependencies that need to be updated using the DCS API
