@@ -57,10 +57,10 @@ export function parseManifest(extractedFilePath, outputPath, resource) {
  *        }} resource - resource entry for download
  * @param {String} sourcePath - path to unzipped files from bible package
  * @param {String} outputPath - path to store processed bible
- * @param {object} latestManifestKey - for resource type make sure manifest key is at specific version, by subject
+ * @param {object} config - configuration object
  * @return {Boolean} true if success
  */
-export function parseBiblePackage(resource, sourcePath, outputPath, latestManifestKey = {}) {
+export function parseBiblePackage(resource, sourcePath, outputPath, config = {}) {
   const index = {};
   if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId) {
     throw Error(resourcesHelpers.formatError(resource, errors.RESOURCE_NOT_GIVEN));
@@ -75,7 +75,7 @@ export function parseBiblePackage(resource, sourcePath, outputPath, latestManife
     throw Error(resourcesHelpers.formatError(resource, errors.OUTPUT_PATH_NOT_GIVEN));
   }
   fs.ensureDirSync(outputPath);
-  const bibleManifestKey = latestManifestKey && latestManifestKey['Bible'];
+  const bibleManifestKey = config.latestManifestKey && config.latestManifestKey['Bible'];
   let manifestKey = null;
   let manifestKeyMinValue = null;
 

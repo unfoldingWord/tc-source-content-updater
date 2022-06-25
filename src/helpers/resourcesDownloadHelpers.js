@@ -94,18 +94,17 @@ export function getVersionFolder(resource) {
  *           }>} resource - resource to download
  * @param {String} resourcesPath Path to the user resources directory
  * @param {Array} downloadErrors - parsed list of download errors with details such as if the download completed (vs. parsing error), error, and url
- * @param {function} getCancelState - function to check if user cancelled download
- * @param {object} latestManifestKey - for resource type make sure manifest key is at specific version, by subject
+ * @param {object} config - configuration object
  * @return {Promise} Download promise
  */
-export const downloadAndProcessResource = async (resource, resourcesPath, downloadErrors, getCancelState = null, latestManifestKey = {}) => {
+export const downloadAndProcessResource = async (resource, resourcesPath, downloadErrors, config = {}) => {
   if (!resource) {
     throw Error(errors.RESOURCE_NOT_GIVEN);
   } else if (!resourcesPath) {
     throw Error(formatError(resource, errors.RESOURCES_PATH_NOT_GIVEN));
   }
 
-  if (getCancelState && getCancelState()) {
+  if (config.getCancelState && config.getCancelState()) {
     console.warn(`downloadAndProcessResource() download of ${resource.downloadUrl} cancelled`);
     return; // if user cancelled then skip
   }
@@ -155,7 +154,7 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
       throw Error(appendError(errors.UNABLE_TO_DOWNLOAD_RESOURCES, err));
     }
     try {
-      if (getCancelState && getCancelState()) {
+      if (config.getCancelState && config.getCancelState()) {
         console.warn(`downloadAndProcessResource() unzipping of ${resource.downloadUrl} cancelled`);
         return; // if user cancelled then skip
       }
@@ -164,13 +163,13 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
     } catch (err) {
       throw Error(appendError(errors.UNABLE_TO_UNZIP_RESOURCES, err));
     }
-    if (getCancelState && getCancelState()) {
+    if (config.getCancelState && config.getCancelState()) {
       console.warn(`downloadAndProcessResource() processing of ${resource.downloadUrl} cancelled`);
       return; // if user cancelled then skip
     }
     console.log('Processing: ' + resource.downloadUrl);
     const importSubdirPath = getSubdirOfUnzippedResource(importPath);
-    const processedFilesPath = await processResource(resource, importSubdirPath, resourcesPath, downloadErrors, latestManifestKey);
+    const processedFilesPath = await processResource(resource, importSubdirPath, resourcesPath, downloadErrors, config);
     if (processedFilesPath) {
       const versionDir = getVersionFolder(resource);
       // Extra step if the resource is the Greek UGNT or Hebrew UHB and in Door43 catalog
@@ -217,14 +216,13 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
  * @param {String} resourcesPath - path to save resources
  * @param {Array} errorList - keeps track of errors
  * @param {Array} downloadErrors - parsed list of download errors with details such as if the download completed (vs. parsing error), error, and url
- * @param {function} getCancelState - function to check if user cancelled download
- * @param {object} latestManifestKey - for resource type make sure manifest key is at specific version, by subject
+ * @param {object} config - configuration object
  * @return {Promise} promise
  */
-export const downloadAndProcessResourceWithCatch = async (resource, resourcesPath, errorList, downloadErrors, getCancelState = null, latestManifestKey = {}) => {
+export const downloadAndProcessResourceWithCatch = async (resource, resourcesPath, errorList, downloadErrors, config = {}) => {
   let result = null;
   try {
-    result = await downloadAndProcessResource(resource, resourcesPath, downloadErrors, getCancelState, latestManifestKey);
+    result = await downloadAndProcessResource(resource, resourcesPath, downloadErrors, config);
     console.log('Update Success: ' + resource.downloadUrl);
   } catch (e) {
     console.log('Update Error:');
@@ -309,12 +307,11 @@ export function showOnlineStatus() {
  *                 }>} resources - resources that will be downloaded if the lanugage IDs match
  * @param {Array} downloadErrors - parsed list of download errors with details such as if the download completed (vs. parsing error), error, and url
  * @param {Boolean} allAlignedBibles - if true all aligned Bibles from all languages are updated also
- * @param {function} getCancelState - function to check if user cancelled download
- * @param {object} latestManifestKey - for resource type make sure manifest key is at specific version, by subject
+ * @param {object} config - configuration object
  * @return {Promise} Promise that returns a list of all the resources updated, rejects if
  * any fail
  */
-export const downloadResources = (languageList, resourcesPath, resources, downloadErrors, allAlignedBibles = false, getCancelState = null, latestManifestKey = {}) => {
+export const downloadResources = (languageList, resourcesPath, resources, downloadErrors, allAlignedBibles = false, config = {}) => {
   return new Promise((resolve, reject) => {
     if (!allAlignedBibles && (!languageList || !languageList.length)) {
       reject(errors.LANGUAGE_LIST_EMPTY);
@@ -365,7 +362,7 @@ export const downloadResources = (languageList, resourcesPath, resources, downlo
     downloadableResources = sortDownloableResources(downloadableResources.filter((resource) => resource));
 
     const queue = downloadableResources.map((resource) =>
-      () => downloadAndProcessResourceWithCatch(resource, resourcesPath, errorList, downloadErrors, getCancelState, latestManifestKey));
+      () => downloadAndProcessResourceWithCatch(resource, resourcesPath, errorList, downloadErrors, config));
     Throttle.all(queue, {maxInProgress: 2})
       .then((result) => {
         rimraf.sync(importsDir, fs);
