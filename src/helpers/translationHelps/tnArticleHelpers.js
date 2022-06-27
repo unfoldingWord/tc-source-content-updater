@@ -303,19 +303,15 @@ export function getMissingOriginalResource(resourcesPath, originalLanguageId, or
           origOwner = 'unfoldingWord';
           downloadUrl = `https://git.door43.org/${origOwner}/${resourceName}/archive/${version_}.zip`;
         }
-        // get metadata for release
-        const latest = await getReleaseMetaData(origOwner, resourceName, version_);
-        const release = latest && latest.release;
         console.log(`tnArticleHelpers.getMissingOriginalResource() - downloading missing original bible: ${downloadUrl}`);
-        const remoteModifiedTime = (latest && latest.released) || (release && release.published_at);
         const resource = {
           languageId: originalLanguageId,
           resourceId: originalLanguageBibleId,
-          remoteModifiedTime,
+          remoteModifiedTime: '0001-01-01T00:00:00+00:00',
           downloadUrl,
           name: resourceName,
           version: formatVersionWithoutV(version),
-          subject: latest.subject,
+          subject: 'Bible',
           owner: origOwner,
           catalogEntry: {
             subject: {},
