@@ -393,11 +393,12 @@ export async function searchCatalogNext(searchParams, retries=3) {
  * does Catalog next API query to get manifest data
  * @param {string} owner
  * @param {string} repo
+ * @param {string} tag
  * @param {number} retries
  * @return {Promise<{Object}>}
  */
-export async function downloadManifestData(owner, repo, retries=5) {
-  const fetchUrl = `https://git.door43.org/api/catalog/v5/entry/${owner}/${repo}/master/metadata`;
+export async function downloadManifestData(owner, repo, tag = 'master', retries=5) {
+  const fetchUrl = `https://git.door43.org/api/catalog/v5/entry/${owner}/${repo}/${tag}/metadata`;
   try {
     const {result} = await makeJsonRequestDetailed(fetchUrl, retries);
     return result;
@@ -406,6 +407,46 @@ export async function downloadManifestData(owner, repo, retries=5) {
     throw e;
   }
 }
+
+/**
+ * does Catalog next API query to get metadata for latest version
+ * @param {string} owner
+ * @param {string} repo
+ * @param {number} retries
+ * @return {Promise<{Object}>}
+ */
+export async function getLatestRelease(owner, repo, retries=5) {
+  const fetchUrl = `https://git.door43.org/api/catalog/v5/search/${owner}/${repo}`;
+  try {
+    const {result} = await makeJsonRequestDetailed(fetchUrl, retries);
+    if (result.data[0].release) {
+      return result.data[0];
+    }
+  } catch (e) {
+    console.warn('getManifestData() - error getting manifest data', e);
+    throw e;
+  }
+}
+
+/**
+ * does Catalog next API query to get metadata for tag
+ * @param {string} owner
+ * @param {string} repo
+ * @param {string|null} tag
+ * @param {number} retries
+ * @return {Promise<{Object}>}
+ */
+export async function getReleaseMetaData(owner, repo, tag, retries=5) {
+  const fetchUrl = `https://git.door43.org/api/catalog/v5/entry/${owner}/${repo}/${tag}`;
+  try {
+    const {result} = await makeJsonRequestDetailed(fetchUrl, retries);
+    return result;
+  } catch (e) {
+    console.warn('getManifestData() - error getting manifest data', e);
+    throw e;
+  }
+}
+
 
 /**
  * add resource to list

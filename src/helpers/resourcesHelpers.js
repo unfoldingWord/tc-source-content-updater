@@ -337,9 +337,9 @@ export function getSubdirOfUnzippedResource(extractedFilesPath) {
  * @param {String} resourcesPath Path to user resources folder
  * @return {String} Path to the directory of the processed files
  * @param {Array} downloadErrors - parsed list of download errors with details such as if the download completed (vs. parsing error), error, and url
- * @param {object} latestManifestKey - for resource type make sure manifest key is at specific version, by subject
+ * @param {object} config - configuration object
  */
-export async function processResource(resource, sourcePath, resourcesPath, downloadErrors, latestManifestKey = {}) {
+export async function processResource(resource, sourcePath, resourcesPath, downloadErrors, config = {}) {
   try {
     if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId) {
       throw Error(formatError(resource, errors.RESOURCE_NOT_GIVEN));
@@ -359,10 +359,10 @@ export async function processResource(resource, sourcePath, resourcesPath, downl
         twArticleHelpers.processTranslationWords(resource, sourcePath, processedFilesPath);
         break;
       case 'TSV_Translation_Words_Links':
-        await twArticleHelpers.processTranslationWordsTSV(resource, sourcePath, processedFilesPath, resourcesPath, downloadErrors);
+        await twArticleHelpers.processTranslationWordsTSV(resource, sourcePath, processedFilesPath, resourcesPath, downloadErrors, config);
         break;
       case 'TSV_Translation_Notes':
-        await tnArticleHelpers.processTranslationNotes(resource, sourcePath, processedFilesPath, resourcesPath, downloadErrors);
+        await tnArticleHelpers.processTranslationNotes(resource, sourcePath, processedFilesPath, resourcesPath, downloadErrors, config);
         break;
       case 'Translation_Academy':
         taArticleHelpers.processTranslationAcademy(resource, sourcePath, processedFilesPath);
@@ -371,16 +371,27 @@ export async function processResource(resource, sourcePath, resourcesPath, downl
       case 'Aligned_Bible':
       case 'Greek_New_Testament':
       case 'Hebrew_Old_Testament':
-        packageParseHelpers.parseBiblePackage(resource, sourcePath, processedFilesPath, latestManifestKey);
+        packageParseHelpers.parseBiblePackage(resource, sourcePath, processedFilesPath, config);
         break;
       default:
         fs.copySync(sourcePath, processedFilesPath);
     }
 
-    const manifest = getResourceManifest(sourcePath);
-
-    if (!getResourceManifest(processedFilesPath) && manifest) {
-      manifest.catalog_modified_time = resource.remoteModifiedTime;
+    let manifest = getResourceManifest(processedFilesPath);
+    if (!manifest) { // if manifest not found, create
+      manifest = getResourceManifest(sourcePath);
+      if (manifest) {
+        if (resource.version) {
+          manifest.version = resource.version;
+        }
+        manifest.modifiedTime = manifest.catalog_modified_time = (resource.remoteModifiedTime || resource.modified);
+        fs.outputJsonSync(path.join(processedFilesPath, 'manifest.json'), manifest, {spaces: 2});
+      }
+    } else { // if manifest found, make sure it has the version and data from catalog next
+      if (resource.version) {
+        manifest.version = resource.version;
+      }
+      manifest.modifiedTime = manifest.catalog_modified_time = (resource.remoteModifiedTime || resource.modified);
       fs.outputJsonSync(path.join(processedFilesPath, 'manifest.json'), manifest, {spaces: 2});
     }
 

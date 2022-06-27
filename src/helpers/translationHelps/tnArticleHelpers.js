@@ -26,10 +26,11 @@ import {
 import {makeSureResourceUnzipped} from '../unzipFileHelpers';
 import {
   DOOR43_CATALOG,
-  downloadManifestData,
   formatVersionWithoutV,
   formatVersionWithV,
+  getLatestRelease,
   getOwnerForOriginalLanguage,
+  getReleaseMetaData,
 } from '../apiHelpers';
 import {tsvToObjects} from './twArticleHelpers';
 
@@ -43,9 +44,10 @@ import {tsvToObjects} from './twArticleHelpers';
  * @param {String} languageId - language ID for tA
  * @param {String} ownerStr
  * @param {boolean} needTa - set to false if resource does not depend on TA
+ * @param {object} config - configuration object
  * @return {Promise<{otQuery: string, ntQuery: string}>}
  */
-export async function getMissingResources(sourcePath, resourcesPath, getMissingOriginalResource, downloadErrors, languageId, ownerStr, needTa = true) {
+export async function getMissingResources(sourcePath, resourcesPath, getMissingOriginalResource, downloadErrors, languageId, ownerStr, needTa = true, config = {}) {
   const tsvManifest = resourcesHelpers.getResourceManifestFromYaml(sourcePath);
   // array of related resources used to generated the tsv.
   const tsvRelations = tsvManifest.dublin_core.relation;
@@ -60,7 +62,7 @@ export async function getMissingResources(sourcePath, resourcesPath, getMissingO
       const origLangId = isNewTestament ? NT_ORIG_LANG : OT_ORIG_LANG;
       const origLangBibleId = isNewTestament ? NT_ORIG_LANG_BIBLE: OT_ORIG_LANG_BIBLE;
       const originalLanguageOwner = getOwnerForOriginalLanguage(ownerStr);
-      await getMissingOriginalResource(resourcesPath, origLangId, origLangBibleId, origLangVersion, downloadErrors, originalLanguageOwner);
+      await getMissingOriginalResource(resourcesPath, origLangId, origLangBibleId, origLangVersion, downloadErrors, originalLanguageOwner, config);
       const originalBiblePath = path.join(
         resourcesPath,
         origLangId,
@@ -155,8 +157,9 @@ async function tsvToGroupData7Cols(filepath, bookId, resourcesPath, langId, tool
  * @param {String} outputPath - Path to place the processed resource files WITHOUT the version in the path
  * @param {String} resourcesPath Path to resources folder
  * @param {Array} downloadErrors - parsed list of download errors with details such as if the download completed (vs. parsing error), error, and url
+ * @param {object} config - configuration object
  */
-export async function processTranslationNotes(resource, sourcePath, outputPath, resourcesPath, downloadErrors) {
+export async function processTranslationNotes(resource, sourcePath, outputPath, resourcesPath, downloadErrors, config = {}) {
   try {
     if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId) {
       throw Error(resourcesHelpers.formatError(resource, errors.RESOURCE_NOT_GIVEN));
@@ -183,13 +186,13 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
     let taCategoriesPath = resourcesHelpers.getLatestVersionInPath(translationAcademyPath, resource.owner);
     if (!taCategoriesPath) {
       console.log(`tnArticleHelpers.processTranslationNotes() - download missing tA resource`);
-      await getMissingHelpsResource(resourcesPath, resource, 'ta', 'Translation_Academy', downloadErrors);
+      await getMissingHelpsResource(resourcesPath, resource, 'ta', 'Translation_Academy', downloadErrors, config);
       console.log(`tnArticleHelpers.processTranslationNotes() - have tA resource`);
       taCategoriesPath = resourcesHelpers.getLatestVersionInPath(translationAcademyPath, resource.owner);
     }
 
     const originalLanguageOwner = getOwnerForOriginalLanguage(resource.owner);
-    const {otQuery, ntQuery} = await getMissingResources(sourcePath, resourcesPath, getMissingOriginalResource, downloadErrors, resource.languageId, resource.owner);
+    const {otQuery, ntQuery} = await getMissingResources(sourcePath, resourcesPath, getMissingOriginalResource, downloadErrors, resource.languageId, resource.owner, true, config);
     console.log(`tnArticleHelpers.processTranslationNotes() - have needed original bibles for ${sourcePath}, starting processing`);
     const tsvFiles = fs.readdirSync(sourcePath).filter((filename) => path.extname(filename) === '.tsv');
     const tnErrors = [];
@@ -272,9 +275,10 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
  * @param {String} version - version number
  * @param {Array} downloadErrors - parsed list of download errors with details such as if the download completed (vs. parsing error), error, and url
  * @param {String} ownerStr
+ * @param {object} config - configuration object
  * @return {Promise}
  */
-export function getMissingOriginalResource(resourcesPath, originalLanguageId, originalLanguageBibleId, version, downloadErrors, ownerStr) {
+export function getMissingOriginalResource(resourcesPath, originalLanguageId, originalLanguageBibleId, version, downloadErrors, ownerStr, config= {}) {
   return new Promise(async (resolve, reject) => {
     try {
       const version_ = formatVersionWithV(version);
@@ -290,12 +294,14 @@ export function getMissingOriginalResource(resourcesPath, originalLanguageId, or
       if (!fs.existsSync(originalBiblePath)) {
         const resourceName = `${originalLanguageId}_${originalLanguageBibleId}`;
         let downloadUrl;
+        let origOwner = ownerStr;
         if (ownerStr === DOOR43_CATALOG) {
           // Download orig. lang. resource
           downloadUrl = `https://cdn.door43.org/${originalLanguageId}/${originalLanguageBibleId}/${version_}/${originalLanguageBibleId}.zip`;
         } else { // otherwise we read from uW org
           // Download orig. lang. resource
-          downloadUrl = `https://git.door43.org/unfoldingWord/${resourceName}/archive/${version_}.zip`;
+          origOwner = 'unfoldingWord';
+          downloadUrl = `https://git.door43.org/${origOwner}/${resourceName}/archive/${version_}.zip`;
         }
         console.log(`tnArticleHelpers.getMissingOriginalResource() - downloading missing original bible: ${downloadUrl}`);
         const resource = {
@@ -306,7 +312,7 @@ export function getMissingOriginalResource(resourcesPath, originalLanguageId, or
           name: resourceName,
           version: formatVersionWithoutV(version),
           subject: 'Bible',
-          owner: ownerStr,
+          owner: origOwner,
           catalogEntry: {
             subject: {},
             resource: {},
@@ -315,7 +321,7 @@ export function getMissingOriginalResource(resourcesPath, originalLanguageId, or
         };
         // Delay to try to avoid Socket timeout
         await delay(1000);
-        await downloadAndProcessResource(resource, resourcesPath, downloadErrors);
+        await downloadAndProcessResource(resource, resourcesPath, downloadErrors, config);
         resolve();
       } else {
         resolve();
@@ -327,38 +333,41 @@ export function getMissingOriginalResource(resourcesPath, originalLanguageId, or
 }
 
 /**
- * download a missing missing resource that matches parentResource, but has fetchResourceId
+ * download a missing resource that matches parentResource, but has fetchResourceId
  * @param {String} resourcesPath - resources Path
  * @param {object} parentResource - resource of object loading this as a dependency
  * @param {String} fetchResourceId - id of resource to fetch, such as 'ta'
  * @param {String} fetchSubject - subject string of resource to fetch, such as 'Translation_Academy'
  * @param {Array} downloadErrors - parsed list of download errors with details such as if the download completed (vs. parsing error), error, and url
+ * @param {object} config - configuration object
  * @return {Promise}
  */
-export function getMissingHelpsResource(resourcesPath, parentResource, fetchResourceId, fetchSubject, downloadErrors) {
+export function getMissingHelpsResource(resourcesPath, parentResource, fetchResourceId, fetchSubject, downloadErrors, config = {}) {
   return new Promise(async (resolve, reject) => {
     try {
       const resourceName = `${parentResource.languageId}_${fetchResourceId}`;
       // get latest version
-      const manifest = await downloadManifestData(parentResource.owner, resourceName);
-      const version = manifest && manifest.dublin_core && manifest.dublin_core.version || 'master';
+      const latest = await getLatestRelease(parentResource.owner, resourceName);
+      const release = latest && latest.release;
+      const version = release && release.tag_name || 'master';
       const version_ = formatVersionWithV(version);
 
       const downloadUrl = `https://git.door43.org/${parentResource.owner}/${resourceName}/archive/${version_}.zip`;
       console.log(`tnArticleHelpers.getMissingHelpsResource() - downloading missing helps: ${downloadUrl}`);
+      const remoteModifiedTime = (latest && latest.released) || (release && release.published_at);
       const resource = {
-        languageId: parentResource.languageId,
+        languageId: latest.language,
         resourceId: fetchResourceId,
-        remoteModifiedTime: '0001-01-01T00:00:00+00:00',
+        remoteModifiedTime,
         downloadUrl,
         name: resourceName,
         owner: parentResource.owner,
         version: formatVersionWithoutV(version),
-        subject: fetchSubject,
+        subject: latest.subject,
       };
       // Delay to try to avoid Socket timeout
       await delay(1000);
-      await downloadAndProcessResource(resource, resourcesPath, downloadErrors);
+      await downloadAndProcessResource(resource, resourcesPath, downloadErrors, config);
       resolve();
     } catch (error) {
       reject(error);

@@ -127,9 +127,10 @@ function isRemoteNewerResLookup(resourceId, remoteResources, localResource) {
   let catalogResource;
   if (index >= 0) {
     catalogResource = remoteResources[index];
-    isNewer = !localResource.modifiedTime ||
-      (catalogResource.remoteModifiedTime > localResource.modifiedTime);
-    catalogResource.localModifiedTime = localResource.modifiedTime;
+    const localModifiedTime = localResource.modifiedTime || (localResource.manifest && localResource.manifest.modified);
+    isNewer = !localModifiedTime ||
+      (catalogResource.remoteModifiedTime > localModifiedTime);
+    catalogResource.localModifiedTime = localModifiedTime;
   } else {
     isNewer = true; // newer if not stored locally
   }
@@ -170,7 +171,7 @@ export function compareVersions(a, b) {
 function isLocalResourceManifestKeyOutdated(localResource, latestManifestKey, isRemoteNewer) {
   const manifest = localResource && localResource.manifest;
   if (latestManifestKey && manifest) {
-    const subject = manifest.subject;
+    const subject = manifest.subject || (manifest.dublin_core && manifest.dublin_core.subject);
     const manifestKeys = latestManifestKey[subject];
 
     if (manifestKeys) {

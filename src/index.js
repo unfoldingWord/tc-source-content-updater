@@ -228,9 +228,8 @@ Updater.prototype.downloadResources = async function(languageList, resourcesPath
   this.downloadErrors = [];
   this.cancelDownload_ = false;
   let results = null;
-  const getCancelState = this.getCancelState.bind(this);
   try {
-    results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors, allAlignedBibles, getCancelState, this.latestManifestKey);
+    results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors, allAlignedBibles, this.getConfig());
   } catch (e) {
     const errors = this.getLatestDownloadErrorsStr(); // get detailed errors and log
     if (errors) {
@@ -241,6 +240,18 @@ Updater.prototype.downloadResources = async function(languageList, resourcesPath
   }
   console.log('Source Content Update Successful');
   return results;
+};
+
+/**
+ * private function to get configuration object that can be passed around
+ * @return {{getCancelState: function, latestManifestKey: {}}}
+ */
+Updater.prototype.getConfig = function() {
+  const config = {
+    getCancelState: this.getCancelState.bind(this),
+    latestManifestKey: this.latestManifestKey,
+  };
+  return config;
 };
 
 /**
@@ -271,9 +282,8 @@ Updater.prototype.downloadAllResources = async function(resourcesPath,
     }
   }
   let results = null;
-  const getCancelState = this.getCancelState.bind(this);
   try {
-    results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors, false, getCancelState);
+    results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors, false, this.getConfig());
   } catch (e) {
     const errors = this.getLatestDownloadErrorsStr(); // get detailed errors and log
     if (errors) {

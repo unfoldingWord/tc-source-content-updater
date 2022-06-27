@@ -41,7 +41,6 @@ export function processTranslationWords(resource, sourcePath, outputPath) {
   if (fs.pathExistsSync(outputPath))
     fs.removeSync(outputPath);
 
-  const isDoor43 = resource.owner === DOOR43_CATALOG;
   const typesPath = path.join(sourcePath, 'bible');
   const isDirectory = (item) => fs.lstatSync(path.join(typesPath, item)).isDirectory();
   let typeDirs = [];
@@ -276,9 +275,10 @@ async function twlTsvToGroupData(tsvPath, project, resourcesPath, originalBibleP
  * @param {String} outputPath - Path to place the processed resource files WIHTOUT the version in the path
  * @param {string} resourcesPath
  * @param {Array} downloadErrors - parsed list of download errors with details such as if the download completed (vs. parsing error), error, and url
+ * @param {object} config - configuration object
  * @return {Boolean} true if success
  */
-export async function processTranslationWordsTSV(resource, sourcePath, outputPath, resourcesPath, downloadErrors) {
+export async function processTranslationWordsTSV(resource, sourcePath, outputPath, resourcesPath, downloadErrors, config = {}) {
   try {
     if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId)
       throw Error(resourcesHelpers.formatError(resource, errors.RESOURCE_NOT_GIVEN));
@@ -291,7 +291,7 @@ export async function processTranslationWordsTSV(resource, sourcePath, outputPat
     if (fs.pathExistsSync(outputPath))
       fs.removeSync(outputPath);
 
-    const {otQuery, ntQuery} = await getMissingResources(sourcePath, resourcesPath, getMissingOriginalResource, downloadErrors, resource.languageId, resource.owner, false);
+    const {otQuery, ntQuery} = await getMissingResources(sourcePath, resourcesPath, getMissingOriginalResource, downloadErrors, resource.languageId, resource.owner, false, config);
 
     // make sure tW is already installed
     const twPath = path.join(
