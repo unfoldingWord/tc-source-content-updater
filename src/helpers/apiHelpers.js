@@ -412,11 +412,15 @@ export async function downloadManifestData(owner, repo, tag = 'master', retries=
  * does Catalog next API query to get manifest data
  * @param {string} owner
  * @param {string} repo
+ * @param {string|null} tag
  * @param {number} retries
  * @return {Promise<{Object}>}
  */
-export async function getLatestRelease(owner, repo, retries=5) {
-  const fetchUrl = `https://git.door43.org/api/catalog/v5/search/${owner}/${repo}`;
+export async function getReleaseMetaData(owner, repo, tag = null, retries=5) {
+  let fetchUrl = `https://git.door43.org/api/catalog/v5/search/${owner}/${repo}`;
+  if (tag) {
+    fetchUrl += `/${tag}`;
+  }
   try {
     const {result} = await makeJsonRequestDetailed(fetchUrl, retries);
     if (result.data[0].release) {

@@ -25,7 +25,7 @@ import * as Bible from '../resources/bible';
 import {
   DOOR43_CATALOG,
   OWNER_SEPARATOR,
-  getLatestRelease,
+  getReleaseMetaData,
 } from './apiHelpers';
 import {areWeOnline} from './utils';
 
@@ -116,7 +116,7 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
       console.log(message);
       throw message;
     }
-    const latest = await getLatestRelease(resourceData.owner || resource.owner, resourceData.name);
+    const latest = await getReleaseMetaData(resourceData.owner || resource.owner, resourceData.name);
     const release = latest && latest.release;
     const version = release && release.tag_name;
     if (version) {

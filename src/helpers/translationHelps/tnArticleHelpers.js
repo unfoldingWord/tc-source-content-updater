@@ -26,10 +26,9 @@ import {
 import {makeSureResourceUnzipped} from '../unzipFileHelpers';
 import {
   DOOR43_CATALOG,
-  downloadManifestData,
   formatVersionWithoutV,
   formatVersionWithV,
-  getLatestRelease,
+  getReleaseMetaData,
   getOwnerForOriginalLanguage,
 } from '../apiHelpers';
 import {tsvToObjects} from './twArticleHelpers';
@@ -303,10 +302,11 @@ export function getMissingOriginalResource(resourcesPath, originalLanguageId, or
           origOwner = 'unfoldingWord';
           downloadUrl = `https://git.door43.org/${origOwner}/${resourceName}/archive/${version_}.zip`;
         }
-        // get manifest data
-        const manifest = await downloadManifestData(origOwner, resourceName, version_);
+        // get metadata for release
+        const latest = await getReleaseMetaData(origOwner, resourceName, version_);
+        const release = latest && latest.release;
         console.log(`tnArticleHelpers.getMissingOriginalResource() - downloading missing original bible: ${downloadUrl}`);
-        const remoteModifiedTime = manifest && manifest.remoteModifiedTime;
+        const remoteModifiedTime = (latest && latest.released) || (release && release.published_at);
         const resource = {
           languageId: originalLanguageId,
           resourceId: originalLanguageBibleId,
@@ -314,7 +314,7 @@ export function getMissingOriginalResource(resourcesPath, originalLanguageId, or
           downloadUrl,
           name: resourceName,
           version: formatVersionWithoutV(version),
-          subject: manifest.subject,
+          subject: release.subject,
           owner: origOwner,
           catalogEntry: {
             subject: {},
@@ -350,7 +350,7 @@ export function getMissingHelpsResource(resourcesPath, parentResource, fetchReso
     try {
       const resourceName = `${parentResource.languageId}_${fetchResourceId}`;
       // get latest version
-      const latest = await getLatestRelease(parentResource.owner, resourceName);
+      const latest = await getReleaseMetaData(parentResource.owner, resourceName);
       const release = latest && latest.release;
       const version = release && release.tag_name || 'master';
       const version_ = formatVersionWithV(version);
