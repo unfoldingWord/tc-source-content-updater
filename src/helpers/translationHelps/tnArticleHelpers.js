@@ -28,8 +28,9 @@ import {
   DOOR43_CATALOG,
   formatVersionWithoutV,
   formatVersionWithV,
-  getReleaseMetaData,
+  getLatestRelease,
   getOwnerForOriginalLanguage,
+  getReleaseMetaData,
 } from '../apiHelpers';
 import {tsvToObjects} from './twArticleHelpers';
 
@@ -350,7 +351,7 @@ export function getMissingHelpsResource(resourcesPath, parentResource, fetchReso
     try {
       const resourceName = `${parentResource.languageId}_${fetchResourceId}`;
       // get latest version
-      const latest = await getReleaseMetaData(parentResource.owner, resourceName);
+      const latest = await getLatestRelease(parentResource.owner, resourceName);
       const release = latest && latest.release;
       const version = release && release.tag_name || 'master';
       const version_ = formatVersionWithV(version);
