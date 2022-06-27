@@ -315,7 +315,7 @@ export function getMissingOriginalResource(resourcesPath, originalLanguageId, or
           downloadUrl,
           name: resourceName,
           version: formatVersionWithoutV(version),
-          subject: release.subject,
+          subject: latest.subject,
           owner: origOwner,
           catalogEntry: {
             subject: {},
@@ -367,7 +367,7 @@ export function getMissingHelpsResource(resourcesPath, parentResource, fetchReso
         name: resourceName,
         owner: release.owner,
         version: formatVersionWithoutV(version),
-        subject: release.subject,
+        subject: latest.subject,
       };
       // Delay to try to avoid Socket timeout
       await delay(1000);
