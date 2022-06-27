@@ -365,7 +365,7 @@ export function getMissingHelpsResource(resourcesPath, parentResource, fetchReso
         remoteModifiedTime,
         downloadUrl,
         name: resourceName,
-        owner: release.owner,
+        owner: parentResource.owner,
         version: formatVersionWithoutV(version),
         subject: latest.subject,
       };
