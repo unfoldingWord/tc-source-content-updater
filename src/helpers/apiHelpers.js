@@ -408,6 +408,26 @@ export async function downloadManifestData(owner, repo, retries=5) {
 }
 
 /**
+ * does Catalog next API query to get manifest data
+ * @param {string} owner
+ * @param {string} repo
+ * @param {number} retries
+ * @return {Promise<{Object}>}
+ */
+export async function getLatestRelease(owner, repo, retries=5) {
+  const fetchUrl = `https://git.door43.org/api/catalog/v5/search/${owner}/${repo}`;
+  try {
+    const {result} = await makeJsonRequestDetailed(fetchUrl, retries);
+    if (result.data[0].release) {
+      return result.data[0];
+    }
+  } catch (e) {
+    console.warn('getManifestData() - error getting manifest data', e);
+    throw e;
+  }
+}
+
+/**
  * add resource to list
  * @param {string} resourceLatestPath
  * @param {string} pathToResourceManifestFile

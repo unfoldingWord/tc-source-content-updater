@@ -26,9 +26,9 @@ import {
 import {makeSureResourceUnzipped} from '../unzipFileHelpers';
 import {
   DOOR43_CATALOG,
-  downloadManifestData,
   formatVersionWithoutV,
   formatVersionWithV,
+  getLatestRelease,
   getOwnerForOriginalLanguage,
 } from '../apiHelpers';
 import {tsvToObjects} from './twArticleHelpers';
@@ -293,23 +293,28 @@ export function getMissingOriginalResource(resourcesPath, originalLanguageId, or
       if (!fs.existsSync(originalBiblePath)) {
         const resourceName = `${originalLanguageId}_${originalLanguageBibleId}`;
         let downloadUrl;
+        let origOwner = ownerStr;
         if (ownerStr === DOOR43_CATALOG) {
           // Download orig. lang. resource
           downloadUrl = `https://cdn.door43.org/${originalLanguageId}/${originalLanguageBibleId}/${version_}/${originalLanguageBibleId}.zip`;
         } else { // otherwise we read from uW org
           // Download orig. lang. resource
-          downloadUrl = `https://git.door43.org/unfoldingWord/${resourceName}/archive/${version_}.zip`;
+          origOwner = 'unfoldingWord';
+          downloadUrl = `https://git.door43.org/${origOwner}/${resourceName}/archive/${version_}.zip`;
         }
+        // get latest version
+        const latest = await getLatestRelease(origOwner, resourceName);
+        const release = latest && latest.release;
         console.log(`tnArticleHelpers.getMissingOriginalResource() - downloading missing original bible: ${downloadUrl}`);
         const resource = {
           languageId: originalLanguageId,
           resourceId: originalLanguageBibleId,
-          remoteModifiedTime: '0001-01-01T00:00:00+00:00',
+          remoteModifiedTime: release.released,
           downloadUrl,
           name: resourceName,
           version: formatVersionWithoutV(version),
-          subject: 'Bible',
-          owner: ownerStr,
+          subject: release.subject,
+          owner: release.owner,
           catalogEntry: {
             subject: {},
             resource: {},
@@ -344,21 +349,22 @@ export function getMissingHelpsResource(resourcesPath, parentResource, fetchReso
     try {
       const resourceName = `${parentResource.languageId}_${fetchResourceId}`;
       // get latest version
-      const manifest = await downloadManifestData(parentResource.owner, resourceName);
-      const version = manifest && manifest.dublin_core && manifest.dublin_core.version || 'master';
+      const latest = await getLatestRelease(parentResource.owner, resourceName);
+      const release = latest && latest.release;
+      const version = release && release.tag_name || 'master';
       const version_ = formatVersionWithV(version);
 
       const downloadUrl = `https://git.door43.org/${parentResource.owner}/${resourceName}/archive/${version_}.zip`;
       console.log(`tnArticleHelpers.getMissingHelpsResource() - downloading missing helps: ${downloadUrl}`);
       const resource = {
-        languageId: parentResource.languageId,
+        languageId: latest.language,
         resourceId: fetchResourceId,
-        remoteModifiedTime: '0001-01-01T00:00:00+00:00',
+        remoteModifiedTime: release.released,
         downloadUrl,
         name: resourceName,
-        owner: parentResource.owner,
+        owner: release.owner,
         version: formatVersionWithoutV(version),
-        subject: fetchSubject,
+        subject: release.subject,
       };
       // Delay to try to avoid Socket timeout
       await delay(1000);
