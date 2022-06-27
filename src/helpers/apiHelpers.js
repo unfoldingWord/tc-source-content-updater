@@ -417,15 +417,13 @@ export async function downloadManifestData(owner, repo, tag = 'master', retries=
  * @return {Promise<{Object}>}
  */
 export async function getReleaseMetaData(owner, repo, tag = null, retries=5) {
-  let fetchUrl = `https://git.door43.org/api/catalog/v5/search/${owner}/${repo}`;
+  let fetchUrl = `https://git.door43.org/api/catalog/v5/entry/${owner}/${repo}`;
   if (tag) {
     fetchUrl += `/${tag}`;
   }
   try {
     const {result} = await makeJsonRequestDetailed(fetchUrl, retries);
-    if (result.data[0].release) {
-      return result.data[0];
-    }
+    return result;
   } catch (e) {
     console.warn('getManifestData() - error getting manifest data', e);
     throw e;
