@@ -393,11 +393,12 @@ export async function searchCatalogNext(searchParams, retries=3) {
  * does Catalog next API query to get manifest data
  * @param {string} owner
  * @param {string} repo
+ * @param {string} tag
  * @param {number} retries
  * @return {Promise<{Object}>}
  */
-export async function downloadManifestData(owner, repo, retries=5) {
-  const fetchUrl = `https://git.door43.org/api/catalog/v5/entry/${owner}/${repo}/master/metadata`;
+export async function downloadManifestData(owner, repo, tag = 'master', retries=5) {
+  const fetchUrl = `https://git.door43.org/api/catalog/v5/entry/${owner}/${repo}/${tag}/metadata`;
   try {
     const {result} = await makeJsonRequestDetailed(fetchUrl, retries);
     return result;

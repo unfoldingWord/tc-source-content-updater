@@ -26,6 +26,7 @@ import {
 import {makeSureResourceUnzipped} from '../unzipFileHelpers';
 import {
   DOOR43_CATALOG,
+  downloadManifestData,
   formatVersionWithoutV,
   formatVersionWithV,
   getLatestRelease,
@@ -302,11 +303,10 @@ export function getMissingOriginalResource(resourcesPath, originalLanguageId, or
           origOwner = 'unfoldingWord';
           downloadUrl = `https://git.door43.org/${origOwner}/${resourceName}/archive/${version_}.zip`;
         }
-        // get latest version
-        const latest = await getLatestRelease(origOwner, resourceName);
-        const release = latest && latest.release;
+        // get manifest data
+        const manifest = await downloadManifestData(origOwner, resourceName, version_);
         console.log(`tnArticleHelpers.getMissingOriginalResource() - downloading missing original bible: ${downloadUrl}`);
-        const remoteModifiedTime = (latest && latest.released) || (release && release.published_at);
+        const remoteModifiedTime = manifest && manifest.remoteModifiedTime;
         const resource = {
           languageId: originalLanguageId,
           resourceId: originalLanguageBibleId,
@@ -314,8 +314,8 @@ export function getMissingOriginalResource(resourcesPath, originalLanguageId, or
           downloadUrl,
           name: resourceName,
           version: formatVersionWithoutV(version),
-          subject: release.subject,
-          owner: release.owner,
+          subject: manifest.subject,
+          owner: origOwner,
           catalogEntry: {
             subject: {},
             resource: {},
