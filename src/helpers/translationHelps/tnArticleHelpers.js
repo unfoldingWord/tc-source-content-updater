@@ -306,10 +306,11 @@ export function getMissingOriginalResource(resourcesPath, originalLanguageId, or
         const latest = await getLatestRelease(origOwner, resourceName);
         const release = latest && latest.release;
         console.log(`tnArticleHelpers.getMissingOriginalResource() - downloading missing original bible: ${downloadUrl}`);
+        const remoteModifiedTime = (latest && latest.released) || (release && release.published_at);
         const resource = {
           languageId: originalLanguageId,
           resourceId: originalLanguageBibleId,
-          remoteModifiedTime: release.released,
+          remoteModifiedTime,
           downloadUrl,
           name: resourceName,
           version: formatVersionWithoutV(version),
@@ -356,10 +357,11 @@ export function getMissingHelpsResource(resourcesPath, parentResource, fetchReso
 
       const downloadUrl = `https://git.door43.org/${parentResource.owner}/${resourceName}/archive/${version_}.zip`;
       console.log(`tnArticleHelpers.getMissingHelpsResource() - downloading missing helps: ${downloadUrl}`);
+      const remoteModifiedTime = (latest && latest.released) || (release && release.published_at);
       const resource = {
         languageId: latest.language,
         resourceId: fetchResourceId,
-        remoteModifiedTime: release.released,
+        remoteModifiedTime,
         downloadUrl,
         name: resourceName,
         owner: release.owner,
