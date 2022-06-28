@@ -354,7 +354,8 @@ export async function processResource(resource, sourcePath, resourcesPath, downl
     const processedFilesPath = sourcePath + '_processed';
     fs.ensureDirSync(processedFilesPath);
 
-    switch (resource.subject) {
+    const subject = resource.subject && resource.subject.replaceAll(' ', '_'); // replace spaces with underscores;
+    switch (subject) {
       case 'Translation_Words':
         twArticleHelpers.processTranslationWords(resource, sourcePath, processedFilesPath);
         break;
