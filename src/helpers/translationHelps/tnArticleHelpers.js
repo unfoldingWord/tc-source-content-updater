@@ -363,7 +363,7 @@ export function getMissingHelpsResource(resourcesPath, parentResource, fetchReso
         name: resourceName,
         owner: parentResource.owner,
         version: formatVersionWithoutV(version),
-        subject: latest.subject && latest.subject.replaceAll(' ', '_'), // replace spaces with underscores
+        subject: latest.subject,
       };
       // Delay to try to avoid Socket timeout
       await delay(1000);
