@@ -222,7 +222,7 @@ export function getLatestResources(catalog, localResourceList, config) {
   }
 
   const latestManifestKey = config.latestManifestKey || {};
-  const filterByOwner = config.filterByOwner || [];
+  const filterByOwner = config.filterByOwner;
   const bibleKey = latestManifestKey && latestManifestKey['Bible'];
 
   if (bibleKey) { // if Bible type, copy to all bible types
