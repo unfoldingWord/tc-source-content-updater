@@ -30,7 +30,6 @@ import {
   formatVersionWithV,
   getLatestRelease,
   getOwnerForOriginalLanguage,
-  getReleaseMetaData,
 } from '../apiHelpers';
 import {tsvToObjects} from './twArticleHelpers';
 

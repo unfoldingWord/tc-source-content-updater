@@ -201,8 +201,10 @@ function isLocalResourceManifestKeyOutdated(localResource, latestManifestKey, is
  *                  resourceId: String,
  *                  modifiedTime: String,
  *                  }>} localResourceList - list of resources that are on the users local machine already {}
- * @param {array} filterByOwner - if given, a list of owners to allow for download, returned list will be limited to these owners
- * @param {object} latestManifestKey - for resource type make sure manifest key is at specific version, by subject
+ * @param {object} config
+ * @param {array|null} config.filterByOwner - if given, a list of owners to allow for download, updatedCatalogResources and returned list will be limited to these owners
+ * @param {object|null} config.latestManifestKey - for resource type make sure manifest key is at specific version, by subject
+ * @param {string|null} config.stage - stage for search, default is production
  * @return {Array.<{
  *                   languageId: String,
  *                   resourceId: String,
@@ -214,11 +216,13 @@ function isLocalResourceManifestKeyOutdated(localResource, latestManifestKey, is
  *                   catalogEntry: {subject, resource, format}
  *                 }>} updated resources  (throws exception on error)
  */
-export function getLatestResources(catalog, localResourceList, filterByOwner = null, latestManifestKey = {}) {
+export function getLatestResources(catalog, localResourceList, config) {
   if (!catalog || !Array.isArray(localResourceList)) {
     throw new Error(ERROR.PARAMETER_ERROR);
   }
 
+  const latestManifestKey = config.latestManifestKey || {};
+  const filterByOwner = config.filterByOwner || [];
   const bibleKey = latestManifestKey && latestManifestKey['Bible'];
 
   if (bibleKey) { // if Bible type, copy to all bible types
@@ -229,7 +233,12 @@ export function getLatestResources(catalog, localResourceList, filterByOwner = n
     }
   }
 
-  let tCoreResources = parseCatalogResources(catalog, true, TC_RESOURCES);
+  const config_ = {
+    ...config,
+    ignoreObsResources: true,
+    subjectFilters: TC_RESOURCES,
+  }
+  let tCoreResources = parseCatalogResources(catalog, config_);
   // remove resources that are already up to date
 
   for (const localResource of localResourceList) {
@@ -317,8 +326,9 @@ export function getFormatsForResource(resource) {
  * parses the remoteCatalog and returns list of catalog resources
  *
  * @param {{subjects: Array.<Object>}} catalog - to parse
- * @param {boolean} ignoreObsResources - if true then reject obs resources
- * @param {Array.<String>} subjectFilters - optional array of subjects to include.  If null then every subject is returned
+ * @param {object} config
+ * @param {boolean} config.ignoreObsResources - if true then reject obs resources
+ * @param {Array.<String>} config.subjectFilters - optional array of subjects to include.  If null then every subject is returned
  * @return {Array.<{
  *                   languageId: String,
  *                   resourceId: String,
@@ -329,10 +339,11 @@ export function getFormatsForResource(resource) {
  *                   catalogEntry: {subject, resource, format}
  *                 }>|null} list of updated resources (returns null on error)
  */
-export function parseCatalogResources(catalog, ignoreObsResources = true, subjectFilters = null) {
+export function parseCatalogResources(catalog, config= {}) {
   if (!catalog || !Array.isArray(catalog)) {
     throw new Error(ERROR.CATALOG_CONTENT_ERROR);
   }
+  const ignoreObsResources = config.ignoreObsResources !== false;
   const catalogResources = [];
   for (let i = 0, len = catalog.length; i < len; i++) {
     const catalogItem = catalog[i];
@@ -353,8 +364,8 @@ export function parseCatalogResources(catalog, ignoreObsResources = true, subjec
     }
     const downloadUrl = catalogItem.downloadUrl;
     const remoteModifiedTime = catalogItem.modified;
-    const isDesiredSubject = !subjectFilters ||
-      subjectFilters.includes(subject);
+    const isDesiredSubject = !config.subjectFilters ||
+      config.subjectFilters.includes(subject);
     let version = catalogItem.version;
     if (!version) {
       version = 'master'; // we are on latest

@@ -64,9 +64,11 @@ Updater.prototype = {};
 /**
  * Method to manually fetch the latest remoteCatalog for the current
  * Updater instance. This function has no return value
+ * @param {object} config
+ * @param {string|null} config.stage - stage for search, default is prod
  */
-Updater.prototype.updateCatalog = async function() {
-  this.remoteCatalog = await apiHelpers.getCatalog();
+Updater.prototype.updateCatalog = async function(config = {}) {
+  this.remoteCatalog = await apiHelpers.getCatalog(config);
 };
 
 /**
@@ -140,9 +142,11 @@ Updater.prototype.getLatestDownloadErrorsStr = function() {
  *                  resourceId: String,
  *                  modifiedTime: String,
  *                  }>} localResourceList - list of resources that are on the users local machine already {}
- * @param {array} filterByOwner - if given, a list of owners to allow for download, updatedCatalogResources and returned list will be limited to these owners
- * @param {object} latestManifestKey - for resource type make sure manifest key is at specific version, by subject
- * @return {
+ * @param {object} config
+ * @param {array|null} config.filterByOwner - if given, a list of owners to allow for download, updatedCatalogResources and returned list will be limited to these owners
+ * @param {object|null} config.latestManifestKey - for resource type make sure manifest key is at specific version, by subject
+ * @param {string|null} config.stage - stage for search, default is prod
+ * * @return {
  *          Array.<{
  *                   languageId: String,
  *                   localModifiedTime: String,
@@ -151,10 +155,10 @@ Updater.prototype.getLatestDownloadErrorsStr = function() {
  *                 }>
  *         }} - list of languages that have updates in catalog (throws exception on error)
  */
-Updater.prototype.getLatestResources = async function (localResourceList, filterByOwner= null, latestManifestKey= {} ) {
-  this.latestManifestKey = latestManifestKey; // save for downloads
-  await this.updateCatalog();
-  this.updatedCatalogResources = parseHelpers.getLatestResources(this.remoteCatalog, localResourceList, filterByOwner, latestManifestKey);
+Updater.prototype.getLatestResources = async function (localResourceList, config = {} ) {
+  this.latestManifestKey = config.latestManifestKey || {}; // save for downloads
+  await this.updateCatalog(config);
+  this.updatedCatalogResources = parseHelpers.getLatestResources(this.remoteCatalog, localResourceList, config);
   return parseHelpers.getUpdatedLanguageList(this.updatedCatalogResources);
 };
 
