@@ -116,7 +116,7 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
       console.log(message);
       throw message;
     }
-    const latest = await getReleaseMetaData(resourceData.owner || resource.owner, resourceData.name);
+    const latest = await getReleaseMetaData(resourceData.owner || resource.owner, resourceData.name, resource.version || 'master');
     const release = latest && latest.release;
     const version = release && release.tag_name;
     if (version) {
