@@ -2,12 +2,12 @@ import fs from 'fs-extra';
 import path from 'path-extra';
 import {isObject} from 'util';
 import {
-  tsvToGroupData,
+  cleanupReference,
   formatAndSaveGroupData,
   generateGroupsIndex,
   saveGroupsIndex,
   tnJsonToGroupData,
-  parseReference,
+  tsvToGroupData,
 } from 'tsv-groupdata-parser';
 // helpers
 import * as resourcesHelpers from '../resourcesHelpers';
@@ -30,7 +30,6 @@ import {
   formatVersionWithV,
   getLatestRelease,
   getOwnerForOriginalLanguage,
-  getReleaseMetaData,
 } from '../apiHelpers';
 import {tsvToObjects} from './twArticleHelpers';
 
@@ -96,6 +95,24 @@ export async function getMissingResources(sourcePath, resourcesPath, getMissingO
 }
 
 /**
+ * separate a reference string such as "1:1" into chapter and verse and add a verseStr for references that have multiple verses
+ * @param {string} ref - reference string
+ * @return {{Chapter, Verse}}
+ */
+export function parseReference(ref) {
+  const cleanedRef = cleanupReference(ref);
+  const ref_ = {
+    Chapter: cleanedRef.chapter,
+    Verse: cleanedRef.verse + '',
+  };
+
+  if (cleanedRef.verseStr) {
+    ref_.verseStr = cleanedRef.verseStr;
+  }
+  return ref_;
+}
+
+/**
  * process the 7 column tsv into group data
  * @param {string} filepath path to tsv file.
  * @param {string} bookId
@@ -127,15 +144,12 @@ async function tsvToGroupData7Cols(filepath, bookId, resourcesPath, langId, tool
       tsvItem.OrigQuote = tsvItem.Quote;
       tsvItem.OccurrenceNote = tsvItem.Note;
       tsvItem.Book = bookId;
-      const refParts = parseReference(reference, true);
-      for (const part of refParts) {
-        const tsvObject = {
-          ...tsvItem,
-          Chapter: part.chapter,
-          Verse: part.verse,
-        };
-        tsvObjects.push(tsvObject);
-      }
+      const cleanedRef = parseReference(reference);
+      const tsvObject = {
+        ...tsvItem,
+        ...cleanedRef,
+      };
+      tsvObjects.push(tsvObject);
     }
   }
 
