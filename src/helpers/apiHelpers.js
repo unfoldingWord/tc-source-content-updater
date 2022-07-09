@@ -403,7 +403,7 @@ export async function downloadManifestData(owner, repo, tag = 'master', retries=
     const {result} = await makeJsonRequestDetailed(fetchUrl, retries);
     return result;
   } catch (e) {
-    console.warn('getManifestData() - error getting manifest data', e);
+    console.warn('downloadManifestData() - error getting manifest data', e);
     throw e;
   }
 }
@@ -423,7 +423,7 @@ export async function getLatestRelease(owner, repo, retries=5) {
       return result.data[0];
     }
   } catch (e) {
-    console.warn('getManifestData() - error getting manifest data', e);
+    console.warn('getLatestRelease() - error getting manifest data', e);
     throw e;
   }
 }
@@ -442,7 +442,7 @@ export async function getReleaseMetaData(owner, repo, tag, retries=5) {
     const {result} = await makeJsonRequestDetailed(fetchUrl, retries);
     return result;
   } catch (e) {
-    console.warn('getManifestData() - error getting manifest data', e);
+    console.warn('getReleaseMetaData() - error getting manifest data', e);
     throw e;
   }
 }
