@@ -25,6 +25,7 @@ import * as Bible from '../resources/bible';
 import {
   DOOR43_CATALOG,
   OWNER_SEPARATOR,
+  downloadManifestData,
   getReleaseMetaData,
 } from './apiHelpers';
 import {areWeOnline} from './utils';
@@ -116,9 +117,15 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
       console.log(message);
       throw message;
     }
-    const latest = await getReleaseMetaData(resourceData.owner || resource.owner, resourceData.name);
+    const owner = resourceData.owner || resource.owner;
+    const tag = resource.version || 'master';
+    const latest = await getReleaseMetaData(owner, resourceData.name, tag);
     const release = latest && latest.release;
-    const version = release && release.tag_name;
+    let version = release && release.tag_name;
+    if (!version) { // if no release found, then get version from manifest data
+      const manifest = await downloadManifestData(owner, resourceData.name, tag);
+      version = manifest && manifest.dublin_core && manifest.dublin_core.version;
+    }
     if (version) {
       resource.version = version;
     }
