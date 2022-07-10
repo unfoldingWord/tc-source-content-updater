@@ -237,7 +237,7 @@ export function getLatestResources(catalog, localResourceList, config) {
     ...config,
     ignoreObsResources: true,
     subjectFilters: TC_RESOURCES,
-  }
+  };
   let tCoreResources = parseCatalogResources(catalog, config_);
   // remove resources that are already up to date
 

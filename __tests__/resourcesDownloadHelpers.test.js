@@ -12,7 +12,7 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 
 describe('Tests for resourcesDownloadHelpers.downloadResources()', function() {
   const updater = new Updater();
-  const resources = parseHelpers.getLatestResources(loadMockedResources(updater), []);
+  const resources = parseHelpers.getLatestResources(loadMockedResources(updater), [], {});
   const resourcesPath = path.join(ospath.home(), 'translationCore/resources'); // a mocked resources directory
   beforeEach(() => {
     fs.__resetMockFS();
