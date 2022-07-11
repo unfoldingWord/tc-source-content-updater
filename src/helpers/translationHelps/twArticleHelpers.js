@@ -126,7 +126,8 @@ function tsvObjectsToGroupData(tsvItems, originalBiblePath, resourcesPath, bookI
           continue;
         }
 
-        let [chapter, verse] = tsvItem.Reference.split(':');
+        const chapter = tsvItem.Chapter;
+        const verse = tsvItem.Verse;
         tsvItem.Book = bookId;
         tsvItem.Chapter = chapter;
         tsvItem.Verse = verse;
