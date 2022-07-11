@@ -215,9 +215,11 @@ export function combineTwords(catalogReleases) {
 
 /**
  * get published catalog - combines catalog next releases with old catalog
+ * @param {object} config
+ * @param {string|null} config.stage - stage for search, default is prod
  * @return {Promise<*[]>}
  */
-export async function getCatalog() {
+export async function getCatalog(config = {}) {
   let searchParams = {
     subject: SUBJECT.ALL_TC_RESOURCES,
     stage: STAGE.LATEST,
@@ -227,7 +229,7 @@ export async function getCatalog() {
   console.log(`found ${catalogReleases.length} items in old Door43-Catalog`);
   searchParams = {
     subject: SUBJECT.ALL_TC_RESOURCES,
-    stage: STAGE.PROD,
+    stage: config.stage || STAGE.PROD,
   };
   const newCatalogReleases = await searchCatalogNext(searchParams);
   console.log(`found ${newCatalogReleases.length} items in catalog next`);

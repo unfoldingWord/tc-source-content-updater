@@ -199,7 +199,7 @@ describe('Updater.downloadResources', () => {
  */
 function loadMockedResources(updater) {
   updater.remoteCatalog = fs.__actual.readJsonSync(path.join('./__tests__/fixtures/catalogNext.json'));
-  updater.updatedCatalogResources = parseHelpers.getLatestResources(updater.remoteCatalog, []);
+  updater.updatedCatalogResources = parseHelpers.getLatestResources(updater.remoteCatalog, [], {});
   const langlist = parseHelpers.getUpdatedLanguageList(updater.updatedCatalogResources);
   return langlist;
 }
