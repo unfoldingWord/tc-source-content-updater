@@ -66,7 +66,7 @@
     "semver": "5.5.0",
     "string-punctuation-tokenizer": "^2.2.0",
     "tmp": "0.0.33",
-    "tsv-groupdata-parser": "0.12.4",
+    "tsv-groupdata-parser": "github:unfoldingWord/tsv-groupdata-parser#feature-mcleanb-7338-chapterRanges.2",
     "usfm-js": "3.4.0"
   },
   "dependencies": {

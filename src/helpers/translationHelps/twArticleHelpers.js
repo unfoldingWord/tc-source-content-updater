@@ -141,7 +141,7 @@ function tsvObjectsToGroupData(tsvItems, originalBiblePath, resourcesPath, bookI
         }
 
         try {
-          verseString = resourceApi.getVerseString(chapter, verse);
+          verseString = resourceApi.getVerseStringFromRef(tsvItem.Reference);
         } catch (e) {
           if (parseInt(chapter, 10) && parseInt(verse, 10)) {
             console.warn(`tsvObjectsToGroupData() - error getting verse string: chapter ${chapter}, verse ${verse} from ${JSON.stringify(tsvItem)}`, e);
