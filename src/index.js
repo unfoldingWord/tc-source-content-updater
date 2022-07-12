@@ -56,6 +56,7 @@ function Updater() {
   this.remoteCatalog = null;
   this.updatedCatalogResources = null;
   this.downloadErrors = [];
+  this.latestManifestKey = {};
 }
 
 Updater.prototype = {};
@@ -63,9 +64,11 @@ Updater.prototype = {};
 /**
  * Method to manually fetch the latest remoteCatalog for the current
  * Updater instance. This function has no return value
+ * @param {object} config
+ * @param {string|null} config.stage - stage for search, default is prod
  */
-Updater.prototype.updateCatalog = async function() {
-  this.remoteCatalog = await apiHelpers.getCatalog();
+Updater.prototype.updateCatalog = async function(config = {}) {
+  this.remoteCatalog = await apiHelpers.getCatalog(config);
 };
 
 /**
@@ -130,7 +133,7 @@ Updater.prototype.getLatestDownloadErrorsStr = function() {
  */
 
 /**
- * Used to initiate a load of the latest resource so that the user can then select which ones
+ * Used to create a list of newest remote resources so that the user can then select which ones
  * they would like to update.
  * Note: This function only returns the resources that are not up to date on the user machine
  * before the request
@@ -139,8 +142,11 @@ Updater.prototype.getLatestDownloadErrorsStr = function() {
  *                  resourceId: String,
  *                  modifiedTime: String,
  *                  }>} localResourceList - list of resources that are on the users local machine already {}
- * @param {array} filterByOwner - if given, a list of owners to allow for download, updatedCatalogResources and returned list will be limited to these owners
- * @return {
+ * @param {object} config
+ * @param {array|null} config.filterByOwner - if given, a list of owners to allow for download, updatedCatalogResources and returned list will be limited to these owners
+ * @param {object|null} config.latestManifestKey - for resource type make sure manifest key is at specific version, by subject
+ * @param {string|null} config.stage - stage for search, default is prod
+ * * @return {
  *          Array.<{
  *                   languageId: String,
  *                   localModifiedTime: String,
@@ -149,9 +155,10 @@ Updater.prototype.getLatestDownloadErrorsStr = function() {
  *                 }>
  *         }} - list of languages that have updates in catalog (throws exception on error)
  */
-Updater.prototype.getLatestResources = async function(localResourceList, filterByOwner= null ) {
-  await this.updateCatalog();
-  this.updatedCatalogResources = parseHelpers.getLatestResources(this.remoteCatalog, localResourceList, filterByOwner);
+Updater.prototype.getLatestResources = async function (localResourceList, config = {} ) {
+  this.latestManifestKey = config.latestManifestKey || {}; // save for downloads
+  await this.updateCatalog(config);
+  this.updatedCatalogResources = parseHelpers.getLatestResources(this.remoteCatalog, localResourceList, config);
   return parseHelpers.getUpdatedLanguageList(this.updatedCatalogResources);
 };
 
@@ -225,9 +232,8 @@ Updater.prototype.downloadResources = async function(languageList, resourcesPath
   this.downloadErrors = [];
   this.cancelDownload_ = false;
   let results = null;
-  const getCancelState = this.getCancelState.bind(this);
   try {
-    results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors, allAlignedBibles, getCancelState);
+    results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors, allAlignedBibles, this.getConfig());
   } catch (e) {
     const errors = this.getLatestDownloadErrorsStr(); // get detailed errors and log
     if (errors) {
@@ -238,6 +244,18 @@ Updater.prototype.downloadResources = async function(languageList, resourcesPath
   }
   console.log('Source Content Update Successful');
   return results;
+};
+
+/**
+ * private function to get configuration object that can be passed around
+ * @return {{getCancelState: function, latestManifestKey: {}}}
+ */
+Updater.prototype.getConfig = function() {
+  const config = {
+    getCancelState: this.getCancelState.bind(this),
+    latestManifestKey: this.latestManifestKey,
+  };
+  return config;
 };
 
 /**
@@ -268,9 +286,8 @@ Updater.prototype.downloadAllResources = async function(resourcesPath,
     }
   }
   let results = null;
-  const getCancelState = this.getCancelState.bind(this);
   try {
-    results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors, false, getCancelState);
+    results = await resourcesDownloadHelpers.downloadResources(languageList, resourcesPath, resources, this.downloadErrors, false, this.getConfig());
   } catch (e) {
     const errors = this.getLatestDownloadErrorsStr(); // get detailed errors and log
     if (errors) {

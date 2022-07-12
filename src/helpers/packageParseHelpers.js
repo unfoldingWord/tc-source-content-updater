@@ -57,9 +57,10 @@ export function parseManifest(extractedFilePath, outputPath, resource) {
  *        }} resource - resource entry for download
  * @param {String} sourcePath - path to unzipped files from bible package
  * @param {String} outputPath - path to store processed bible
+ * @param {object} config - configuration object
  * @return {Boolean} true if success
  */
-export function parseBiblePackage(resource, sourcePath, outputPath) {
+export function parseBiblePackage(resource, sourcePath, outputPath, config = {}) {
   const index = {};
   if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId) {
     throw Error(resourcesHelpers.formatError(resource, errors.RESOURCE_NOT_GIVEN));

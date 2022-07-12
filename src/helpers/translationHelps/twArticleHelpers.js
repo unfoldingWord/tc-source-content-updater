@@ -229,9 +229,10 @@ async function twlTsvToGroupData(tsvPath, project, resourcesPath, originalBibleP
  * @param {String} outputPath - Path to place the processed resource files WIHTOUT the version in the path
  * @param {string} resourcesPath
  * @param {Array} downloadErrors - parsed list of download errors with details such as if the download completed (vs. parsing error), error, and url
+ * @param {object} config - configuration object
  * @return {Boolean} true if success
  */
-export async function processTranslationWordsTSV(resource, sourcePath, outputPath, resourcesPath, downloadErrors) {
+export async function processTranslationWordsTSV(resource, sourcePath, outputPath, resourcesPath, downloadErrors, config = {}) {
   try {
     if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId)
       throw Error(resourcesHelpers.formatError(resource, errors.RESOURCE_NOT_GIVEN));
@@ -244,7 +245,7 @@ export async function processTranslationWordsTSV(resource, sourcePath, outputPat
     if (fs.pathExistsSync(outputPath))
       fs.removeSync(outputPath);
 
-    const {otQuery, ntQuery} = await getMissingResources(sourcePath, resourcesPath, getMissingOriginalResource, downloadErrors, resource.languageId, resource.owner, false);
+    const {otQuery, ntQuery} = await getMissingResources(sourcePath, resourcesPath, getMissingOriginalResource, downloadErrors, resource.languageId, resource.owner, false, config);
 
     // make sure tW is already installed
     const twPath = path.join(
@@ -256,8 +257,8 @@ export async function processTranslationWordsTSV(resource, sourcePath, outputPat
     if (fs.existsSync(twVersionPath)) {
       makeSureResourceUnzipped(twVersionPath);
     } else {
-      const resource = `${resource.owner}/${resource.languageId}_tw`;
-      throw new Error(`processTranslationWordsTSV() - cannot find '${resource}' at ${twPath} for ${resource.owner}`);
+      const resource_ = `${resource.owner}/${resource.languageId}_tw`;
+      throw new Error(`processTranslationWordsTSV() - cannot find '${resource_}' at ${twPath} for ${resource.owner}`);
     }
 
     const manifest = getResourceManifest(sourcePath);
