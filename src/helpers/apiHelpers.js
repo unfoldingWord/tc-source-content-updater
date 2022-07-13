@@ -462,17 +462,21 @@ function addLocalResource(resourceLatestPath, pathToResourceManifestFile, langua
   const {version, owner} = getVersionAndOwnerFromPath(resourceLatestPath);
 
   if (fs.existsSync(pathToResourceManifestFile)) {
-    const resourceManifest = fs.readJsonSync(pathToResourceManifestFile);
-    const localResource = {
-      languageId,
-      resourceId,
-      owner,
-      version,
-      modifiedTime: resourceManifest.catalog_modified_time,
-      manifest: resourceManifest,
-    };
+    try {
+      const resourceManifest = fs.readJsonSync(pathToResourceManifestFile);
+      const localResource = {
+        languageId,
+        resourceId,
+        owner,
+        version,
+        modifiedTime: resourceManifest.catalog_modified_time,
+        manifest: resourceManifest,
+      };
 
-    localResourceList.push(localResource);
+      localResourceList.push(localResource);
+    } catch (e) {
+      console.error(`getLocalResourceList(): could not read ${pathToResourceManifestFile}`, e);
+    }
   } else {
     console.log(`getLocalResourceList(): no such file or directory, ${pathToResourceManifestFile}`);
   }
