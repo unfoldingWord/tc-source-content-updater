@@ -388,6 +388,10 @@ export async function processResource(resource, sourcePath, resourcesPath, downl
         manifest.version = resource.version;
       }
       manifest.modifiedTime = manifest.catalog_modified_time = (resource.remoteModifiedTime || resource.modified);
+      const stage = resource.catalogEntry && resource.catalogEntry.resource && resource.catalogEntry.resource.stage;
+      if (stage) {
+        manifest.stage = stage;
+      }
       fs.outputJsonSync(path.join(processedFilesPath, 'manifest.json'), manifest, {spaces: 2});
     }
 
