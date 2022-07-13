@@ -75,6 +75,19 @@ export function parseBiblePackage(resource, sourcePath, outputPath, config = {})
     throw Error(resourcesHelpers.formatError(resource, errors.OUTPUT_PATH_NOT_GIVEN));
   }
   fs.ensureDirSync(outputPath);
+  const bibleManifestKey = config.latestManifestKey && config.latestManifestKey['Bible'];
+  let manifestKey = null;
+  let manifestKeyMinValue = null;
+
+  if (bibleManifestKey) {
+    const keys = Object.keys(bibleManifestKey);
+    manifestKey = keys.length ? keys[0] : null;
+
+    if (manifestKey) {
+      manifestKeyMinValue = bibleManifestKey[manifestKey];
+    }
+  }
+
   try {
     const isOL = (resource.resourceId === 'ugnt') || (resource.resourceId === 'uhb');
     const manifest = parseManifest(sourcePath, outputPath, resource);
@@ -82,6 +95,9 @@ export function parseBiblePackage(resource, sourcePath, outputPath, config = {})
       throw Error(resourcesHelpers.formatError(resource, errors.MANIFEST_MISSING_BOOKS));
     }
     manifest.catalog_modified_time = resource.remoteModifiedTime;
+    if (manifestKey) {
+      manifest[manifestKey] = manifestKeyMinValue;
+    }
     const savePath = path.join(outputPath, 'manifest.json');
     fs.writeFileSync(savePath, JSON.stringify(manifest, null, 2));
     const projects = manifest.projects || [];

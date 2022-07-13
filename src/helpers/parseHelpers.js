@@ -1,4 +1,5 @@
 /* eslint-disable camelcase,no-empty,no-negated-condition */
+import semver from 'semver';
 import * as ERROR from '../resources/errors';
 import {sortDownloableResources} from './resourcesDownloadHelpers';
 
@@ -108,13 +109,13 @@ export function getUpdatedLanguageList(updatedRemoteResources) {
 }
 
 /**
- * search remote resources for match similar to local resource, but with given resourceId.  Return true if local resource is newer
+ * search remote resources for match similar to local resource, but with given resourceId.  Return true if remote resource is newer
  * @param {String} resourceId
  * @param {Array} remoteResources
  * @param {Object} localResource
  * @return {{resourceId, catalogResource, isNewer: boolean, index: *}}
  */
-function isLocalNewerResLookup(resourceId, remoteResources, localResource) {
+function isRemoteNewerResLookup(resourceId, remoteResources, localResource) {
   resourceId = RESOURCE_ID_MAP[resourceId] || resourceId; // map resource names to ids
   const index = remoteResources.findIndex((remoteResource) =>
     ((localResource.languageId.toLowerCase() === remoteResource.languageId.toLowerCase()) &&
@@ -126,9 +127,10 @@ function isLocalNewerResLookup(resourceId, remoteResources, localResource) {
   let catalogResource;
   if (index >= 0) {
     catalogResource = remoteResources[index];
-    isNewer = !localResource.modifiedTime ||
-      (catalogResource.remoteModifiedTime > localResource.modifiedTime);
-    catalogResource.localModifiedTime = localResource.modifiedTime;
+    const localModifiedTime = localResource.modifiedTime || (localResource.manifest && localResource.manifest.modified);
+    isNewer = !localModifiedTime ||
+      (catalogResource.remoteModifiedTime > localModifiedTime);
+    catalogResource.localModifiedTime = localModifiedTime;
   } else {
     isNewer = true; // newer if not stored locally
   }
@@ -138,6 +140,55 @@ function isLocalNewerResLookup(resourceId, remoteResources, localResource) {
     isNewer,
     catalogResource,
   };
+}
+
+/**
+ * compares version numbers, if a > b returns 1; if a < b return -1; else are equal and return 0
+ * @param {string} a
+ * @param {string} b
+ * @return {number}
+ */
+export function compareVersions(a, b) {
+  const cleanA = semver.coerce(a);
+  const cleanB = semver.coerce(b);
+
+  if (semver.gt(cleanA, cleanB)) {
+    return 1;
+  } else if (semver.lt(cleanA, cleanB)) {
+    return -1;
+  } else {
+    return 0;
+  }
+}
+
+/**
+ * determine if manifest key for local resource is outdated
+ * @param {object} localResource
+ * @param {object} latestManifestKey
+ * @param {boolean} isRemoteNewer
+ * @return {boolean} - returns true if manifest key is missing or outdated
+ */
+function isLocalResourceManifestKeyOutdated(localResource, latestManifestKey, isRemoteNewer) {
+  const manifest = localResource && localResource.manifest;
+  if (latestManifestKey && manifest) {
+    const subject = manifest.subject || (manifest.dublin_core && manifest.dublin_core.subject);
+    const manifestKeys = latestManifestKey[subject];
+
+    if (manifestKeys) {
+      const keys = Object.keys(manifestKeys);
+      const manifestKey = keys.length ? keys[0] : null;
+
+      if (manifestKey) {
+        const localResourceKey = manifest[manifestKey];
+        const minimumManifestKey = manifestKeys[manifestKey];
+
+        if (!localResourceKey || (compareVersions(localResourceKey, minimumManifestKey) < 0)) { // if local manifest key is less than minimum
+          isRemoteNewer = true;
+        }
+      }
+    }
+  }
+  return isRemoteNewer;
 }
 
 /**
@@ -189,32 +240,39 @@ export function getLatestResources(catalog, localResourceList, config) {
   };
   let tCoreResources = parseCatalogResources(catalog, config_);
   // remove resources that are already up to date
+
   for (const localResource of localResourceList) {
     const resourceId = localResource.resourceId;
+
     if (localResource.languageId && resourceId) {
       const {
         index,
         isNewer,
-      } = isLocalNewerResLookup(resourceId, tCoreResources, localResource);
+      } = isRemoteNewerResLookup(resourceId, tCoreResources, localResource);
 
-      let isNewer_ = isNewer;
-      if (!isNewer_ && (index >= 0)) {
+      let isRemoteNewer_ = isNewer;
+
+      if (!isRemoteNewer_ && Object.keys(latestManifestKey).length) {
+        isRemoteNewer_ = isLocalResourceManifestKeyOutdated(localResource, latestManifestKey, isRemoteNewer_);
+      }
+
+      if (!isRemoteNewer_ && (index >= 0)) {
         const resource = tCoreResources[index];
         if (resource.loadAfter) {
           const resourceAfter = resource.loadAfter;
-          const localResource = localResourceList.find((localeResource) =>
+          const localResource = localResourceList.find(() =>
             ((localResource.languageId.toLowerCase() === resourceAfter.languageId.toLowerCase()) &&
               (localResource.owner === resourceAfter.owner) &&
               (localResource.resourceId === resourceAfter.resourceId))
           );
           if (localResource) {
-            const isNewer = !localResource.modifiedTime ||
+            const isRemoteNewe = !localResource.modifiedTime ||
               (resourceAfter.remoteModifiedTime > resourceAfter.modifiedTime);
-            isNewer_ = isNewer;
+            isRemoteNewer_ = isRemoteNewe;
           }
         }
       }
-      if (!isNewer_) { // if resource up to date, remove it from resource list
+      if (!isRemoteNewer_) { // if resource up to date, remove it from resource list
         tCoreResources.splice(index, 1);
       }
     }

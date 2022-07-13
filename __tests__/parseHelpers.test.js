@@ -11,33 +11,45 @@ const catalogUW = combineTwords(_.cloneDeep(catalogUW_));
 
 describe('parseCatalogResources()', () => {
   it('should find Bibles', () => {
-    const results = parseHelpers.parseCatalogResources(catalog, true, ['Bible']);
+    const config = {
+      ignoreObsResources: true,
+      subjectFilters: ['Bible'],
+    };
+    const results = parseHelpers.parseCatalogResources(catalog, config);
     expect(results.length).toEqual(2);
   });
 
   it('All language Ids are lower case', () => {
-    const results = parseHelpers.parseCatalogResources(catalog, true, ['Bible']);
+    const results = parseHelpers.parseCatalogResources(catalog, {});
     const re = /^[-a-z0-9]*$/; // dash is allowed
 
+    expect(results.length).toBeGreaterThan(0);
     for ( let idx = 0; idx < results.length; idx++) {
-      //console.log( "results.languageId: ", results[idx].languageId );
+      // console.log( "results.languageId: ", results[idx].languageId );
       expect(results[idx].languageId).toEqual(expect.stringMatching(re));
     }
   });
 
   it('should find Greek OL', () => {
-    const results = parseHelpers.parseCatalogResources(catalog, false, ['Greek_New_Testament']);
+    const config = {
+      ignoreObsResources: false,
+      subjectFilters: ['Greek_New_Testament'],
+    };
+    const results = parseHelpers.parseCatalogResources(catalog, config );
     expect(results.length).toEqual(1);
     expect(results[0].languageId).toEqual('el-x-koine');
   });
 
   it('should return everything with no filter', () => {
-    const results = parseHelpers.parseCatalogResources(catalog, false, null);
+    const results = parseHelpers.parseCatalogResources(catalog, {});
     expect(results.length).toEqual(11);
   });
 
   it('should return everything with default filter', () => {
-    const results = parseHelpers.parseCatalogResources(catalog, true);
+    const config = {
+      ignoreObsResources: true,
+    };
+    const results = parseHelpers.parseCatalogResources(catalog, config);
     expect(results.length).toEqual(11);
   });
 
@@ -55,7 +67,7 @@ describe('parseCatalogResources()', () => {
 describe('getLatestResources()', () => {
   it('should succeed with empty resourceList', () => {
     const resourceList = [];
-    const results = parseHelpers.getLatestResources(catalog, resourceList);
+    const results = parseHelpers.getLatestResources(catalog, resourceList, {});
     expect(results.length).toEqual(11);
 
     const greekResources = getResourcesForLanguageAndResource(results, 'el-x-koine');
@@ -69,7 +81,7 @@ describe('getLatestResources()', () => {
     const resourceList = [
       {languageId: 'fr', resourceId: 'f10', modifiedTime: '2018-04-27T18:51:27+00:00'}
     ];
-    const results = parseHelpers.getLatestResources(catalog, resourceList);
+    const results = parseHelpers.getLatestResources(catalog, resourceList, {});
     expect(results.length).toEqual(11);
 
     const greekResources = getResourcesForLanguageAndResource(results, 'el-x-koine');
@@ -83,7 +95,7 @@ describe('getLatestResources()', () => {
     const resourceList = [
       {languageId: 'fr', resourceId: 'f10', modifiedTime: '2018-04-27T18:51:26+00:00'}
     ];
-    const results = parseHelpers.getLatestResources(catalogUW, resourceList);
+    const results = parseHelpers.getLatestResources(catalogUW, resourceList, {});
     expect(results.length).toEqual(12);
 
     const greekResources = getResourcesForLanguageAndResource(results, 'el-x-koine');
@@ -95,7 +107,7 @@ describe('getLatestResources()', () => {
 
   it('should throw exception for null resource list', done => {
     try {
-      const results = parseHelpers.getLatestResources(catalog, null);
+      const results = parseHelpers.getLatestResources(catalog, null, {});
       done.fail(results);
     } catch (e) {
       expect(e.message).toEqual(ERROR.PARAMETER_ERROR);
@@ -105,7 +117,7 @@ describe('getLatestResources()', () => {
 
   it('should throw exception for null catalog', done => {
     try {
-      const results = parseHelpers.getLatestResources(null, []);
+      const results = parseHelpers.getLatestResources(null, [], {});
       done.fail(results);
     } catch (e) {
       expect(e.message).toEqual(ERROR.PARAMETER_ERROR);
@@ -115,7 +127,7 @@ describe('getLatestResources()', () => {
 
   it('should throw exception for invalid catalog object', done => {
     try {
-      const results = parseHelpers.getLatestResources({ }, []);
+      const results = parseHelpers.getLatestResources({ }, [], {});
       done.fail(results);
     } catch (e) {
       expect(e.message).toEqual(ERROR.CATALOG_CONTENT_ERROR);
@@ -125,7 +137,7 @@ describe('getLatestResources()', () => {
 });
 
 describe('getUpdatedLanguageList()', () => {
-  const resources = parseHelpers.getLatestResources(catalog, []);
+  const resources = parseHelpers.getLatestResources(catalog, [], {});
 
   it('should succeed', () => {
     const languages = parseHelpers.getUpdatedLanguageList(resources);
@@ -139,7 +151,7 @@ describe('getUpdatedLanguageList()', () => {
 });
 
 describe('getResourcesForLanguage()', () => {
-  const resources = parseHelpers.getLatestResources(catalog, []);
+  const resources = parseHelpers.getLatestResources(catalog, [], {});
 
   it('should find el-x-koine', () => {
     const results = parseHelpers.getResourcesForLanguage(resources, 'el-x-koine');
