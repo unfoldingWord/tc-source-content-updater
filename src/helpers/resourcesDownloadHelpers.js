@@ -27,8 +27,10 @@ import {
   OWNER_SEPARATOR,
   downloadManifestData,
   getReleaseMetaData,
+  readJsonFile,
 } from './apiHelpers';
 import {areWeOnline} from './utils';
+import {STAGE} from '../index';
 
 /**
  * add download error keeping track of error message, download url, and if parse error type (if not parse error, then download error)
@@ -82,6 +84,79 @@ export function getVersionFolder(resource) {
 }
 
 /**
+ * save flag that resources contain pre-release data if stage is preprod
+ * @param {String} resourcesPath
+ * @param {String} stage
+ */
+export function setResourcesPreReleaseStateFromStage(resourcesPath, stage) {
+  if (isStagePreRelease(stage)) {
+    setResourcesContainPreReleaseData(resourcesPath, true);
+  }
+}
+
+/**
+ * save flag that resources contain pre-release data.  Flag is truthy
+ * @param {String} resourcesPath
+ * @param {boolean} flag
+ */
+export function setResourcesContainPreReleaseData(resourcesPath, flag) {
+  const mainManifestPath = path.join(resourcesPath, 'source-content-updater-manifest.json');
+  let manifest = readJsonFile(mainManifestPath);
+  if (!manifest) {
+    manifest = {};
+  }
+  manifest.havePreReleaseData = !!flag;
+  try {
+    fs.outputJsonSync(mainManifestPath, manifest);
+  } catch (e) {
+    console.error(`setResourcesContainPreReleaseData(): could not save ${mainManifestPath}`, e);
+  }
+}
+
+/**
+ * checks flag to see if we have pre-release data
+ * @param {String} resourcesPath
+ * @return {boolean} true if we have downloaded pre-release data
+ */
+export function doResourcesContainPreReleaseData(resourcesPath) {
+  const mainManifestPath = path.join(resourcesPath, 'source-content-updater-manifest.json');
+  const manifest = readJsonFile(mainManifestPath);
+  if (manifest) {
+    return manifest.havePreReleaseData;
+  }
+  return false;
+}
+
+/**
+ * returns true is stage is pre-release
+ * @param {string} stage
+ * @return {boolean} true if pre-release
+ */
+export function isStagePreRelease(stage) {
+  return stage === STAGE.PRE_PROD;
+}
+
+/**
+ * checks flag to see if we have pre-release data
+ * @param {object} config
+ * @return {boolean} true if we are downloading pre-release data
+ */
+export function doingPreReleaseFetching(config = {}) {
+  return isStagePreRelease(config.stage);
+}
+
+/**
+ * check if we are doing pre-release checking or have prerelease downloads
+ * @param {String} resourcesPath
+ * @param {object} config
+ * @return {boolean} true if we are doing pre-release data
+ */
+export function doingPreRelease(resourcesPath, config = {}) {
+  const doingPrerelease = doingPreReleaseFetching(config) || doResourcesContainPreReleaseData(resourcesPath);
+  return doingPrerelease;
+}
+
+/**
  * @description Downloads the resources that need to be updated for a given language using the DCS API
  * @param {Object.<{
  *             languageId: String,
@@ -110,6 +185,7 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
     return; // if user cancelled then skip
   }
 
+  const doingPreRelease_ = doingPreRelease(resourcesPath, config);
   const resourceData = resource.catalogEntry ? resource.catalogEntry.resource : resource;
   if (!resource.version || (resource.version === 'master')) {
     if (!areWeOnline()) {
@@ -186,7 +262,9 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
         const twGroupDataResourcesPath = path.join(resourcesPath, resource.languageId, 'translationHelps', 'translationWords', versionDir);
         try {
           await moveResourcesHelpers.moveResources(twGroupDataPath, twGroupDataResourcesPath);
-          removeUnusedResources(resourcesPath, twGroupDataResourcesPath, resource.languageId, resource.version, isGreekOrHebrew);
+          if (!doingPreRelease_) {
+            removeUnusedResources(resourcesPath, twGroupDataResourcesPath, resource.languageId, resource.version, isGreekOrHebrew);
+          }
         } catch (err) {
           throw Error(appendError(errors.UNABLE_TO_CREATE_TW_GROUP_DATA, err));
         }
@@ -197,7 +275,9 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
       } catch (err) {
         throw Error(appendError(errors.UNABLE_TO_MOVE_RESOURCE_INTO_RESOURCES, err));
       }
-      removeUnusedResources(resourcesPath, currentResourcePath, resource.languageId, resource.version, isGreekOrHebrew);
+      if (!doingPreRelease_) {
+        removeUnusedResources(resourcesPath, currentResourcePath, resource.languageId, resource.version, isGreekOrHebrew);
+      }
     } else {
       throw Error(errors.FAILED_TO_PROCESS_RESOURCE);
     }
