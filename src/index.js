@@ -57,6 +57,7 @@ function Updater() {
   this.updatedCatalogResources = null;
   this.downloadErrors = [];
   this.latestManifestKey = {};
+  this.stage = null;
 }
 
 Updater.prototype = {};
@@ -68,6 +69,7 @@ Updater.prototype = {};
  * @param {string|null} config.stage - stage for search, default is prod
  */
 Updater.prototype.updateCatalog = async function(config = {}) {
+  this.stage = config.stage;
   this.remoteCatalog = await apiHelpers.getCatalog(config);
 };
 
@@ -254,6 +256,7 @@ Updater.prototype.getConfig = function() {
   const config = {
     getCancelState: this.getCancelState.bind(this),
     latestManifestKey: this.latestManifestKey,
+    stage: this.stage,
   };
   return config;
 };

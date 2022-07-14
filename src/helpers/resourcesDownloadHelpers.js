@@ -95,12 +95,22 @@ export function setResourcesPreReleaseStateFromStage(resourcesPath, stage) {
 }
 
 /**
+ * get path for main manifest
+ * @param {String} resourcesPath
+ * @return {*}
+ */
+export function getMainManifestPath(resourcesPath) {
+  const mainManifestPath = path.join(resourcesPath, 'source-content-updater-manifest.json');
+  return mainManifestPath;
+}
+
+/**
  * save flag that resources contain pre-release data.  Flag is truthy
  * @param {String} resourcesPath
  * @param {boolean} flag
  */
 export function setResourcesContainPreReleaseData(resourcesPath, flag) {
-  const mainManifestPath = path.join(resourcesPath, 'source-content-updater-manifest.json');
+  const mainManifestPath = getMainManifestPath(resourcesPath);
   let manifest = readJsonFile(mainManifestPath);
   if (!manifest) {
     manifest = {};
@@ -119,7 +129,7 @@ export function setResourcesContainPreReleaseData(resourcesPath, flag) {
  * @return {boolean} true if we have downloaded pre-release data
  */
 export function doResourcesContainPreReleaseData(resourcesPath) {
-  const mainManifestPath = path.join(resourcesPath, 'source-content-updater-manifest.json');
+  const mainManifestPath = getMainManifestPath(resourcesPath);
   const manifest = readJsonFile(mainManifestPath);
   if (manifest) {
     return manifest.havePreReleaseData;
