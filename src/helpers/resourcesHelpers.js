@@ -15,6 +15,7 @@ import * as packageParseHelpers from './packageParseHelpers';
 import * as errors from '../resources/errors';
 import * as Bible from '../resources/bible';
 import {DEFAULT_OWNER, OWNER_SEPARATOR} from './apiHelpers';
+import {setResourcesPreReleaseStateFromStage} from './resourcesDownloadHelpers';
 
 export const TRANSLATION_HELPS_INDEX = {
   ta: 'translationAcademy',
@@ -381,19 +382,23 @@ export async function processResource(resource, sourcePath, resourcesPath, downl
     let manifest = getResourceManifest(processedFilesPath);
     if (!manifest) { // if manifest not found, create
       manifest = getResourceManifest(sourcePath);
-      if (manifest) {
-        if (resource.version) {
-          manifest.version = resource.version;
-        }
-        manifest.modifiedTime = manifest.catalog_modified_time = (resource.remoteModifiedTime || resource.modified);
-        fs.outputJsonSync(path.join(processedFilesPath, 'manifest.json'), manifest, {spaces: 2});
-      }
-    } else { // if manifest found, make sure it has the version and data from catalog next
+    }
+
+    const stage = resource.catalogEntry && resource.catalogEntry.resource && resource.catalogEntry.resource.stage;
+
+    if (manifest) {
       if (resource.version) {
         manifest.version = resource.version;
       }
       manifest.modifiedTime = manifest.catalog_modified_time = (resource.remoteModifiedTime || resource.modified);
+      if (stage) {
+        manifest.stage = stage;
+      }
       fs.outputJsonSync(path.join(processedFilesPath, 'manifest.json'), manifest, {spaces: 2});
+    }
+
+    if (stage) {
+      setResourcesPreReleaseStateFromStage(resourcesPath, stage);
     }
 
     return processedFilesPath;

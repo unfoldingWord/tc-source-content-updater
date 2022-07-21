@@ -449,6 +449,22 @@ export async function getReleaseMetaData(owner, repo, tag, retries=5) {
   }
 }
 
+/**
+ * reads Json file if it exists, otherwise returns null
+ * @param {string} jsonPath
+ * @return {object|null}
+ */
+export function readJsonFile(jsonPath) {
+  if (fs.existsSync(jsonPath)) {
+    try {
+      const resourceManifest = fs.readJsonSync(jsonPath);
+      return resourceManifest;
+    } catch (e) {
+      console.error(`getLocalResourceList(): could not read ${jsonPath}`, e);
+    }
+  }
+  return null;
+}
 
 /**
  * add resource to list
@@ -461,24 +477,20 @@ export async function getReleaseMetaData(owner, repo, tag, retries=5) {
 function addLocalResource(resourceLatestPath, pathToResourceManifestFile, languageId, resourceId, localResourceList) {
   const {version, owner} = getVersionAndOwnerFromPath(resourceLatestPath);
 
-  if (fs.existsSync(pathToResourceManifestFile)) {
-    try {
-      const resourceManifest = fs.readJsonSync(pathToResourceManifestFile);
-      const localResource = {
-        languageId,
-        resourceId,
-        owner,
-        version,
-        modifiedTime: resourceManifest.catalog_modified_time,
-        manifest: resourceManifest,
-      };
+  const resourceManifest = readJsonFile(pathToResourceManifestFile);
+  if (resourceManifest) {
+    const localResource = {
+      languageId,
+      resourceId,
+      owner,
+      version,
+      modifiedTime: resourceManifest.catalog_modified_time,
+      manifest: resourceManifest,
+    };
 
-      localResourceList.push(localResource);
-    } catch (e) {
-      console.error(`getLocalResourceList(): could not read ${pathToResourceManifestFile}`, e);
-    }
+    localResourceList.push(localResource);
   } else {
-    console.log(`getLocalResourceList(): no such file or directory, ${pathToResourceManifestFile}`);
+    console.log(`addLocalResource(): no such file or directory, ${pathToResourceManifestFile}`);
   }
 }
 
