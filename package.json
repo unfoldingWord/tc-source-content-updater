@@ -1,6 +1,6 @@
 {
   "name": "tc-source-content-updater",
-  "version": "1.4.7-alpha",
+  "version": "1.4.7-alpha.2",
   "description": "Module that updates source content for the desktop application translationCore.",
   "main": "lib/index.js",
   "display": "library",
@@ -67,7 +67,7 @@
     "semver": "5.5.0",
     "string-punctuation-tokenizer": "^2.2.0",
     "tmp": "0.0.33",
-    "tsv-groupdata-parser": "github:unfoldingWord/tsv-groupdata-parser#feature-mcleanb-7338-chapterRanges.2",
+    "tsv-groupdata-parser": "0.13.0-alpha.2",
     "usfm-js": "3.4.0"
   },
   "dependencies": {
