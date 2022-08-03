@@ -1,6 +1,6 @@
 {
   "name": "tc-source-content-updater",
-  "version": "1.4.7",
+  "version": "1.4.8",
   "description": "Module that updates source content for the desktop application translationCore.",
   "main": "lib/index.js",
   "display": "library",
@@ -54,6 +54,7 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-es2015": "^6.24.1",
+    "bible-reference-range": "1.0.1",
     "deep-equal": "1.0.1",
     "eslint": "^5.11.1",
     "eslint-config-google": "^0.11.0",
@@ -66,7 +67,7 @@
     "semver": "5.5.0",
     "string-punctuation-tokenizer": "^2.2.0",
     "tmp": "0.0.33",
-    "tsv-groupdata-parser": "0.12.4",
+    "tsv-groupdata-parser": "0.13.0",
     "usfm-js": "3.4.0"
   },
   "dependencies": {
@@ -83,8 +84,9 @@
     "yamljs": "^0.3.0"
   },
   "peerDependencies": {
+    "bible-reference-range": "^1.0.1",
     "string-punctuation-tokenizer": "^2.2.0",
-    "tsv-groupdata-parser": "^0.12.4",
+    "tsv-groupdata-parser": "^0.13.0",
     "usfm-js": "^3.4.0"
   }
 }
