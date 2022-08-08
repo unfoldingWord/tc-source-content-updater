@@ -12,9 +12,10 @@ import * as twArticleHelpers from './helpers/translationHelps/twArticleHelpers';
 import * as twGroupDataHelpers from './helpers/translationHelps/twGroupDataHelpers';
 import * as tnArticleHelpers from './helpers/translationHelps/tnArticleHelpers';
 import * as resourcesDownloadHelpers from './helpers/resourcesDownloadHelpers';
+import * as downloadHelpers from './helpers/downloadHelpers';
 import * as resourcesHelpers from './helpers/resourcesHelpers';
 export {getOtherTnsOLVersions} from './helpers/translationHelps/tnArticleHelpers';
-export {apiHelpers, parseHelpers, resourcesHelpers, resourcesDownloadHelpers};
+export {apiHelpers, downloadHelpers, parseHelpers, resourcesHelpers, resourcesDownloadHelpers};
 
 // ============================
 // defines useful for searching
