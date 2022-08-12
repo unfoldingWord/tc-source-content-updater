@@ -323,6 +323,25 @@ export function getFormatsForResource(resource) {
 }
 
 /**
+ * get pertinent info to identify resource
+ * @param {object} resource
+ * @return {string}
+ */
+function getResourceInfo(resource) {
+  const info = {
+    subject: resource.subject,
+    checkingLevel: resource.checking_level,
+    downloadUrl: resource.downloadUrl,
+    remoteModifiedTime: resource.remoteModifiedTime,
+    languageId: resource.languageId,
+    resourceId: resource.resourceId,
+    owner: resource.owner,
+    version: resource.version,
+  };
+  return JSON.stringify(info);
+}
+
+/**
  * parses the remoteCatalog and returns list of catalog resources
  *
  * @param {{subjects: Array.<Object>}} catalog - to parse
@@ -376,7 +395,8 @@ export function parseCatalogResources(catalog, config= {}) {
       version = version.substr(1);
     }
     if (!(catalogItem.projects && catalogItem.projects.length) && !(catalogItem.books && catalogItem.books.length)) {
-      continue; // skip over repos with no projects or books
+      console.log(`parseCatalogResources - skipping resource with no content ${getResourceInfo(catalogItem)}`);
+      continue;
     }
     if (isDesiredSubject && isCheckingLevel2 &&
       downloadUrl && remoteModifiedTime && languageId) {
@@ -395,10 +415,10 @@ export function parseCatalogResources(catalog, config= {}) {
       };
       catalogResources.push(foundResource);
     } else {
-      // console.log(`skipping: ${JSON.stringify(catalogItem)}`);
+      console.log(`parseCatalogResources - skipping ${getResourceInfo(catalogItem)}`);
     }
   }
-  console.log(`filtered catalog length: ${catalogResources.length}`);
+  console.log(`parseCatalogResources - filtered catalog length: ${catalogResources.length}`);
   return catalogResources;
 }
 
