@@ -8,7 +8,7 @@ import {
   getLatestVersionsAndOwners,
   getVersionAndOwnerFromPath,
 } from './resourcesHelpers';
-import {RESOURCE_ID_MAP} from './parseHelpers';
+import {getResourceInfo, RESOURCE_ID_MAP} from './parseHelpers';
 
 const request = require('request');
 export const DOOR43_CATALOG = `Door43-Catalog`;
@@ -226,13 +226,13 @@ export async function getCatalog(config = {}) {
     owner: DOOR43_CATALOG,
   };
   const catalogReleases = await searchCatalogNext(searchParams);
-  console.log(`found ${catalogReleases.length} items in old Door43-Catalog`);
+  console.log(`getCatalog - found ${catalogReleases.length} items in old Door43-Catalog`);
   searchParams = {
     subject: SUBJECT.ALL_TC_RESOURCES,
     stage: config.stage || STAGE.PROD,
   };
   const newCatalogReleases = await searchCatalogNext(searchParams);
-  console.log(`found ${newCatalogReleases.length} items in catalog next`);
+  console.log(`getCatalog - found ${newCatalogReleases.length} items in catalog next`);
   // merge catalogs together - catalog new takes precedence
   for (const item of newCatalogReleases) {
     const index = catalogReleases.findIndex(oldItem => (item.full_name === oldItem.full_name));
@@ -243,7 +243,7 @@ export async function getCatalog(config = {}) {
       catalogReleases.push(item); // add unique item
     }
   }
-  console.log(`now ${catalogReleases.length} items in merged catalog, before filter`);
+  console.log(`getCatalog - now ${catalogReleases.length} items in merged catalog, before filter`);
   let catalogReleases_ = catalogReleases.filter(resource => {
     const isGreekOrHebrew = (resource.languageId === Bible.NT_ORIG_LANG && resource.resourceId === Bible.NT_ORIG_LANG_BIBLE) ||
       (resource.languageId === Bible.OT_ORIG_LANG && resource.resourceId === Bible.OT_ORIG_LANG_BIBLE);
@@ -254,6 +254,7 @@ export async function getCatalog(config = {}) {
       const isDigit = (firstChar >= '0') && (firstChar <= '9');
       const isD43Master = (tagName === 'master') && (resource.owner === DOOR43_CATALOG);
       if (!isD43Master && (firstChar !== 'v') && !isDigit) {
+        console.log(`getCatalog - invalid version: ${tagName} in ${getResourceInfo(resource)}`);
         return false; // reject if tag is not a version
       }
     }
@@ -264,7 +265,7 @@ export async function getCatalog(config = {}) {
   // combine tw and twl dependencies
   catalogReleases_ = combineTwords(catalogReleases_);
 
-  console.log(`now ${catalogReleases_.length} items in filtered catalog`);
+  console.log(`getCatalog - now ${catalogReleases_.length} items in filtered catalog`);
 
   return catalogReleases_;
 }
