@@ -254,7 +254,7 @@ export async function getCatalog(config = {}) {
       const isDigit = (firstChar >= '0') && (firstChar <= '9');
       const isD43Master = (tagName === 'master') && (resource.owner === DOOR43_CATALOG);
       if (!isD43Master && (firstChar !== 'v') && !isDigit) {
-        console.log('getCatalog - invalid version: ${tagName');
+        console.log(`getCatalog - invalid version: ${tagName} in`, resource);
         return false; // reject if tag is not a version
       }
     }
