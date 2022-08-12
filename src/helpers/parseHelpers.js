@@ -328,16 +328,16 @@ export function getFormatsForResource(resource) {
  * @param {object} resource
  * @return {string}
  */
-function getResourceInfo(resource) {
+export function getResourceInfo(resource) {
   const info = {
     subject: resource.subject,
     checkingLevel: resource.checking_level,
     downloadUrl: resource.downloadUrl,
-    remoteModifiedTime: resource.remoteModifiedTime,
+    remoteModifiedTime: resource.remoteModifiedTime || resource.modified,
     languageId: resource.languageId,
     resourceId: resource.resourceId,
     owner: resource.owner,
-    version: resource.version,
+    version: resource.version || resource.branch_or_tag_name,
   };
   return JSON.stringify(info);
 }

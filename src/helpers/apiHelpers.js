@@ -8,7 +8,7 @@ import {
   getLatestVersionsAndOwners,
   getVersionAndOwnerFromPath,
 } from './resourcesHelpers';
-import {RESOURCE_ID_MAP} from './parseHelpers';
+import {getResourceInfo, RESOURCE_ID_MAP} from './parseHelpers';
 
 const request = require('request');
 export const DOOR43_CATALOG = `Door43-Catalog`;
@@ -254,7 +254,7 @@ export async function getCatalog(config = {}) {
       const isDigit = (firstChar >= '0') && (firstChar <= '9');
       const isD43Master = (tagName === 'master') && (resource.owner === DOOR43_CATALOG);
       if (!isD43Master && (firstChar !== 'v') && !isDigit) {
-        console.log(`getCatalog - invalid version: ${tagName} in`, resource);
+        console.log(`getCatalog - invalid version: ${tagName} in ${getResourceInfo(resource)}`);
         return false; // reject if tag is not a version
       }
     }
