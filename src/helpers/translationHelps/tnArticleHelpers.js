@@ -2,13 +2,13 @@ import fs from 'fs-extra';
 import path from 'path-extra';
 import {isObject} from 'util';
 import {
-  cleanupReference,
   formatAndSaveGroupData,
   generateGroupsIndex,
   saveGroupsIndex,
   tnJsonToGroupData,
   tsvToGroupData,
 } from 'tsv-groupdata-parser';
+import {cleanupReference} from 'bible-reference-range';
 // helpers
 import * as resourcesHelpers from '../resourcesHelpers';
 import {downloadAndProcessResource} from '../resourcesDownloadHelpers';
