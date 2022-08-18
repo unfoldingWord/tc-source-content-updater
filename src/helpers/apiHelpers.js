@@ -420,7 +420,10 @@ export async function downloadManifestData(owner, repo, tag = 'master', retries=
  * @return {Promise<{Object}>}
  */
 export async function getLatestRelease(owner, repo, retries=5, stage = null) {
-  const fetchUrl = `https://git.door43.org/api/catalog/v5/search/${owner}/${repo}`;
+  let fetchUrl = `https://git.door43.org/api/catalog/v5/search/${owner}/${repo}`;
+  if (stage) {
+    fetchUrl += `?stage=${stage}`;
+  }
   try {
     const {result} = await makeJsonRequestDetailed(fetchUrl, retries);
     if (result.data[0] && result.data[0].release) {
