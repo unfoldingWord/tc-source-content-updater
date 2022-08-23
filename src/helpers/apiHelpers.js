@@ -416,17 +416,23 @@ export async function downloadManifestData(owner, repo, tag = 'master', retries=
  * @param {string} owner
  * @param {string} repo
  * @param {number} retries
+ * @param {string} stage - null defaults to production
  * @return {Promise<{Object}>}
  */
-export async function getLatestRelease(owner, repo, retries=5) {
-  const fetchUrl = `https://git.door43.org/api/catalog/v5/search/${owner}/${repo}`;
+export async function getLatestRelease(owner, repo, retries=5, stage = null) {
+  let fetchUrl = `https://git.door43.org/api/catalog/v5/search/${owner}/${repo}`;
+  if (stage) {
+    fetchUrl += `?stage=${stage}`;
+  }
   try {
     const {result} = await makeJsonRequestDetailed(fetchUrl, retries);
-    if (result.data[0].release) {
+    if (result.data[0] && result.data[0].release) {
       return result.data[0];
     }
+    console.warn(`getLatestRelease() - error getting release data, empty response to ${fetchUrl}`);
+    return null;
   } catch (e) {
-    console.warn('getLatestRelease() - error getting manifest data', e);
+    console.warn(`getLatestRelease() - error getting release data from  ${fetchUrl}`, e);
     throw e;
   }
 }
