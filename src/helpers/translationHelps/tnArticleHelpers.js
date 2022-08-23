@@ -361,7 +361,11 @@ export function getMissingHelpsResource(resourcesPath, parentResource, fetchReso
     try {
       const resourceName = `${parentResource.languageId}_${fetchResourceId}`;
       // get latest version
-      const latest = await getLatestRelease(parentResource.owner, resourceName);
+      const latest = await getLatestRelease(parentResource.owner, resourceName, 5, config.stage);
+      if (!latest) {
+        console.warn('tnArticleHelpers.getMissingHelpsResource() - no release found');
+        throw 'no release found';
+      }
       const release = latest && latest.release;
       const version = release && release.tag_name || 'master';
       const version_ = formatVersionWithV(version);
