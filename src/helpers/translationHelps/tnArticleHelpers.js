@@ -183,14 +183,14 @@ export function convertEllipsisToAmpersand(groupData, filepath) {
             let quoteString = contextId.quoteString;
             const foundEllipsis = quoteString && quoteString.includes(ELLIPSIS);
             if (foundEllipsis) {
-              console.log(`convertEllipsisToAmpersand(${filepath}) - found ellipsis in `, contextId);
+              console.log(`convertEllipsisToAmpersand(${filepath}) - found ellipsis in `, JSON.stringify(contextId));
               quoteString = quoteString.replaceAll(ELLIPSIS, '&');
               if (Array.isArray(quote) && quote.length) {
                 quote = quote.map(item => (item.word === ELLIPSIS ? {word: '&'} : item));
                 contextId.quote = quote;
                 contextId.quoteString = quoteString;
               } else {
-                console.log(`convertEllipsisToAmpersand(${filepath}) - missing quote array in `, contextId);
+                console.log(`convertEllipsisToAmpersand(${filepath}) - missing quote array in `, JSON.stringify(contextId));
               }
             }
           }
