@@ -182,6 +182,7 @@ export function convertEllipsisToAmpersand(groupData) {
             let quoteString = contextId.quoteString;
             const foundEllipsis = quoteString && quoteString.includes(ELLIPSIS);
             if (foundEllipsis) {
+              console.log('convertEllipsisToAmpersand() - found ellipsis in ', contextId);
               quoteString = quoteString.replaceAll(ELLIPSIS, '&');
               if (Array.isArray(quote) && quote.length) {
                 quote = quote.map(item => (item.word === ELLIPSIS ? {word: '&'} : item));
