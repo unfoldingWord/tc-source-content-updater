@@ -166,8 +166,9 @@ async function tsvToGroupData7Cols(filepath, bookId, resourcesPath, langId, tool
 /**
  * iterate through group data converting older format ellipsis breaks to ampersand
  * @param {object} groupData
+ * @param {string} filepath
  */
-export function convertEllipsisToAmpersand(groupData) {
+export function convertEllipsisToAmpersand(groupData, filepath) {
   if (groupData) {
     const categoriesKeys = Object.keys(groupData);
     for (const categoryKey of categoriesKeys) {
@@ -182,14 +183,14 @@ export function convertEllipsisToAmpersand(groupData) {
             let quoteString = contextId.quoteString;
             const foundEllipsis = quoteString && quoteString.includes(ELLIPSIS);
             if (foundEllipsis) {
-              console.log('convertEllipsisToAmpersand() - found ellipsis in ', contextId);
+              console.log(`convertEllipsisToAmpersand(${filepath}) - found ellipsis in `, contextId);
               quoteString = quoteString.replaceAll(ELLIPSIS, '&');
               if (Array.isArray(quote) && quote.length) {
                 quote = quote.map(item => (item.word === ELLIPSIS ? {word: '&'} : item));
                 contextId.quote = quote;
                 contextId.quoteString = quoteString;
               } else {
-                console.log('convertEllipsisToAmpersand() - missing quote array in ', contextId);
+                console.log(`convertEllipsisToAmpersand(${filepath}) - missing quote array in `, contextId);
               }
             }
           }
@@ -286,7 +287,7 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
           } else {
             groupData = await tsvToGroupData(filepath, toolName, params, originalBiblePath, resourcesPath, resource.languageId);
           }
-          convertEllipsisToAmpersand(groupData);
+          convertEllipsisToAmpersand(groupData, filepath);
           await formatAndSaveGroupData(groupData, outputPath, bookId);
         } else {
           const resource = `${originalLanguageOwner}/${originalLanguageId}_${originalLanguageBibleId}`;

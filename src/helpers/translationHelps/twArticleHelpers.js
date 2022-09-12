@@ -261,7 +261,7 @@ async function twlTsvToGroupData(tsvPath, project, resourcesPath, originalBibleP
 
   try {
     groupData = tsvObjectsToGroupData(tsvItems_, originalBiblePath, resourcesPath, bookId, project.languageId, 'translationWords', {categorized: true});
-    convertEllipsisToAmpersand(groupData);
+    convertEllipsisToAmpersand(groupData, tsvPath);
     await formatAndSaveGroupData(groupData, outputPath, bookId);
   } catch (e) {
     console.error(`twArticleHelpers.twlTsvToGroupData() - error processing filepath: ${tsvPath}`, e);
@@ -340,7 +340,7 @@ export async function processTranslationWordsTSV(resource, sourcePath, outputPat
 
         if (fs.existsSync(originalBiblePath)) {
           const groupData = await twlTsvToGroupData(tsvPath, project, resourcesPath, originalBiblePath, outputPath);
-          convertEllipsisToAmpersand(groupData);
+          convertEllipsisToAmpersand(groupData, tsvPath);
           await formatAndSaveGroupData(groupData, outputPath, bookId);
         } else {
           const resource = `${originalLanguageOwner}/${originalLanguageId}_${originalLanguageBibleId}`;
