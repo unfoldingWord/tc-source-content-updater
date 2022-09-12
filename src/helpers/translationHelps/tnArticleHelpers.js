@@ -34,6 +34,8 @@ import {
 import {tsvToObjects} from './twArticleHelpers';
 import {ELLIPSIS} from 'tsv-groupdata-parser/lib/utils/constants';
 
+const ELLIPSIS_WITH_SPACES = ` ${ELLIPSIS} `;
+
 /**
  * search to see if we need to get any missing resources needed for tN processing
  * @param {String} sourcePath - Path to the extracted files that came from the zip file from the catalog
@@ -184,7 +186,8 @@ export function convertEllipsisToAmpersand(groupData, filepath) {
             const foundEllipsis = quoteString && quoteString.includes(ELLIPSIS);
             if (foundEllipsis) {
               console.log(`convertEllipsisToAmpersand(${filepath}) - found ellipsis in `, JSON.stringify(contextId));
-              quoteString = quoteString.replaceAll(ELLIPSIS, '&');
+              quoteString = quoteString.replaceAll(ELLIPSIS_WITH_SPACES, ' & ');
+              quoteString = quoteString.replaceAll(ELLIPSIS, ' & ');
               if (Array.isArray(quote) && quote.length) {
                 quote = quote.map(item => (item.word === ELLIPSIS ? {word: '&'} : item));
                 contextId.quote = quote;
