@@ -185,7 +185,7 @@ export function convertEllipsisToAmpersand(groupData, filepath) {
             let quoteString = contextId.quoteString;
             const foundEllipsis = quoteString && quoteString.includes(ELLIPSIS);
             if (foundEllipsis) {
-              console.log(`convertEllipsisToAmpersand(${filepath}) - found ellipsis in `, JSON.stringify(contextId));
+              // console.log(`convertEllipsisToAmpersand(${filepath}) - found ellipsis in `, JSON.stringify(contextId));
               quoteString = quoteString.replaceAll(ELLIPSIS_WITH_SPACES, ' & ');
               quoteString = quoteString.replaceAll(ELLIPSIS, ' & ');
               if (Array.isArray(quote) && quote.length) {
