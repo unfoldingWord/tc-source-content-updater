@@ -17,7 +17,12 @@ import * as errors from '../../resources/errors';
 import {getOwnerForOriginalLanguage} from '../apiHelpers';
 import {makeSureResourceUnzipped} from '../unzipFileHelpers';
 import {BIBLE_BOOKS, NT_ORIG_LANG, NT_ORIG_LANG_BIBLE, OT_ORIG_LANG, OT_ORIG_LANG_BIBLE} from '../../resources/bible';
-import {getMissingOriginalResource, getMissingResources, parseReference} from './tnArticleHelpers';
+import {
+  convertEllipsisToAmpersand,
+  getMissingOriginalResource,
+  getMissingResources,
+  parseReference,
+} from './tnArticleHelpers';
 import {delay} from '../utils';
 
 /**
@@ -256,6 +261,7 @@ async function twlTsvToGroupData(tsvPath, project, resourcesPath, originalBibleP
 
   try {
     groupData = tsvObjectsToGroupData(tsvItems_, originalBiblePath, resourcesPath, bookId, project.languageId, 'translationWords', {categorized: true});
+    convertEllipsisToAmpersand(groupData, tsvPath);
     await formatAndSaveGroupData(groupData, outputPath, bookId);
   } catch (e) {
     console.error(`twArticleHelpers.twlTsvToGroupData() - error processing filepath: ${tsvPath}`, e);
@@ -334,6 +340,7 @@ export async function processTranslationWordsTSV(resource, sourcePath, outputPat
 
         if (fs.existsSync(originalBiblePath)) {
           const groupData = await twlTsvToGroupData(tsvPath, project, resourcesPath, originalBiblePath, outputPath);
+          convertEllipsisToAmpersand(groupData, tsvPath);
           await formatAndSaveGroupData(groupData, outputPath, bookId);
         } else {
           const resource = `${originalLanguageOwner}/${originalLanguageId}_${originalLanguageBibleId}`;

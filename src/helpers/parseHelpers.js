@@ -367,9 +367,9 @@ export function parseCatalogResources(catalog, config= {}) {
   const catalogResources = [];
   for (let i = 0, len = catalog.length; i < len; i++) {
     const catalogItem = catalog[i];
-    if (catalogItem.stage !== 'prod') {
-      console.log(`catalog item stage ${catalogItem.stage} found`);
-    }
+    // if (catalogItem.stage !== 'prod') {
+    //   console.log(`catalog item non-prod stage '${catalogItem.stage}' found`, JSON.stringify(catalogItem));
+    // }
     const subject = catalogItem.subject;
     const languageId = catalogItem.languageId.toLowerCase();
     const isCheckingLevel2 = catalogItem.checking_level >= 2;
