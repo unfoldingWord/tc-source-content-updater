@@ -32,6 +32,9 @@ import {
   getOwnerForOriginalLanguage,
 } from '../apiHelpers';
 import {tsvToObjects} from './twArticleHelpers';
+import {ELLIPSIS} from 'tsv-groupdata-parser/lib/utils/constants';
+
+const ELLIPSIS_WITH_SPACES = ` ${ELLIPSIS} `;
 
 /**
  * search to see if we need to get any missing resources needed for tN processing
@@ -163,6 +166,44 @@ async function tsvToGroupData7Cols(filepath, bookId, resourcesPath, langId, tool
 }
 
 /**
+ * iterate through group data converting older format ellipsis breaks to ampersand
+ * @param {object} groupData
+ * @param {string} filepath
+ */
+export function convertEllipsisToAmpersand(groupData, filepath) {
+  if (groupData) {
+    const categoriesKeys = Object.keys(groupData);
+    for (const categoryKey of categoriesKeys) {
+      const categoryData = groupData[categoryKey];
+      const checkKeys = Object.keys(categoryData);
+      for (const checkKey of checkKeys) {
+        const checks = categoryData[checkKey];
+        for (const check of checks) {
+          const contextId = check && check.contextId && check.contextId;
+          if (contextId) {
+            let quote = contextId.quote;
+            let quoteString = contextId.quoteString;
+            const foundEllipsis = quoteString && quoteString.includes(ELLIPSIS);
+            if (foundEllipsis) {
+              // console.log(`convertEllipsisToAmpersand(${filepath}) - found ellipsis in `, JSON.stringify(contextId));
+              quoteString = quoteString.replaceAll(ELLIPSIS_WITH_SPACES, ' & ');
+              quoteString = quoteString.replaceAll(ELLIPSIS, ' & ');
+              if (Array.isArray(quote) && quote.length) {
+                quote = quote.map(item => (item.word === ELLIPSIS ? {word: '&'} : item));
+                contextId.quote = quote;
+                contextId.quoteString = quoteString;
+              } else {
+                console.log(`convertEllipsisToAmpersand(${filepath}) - missing quote array in `, JSON.stringify(contextId));
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
  * @description Processes the extracted files for translationNotes to separate the folder
  * structure and produce the index.json file for the language with the title of each article.
  * @param {Object} resource - Resource object
@@ -249,6 +290,7 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
           } else {
             groupData = await tsvToGroupData(filepath, toolName, params, originalBiblePath, resourcesPath, resource.languageId);
           }
+          convertEllipsisToAmpersand(groupData, filepath);
           await formatAndSaveGroupData(groupData, outputPath, bookId);
         } else {
           const resource = `${originalLanguageOwner}/${originalLanguageId}_${originalLanguageBibleId}`;
