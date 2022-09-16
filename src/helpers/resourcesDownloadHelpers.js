@@ -205,11 +205,12 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
     }
     const owner = resourceData.owner || resource.owner;
     const tag = resource.version || 'master';
-    const latest = await getReleaseMetaData(owner, resourceData.name, tag);
+    const repo = resourceData.name || `${resource.languageId}_${resource.resourceId}`;
+    const latest = await getReleaseMetaData(owner, repo, tag);
     const release = latest && latest.release;
     let version = release && release.tag_name;
     if (!version) { // if no release found, then get version from manifest data
-      const manifest = await downloadManifestData(owner, resourceData.name, tag);
+      const manifest = await downloadManifestData(owner, repo, tag);
       version = manifest && manifest.dublin_core && manifest.dublin_core.version;
     }
     if (version) {
