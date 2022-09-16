@@ -209,8 +209,8 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
     const latest = await getReleaseMetaData(owner, repo, tag);
     const release = latest && latest.release;
     let version = release && release.tag_name;
+    resource.downloadUrl = release && release.zipball_url || latest.zipball_url;
     if (!version) { // if no release found, then get version from manifest data
-      resource.downloadUrl = latest.zipball_url;
       const manifest = await downloadManifestData(owner, repo, tag);
       version = manifest && manifest.dublin_core && manifest.dublin_core.version;
     }
