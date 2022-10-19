@@ -409,7 +409,7 @@ describe.skip('apiHelpers compare pivoted.json with CN', () => {
 
 describe.skip('apiHelpers.getCatalogCN', () => {
   it('should get the CN catalog', async () => {
-    const unFilteredSearch = 'https://git.door43.org/api/catalog/v5/search?sort=subject&limit=50';
+    const unFilteredSearch = 'https://qa.door43.org/api/catalog/v5/search?sort=subject&limit=50';
     const data = await apiHelpers.doMultipartQuery(unFilteredSearch);
     console.log(`Catalog Next Found ${data.length} total items`);
     expect(data.length).toBeTruthy();
