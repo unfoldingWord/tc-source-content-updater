@@ -1,6 +1,7 @@
 import fs from 'fs-extra';
 import path from 'path-extra';
 import ospath from 'ospath';
+import { convertTsv9to7 } from 'tsv-groupdata-parser';
 // helpers
 import * as taArticleHelpers from '../src/helpers/translationHelps/taArticleHelpers';
 import * as resourcesHelpers from '../src/helpers/resourcesHelpers';
@@ -16,6 +17,21 @@ describe('Tests for taArticleHelpers', function() {
 
   beforeEach(() => {
     fs.__resetMockFS();
+  });
+
+  // __tests__/fixtures/translationHelps/tnExtractedFromCDN/en_tn/en_tn_57-TIT.tsv
+  // convertTsv9to7(tsv_)
+
+  it('test convertTsv9to7', () => {
+    const actualFilePath = path.join(__dirname, 'fixtures/translationHelps/tnExtractedFromCDN/en_tn/en_tn_57-TIT.tsv');
+    const tsv = fs.__actual.readFileSync(actualFilePath, 'utf8');
+
+    // import { convertTsv9to7 } from 'tsv-groupdata-parser';
+    const result = convertTsv9to7(tsv);
+
+    // then
+    expect(result.tsv).toBeTruthy();
+    expect(result.errors).toBeFalsy();
   });
 
   it('Test taArticleHelpers.processTranslationAcademy() for en', () => {
