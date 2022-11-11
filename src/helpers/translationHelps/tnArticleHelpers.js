@@ -25,6 +25,7 @@ import {
 } from '../../resources/bible';
 import {makeSureResourceUnzipped} from '../unzipFileHelpers';
 import {
+  DCS_BASE_URL,
   DOOR43_CATALOG,
   formatVersionWithoutV,
   formatVersionWithV,
@@ -357,7 +358,7 @@ export function getMissingOriginalResource(resourcesPath, originalLanguageId, or
         } else { // otherwise we read from uW org
           // Download orig. lang. resource
           origOwner = 'unfoldingWord';
-          downloadUrl = `https://git.door43.org/${origOwner}/${resourceName}/archive/${version_}.zip`;
+          downloadUrl = `${DCS_BASE_URL}/${origOwner}/${resourceName}/archive/${version_}.zip`;
         }
         console.log(`tnArticleHelpers.getMissingOriginalResource() - downloading missing original bible: ${downloadUrl}`);
         const resource = {
@@ -412,7 +413,7 @@ export function getMissingHelpsResource(resourcesPath, parentResource, fetchReso
       const version = release && release.tag_name || 'master';
       const version_ = formatVersionWithV(version);
 
-      const downloadUrl = `https://git.door43.org/${parentResource.owner}/${resourceName}/archive/${version_}.zip`;
+      const downloadUrl = `${DCS_BASE_URL}/${parentResource.owner}/${resourceName}/archive/${version_}.zip`;
       console.log(`tnArticleHelpers.getMissingHelpsResource() - downloading missing helps: ${downloadUrl}`);
       const remoteModifiedTime = (latest && latest.released) || (release && release.published_at);
       const resource = {

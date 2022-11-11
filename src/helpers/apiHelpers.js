@@ -18,6 +18,7 @@ export const TRANSLATION_HELPS = 'translationHelps';
 export const EMPTY_TIME = '0001-01-01T00:00:00+00:00';
 export const OWNER_SEPARATOR = '_';
 export const SEARCH_LIMIT = 250;
+export const DCS_BASE_URL = 'https://qa.door43.org';
 
 /**
  * does http request and returns the response data parsed from JSON
@@ -114,7 +115,7 @@ export async function doMultipartQuery(url, retries = 5) {
  */
 async function searchSubjects(subjects, owner, retries=3) {
   const subjectParam = encodeURI(subjects.join(','));
-  let fetchUrl = `https://git.door43.org/api/catalog/v3/search?subject=${subjectParam}`;
+  let fetchUrl = `${DCS_BASE_URL}/api/catalog/v3/search?subject=${subjectParam}`;
   if (owner) {
     fetchUrl += fetchUrl + `&owner=${owner}`;
   }
@@ -368,7 +369,7 @@ export async function searchCatalogNext(searchParams, retries=3) {
   } = searchParams;
 
   try {
-    let fetchUrl = `https://git.door43.org/api/catalog/v5/search`;
+    let fetchUrl = `${DCS_BASE_URL}/api/catalog/v5/search`;
     let parameters = '';
     parameters = addUrlParameter(owner, parameters, 'owner');
     parameters = addUrlParameter(languageId, parameters, 'lang');
@@ -401,7 +402,7 @@ export async function searchCatalogNext(searchParams, retries=3) {
  * @return {Promise<{Object}>}
  */
 export async function downloadManifestData(owner, repo, tag = 'master', retries=5) {
-  const fetchUrl = `https://git.door43.org/api/catalog/v5/entry/${owner}/${repo}/${tag}/metadata`;
+  const fetchUrl = `${DCS_BASE_URL}/api/catalog/v5/entry/${owner}/${repo}/${tag}/metadata`;
   try {
     const {result} = await makeJsonRequestDetailed(fetchUrl, retries);
     return result;
@@ -420,7 +421,7 @@ export async function downloadManifestData(owner, repo, tag = 'master', retries=
  * @return {Promise<{Object}>}
  */
 export async function getLatestRelease(owner, repo, retries=5, stage = null) {
-  let fetchUrl = `https://git.door43.org/api/catalog/v5/search/${owner}/${repo}`;
+  let fetchUrl = `${DCS_BASE_URL}/api/catalog/v5/search/${owner}/${repo}`;
   if (stage) {
     fetchUrl += `?stage=${stage}`;
   }
@@ -446,7 +447,7 @@ export async function getLatestRelease(owner, repo, retries=5, stage = null) {
  * @return {Promise<{Object}>}
  */
 export async function getReleaseMetaData(owner, repo, tag, retries=5) {
-  const fetchUrl = `https://git.door43.org/api/catalog/v5/entry/${owner}/${repo}/${tag}`;
+  const fetchUrl = `${DCS_BASE_URL}/api/catalog/v5/entry/${owner}/${repo}/${tag}`;
   try {
     const {result} = await makeJsonRequestDetailed(fetchUrl, retries);
     return result;
