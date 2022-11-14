@@ -18,7 +18,7 @@ export const TRANSLATION_HELPS = 'translationHelps';
 export const EMPTY_TIME = '0001-01-01T00:00:00+00:00';
 export const OWNER_SEPARATOR = '_';
 export const SEARCH_LIMIT = 250;
-export const DCS_BASE_URL = 'https://qa.door43.org';
+export const DCS_BASE_URL = 'https://git.door43.org';
 
 /**
  * does http request and returns the response data parsed from JSON
@@ -225,12 +225,14 @@ export async function getCatalog(config = {}) {
     subject: SUBJECT.ALL_TC_RESOURCES,
     stage: STAGE.LATEST,
     owner: DOOR43_CATALOG,
+    DCS_BASE_URL: config.DCS_BASE_URL,
   };
   const catalogReleases = await searchCatalogNext(searchParams);
   console.log(`getCatalog - found ${catalogReleases.length} items in old Door43-Catalog`);
   searchParams = {
     subject: SUBJECT.ALL_TC_RESOURCES,
     stage: config.stage || STAGE.PROD,
+    DCS_BASE_URL: config.DCS_BASE_URL,
   };
   const newCatalogReleases = await searchCatalogNext(searchParams);
   console.log(`getCatalog - found ${newCatalogReleases.length} items in catalog next`);
@@ -366,10 +368,11 @@ export async function searchCatalogNext(searchParams, retries=3) {
     checkingLevel,
     partialMatch,
     sort = SORT.REPO_NAME,
+    DCS_BASE_URL: baseUrl = DCS_BASE_URL,
   } = searchParams;
 
   try {
-    let fetchUrl = `${DCS_BASE_URL}/api/catalog/v5/search`;
+    let fetchUrl = `${baseUrl}/api/catalog/v5/search`;
     let parameters = '';
     parameters = addUrlParameter(owner, parameters, 'owner');
     parameters = addUrlParameter(languageId, parameters, 'lang');
@@ -399,10 +402,11 @@ export async function searchCatalogNext(searchParams, retries=3) {
  * @param {string} repo
  * @param {string} tag
  * @param {number} retries
+ * @param {string} baseUrl - optional server to use
  * @return {Promise<{Object}>}
  */
-export async function downloadManifestData(owner, repo, tag = 'master', retries=5) {
-  const fetchUrl = `${DCS_BASE_URL}/api/catalog/v5/entry/${owner}/${repo}/${tag}/metadata`;
+export async function downloadManifestData({owner, repo, tag = 'master', retries = 5, baseUrl = DCS_BASE_URL}) {
+  const fetchUrl = `${baseUrl}/api/catalog/v5/entry/${owner}/${repo}/${tag}/metadata`;
   try {
     const {result} = await makeJsonRequestDetailed(fetchUrl, retries);
     return result;
@@ -418,10 +422,11 @@ export async function downloadManifestData(owner, repo, tag = 'master', retries=
  * @param {string} repo
  * @param {number} retries
  * @param {string} stage - null defaults to production
+ * @param {string} baseUrl - optional server to use
  * @return {Promise<{Object}>}
  */
-export async function getLatestRelease(owner, repo, retries=5, stage = null) {
-  let fetchUrl = `${DCS_BASE_URL}/api/catalog/v5/search/${owner}/${repo}`;
+export async function getLatestRelease({owner, repo, retries = 5, stage = null, baseUrl = DCS_BASE_URL}) {
+  let fetchUrl = `${baseUrl}/api/catalog/v5/search/${owner}/${repo}`;
   if (stage) {
     fetchUrl += `?stage=${stage}`;
   }
@@ -444,10 +449,11 @@ export async function getLatestRelease(owner, repo, retries=5, stage = null) {
  * @param {string} repo
  * @param {string|null} tag
  * @param {number} retries
+ * @param {string} baseUrl - optional server to use
  * @return {Promise<{Object}>}
  */
-export async function getReleaseMetaData(owner, repo, tag, retries=5) {
-  const fetchUrl = `${DCS_BASE_URL}/api/catalog/v5/entry/${owner}/${repo}/${tag}`;
+export async function getReleaseMetaData({owner, repo, tag, retries = 5, baseUrl = DCS_BASE_URL}) {
+  const fetchUrl = `${baseUrl}/api/catalog/v5/entry/${owner}/${repo}/${tag}`;
   try {
     const {result} = await makeJsonRequestDetailed(fetchUrl, retries);
     return result;

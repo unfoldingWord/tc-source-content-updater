@@ -71,6 +71,7 @@ Updater.prototype = {};
  */
 Updater.prototype.updateCatalog = async function(config = {}) {
   this.lastStage = config.stage;
+  this.DCS_BASE_URL = config.DCS_BASE_URL;
   this.remoteCatalog = await apiHelpers.getCatalog(config);
 };
 
@@ -258,6 +259,7 @@ Updater.prototype.getConfig = function() {
     getCancelState: this.getCancelState.bind(this),
     latestManifestKey: this.latestManifestKey,
     stage: this.lastStage,
+    DCS_BASE_URL: this.DCS_BASE_URL,
   };
   return config;
 };
@@ -397,8 +399,9 @@ Updater.prototype.downloadAndProcessResource = async function(resourceDetails, r
   const {languageId, resourceId, version, owner} = resourceDetails;
   const resourceName = `${languageId}_${resourceId}`;
   const version_ = (version !== 'master') ? apiHelpers.formatVersionWithV(version) : version;
-  let downloadUrl = `${apiHelpers.DCS_BASE_URL}/${owner}/${resourceName}/archive/${version_}.zip`;
-  if (owner === apiHelpers.DOOR43_CATALOG) {
+  const baseUrl = this.DCS_BASE_URL || apiHelpers.DCS_BASE_URL;
+  let downloadUrl = `${baseUrl}/${owner}/${resourceName}/archive/${version_}.zip`;
+  if ((owner === apiHelpers.DOOR43_CATALOG) && (baseUrl === apiHelpers.DCS_BASE_URL)) {
     downloadUrl = `https://cdn.door43.org/${languageId}/${resourceId}/${version_}/${resourceId}.zip`;
   }
   const resource = {

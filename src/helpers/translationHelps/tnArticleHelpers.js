@@ -352,13 +352,19 @@ export function getMissingOriginalResource(resourcesPath, originalLanguageId, or
         const resourceName = `${originalLanguageId}_${originalLanguageBibleId}`;
         let downloadUrl;
         let origOwner = ownerStr;
+        const baseUrl = config.DCS_BASE_URL || DCS_BASE_URL;
         if (ownerStr === DOOR43_CATALOG) {
-          // Download orig. lang. resource
-          downloadUrl = `https://cdn.door43.org/${originalLanguageId}/${originalLanguageBibleId}/${version_}/${originalLanguageBibleId}.zip`;
+          if (baseUrl === DCS_BASE_URL) {
+            // Download orig. lang. resource
+            downloadUrl = `https://cdn.door43.org/${originalLanguageId}/${originalLanguageBibleId}/${version_}/${originalLanguageBibleId}.zip`;
+          } else {
+            origOwner = DOOR43_CATALOG;
+            downloadUrl = `${baseUrl}/${origOwner}/${resourceName}/archive/${version_}.zip`;
+          }
         } else { // otherwise we read from uW org
           // Download orig. lang. resource
           origOwner = 'unfoldingWord';
-          downloadUrl = `${DCS_BASE_URL}/${origOwner}/${resourceName}/archive/${version_}.zip`;
+          downloadUrl = `${baseUrl}/${origOwner}/${resourceName}/archive/${version_}.zip`;
         }
         console.log(`tnArticleHelpers.getMissingOriginalResource() - downloading missing original bible: ${downloadUrl}`);
         const resource = {
@@ -413,7 +419,8 @@ export function getMissingHelpsResource(resourcesPath, parentResource, fetchReso
       const version = release && release.tag_name || 'master';
       const version_ = formatVersionWithV(version);
 
-      const downloadUrl = `${DCS_BASE_URL}/${parentResource.owner}/${resourceName}/archive/${version_}.zip`;
+      const baseUrl = config.DCS_BASE_URL || DCS_BASE_URL;
+      const downloadUrl = `${baseUrl}/${parentResource.owner}/${resourceName}/archive/${version_}.zip`;
       console.log(`tnArticleHelpers.getMissingHelpsResource() - downloading missing helps: ${downloadUrl}`);
       const remoteModifiedTime = (latest && latest.released) || (release && release.published_at);
       const resource = {
