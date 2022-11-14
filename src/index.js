@@ -393,13 +393,14 @@ Updater.prototype.processTranslationNotes = function(resource, sourcePath, outpu
  * @param {string} resourceDetails.resourceId The resource Id of the resource.
  * @param {number} resourceDetails.version The version of the resource.
  * @param {string} resourcesPath - Path to the resources directory where each resource will be placed
+ * @param {object} config - optional configuration settings
  * @return {Promise} Promise that resolves to return all the resources updated or rejects if a resource failed to download.
  */
-Updater.prototype.downloadAndProcessResource = async function(resourceDetails, resourcesPath) {
+Updater.prototype.downloadAndProcessResource = async function(resourceDetails, resourcesPath, config={}) {
   const {languageId, resourceId, version, owner} = resourceDetails;
   const resourceName = `${languageId}_${resourceId}`;
   const version_ = (version !== 'master') ? apiHelpers.formatVersionWithV(version) : version;
-  const baseUrl = this.DCS_BASE_URL || apiHelpers.DCS_BASE_URL;
+  const baseUrl = config.DCS_BASE_URL || apiHelpers.DCS_BASE_URL;
   let downloadUrl = `${baseUrl}/${owner}/${resourceName}/archive/${version_}.zip`;
   if ((owner === apiHelpers.DOOR43_CATALOG) && (baseUrl === apiHelpers.DCS_BASE_URL)) {
     downloadUrl = `https://cdn.door43.org/${languageId}/${resourceId}/${version_}/${resourceId}.zip`;
