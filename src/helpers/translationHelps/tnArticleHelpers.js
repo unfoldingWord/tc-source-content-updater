@@ -410,7 +410,12 @@ export function getMissingHelpsResource(resourcesPath, parentResource, fetchReso
     try {
       const resourceName = `${parentResource.languageId}_${fetchResourceId}`;
       // get latest version
-      const latest = await getLatestRelease(parentResource.owner, resourceName, 5, config.stage);
+      const latest = await getLatestRelease({
+        owner: parentResource.owner,
+        repo: resourceName,
+        stage: config.stage,
+        baseUrl: config.DCS_BASE_URL || DCS_BASE_URL,
+      });
       if (!latest) {
         console.warn('tnArticleHelpers.getMissingHelpsResource() - no release found');
         throw 'no release found';
