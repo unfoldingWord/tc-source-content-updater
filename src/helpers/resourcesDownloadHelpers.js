@@ -206,12 +206,12 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
     const owner = resourceData.owner || resource.owner;
     const tag = resource.version || 'master';
     const repo = resourceData.name || `${resource.languageId}_${resource.resourceId}`;
-    const latest = await getReleaseMetaData(owner, repo, tag);
+    const latest = await getReleaseMetaData({owner, repo, tag, baseUrl: config.DCS_BASE_URL});
     const release = latest && latest.release;
     let version = release && release.tag_name;
     resource.downloadUrl = release && release.zipball_url || latest.zipball_url;
     if (!version) { // if no release found, then get version from manifest data
-      const manifest = await downloadManifestData(owner, repo, tag);
+      const manifest = await downloadManifestData({owner, repo, tag, baseUrl: config.DCS_BASE_URL});
       version = manifest && manifest.dublin_core && manifest.dublin_core.version;
     }
     if (version) {
