@@ -2,11 +2,12 @@
 import fs from 'fs-extra';
 import path from 'path-extra';
 import {isObject} from 'util';
-import * as tsvparser from 'uw-tsv-parser';
 import {
   formatAndSaveGroupData,
   generateGroupDataItem,
   ManageResource,
+  parseReference,
+  tsvToObjects,
 } from 'tsv-groupdata-parser';
 // helpers
 import * as resourcesHelpers from '../resourcesHelpers';
@@ -21,7 +22,6 @@ import {
   convertEllipsisToAmpersand,
   getMissingOriginalResource,
   getMissingResources,
-  parseReference,
 } from './tnArticleHelpers';
 import {delay} from '../utils';
 
@@ -173,60 +173,6 @@ function tsvObjectsToGroupData(tsvItems, originalBiblePath, resourcesPath, bookI
     console.error(`tsvObjectsToGroupData() - error processing TSVs`, e);
     throw e;
   }
-}
-
-/**
- * process the TSV file into index files
- * @param {string} tsvPath
- * @param {object} project
- */
-export async function tsvToObjects(tsvPath, project) {
-  const tsvLines = fs.readFileSync(tsvPath).toString();
-  // console.log(tsvLines);
-  let tsvItems;
-  let parseErrorMsg;
-  let error;
-  let expectedColumns = 0;
-  const tableObject = tsvparser.tsvStringToTable(tsvLines);
-  if ( tableObject.errors.length > 0 ) {
-    parseErrorMsg = '';
-    expectedColumns = tableObject.header.length;
-    for (let i=0; i<tableObject.errors.length; i++) {
-      let msg;
-      const rownum = tableObject.errors[i][0] - 1; // adjust for data table without header row
-      const colsfound = tableObject.errors[i][1];
-      if ( colsfound > expectedColumns ) {
-        msg = 'Row is too long';
-      } else {
-        msg = 'Row is too short';
-      }
-      parseErrorMsg += `\n\n${msg}:`;
-      parseErrorMsg += '\n' + tableObject.data[rownum].join(',');
-    }
-    console.warn(`twArticleHelpers.twlTsvToGroupData() - table parse errors found: ${parseErrorMsg}`);
-  }
-
-  try {
-    tsvItems = tableObject.data.map(line => {
-      const tsvItem = {};
-      const l = tableObject.header.length;
-      for (let i = 0; i < l; i++) {
-        const key = tableObject.header[i];
-        const value = line[i] || '';
-        tsvItem[key] = value.trim();
-      }
-      return tsvItem;
-    });
-  } catch (e) {
-    console.error(`twArticleHelpers.twlTsvToGroupData() - error processing filepath: ${tsvPath}`, e);
-    error = e;
-  }
-  return {
-    tsvItems,
-    parseErrorMsg,
-    error,
-    expectedColumns,
-  };
 }
 
 /**
