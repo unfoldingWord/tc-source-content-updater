@@ -248,9 +248,6 @@ export async function getCatalog(config = {}) {
   }
   console.log(`getCatalog - now ${catalogReleases.length} items in merged catalog, before filter`);
   let catalogReleases_ = catalogReleases.filter(resource => {
-    const isGreekOrHebrew = (resource.languageId === Bible.NT_ORIG_LANG && resource.resourceId === Bible.NT_ORIG_LANG_BIBLE) ||
-      (resource.languageId === Bible.OT_ORIG_LANG && resource.resourceId === Bible.OT_ORIG_LANG_BIBLE);
-
     const tagName = resource.branch_or_tag_name;
     if (tagName) { // check for version
       const firstChar = tagName[0];
