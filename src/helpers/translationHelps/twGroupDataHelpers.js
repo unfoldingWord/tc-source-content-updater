@@ -110,6 +110,7 @@ function populateGroupDataFromVerseObject(groupData, verseObject, words, isMiles
   const myGroupData = {
     quote: [],
     strong: [],
+    lemma: [],
   };
   const isWord = (verseObject.type === 'word');
   if (verseObject.type === 'milestone' || (isWord && (verseObject.tw || isMilestone))) {
@@ -123,11 +124,13 @@ function populateGroupDataFromVerseObject(groupData, verseObject, words, isMiles
         if (childGroupData) {
           myGroupData.quote = myGroupData.quote.concat(childGroupData.quote);
           myGroupData.strong = myGroupData.strong.concat(childGroupData.strong);
+          myGroupData.lemma = myGroupData.strong.concat(childGroupData.lemma);
         }
       }
     } else if (isWord) {
       myGroupData.quote.push({word: verseObject.text, occurrence: getWordOccurrence(words, verseObject)});
       myGroupData.strong.push(verseObject.strong);
+      myGroupData.lemma.push(verseObject.lemma);
     }
     if (myGroupData.quote.length) {
       if (verseObject.tw) {
@@ -199,6 +202,7 @@ function populateTwDataFromGroupData(twData, groupData, bookId, chapter, verse) 
             groupId: groupId,
             quote,
             strong: item.strong,
+            lemma: item.lemma,
             occurrence,
           },
         });
