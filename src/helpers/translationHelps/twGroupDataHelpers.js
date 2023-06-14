@@ -124,7 +124,7 @@ function populateGroupDataFromVerseObject(groupData, verseObject, words, isMiles
         if (childGroupData) {
           myGroupData.quote = myGroupData.quote.concat(childGroupData.quote);
           myGroupData.strong = myGroupData.strong.concat(childGroupData.strong);
-          myGroupData.lemma = myGroupData.strong.concat(childGroupData.lemma);
+          myGroupData.lemma = myGroupData.lemma.concat(childGroupData.lemma);
         }
       }
     } else if (isWord) {
@@ -146,6 +146,7 @@ function populateGroupDataFromVerseObject(groupData, verseObject, words, isMiles
         groupData[category][groupId].push({
           quote: myGroupData.quote,
           strong: myGroupData.strong,
+          lemma: myGroupData.lemma,
         });
       }
     }
