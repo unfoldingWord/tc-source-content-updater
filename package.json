@@ -1,6 +1,6 @@
 {
   "name": "tc-source-content-updater",
-  "version": "1.4.12",
+  "version": "1.4.12-patch.1",
   "description": "Module that updates source content for the desktop application translationCore.",
   "main": "lib/index.js",
   "display": "library",
