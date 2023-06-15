@@ -5,10 +5,9 @@ import {
   formatAndSaveGroupData,
   generateGroupsIndex,
   saveGroupsIndex,
-  tnJsonToGroupData,
   tsvToGroupData,
+  tsvToGroupData7Cols,
 } from 'tsv-groupdata-parser';
-import {cleanupReference} from 'bible-reference-range';
 // helpers
 import * as resourcesHelpers from '../resourcesHelpers';
 import {downloadAndProcessResource} from '../resourcesDownloadHelpers';
@@ -25,13 +24,13 @@ import {
 } from '../../resources/bible';
 import {makeSureResourceUnzipped} from '../unzipFileHelpers';
 import {
+  DCS_BASE_URL,
   DOOR43_CATALOG,
   formatVersionWithoutV,
   formatVersionWithV,
   getLatestRelease,
   getOwnerForOriginalLanguage,
 } from '../apiHelpers';
-import {tsvToObjects} from './twArticleHelpers';
 import {ELLIPSIS} from 'tsv-groupdata-parser/lib/utils/constants';
 
 const ELLIPSIS_WITH_SPACES = ` ${ELLIPSIS} `;
@@ -95,74 +94,6 @@ export async function getMissingResources(sourcePath, resourcesPath, getMissingO
   }
 
   return {otQuery, ntQuery};
-}
-
-/**
- * separate a reference string such as "1:1" into chapter and verse and add a verseStr for references that have multiple verses
- * @param {string} ref - reference string
- * @return {{Chapter, Verse}}
- */
-export function parseReference(ref) {
-  const cleanedRef = cleanupReference(ref);
-  const ref_ = {
-    Chapter: cleanedRef.chapter,
-    Verse: cleanedRef.verse + '',
-  };
-
-  if (cleanedRef.verseStr) {
-    ref_.verseStr = cleanedRef.verseStr;
-  }
-  return ref_;
-}
-
-/**
- * process the 7 column tsv into group data
- * @param {string} filepath path to tsv file.
- * @param {string} bookId
- * @param {string} resourcesPath path to the resources dir
- * e.g. /User/john/translationCore/resources
- * @param {string} langId
- * @param {string} toolName tC tool name.
- * @param {string} originalBiblePath path to original bible.
- * e.g. /resources/el-x-koine/bibles/ugnt/v0.11
- * @param {object} params When it includes { categorized: true }
- * then it returns the object organized by tn article category.
- * @return {Promise<{tsvItems, groupData: string}>}
- */
-async function tsvToGroupData7Cols(filepath, bookId, resourcesPath, langId, toolName, originalBiblePath, params) {
-  const {
-    tsvItems,
-    error,
-  } = await tsvToObjects(filepath, {});
-
-  if (error) {
-    throw error;
-  }
-
-  // convert 7 column TSV format to tsvObject format
-  const tsvObjects = [];
-  for (const tsvItem of tsvItems) {
-    const reference = tsvItem && tsvItem.Reference;
-    if (reference) {
-      tsvItem.OrigQuote = tsvItem.Quote;
-      tsvItem.OccurrenceNote = tsvItem.Note;
-      tsvItem.Book = bookId;
-      const cleanedRef = parseReference(reference);
-      const tsvObject = {
-        ...tsvItem,
-        ...cleanedRef,
-      };
-      tsvObjects.push(tsvObject);
-    }
-  }
-
-  try {
-    const groupData = tnJsonToGroupData(originalBiblePath, bookId, tsvObjects, resourcesPath, langId, toolName, params, filepath);
-    return groupData;
-  } catch (e) {
-    console.error(`tsvToGroupData7Cols() - error processing filepath: ${filepath}`, e);
-    throw e;
-  }
 }
 
 /**
@@ -351,13 +282,19 @@ export function getMissingOriginalResource(resourcesPath, originalLanguageId, or
         const resourceName = `${originalLanguageId}_${originalLanguageBibleId}`;
         let downloadUrl;
         let origOwner = ownerStr;
+        const baseUrl = config.DCS_BASE_URL || DCS_BASE_URL;
         if (ownerStr === DOOR43_CATALOG) {
-          // Download orig. lang. resource
-          downloadUrl = `https://cdn.door43.org/${originalLanguageId}/${originalLanguageBibleId}/${version_}/${originalLanguageBibleId}.zip`;
+          if (baseUrl === DCS_BASE_URL) {
+            // Download orig. lang. resource
+            downloadUrl = `https://cdn.door43.org/${originalLanguageId}/${originalLanguageBibleId}/${version_}/${originalLanguageBibleId}.zip`;
+          } else {
+            origOwner = DOOR43_CATALOG;
+            downloadUrl = `${baseUrl}/${origOwner}/${resourceName}/archive/${version_}.zip`;
+          }
         } else { // otherwise we read from uW org
           // Download orig. lang. resource
           origOwner = 'unfoldingWord';
-          downloadUrl = `https://git.door43.org/${origOwner}/${resourceName}/archive/${version_}.zip`;
+          downloadUrl = `${baseUrl}/${origOwner}/${resourceName}/archive/${version_}.zip`;
         }
         console.log(`tnArticleHelpers.getMissingOriginalResource() - downloading missing original bible: ${downloadUrl}`);
         const resource = {
@@ -403,7 +340,12 @@ export function getMissingHelpsResource(resourcesPath, parentResource, fetchReso
     try {
       const resourceName = `${parentResource.languageId}_${fetchResourceId}`;
       // get latest version
-      const latest = await getLatestRelease(parentResource.owner, resourceName, 5, config.stage);
+      const latest = await getLatestRelease({
+        owner: parentResource.owner,
+        repo: resourceName,
+        stage: config.stage,
+        baseUrl: config.DCS_BASE_URL || DCS_BASE_URL,
+      });
       if (!latest) {
         console.warn('tnArticleHelpers.getMissingHelpsResource() - no release found');
         throw 'no release found';
@@ -412,7 +354,8 @@ export function getMissingHelpsResource(resourcesPath, parentResource, fetchReso
       const version = release && release.tag_name || 'master';
       const version_ = formatVersionWithV(version);
 
-      const downloadUrl = `https://git.door43.org/${parentResource.owner}/${resourceName}/archive/${version_}.zip`;
+      const baseUrl = config.DCS_BASE_URL || DCS_BASE_URL;
+      const downloadUrl = `${baseUrl}/${parentResource.owner}/${resourceName}/archive/${version_}.zip`;
       console.log(`tnArticleHelpers.getMissingHelpsResource() - downloading missing helps: ${downloadUrl}`);
       const remoteModifiedTime = (latest && latest.released) || (release && release.published_at);
       const resource = {
