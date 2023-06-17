@@ -6,6 +6,10 @@ Array [
     "comments": false,
     "contextId": Object {
       "groupId": "inchrist",
+      "lemma": Array [
+        "ἐν",
+        "χριστός",
+      ],
       "occurrence": 1,
       "quote": Array [
         Object {
@@ -38,6 +42,10 @@ Array [
     "comments": false,
     "contextId": Object {
       "groupId": "inchrist",
+      "lemma": Array [
+        "ἐν",
+        "κύριος",
+      ],
       "occurrence": 1,
       "quote": Array [
         Object {
@@ -70,6 +78,10 @@ Array [
     "comments": false,
     "contextId": Object {
       "groupId": "inchrist",
+      "lemma": Array [
+        "ἐν",
+        "κύριος",
+      ],
       "occurrence": 1,
       "quote": Array [
         Object {
@@ -102,6 +114,10 @@ Array [
     "comments": false,
     "contextId": Object {
       "groupId": "inchrist",
+      "lemma": Array [
+        "ἐν",
+        "χριστός",
+      ],
       "occurrence": 1,
       "quote": Array [
         Object {
@@ -134,6 +150,11 @@ Array [
     "comments": false,
     "contextId": Object {
       "groupId": "inchrist",
+      "lemma": Array [
+        "ἐν",
+        "χριστός",
+        "Ἰησοῦς",
+      ],
       "occurrence": 1,
       "quote": Array [
         Object {
