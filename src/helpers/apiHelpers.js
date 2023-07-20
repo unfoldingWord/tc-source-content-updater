@@ -381,7 +381,7 @@ export async function searchCatalogNext(searchParams, retries=3) {
     parameters = addUrlParameter(stage, parameters, 'stage');
     parameters = addUrlParameter(checkingLevel, parameters, 'checkingLevel');
     parameters = addUrlParameter(partialMatch, parameters, 'partialMatch');
-    paramaters = addUrlParameter('rc', parameters, 'metadataType');
+    parameters = addUrlParameter('rc', parameters, 'metadataType');
     parameters = addUrlParameter(sort, parameters, 'sort');
     if (parameters) {
       fetchUrl += '?' + parameters;
