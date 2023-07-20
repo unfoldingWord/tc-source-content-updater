@@ -115,7 +115,7 @@ export async function doMultipartQuery(url, retries = 5) {
  */
 async function searchSubjects(subjects, owner, retries=3) {
   const subjectParam = encodeURI(subjects.join(','));
-  let fetchUrl = `${DCS_BASE_URL}/api/catalog/v3/search?subject=${subjectParam}`;
+  let fetchUrl = `${DCS_BASE_URL}/api/v1/catalog/search?metadataType=rc&subject=${subjectParam}`;
   if (owner) {
     fetchUrl += fetchUrl + `&owner=${owner}`;
   }
