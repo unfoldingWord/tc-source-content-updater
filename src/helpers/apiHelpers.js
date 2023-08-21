@@ -115,7 +115,7 @@ export async function doMultipartQuery(url, retries = 5) {
  */
 async function searchSubjects(subjects, owner, retries=3) {
   const subjectParam = encodeURI(subjects.join(','));
-  let fetchUrl = `${DCS_BASE_URL}/api/v1/catalog/search?metadataType=rc&subject=${subjectParam}`;
+  let fetchUrl = `${DCS_BASE_URL}/api/catalog/v3/search?subject=${subjectParam}`;
   if (owner) {
     fetchUrl += fetchUrl + `&owner=${owner}`;
   }
@@ -372,7 +372,7 @@ export async function searchCatalogNext(searchParams, retries=3) {
   } = searchParams;
 
   try {
-    let fetchUrl = `${baseUrl}/api/v1/catalog/search`;
+    let fetchUrl = `${baseUrl}/api/catalog/v5/search`;
     let parameters = '';
     parameters = addUrlParameter(owner, parameters, 'owner');
     parameters = addUrlParameter(languageId, parameters, 'lang');
@@ -381,7 +381,6 @@ export async function searchCatalogNext(searchParams, retries=3) {
     parameters = addUrlParameter(stage, parameters, 'stage');
     parameters = addUrlParameter(checkingLevel, parameters, 'checkingLevel');
     parameters = addUrlParameter(partialMatch, parameters, 'partialMatch');
-    parameters = addUrlParameter('rc', parameters, 'metadataType');
     parameters = addUrlParameter(sort, parameters, 'sort');
     if (parameters) {
       fetchUrl += '?' + parameters;
@@ -407,7 +406,7 @@ export async function searchCatalogNext(searchParams, retries=3) {
  * @return {Promise<{Object}>}
  */
 export async function downloadManifestData({owner, repo, tag = 'master', retries = 5, baseUrl = DCS_BASE_URL}) {
-  const fetchUrl = `${baseUrl}/api/v1/catalog/entry/${owner}/${repo}/${tag}/metadata`;
+  const fetchUrl = `${baseUrl}/api/catalog/v5/entry/${owner}/${repo}/${tag}/metadata`;
   try {
     const {result} = await makeJsonRequestDetailed(fetchUrl, retries);
     return result;
@@ -427,7 +426,7 @@ export async function downloadManifestData({owner, repo, tag = 'master', retries
  * @return {Promise<{Object}>}
  */
 export async function getLatestRelease({owner, repo, retries = 5, stage = null, baseUrl = DCS_BASE_URL}) {
-  let fetchUrl = `${baseUrl}/api/v1/catalog/search/${owner}/${repo}`;
+  let fetchUrl = `${baseUrl}/api/catalog/v5/search/${owner}/${repo}`;
   if (stage) {
     fetchUrl += `?stage=${stage}`;
   }
@@ -454,7 +453,7 @@ export async function getLatestRelease({owner, repo, retries = 5, stage = null, 
  * @return {Promise<{Object}>}
  */
 export async function getReleaseMetaData({owner, repo, tag, retries = 5, baseUrl = DCS_BASE_URL}) {
-  const fetchUrl = `${baseUrl}/api/v1/catalog/entry/${owner}/${repo}/${tag}`;
+  const fetchUrl = `${baseUrl}/api/catalog/v5/entry/${owner}/${repo}/${tag}`;
   try {
     const {result} = await makeJsonRequestDetailed(fetchUrl, retries);
     return result;
