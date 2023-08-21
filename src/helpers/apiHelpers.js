@@ -222,6 +222,10 @@ export function combineTwords(catalogReleases) {
  */
 function filterOutMasterBranch(catalog, ignoredResources = []) {
   let catalog_ = catalog.filter(resource => {
+    if (ignoredResources.includes(resource.resource)) {
+      return false; // reject ignored resources
+    }
+
     const tagName = resource.branch_or_tag_name;
     if (tagName) { // check for version
       const firstChar = tagName[0];
