@@ -159,7 +159,7 @@ export async function getOldCatalogReleases() {
       console.log(`has ${repos} items`);
     console.log(`released catalog has ${released.length} items`);
   } catch (e) {
-    console.error('getCatalog() - error getting catalog', e);
+    console.error('getOldCatalogReleases() - error getting catalog', e);
     return [];
   }
 
@@ -215,6 +215,30 @@ export function combineTwords(catalogReleases) {
 }
 
 /**
+ * filter list of items and ignore master branch
+ * @param {[object]} catalog - array of resources
+ * @param {[string]} ignoredResources
+ * @return {[object]}
+ */
+function filterOutMasterBranch(catalog, ignoredResources = []) {
+  let catalog_ = catalog.filter(resource => {
+    const tagName = resource.branch_or_tag_name;
+    if (tagName) { // check for version
+      const firstChar = tagName[0];
+      const isDigit = (firstChar >= '0') && (firstChar <= '9');
+      const isD43Master = (tagName === 'master') && (resource.owner === DOOR43_CATALOG);
+      if (!isD43Master && (firstChar !== 'v') && !isDigit) {
+        console.log(`getCatalog - invalid version: ${tagName} in ${getResourceInfo(resource)}`);
+        return false; // reject if tag is not a version
+      }
+    }
+
+    return true;
+  });
+  return catalog_;
+}
+
+/**
  * get published catalog - combines catalog next releases with old catalog
  * @param {object} config
  * @param {string|null} config.stage - stage for search, default is prod
@@ -229,6 +253,8 @@ export async function getCatalog(config = {}) {
   };
   const catalogReleases = await searchCatalogNext(searchParams);
   console.log(`getCatalog - found ${catalogReleases.length} items in old Door43-Catalog`);
+  let catalogReleases_ = filterOutMasterBranch(catalogReleases, ['obs', 'obs-tn']);
+  console.log(`getCatalog - found ${catalogReleases_.length} items in old Door43-Catalog after filter`);
   searchParams = {
     subject: SUBJECT.ALL_TC_RESOURCES,
     stage: config.stage || STAGE.PROD,
@@ -236,34 +262,20 @@ export async function getCatalog(config = {}) {
   };
   const newCatalogReleases = await searchCatalogNext(searchParams);
   console.log(`getCatalog - found ${newCatalogReleases.length} items in catalog next`);
+  let newCatalogReleases_ = filterOutMasterBranch(newCatalogReleases, ['obs', 'obs-tn']);
+  console.log(`getCatalog - found ${newCatalogReleases_.length} items in catalog next after filter`);
+
   // merge catalogs together - catalog new takes precedence
-  for (const item of newCatalogReleases) {
-    const index = catalogReleases.findIndex(oldItem => (item.full_name === oldItem.full_name));
+  for (const item of newCatalogReleases_) {
+    const index = catalogReleases_.findIndex(oldItem => (item.full_name === oldItem.full_name) && (item.full_name === oldItem.full_name));
     if (index >= 0) {
-      catalogReleases[index] = item; // overwrite item in old catalog
-      catalogReleases[index].foundInCatalog = 'NEW+OLD';
+      catalogReleases_[index] = item; // overwrite item in old catalog
+      catalogReleases_[index].foundInCatalog = 'NEW+OLD';
     } else {
-      catalogReleases.push(item); // add unique item
+      catalogReleases_.push(item); // add unique item
     }
   }
-  console.log(`getCatalog - now ${catalogReleases.length} items in merged catalog, before filter`);
-  let catalogReleases_ = catalogReleases.filter(resource => {
-    const isGreekOrHebrew = (resource.languageId === Bible.NT_ORIG_LANG && resource.resourceId === Bible.NT_ORIG_LANG_BIBLE) ||
-      (resource.languageId === Bible.OT_ORIG_LANG && resource.resourceId === Bible.OT_ORIG_LANG_BIBLE);
-
-    const tagName = resource.branch_or_tag_name;
-    if (tagName) { // check for version
-      const firstChar = tagName[0];
-      const isDigit = (firstChar >= '0') && (firstChar <= '9');
-      const isD43Master = (tagName === 'master') && (resource.owner === DOOR43_CATALOG);
-      if (!isD43Master && (firstChar !== 'v') && !isDigit) {
-        console.log(`getCatalog - invalid version: ${tagName} in ${getResourceInfo(resource)}`);
-        return false; // reject if tag is not a version
-      }
-    }
-
-    return true;
-  });
+  console.log(`getCatalog - now ${catalogReleases_.length} items in merged catalog, before filter`);
 
   // combine tw and twl dependencies
   catalogReleases_ = combineTwords(catalogReleases_);
