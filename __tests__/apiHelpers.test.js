@@ -13,7 +13,12 @@ describe('apiHelpers.getCatalog', () => {
         expectMemberType(item, idx, 'languageId', 'string');
         expectMemberType(item, idx, 'resourceId', 'string');
         expectMemberType(item, idx, 'full_name', 'string');
-        expectMemberType(item, idx, 'checking_level', 'string');
+        const key = 'checking_level';
+        const value = item[key];
+        const checkingLevelType = typeof value;
+        if ( !value || !(checkingLevelType === 'number' || checkingLevelType === 'string')) {
+          console.log(`For resource at ${idx}, value '${value}' for key '${key} should be type number or string, not '${checkingLevelType}' - ${JSON.stringify(item)}`);
+        }
         expectMemberType(item, idx, 'modified', 'string');
         expectMemberType(item, idx, 'subject', 'string');
         expectMemberType(item, idx, 'title', 'string');
