@@ -227,7 +227,7 @@ function filterOutMasterBranch(catalog, ignoredResources = []) {
       const firstChar = tagName[0];
       const isDigit = (firstChar >= '0') && (firstChar <= '9');
       const isD43Master = (tagName === 'master') && (resource.owner === DOOR43_CATALOG);
-      if (isD43Master || (firstChar !== 'v') && !isDigit) {
+      if (isD43Master || (firstChar !== 'v' && !isDigit)) {
         console.log(`getCatalog - invalid version: ${tagName} in ${getResourceInfo(resource)}`);
         return false; // reject if tag is not a version
       }
