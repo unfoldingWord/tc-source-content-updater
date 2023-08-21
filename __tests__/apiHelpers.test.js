@@ -13,7 +13,9 @@ describe('apiHelpers.getCatalog', () => {
         expectMemberType(item, idx, 'languageId', 'string');
         expectMemberType(item, idx, 'resourceId', 'string');
         expectMemberType(item, idx, 'full_name', 'string');
-        expectMemberType(item, idx, 'checking_level', 'string');
+        if (typeof item['checking_level'] !== 'number') { // can be either number or string type
+          expectMemberType(item, idx, 'checking_level', 'string');
+        }
         expectMemberType(item, idx, 'modified', 'string');
         expectMemberType(item, idx, 'subject', 'string');
         expectMemberType(item, idx, 'title', 'string');
