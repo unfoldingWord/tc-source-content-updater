@@ -115,7 +115,7 @@ export async function doMultipartQuery(url, retries = 5) {
  */
 async function searchSubjects(subjects, owner, retries=3) {
   const subjectParam = encodeURI(subjects.join(','));
-  let fetchUrl = `${DCS_BASE_URL}/api/v1/catalog/search?metadataType=rc&subject=${subjectParam}`;
+  let fetchUrl = `${DCS_BASE_URL}/api/v1/catalog/search?metadataType=rc&partialMatch=0&subject=${subjectParam}`;
   if (owner) {
     fetchUrl += fetchUrl + `&owner=${owner}`;
   }
@@ -256,6 +256,7 @@ export async function getCatalog(config = {}) {
     stage: STAGE.LATEST,
     owner: DOOR43_CATALOG,
     DCS_BASE_URL: config.DCS_BASE_URL,
+    partialMatch: '0',
   };
   const catalogReleases = await searchCatalogNext(searchParams);
   console.log(`getCatalog - found ${catalogReleases.length} items in old Door43-Catalog`);
@@ -265,6 +266,7 @@ export async function getCatalog(config = {}) {
     subject: SUBJECT.ALL_TC_RESOURCES,
     stage: config.stage || STAGE.PROD,
     DCS_BASE_URL: config.DCS_BASE_URL,
+    partialMatch: '0',
   };
   const newCatalogReleases = await searchCatalogNext(searchParams);
   console.log(`getCatalog - found ${newCatalogReleases.length} items in catalog next`);
