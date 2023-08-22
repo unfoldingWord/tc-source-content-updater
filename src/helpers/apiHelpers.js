@@ -256,6 +256,7 @@ export async function getCatalog(config = {}) {
     stage: STAGE.LATEST,
     owner: DOOR43_CATALOG,
     DCS_BASE_URL: config.DCS_BASE_URL,
+    partialMatch: '0',
   };
   const catalogReleases = await searchCatalogNext(searchParams);
   console.log(`getCatalog - found ${catalogReleases.length} items in old Door43-Catalog`);
@@ -265,6 +266,7 @@ export async function getCatalog(config = {}) {
     subject: SUBJECT.ALL_TC_RESOURCES,
     stage: config.stage || STAGE.PROD,
     DCS_BASE_URL: config.DCS_BASE_URL,
+    partialMatch: '0',
   };
   const newCatalogReleases = await searchCatalogNext(searchParams);
   console.log(`getCatalog - found ${newCatalogReleases.length} items in catalog next`);
