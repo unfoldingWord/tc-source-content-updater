@@ -181,7 +181,7 @@ function indexBook(bookPath, index, bookCode, isOL) {
     const ugntChapter = fs.readJSONSync(chapterPath);
     const ugntVerses = Object.keys(ugntChapter);
     const frontPos = ugntVerses.indexOf('front');
-    let haveFrontMatter = frontPos >= 0;
+    const haveFrontMatter = frontPos >= 0;
     if (!isOL && haveFrontMatter) { // remove chapter front matter
       ugntVerses.splice(frontPos, 1); // remove front item
     }
