@@ -402,9 +402,14 @@ export function getOtherTnsOLVersions(resourcesPath, originalLanguageId) {
             const {relation} = manifest.dublin_core || {};
             const query = getQueryStringForBibleId(relation, originalLanguageId);
             if (query) {
-              const version = 'v' + getQueryVariable(query, 'v');
-              // console.log(`tnArticleHelpers.getOtherTnsOLVersions() - for ${languageId}, found dependency: ${query}`);
-              versionsToNotDelete.push(version);
+              let requiredVersion = getQueryVariable(query, 'v');
+              if (requiredVersion) {
+                const version = 'v' + requiredVersion;
+                // console.log(`tnArticleHelpers.getOtherTnsOLVersions() - for ${languageId}, found dependency: ${query}`);
+                versionsToNotDelete.push(version);
+              } else {
+                console.log(`getOtherTnsOLVersions() - could not find version for ${query} in ${tnHelpsPath}`);
+              }
             }
           }
         }
