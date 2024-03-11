@@ -202,7 +202,7 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
         const originalLanguageBibleId = isNewTestament ? NT_ORIG_LANG_BIBLE : OT_ORIG_LANG_BIBLE;
         const version = isNewTestament && ntQuery ? ('v' + ntQuery) : otQuery ? ('v' + otQuery) : null;
         if (!version) {
-          console.warn('tnArticleHelpers.processTranslationNotes() - There was a missing version for book ' + bookId + ' of resource ' + originalLanguageBibleId + ' from ' + resource.downloadUrl);
+          console.warn('tnArticleHelpers.processTranslationNotes() - There was a missing original language version for book ' + bookId + ' of resource ' + originalLanguageBibleId + ' from ' + resource.downloadUrl);
           continue;
         }
         const originalBiblePath = path.join(
@@ -247,7 +247,7 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
     }
 
     if (!bookCount) {
-      const message = `tnArticleHelpers.processTranslationNotes() - no books found in ${sourcePath}`;
+      const message = `tnArticleHelpers.processTranslationNotes() - no books could be processed in ${sourcePath}`;
       console.error(message);
       throw new Error(`${message}:\n${tnErrors.join('\n')}`);
     }
