@@ -182,6 +182,7 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
     console.log(`tnArticleHelpers.processTranslationNotes() - have needed original bibles for ${sourcePath}, starting processing`);
     const tsvFiles = fs.readdirSync(sourcePath).filter((filename) => path.extname(filename) === '.tsv');
     const tnErrors = [];
+    let bookCount = 0;
 
     for (const filename of tsvFiles) {
       try {
@@ -201,8 +202,8 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
         const originalLanguageBibleId = isNewTestament ? NT_ORIG_LANG_BIBLE : OT_ORIG_LANG_BIBLE;
         const version = isNewTestament && ntQuery ? ('v' + ntQuery) : otQuery ? ('v' + otQuery) : null;
         if (!version) {
-          console.warn('tnArticleHelpers.processTranslationNotes() - There was a missing version for book ' + bookId + ' of resource ' + originalLanguageBibleId + ' from ' + resource.downloadUrl);
-          return;
+          console.warn('tnArticleHelpers.processTranslationNotes() - There was a missing original language version for book ' + bookId + ' of resource ' + originalLanguageBibleId + ' from ' + resource.downloadUrl);
+          continue;
         }
         const originalBiblePath = path.join(
           resourcesPath,
@@ -223,6 +224,7 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
           }
           convertEllipsisToAmpersand(groupData, filepath);
           await formatAndSaveGroupData(groupData, outputPath, bookId);
+          bookCount += 1;
         } else {
           const resource = `${originalLanguageOwner}/${originalLanguageId}_${originalLanguageBibleId}`;
           const message = `tnArticleHelpers.processTranslationNotes() - cannot find '${resource}' at ${originalBiblePath}:`;
@@ -240,6 +242,12 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
 
     if (tnErrors.length) { // report errors
       const message = `tnArticleHelpers.processTranslationNotes() - error processing ${sourcePath}`;
+      console.error(message);
+      throw new Error(`${message}:\n${tnErrors.join('\n')}`);
+    }
+
+    if (!bookCount) {
+      const message = `tnArticleHelpers.processTranslationNotes() - no books could be processed in ${sourcePath}`;
       console.error(message);
       throw new Error(`${message}:\n${tnErrors.join('\n')}`);
     }
