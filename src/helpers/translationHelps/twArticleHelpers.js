@@ -284,6 +284,10 @@ export async function processTranslationWordsTSV(resource, sourcePath, outputPat
           `${version}_${originalLanguageOwner}`
         );
 
+        if (!fs.existsSync(tsvPath)) {
+          const message = `processTranslationWordsTSV() - cannot find '${tsvPath}' from manifest projects - skipping`;
+          console.warn(message);
+        } else
         if (fs.existsSync(originalBiblePath)) {
           const groupData = await twlTsvToGroupData(tsvPath, project, resourcesPath, originalBiblePath, outputPath);
           convertEllipsisToAmpersand(groupData, tsvPath);

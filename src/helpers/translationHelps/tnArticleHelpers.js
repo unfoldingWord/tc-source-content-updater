@@ -212,8 +212,13 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
           originalLanguageBibleId,
           `${version}_${originalLanguageOwner}`
         );
+
+        const filepath = path.join(sourcePath, filename);
+        if (!fs.existsSync(filepath)) {
+          const message = `tnArticleHelpers.processTranslationNote() - cannot find '${filepath}' from manifest projects - skipping`;
+          console.warn(message);
+        } else
         if (fs.existsSync(originalBiblePath)) {
-          const filepath = path.join(sourcePath, filename);
           let groupData;
           const params = {categorized: true};
           const toolName = 'translationNotes';
