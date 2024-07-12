@@ -77,8 +77,22 @@ export function getResourceManifestFromYaml(resourcePath) {
   const manifestPath = path.join(resourcePath, fileName);
   let manifest = null;
   if (fs.existsSync(manifestPath)) {
-    const yamlManifest = fs.readFileSync(manifestPath, 'utf8').replace(/^\uFEFF/, '');
+    let yamlManifest = fs.readFileSync(manifestPath, 'utf8').replace(/^\uFEFF/, '');
+    try {
     manifest = yaml.parse(yamlManifest);
+    } catch (e) {
+      console.error(`getResourceManifestFromYaml - manifest.yaml invalid ${manifestPath}`, e);
+      yamlManifest = yamlManifest.replace('---', '').trimStart();
+      try {
+        manifest = YAML.parse(yamlManifest);
+        // copy some data for more convenient access
+        console.log(`getResourceManifestFromYaml - manifest.yaml cleaned yaml worked`);
+      } catch (e) {
+        console.error(`getResourceManifestFromYaml - manifest.yaml invalid even without --- ${manifestPath}`, e);
+        manifest = null;
+        throw e;
+      }
+    }
   }
   return manifest;
 }

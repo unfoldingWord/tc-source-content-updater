@@ -140,7 +140,7 @@ describe('parseBiblePackage()', () => {
     const sourceBible = 'el-x-koine_ugnt';
     const PROJECTS_PATH = path.join(ospath.home(), 'resources/import');
     const resultsPath = path.join(ospath.home(), 'resources/results');
-    const expectedError = resourcesHelpers.formatError(grcUgntResource, errors.ERROR_PARSING_BIBLE + ": " + "Cannot read property 'dublin_core' of null");
+    const expectedError = resourcesHelpers.formatError(grcUgntResource, errors.ERROR_PARSING_BIBLE + ": " + "Cannot read properties of null (reading 'dublin_core')");
     fs.__loadFilesIntoMockFs([sourceBible], './__tests__/fixtures', PROJECTS_PATH);
     let packagePath = path.join(PROJECTS_PATH, sourceBible);
     fs.removeSync(path.join(packagePath, 'manifest.yaml'));
