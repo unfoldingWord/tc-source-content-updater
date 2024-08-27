@@ -1,6 +1,6 @@
 {
   "name": "tc-source-content-updater",
-  "version": "1.4.26",
+  "version": "1.4.27-beta",
   "description": "Module that updates source content for the desktop application translationCore.",
   "main": "lib/index.js",
   "display": "library",
@@ -47,6 +47,9 @@
     "url": "https://github.com/unfoldingWord/tc-source-content-updater/issues"
   },
   "homepage": "https://github.com/unfoldingWord/tc-source-content-updater#readme",
+  "engines": {
+    "node": ">=16.14 <16.21"
+  },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",

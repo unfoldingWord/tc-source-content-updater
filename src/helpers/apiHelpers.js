@@ -250,7 +250,10 @@ function filterOutMasterBranch(catalog, ignoredResources = [], newCatalog = []) 
         if (sourceResource) {
           const _tagName = sourceResource.branch_or_tag_name;
           if (isValidVersionTag(_tagName)) {
+            // copy latest release data from source
             resource.branch_or_tag_name = _tagName;
+            resource.released = sourceResource.released;
+            resource.modified = sourceResource.modified;
             return true;
           }
         }
@@ -294,7 +297,7 @@ export async function getCatalog(config = {}) {
   let catalogReleases_ = filterOutMasterBranch(catalogReleases, ['obs', 'obs-tn'], newCatalogReleases);
   console.log(`getCatalog - found ${catalogReleases_.length} items in old Door43-Catalog after filter`);
 
-  let newCatalogReleases_ = filterOutMasterBranch(newCatalogReleases, ['obs', 'obs-tn']);
+  const newCatalogReleases_ = filterOutMasterBranch(newCatalogReleases, ['obs', 'obs-tn']);
   console.log(`getCatalog - found ${newCatalogReleases_.length} items in catalog next after filter`);
 
   // merge catalogs together - catalog new takes precedence
