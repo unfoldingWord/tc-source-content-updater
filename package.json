@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "display": "library",
   "scripts": {
-    "test": "eslint ./src && jest --json --outputFile=jest-results.json ",
+    "test": "eslint ./src && jest --json --outputFile=jest-results.json",
     "test:showFails": "eslint ./src && jest --reporters jest-silent-reporter",
     "fix": "eslint ./src --fix",
     "prebuild": "rm -rf ./lib",
