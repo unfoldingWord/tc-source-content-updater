@@ -391,6 +391,9 @@ export function parseCatalogResources(catalog, config= {}) {
       config.subjectFilters.includes(subject);
     let version = catalogItem.version;
     if (!version) {
+      version = catalogItem.branch_or_tag_name;
+    }
+    if (!version) {
       version = 'master'; // we are on latest
     } else if (version[0].toLowerCase() === 'v') { // trim leading v
       version = version.substr(1);
