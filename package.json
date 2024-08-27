@@ -1,11 +1,11 @@
 {
   "name": "tc-source-content-updater",
-  "version": "1.4.26-beta.4",
+  "version": "1.4.26",
   "description": "Module that updates source content for the desktop application translationCore.",
   "main": "lib/index.js",
   "display": "library",
   "scripts": {
-    "test": "eslint ./src && jest --json --outputFile=jest-results.json",
+    "test": "eslint ./src && jest --json --outputFile=jest-results.json ",
     "test:showFails": "eslint ./src && jest --reporters jest-silent-reporter",
     "fix": "eslint ./src --fix",
     "prebuild": "rm -rf ./lib",
