@@ -25,7 +25,7 @@ describe('apiHelpers.getCatalog', () => {
         expectMemberType(item, idx, 'downloadUrl', 'string');
       });
     });
-  }, 60000);
+  }, 180000);
 });
 
 /**

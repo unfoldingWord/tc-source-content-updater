@@ -13,6 +13,7 @@ import {getResourceInfo, RESOURCE_ID_MAP} from './parseHelpers';
 const request = require('request');
 export const DOOR43_CATALOG = `Door43-Catalog`;
 export const CN_CATALOG = `unfoldingWord`;
+export const UNFOLDING_WORD = `unfoldingWord`;
 export const DEFAULT_OWNER = DOOR43_CATALOG;
 export const TRANSLATION_HELPS = 'translationHelps';
 export const EMPTY_TIME = '0001-01-01T00:00:00+00:00';
@@ -215,12 +216,25 @@ export function combineTwords(catalogReleases) {
 }
 
 /**
+ * check if tag name is valid for release version
+ * @param {string} tagName
+ * @return {boolean}
+ */
+function isValidVersionTag(tagName) {
+  const firstChar = tagName && tagName[0];
+  const isDigit = (firstChar >= '0') && (firstChar <= '9');
+  const isValidVersionTag = firstChar && ((firstChar === 'v') || isDigit);
+  return isValidVersionTag;
+}
+
+/**
  * filter list of items and ignore master branch
  * @param {[object]} catalog - array of resources
  * @param {[string]} ignoredResources
+ * @param {[object]} newCatalog - new catalog to search for matches to Door43-Catalog matches in unfoldingWord
  * @return {[object]}
  */
-function filterOutMasterBranch(catalog, ignoredResources = []) {
+function filterOutMasterBranch(catalog, ignoredResources = [], newCatalog = []) {
   let catalog_ = catalog.filter(resource => {
     if (ignoredResources.includes(resource.resource)) {
       return false; // reject ignored resources
@@ -228,15 +242,23 @@ function filterOutMasterBranch(catalog, ignoredResources = []) {
 
     const tagName = resource.branch_or_tag_name;
     if (tagName) { // check for version
-      const firstChar = tagName[0];
-      const isDigit = (firstChar >= '0') && (firstChar <= '9');
+      const _isValidVersionTag = isValidVersionTag(tagName);
       const isD43Master = (tagName === 'master') && (resource.owner === DOOR43_CATALOG);
-      if (isD43Master || (firstChar !== 'v' && !isDigit)) {
-        if (!isD43Master) {
-          console.log(`filterOutMasterBranch - invalid version: ${tagName} in ${getResourceInfo(resource)}`);
+      if (isD43Master) {
+        // find the latest release in unfoldingWord org to get version info
+        const sourceResource = findResource(newCatalog, {...resource, owner: UNFOLDING_WORD});
+        if (sourceResource) {
+          const _tagName = sourceResource.branch_or_tag_name;
+          if (isValidVersionTag(_tagName)) {
+            resource.branch_or_tag_name = _tagName;
+            return true;
+          }
         }
-        return false; // reject if tag is not a version
+      } else if (_isValidVersionTag) {
+        return true;
       }
+      console.log(`filterOutMasterBranch - invalid version: ${tagName} in ${getResourceInfo(resource)}`);
+      return false; // reject if tag is not a version
     }
 
     return true;
@@ -260,8 +282,6 @@ export async function getCatalog(config = {}) {
   };
   const catalogReleases = await searchCatalogNext(searchParams);
   console.log(`getCatalog - found ${catalogReleases.length} items in old Door43-Catalog`);
-  let catalogReleases_ = filterOutMasterBranch(catalogReleases, ['obs', 'obs-tn']);
-  console.log(`getCatalog - found ${catalogReleases_.length} items in old Door43-Catalog after filter`);
   searchParams = {
     subject: SUBJECT.ALL_TC_RESOURCES,
     stage: config.stage || STAGE.PROD,
@@ -270,6 +290,10 @@ export async function getCatalog(config = {}) {
   };
   const newCatalogReleases = await searchCatalogNext(searchParams);
   console.log(`getCatalog - found ${newCatalogReleases.length} items in catalog next`);
+
+  let catalogReleases_ = filterOutMasterBranch(catalogReleases, ['obs', 'obs-tn'], newCatalogReleases);
+  console.log(`getCatalog - found ${catalogReleases_.length} items in old Door43-Catalog after filter`);
+
   let newCatalogReleases_ = filterOutMasterBranch(newCatalogReleases, ['obs', 'obs-tn']);
   console.log(`getCatalog - found ${newCatalogReleases_.length} items in catalog next after filter`);
 
