@@ -250,15 +250,12 @@ function filterOutMasterBranch(catalog, ignoredResources = [], newCatalog = []) 
         if (sourceResource) {
           const _tagName = sourceResource.branch_or_tag_name;
           if (isValidVersionTag(_tagName)) {
-            // mirror from unfoldingWord repo
-            const originalOwner = resource.owner;
-            const originalFullName = resource.full_name;
-            for (const key of Object.keys(sourceResource)) {
-              resource[key] = sourceResource[key];
-            }
-            // restore original owner
-            resource.owner = originalOwner;
-            resource.full_name = originalFullName;
+            // copy latest release data from source
+            resource.branch_or_tag_name = _tagName;
+            resource.released = sourceResource.released;
+            resource.modified = sourceResource.modified;
+            resource.zipball_url = sourceResource.zipball_url;
+            resource.downloadUrl = sourceResource.downloadUrl;
             return true;
           }
         }
@@ -411,6 +408,7 @@ function getCompatibleResourceList(resources) {
  */
 export async function searchCatalogNext(searchParams, retries=3) {
   let result_ = null;
+  const start = Date.now();
   const {
     owner,
     languageId,
@@ -440,6 +438,10 @@ export async function searchCatalogNext(searchParams, retries=3) {
     }
     console.log(`Searching: ${fetchUrl}`);
     result_ = await doMultipartQuery(fetchUrl, retries);
+
+    const end = Date.now();
+    const elapsed = (end - start) / (60*1000); // Convert milliseconds to minutes
+    console.log(`searchCatalogNext() - search took: ${elapsed} minutes`);
   } catch (e) {
     console.warn('searchCatalogNext() - error calling search API', e);
     return null;
