@@ -250,10 +250,15 @@ function filterOutMasterBranch(catalog, ignoredResources = [], newCatalog = []) 
         if (sourceResource) {
           const _tagName = sourceResource.branch_or_tag_name;
           if (isValidVersionTag(_tagName)) {
-            // copy latest release data from source
-            resource.branch_or_tag_name = _tagName;
-            resource.released = sourceResource.released;
-            resource.modified = sourceResource.modified;
+            // mirror from unfoldingWord repo
+            const originalOwner = resource.owner;
+            const originalFullName = resource.full_name;
+            for (const key of Object.keys(sourceResource)) {
+              resource[key] = sourceResource[key];
+            }
+            // restore original owner
+            resource.owner = originalOwner;
+            resource.full_name = originalFullName;
             return true;
           }
         }
