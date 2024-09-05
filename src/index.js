@@ -403,7 +403,8 @@ Updater.prototype.downloadAndProcessResource = async function(resourceDetails, r
   const baseUrl = config.DCS_BASE_URL || apiHelpers.DCS_BASE_URL;
   let downloadUrl = `${baseUrl}/${owner}/${resourceName}/archive/${version_}.zip`;
   if ((owner === apiHelpers.DOOR43_CATALOG) && (baseUrl === apiHelpers.DCS_BASE_URL)) {
-    downloadUrl = `https://cdn.door43.org/${languageId}/${resourceId}/${version_}/${resourceId}.zip`;
+    // redirect to UW org
+    downloadUrl = `${baseUrl}/${apiHelpers.CN_CATALOG}/${resourceName}/archive/${version_}.zip`;
   }
   const resource = {
     languageId,

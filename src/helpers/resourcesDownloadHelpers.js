@@ -267,20 +267,6 @@ export const downloadAndProcessResource = async (resource, resourcesPath, downlo
     const importSubdirPath = getSubdirOfUnzippedResource(importPath);
     const processedFilesPath = await processResource(resource, importSubdirPath, resourcesPath, downloadErrors, config);
     if (processedFilesPath) {
-      const versionDir = getVersionFolder(resource);
-      // Extra step if the resource is the Greek UGNT or Hebrew UHB and in Door43 catalog
-      if (isGreekOrHebrew && (resource.owner === DOOR43_CATALOG)) {
-        const twGroupDataPath = makeTwGroupDataResource(resource, processedFilesPath);
-        const twGroupDataResourcesPath = path.join(resourcesPath, resource.languageId, 'translationHelps', 'translationWords', versionDir);
-        try {
-          await moveResourcesHelpers.moveResources(twGroupDataPath, twGroupDataResourcesPath);
-          if (!doingPreRelease_) {
-            removeUnusedResources(resourcesPath, twGroupDataResourcesPath, resource.languageId, resource.version, isGreekOrHebrew);
-          }
-        } catch (err) {
-          throw Error(appendError(errors.UNABLE_TO_CREATE_TW_GROUP_DATA, err));
-        }
-      }
       const currentResourcePath = getActualResourcePath(resource, resourcesPath);
       try {
         await moveResourcesHelpers.moveResources(processedFilesPath, currentResourcePath);

@@ -24,6 +24,7 @@ import {
 } from '../../resources/bible';
 import {makeSureResourceUnzipped} from '../unzipFileHelpers';
 import {
+  CN_CATALOG,
   DCS_BASE_URL,
   DOOR43_CATALOG,
   formatVersionWithoutV,
@@ -297,16 +298,10 @@ export function getMissingOriginalResource(resourcesPath, originalLanguageId, or
         let origOwner = ownerStr;
         const baseUrl = config.DCS_BASE_URL || DCS_BASE_URL;
         if (ownerStr === DOOR43_CATALOG) {
-          if (baseUrl === DCS_BASE_URL) {
-            // Download orig. lang. resource
-            downloadUrl = `https://cdn.door43.org/${originalLanguageId}/${originalLanguageBibleId}/${version_}/${originalLanguageBibleId}.zip`;
-          } else {
-            origOwner = DOOR43_CATALOG;
-            downloadUrl = `${baseUrl}/${origOwner}/${resourceName}/archive/${version_}.zip`;
-          }
+          // Download orig. lang. resource from UW org, but use as Door43-Catalog
+          downloadUrl = `${baseUrl}/${CN_CATALOG}/${resourceName}/archive/${version_}.zip`;
         } else { // otherwise we read from uW org
-          // Download orig. lang. resource
-          origOwner = 'unfoldingWord';
+          origOwner = 'unfoldingWord'; // change owner of resource
           downloadUrl = `${baseUrl}/${origOwner}/${resourceName}/archive/${version_}.zip`;
         }
         console.log(`tnArticleHelpers.getMissingOriginalResource() - downloading missing original bible: ${downloadUrl}`);
