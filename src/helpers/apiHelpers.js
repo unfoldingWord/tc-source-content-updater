@@ -254,6 +254,8 @@ function filterOutMasterBranch(catalog, ignoredResources = [], newCatalog = []) 
             resource.branch_or_tag_name = _tagName;
             resource.released = sourceResource.released;
             resource.modified = sourceResource.modified;
+            resource.zipball_url = sourceResource.zipball_url;
+            resource.downloadUrl = sourceResource.downloadUrl;
             return true;
           }
         }
@@ -406,6 +408,7 @@ function getCompatibleResourceList(resources) {
  */
 export async function searchCatalogNext(searchParams, retries=3) {
   let result_ = null;
+  const start = Date.now();
   const {
     owner,
     languageId,
@@ -435,6 +438,10 @@ export async function searchCatalogNext(searchParams, retries=3) {
     }
     console.log(`Searching: ${fetchUrl}`);
     result_ = await doMultipartQuery(fetchUrl, retries);
+
+    const end = Date.now();
+    const elapsed = (end - start) / (60*1000); // Convert milliseconds to minutes
+    console.log(`searchCatalogNext() - search took: ${elapsed} minutes`);
   } catch (e) {
     console.warn('searchCatalogNext() - error calling search API', e);
     return null;
