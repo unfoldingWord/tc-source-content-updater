@@ -167,7 +167,7 @@ export function getVersionAndOwnerFromPath(versionPath) {
 export function splitVersionAndOwner(versionAndOwner) {
   let version = versionAndOwner;
   let owner = '';
-  const pos = versionAndOwner.indexOf(OWNER_SEPARATOR);
+  const pos = versionAndOwner && versionAndOwner.indexOf(OWNER_SEPARATOR);
   if (pos >= 0) {
     owner = decodeURIComponent(versionAndOwner.substr(pos + 1));
     version = versionAndOwner.substr(0, pos);
