@@ -183,7 +183,7 @@ function tsvObjectsToGroupData(tsvItems, originalBiblePath, resourcesPath, bookI
  * @param {string} originalBiblePath
  * @param {string} outputPath
  */
-async function twlTsvToGroupData(tsvPath, project, resourcesPath, originalBiblePath, outputPath) {
+export async function twlTsvToGroupData(tsvPath, project, resourcesPath, originalBiblePath, outputPath) {
   const bookId = project.identifier;
   let groupData;
   const {
