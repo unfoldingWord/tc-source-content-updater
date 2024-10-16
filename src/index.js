@@ -15,7 +15,15 @@ import * as resourcesDownloadHelpers from './helpers/resourcesDownloadHelpers';
 import * as downloadHelpers from './helpers/downloadHelpers';
 import * as resourcesHelpers from './helpers/resourcesHelpers';
 export {getOtherTnsOLVersions} from './helpers/translationHelps/tnArticleHelpers';
-export {apiHelpers, downloadHelpers, parseHelpers, resourcesHelpers, resourcesDownloadHelpers};
+export {
+  apiHelpers,
+  downloadHelpers,
+  parseHelpers,
+  resourcesHelpers,
+  resourcesDownloadHelpers,
+  twArticleHelpers,
+  tnArticleHelpers,
+};
 
 // ============================
 // defines useful for searching
