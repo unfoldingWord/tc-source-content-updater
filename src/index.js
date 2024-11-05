@@ -14,6 +14,8 @@ import * as tnArticleHelpers from './helpers/translationHelps/tnArticleHelpers';
 import * as resourcesDownloadHelpers from './helpers/resourcesDownloadHelpers';
 import * as downloadHelpers from './helpers/downloadHelpers';
 import * as resourcesHelpers from './helpers/resourcesHelpers';
+import * as zipFileHelpers from './helpers/zipFileHelpers';
+import * as unzipFileHelpers from './helpers/unzipFileHelpers';
 export {getOtherTnsOLVersions} from './helpers/translationHelps/tnArticleHelpers';
 export {
   apiHelpers,
@@ -23,6 +25,8 @@ export {
   resourcesDownloadHelpers,
   twArticleHelpers,
   tnArticleHelpers,
+  unzipFileHelpers,
+  zipFileHelpers,
 };
 
 // ============================
