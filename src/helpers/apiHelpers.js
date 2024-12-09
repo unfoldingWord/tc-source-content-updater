@@ -293,6 +293,8 @@ export async function getCatalog(config = {}) {
     stage: config.stage || STAGE.PROD,
     DCS_BASE_URL: config.DCS_BASE_URL,
     partialMatch: '0',
+    ignoreDoor43Catalog: config.ignoreDoor43Catalog,
+    topic: config.topic,
   };
   const newCatalogReleases = await searchCatalogNext(searchParams);
   console.log(`getCatalog - found ${newCatalogReleases.length} items in catalog next`);
