@@ -285,7 +285,8 @@ export async function getCatalog(config = {}) {
     DCS_BASE_URL: config.DCS_BASE_URL,
     partialMatch: '0',
   };
-  const catalogReleases = await searchCatalogNext(searchParams);
+  const fetchDoor43Catalog = !config.ignoreDoor43Catalog;
+  const catalogReleases = fetchDoor43Catalog ? await searchCatalogNext(searchParams) : [];
   console.log(`getCatalog - found ${catalogReleases.length} items in old Door43-Catalog`);
   searchParams = {
     subject: SUBJECT.ALL_TC_RESOURCES,
@@ -398,6 +399,7 @@ function getCompatibleResourceList(resources) {
  *                    STAGE.LATEST -return the default branch (e.g. master) if it is a valid RC instead of the "prod", "preprod" or "draft".  (default)
  * @property {Number|String} checkingLevel - search only for entries with the given checking level(s). Can be 1, 2 or 3.  Default is any.
  * @property {String} sort - how to sort results (see defines in SORT), if undefined then sorted by by "lang", then "subject" and then "tag"
+ * @property {String} topic - filter by topic tags (e.g. "tc-ready")
  */
 
 /**
@@ -419,6 +421,7 @@ export async function searchCatalogNext(searchParams, retries=3) {
     partialMatch,
     sort = SORT.REPO_NAME,
     DCS_BASE_URL: baseUrl = DCS_BASE_URL,
+    topic,
   } = searchParams;
 
   try {
@@ -433,6 +436,7 @@ export async function searchCatalogNext(searchParams, retries=3) {
     parameters = addUrlParameter(partialMatch, parameters, 'partialMatch');
     parameters = addUrlParameter('rc', parameters, 'metadataType');
     parameters = addUrlParameter(sort, parameters, 'sort');
+    parameters = addUrlParameter(topic, parameters, 'topic');
     if (parameters) {
       fetchUrl += '?' + parameters;
     }
