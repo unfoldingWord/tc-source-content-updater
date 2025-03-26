@@ -401,7 +401,7 @@ function getCompatibleResourceList(resources) {
  *                    STAGE.LATEST -return the default branch (e.g. master) if it is a valid RC instead of the "prod", "preprod" or "draft".  (default)
  * @property {Number|String} checkingLevel - search only for entries with the given checking level(s). Can be 1, 2 or 3.  Default is any.
  * @property {String} sort - how to sort results (see defines in SORT), if undefined then sorted by by "lang", then "subject" and then "tag"
- * @property {String} topic - filter by topic tags (e.g. "tc-ready")
+ * @property {String|String[]} topic - filter by topic tags (e.g. "tc-ready")
  */
 
 /**
@@ -438,7 +438,16 @@ export async function searchCatalogNext(searchParams, retries=3) {
     parameters = addUrlParameter(partialMatch, parameters, 'partialMatch');
     parameters = addUrlParameter('rc', parameters, 'metadataType');
     parameters = addUrlParameter(sort, parameters, 'sort');
-    parameters = addUrlParameter(topic, parameters, 'topic');
+
+    if (Array.isArray(topic)) {
+      for (const topicItem of topic) {
+        {
+          parameters = addUrlParameter(topicItem, parameters, 'topic');
+        }
+      }
+    } else {
+      parameters = addUrlParameter(topic, parameters, 'topic');
+    }
     if (parameters) {
       fetchUrl += '?' + parameters;
     }
