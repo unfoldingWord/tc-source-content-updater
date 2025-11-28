@@ -181,11 +181,18 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
     const originalLanguageOwner = getOwnerForOriginalLanguage(resource.owner);
     const {otQuery, ntQuery} = await getMissingResources(sourcePath, resourcesPath, getMissingOriginalResource, downloadErrors, resource.languageId, resource.owner, true, config);
     console.log(`tnArticleHelpers.processTranslationNotes() - have needed original bibles for ${sourcePath}, starting processing`);
-    const tsvFiles = fs.readdirSync(sourcePath).filter((filename) => path.extname(filename) === '.tsv');
+
+    const manifest = resourcesHelpers.getResourceManifest(sourcePath);
+    if (!(manifest && Array.isArray(manifest.projects))) {
+      throw new Error(`tnArticleHelpers.processTranslationNotes() - no projects in manifest at ${sourcePath} for ${resource_}`);
+    }
+
     const tnErrors = [];
     let bookCount = 0;
 
-    for (const filename of tsvFiles) {
+    for (const project of manifest.projects) {
+      const filepath = path.join(sourcePath, project.path);
+      const filename = path.basename(filepath);
       try {
         const isSevenCol = (filename.toLowerCase().indexOf('tn_') === 0); // file names are as tn_2JN.tsv
         const splitter = isSevenCol ? '_' : '-';
@@ -214,7 +221,6 @@ export async function processTranslationNotes(resource, sourcePath, outputPath, 
           `${version}_${originalLanguageOwner}`
         );
 
-        const filepath = path.join(sourcePath, filename);
         if (!fs.existsSync(filepath)) {
           const message = `tnArticleHelpers.processTranslationNote() - cannot find '${filepath}' from manifest projects - skipping`;
           console.warn(message);

@@ -26,7 +26,7 @@ import {
 import {delay} from '../utils';
 
 /**
- * @description Processes the extracted files for translationWord to create the folder
+ * @description Processes the extracted files for translationWord (tw) to create the folder
  * structure and produce the index.js file for the language with the title of each article.
  * @param {Object} resource - Resource object
  * @param {String} sourcePath - Path to the extracted files that came from the zip file from the catalog
@@ -45,12 +45,25 @@ export function processTranslationWords(resource, sourcePath, outputPath) {
   if (fs.pathExistsSync(outputPath))
     fs.removeSync(outputPath);
 
-  const typesPath = path.join(sourcePath, 'bible');
+  const resource_ = `${resource.owner}/${resource.languageId}_tw`;
+  const manifest = getResourceManifest(sourcePath);
+  if (!(manifest && Array.isArray(manifest.projects))) {
+    throw new Error(`processTranslationWords() - no projects in manifest at ${sourcePath} for ${resource_}`);
+  }
+
+  const twlErrors = [];
+  let articleCount = 0;
+  const firstItem = manifest.projects[0]; // only need first item which points to folder containing notes
+  const projectFolder = firstItem && firstItem.path;
+  const typesPath = path.join(sourcePath, projectFolder || 'bible');
   const isDirectory = (item) => fs.lstatSync(path.join(typesPath, item)).isDirectory();
   let typeDirs = [];
   if (fs.existsSync(typesPath)) {
     typeDirs = fs.readdirSync(typesPath).filter(isDirectory);
+  } else {
+    throw new Error(`processTranslationWords() - path not found ${typesPath} for ${resource_}`);
   }
+
   typeDirs.forEach((typeDir) => {
     const typePath = path.join(typesPath, typeDir);
     const files = fs.readdirSync(typePath).filter((filename) => path.extname(filename) === '.md');
@@ -64,8 +77,15 @@ export function processTranslationWords(resource, sourcePath, outputPath) {
         fileName,
       );
       fs.copySync(sourcePath, destinationPath);
+      articleCount++;
     });
   });
+
+  if (articleCount > 0) {
+    console.log(`processTranslationWords() - ${articleCount} articles found for ${resource_}`);
+  } else {
+    throw new Error(`processTranslationWords() - no articles found at ${typesPath} for ${resource_}`);
+  }
   return true;
 }
 
@@ -217,7 +237,7 @@ export async function twlTsvToGroupData(tsvPath, project, resourcesPath, origina
 }
 
 /**
- * @description Processes the extracted files for translationWord to create the folder
+ * @description Processes the extracted files for translationWord tsv's (twl's) to create the folder
  * structure and produce the index.js file for the language with the title of each article.
  * @param {Object} resource - Resource object
  * @param {String} sourcePath - Path to the extracted files that came from the zip file from the catalog
@@ -248,17 +268,17 @@ export async function processTranslationWordsTSV(resource, sourcePath, outputPat
       resource.languageId,
       'translationHelps/translationWords'
     );
+    const resource_ = `${resource.owner}/${resource.languageId}_twl`;
     const twVersionPath = resourcesHelpers.getLatestVersionInPath(twPath, resource.owner);
     if (fs.existsSync(twVersionPath)) {
       makeSureResourceUnzipped(twVersionPath);
     } else {
-      const resource_ = `${resource.owner}/${resource.languageId}_tw`;
       throw new Error(`processTranslationWordsTSV() - cannot find '${resource_}' at ${twPath} for ${resource.owner}`);
     }
 
     const manifest = getResourceManifest(sourcePath);
     if (!(manifest && Array.isArray(manifest.projects))) {
-      throw new Error(`processTranslationWordsTSV() - no projects in manifest at ${sourcePath} for ${resource.owner}`);
+      throw new Error(`processTranslationWordsTSV() - no projects in manifest at ${sourcePath} for ${resource_}`);
     }
 
     const twlErrors = [];
