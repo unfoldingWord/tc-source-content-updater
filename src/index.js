@@ -32,10 +32,24 @@ export {
 // ============================
 // defines useful for searching
 
+/**
+ * Release stages for the Catalog Next search API (`stage` parameter).
+ * Each level returns one entry per repo - the most recent version at that stability level or higher,
+ * so each level is a superset of the ones above it. The `stage` field of each returned item tells
+ * which was actually found (e.g. a LATEST search can return items with stage 'prod').
+ */
 export const STAGE = {
+  // only production (non-pre-release) releases; repos without a production release are excluded.
+  //   Default for updateCatalog()/getCatalog().
   PROD: 'prod',
+  // newest pre-release if one exists, otherwise the production release. Only this stage enables
+  //   pre-release mode, in which older resource versions are kept rather than deleted after downloading.
   PRE_PROD: 'preprod',
+  // draft release if one exists, otherwise pre-release or production release.
+  //   Note: currently rejected by DCS search API (HTTP 422).
   DRAFT: 'draft',
+  // default branch (e.g. master) if it is a valid resource container, otherwise the newest release.
+  //   Includes repos that were never released. Default for searchCatalogNext().
   LATEST: 'latest',
 };
 

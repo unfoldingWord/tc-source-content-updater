@@ -19,6 +19,8 @@ Node 16 is required (`engines: >=16.14 <18.21`; CI uses 16.20.2). The code is Ba
 
 Jest is v23 and tests live in both `src/` and `__tests__/` (`*.test.js`).
 
+Use Node 16 for every npm/npx command, including `npm ci`. If the default `node` is newer, put Node 16 first on the PATH, e.g. `export PATH=~/.nvm/versions/node/v16.20.2/bin:$PATH`. If `node_modules` isn't installed, `npx jest` downloads a modern Jest, which fails with `.plugins[0] may only be a two-tuple or three-tuple` because it can't read the Babel 6 `.babelrc`.
+
 To try changes in translationCore without publishing, install the branch there: `npm i translationCoreApps/tc-source-content-updater#<branch>`.
 
 ## Architecture
@@ -30,7 +32,19 @@ To try changes in translationCore without publishing, install the branch there: 
 2. `getLatestResources(localResourceList, config)` → `parseHelpers.getLatestResources`, which compares the remote catalog against local manifests and returns only the resources that need updating.
 3. `downloadResources(languageList, resourcesPath)`, `downloadAllResources(...)` or `downloadAndProcessResource(resourceDetails, ...)` → `resourcesDownloadHelpers`.
 
-`STAGE`, `SUBJECT` and `SORT` constants, plus some helper re-exports, are also exported from `index.js`. The `src/index.js` methods are thin wrappers. The README asks that logic go into the helper files rather than the main index.
+`STAGE`, `SUBJECT` and `SORT` constants, plus some helper re-exports, are also exported from `index.js`.
+
+### Catalog search and stages
+`apiHelpers.searchCatalogNext` builds a query to `<DCS_BASE_URL>/api/v1/catalog/search` and pages through the results with `doMultipartQuery`, using the `X-Total-Count` header to know when it has everything. It then normalises each item with `getCompatibleResourceList`, which adds `languageId`, `resourceId` and `version` and turns spaces in the subject into `_`.
+
+- **Stages:** `STAGE` (documented in `src/index.js`) is a fallback hierarchy that returns one entry per repo: `prod` ⊂ `preprod` ⊂ `latest`. Each item's own `stage` field says which version was actually returned.
+  - `latest` returns default branches, including repos that were never released, and is the only way to get *all* repos.
+  - `draft` is currently rejected by DCS with HTTP 422.
+  - `searchCatalogNext` defaults to `latest`. `getCatalog` defaults to `prod`, but always queries the legacy `Door43-Catalog` owner with `latest`.
+  - Only `preprod` turns on pre-release mode, in which old versions are not deleted after a download.
+- **Fields on each catalog item:**
+  - `ref_type` (`branch`/`tag`) and `branch_or_tag_name` give the raw file URL: `https://git.door43.org/<owner>/<repo>/raw/<branch|tag>/<ref>/<path>`.
+  - `ingredients[]` lists the books, each with its `path` and an `alignment_count`. A total `alignment_count` of 0 reliably means the Bible has no `\zaln` alignment, even if its subject is "Aligned Bible". Many repos with that subject contain only plain text. The `src/index.js` methods are thin wrappers. The README asks that logic go into the helper files rather than the main index.
 
 ### Download/process pipeline
 `resourcesDownloadHelpers.downloadAndProcessResource` handles one resource:
@@ -64,6 +78,8 @@ Error message strings are in `src/resources/errors.js`. Bible book and original-
 - `fs-extra` is mocked with an in-memory file system (`__tests__/__mocks__/fs-extra.js`). Fixtures are loaded into it with helpers such as `fs.__loadFilesIntoMockFs` / `__setMockDirectories`, and real fs is reached via `fs.__actual`. Tests that need the real filesystem call `jest.unmock('fs-extra')`.
 - HTTP calls are stubbed with `nock` (`__tests__/__nocks__`). `__tests__/fixtures/catalog.json` is example DCS catalog metadata.
 - `__tests__/_apiIntegration.test.js` holds live-network integration tests used during development. They are `describe.skip` by default and write to `./temp`.
+- To mock the search API for a test, stub `DCS_BASE_URL` + `/api/v1/catalog/search` with nock and include an `X-Total-Count` reply header. `__tests__/searchAlignedBibles.test.js` is an example that covers paging.
+- `temp/` is gitignored. Use it for scratch output and one-off scripts, such as `temp/verifyAligned.mjs`, which checks catalog Bibles for `\zaln`.
 
 ## Lint style
 
