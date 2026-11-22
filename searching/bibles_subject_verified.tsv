@@ -1,4 +1,8 @@
 language	full_name	stage	ref	aligned	checked_book	url	checked_usfm_url
+nag	Door43-Catalog/nag_irv	prod	v1	true	tit	https://git.door43.org/Door43-Catalog/nag_irv	https://git.door43.org/Door43-Catalog/nag_irv/raw/tag/v1/57-TIT.usfm
+nag	STR/nag_irv	latest	master	true	tit	https://git.door43.org/STR/nag_irv	https://git.door43.org/STR/nag_irv/raw/branch/master/57-TIT.usfm
+or	Door43-Catalog/or_irv	prod	v1	true	tit	https://git.door43.org/Door43-Catalog/or_irv	https://git.door43.org/Door43-Catalog/or_irv/raw/tag/v1/57-TIT.usfm
+or	STR/or_irv	latest	master	true	tit	https://git.door43.org/STR/or_irv	https://git.door43.org/STR/or_irv/raw/branch/master/57-TIT.usfm
 aaa	mXaln/aaa_1jn_text_ulb	latest	master	false		https://git.door43.org/mXaln/aaa_1jn_text_ulb	
 aeb	poestreich/aeb_practice	latest	master	false		https://git.door43.org/poestreich/aeb_practice	
 aeb	poestreich/practice_aeb_psa	latest	master	false		https://git.door43.org/poestreich/practice_aeb_psa	
@@ -129,9 +133,7 @@ my	Door43-Catalog/my_juds	prod	v1835.2	false		https://git.door43.org/Door43-Cata
 my	STR/my_juds	latest	master	false		https://git.door43.org/STR/my_juds	
 mzn	Door43-Catalog/mzn_ulb	prod	v1.3	false		https://git.door43.org/Door43-Catalog/mzn_ulb	
 mzn	STR/mzn_ulb	latest	master	false		https://git.door43.org/STR/mzn_ulb	
-nag	Door43-Catalog/nag_irv	prod	v1	true	tit	https://git.door43.org/Door43-Catalog/nag_irv	https://git.door43.org/Door43-Catalog/nag_irv/raw/tag/v1/57-TIT.usfm
 nag	Door43-Catalog/nag_isv	prod	v2	false		https://git.door43.org/Door43-Catalog/nag_isv	
-nag	STR/nag_irv	latest	master	true	tit	https://git.door43.org/STR/nag_irv	https://git.door43.org/STR/nag_irv/raw/branch/master/57-TIT.usfm
 nag	STR/nag_isv	latest	master	false		https://git.door43.org/STR/nag_isv	
 nar	lversaw/nar_jhn_text_reg	latest	master	false		https://git.door43.org/lversaw/nar_jhn_text_reg	
 ne	Door43-Catalog/ne_udb	prod	v12.2	false		https://git.door43.org/Door43-Catalog/ne_udb	
@@ -140,10 +142,8 @@ ne	hblamtari/udb_ne	latest	master	false		https://git.door43.org/hblamtari/udb_ne
 ne	jag3773/ne-ulb	latest	master	false		https://git.door43.org/jag3773/ne-ulb	
 ne	STR/ne_udb	latest	master	false		https://git.door43.org/STR/ne_udb	
 ne	STR/ne_ulb	latest	master	false		https://git.door43.org/STR/ne_ulb	
-or	Door43-Catalog/or_irv	prod	v1	true	tit	https://git.door43.org/Door43-Catalog/or_irv	https://git.door43.org/Door43-Catalog/or_irv/raw/tag/v1/57-TIT.usfm
 or	Door43-Catalog/or_udb	prod	v11.3	false		https://git.door43.org/Door43-Catalog/or_udb	
 or	Door43-Catalog/or_ulb	prod	v5	false		https://git.door43.org/Door43-Catalog/or_ulb	
-or	STR/or_irv	latest	master	true	tit	https://git.door43.org/STR/or_irv	https://git.door43.org/STR/or_irv/raw/branch/master/57-TIT.usfm
 or	STR/or_udb	latest	master	false		https://git.door43.org/STR/or_udb	
 or	STR/or_ulb	latest	master	false		https://git.door43.org/STR/or_ulb	
 pa	Door43-Catalog/pa_ulb	prod	v3	false		https://git.door43.org/Door43-Catalog/pa_ulb	
