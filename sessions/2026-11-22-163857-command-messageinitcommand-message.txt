@@ -1,0 +1,944 @@
+ ▐▛███▛█   Claude Code v2.1.327
+▝▜██████▀  Opus 5.5 · Claude Pro
+ ▝▝   ▝▝   ~/Development/Electron/tc-source-content-updater
+
+
+❯ /init                                                                         
+
+  Ran 3 shell commands (ctrl+o to expand)
+
+⏺ Let me look at the core download/process flow to describe it accurately.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+⏺ I have enough to write it.
+
+⏺ Write(CLAUDE.md)
+  ⎿  Wrote 74 lines to CLAUDE.md
+      1 # CLAUDE.md
+      2 
+      3 This file provides guidance to Claude Code (claude.ai/code) when
+        working with code in this repository.
+      4 
+      5 ## Overview
+      6 
+      7 `tc-source-content-updater` is an npm library used by the transla
+        tionCore desktop app. It queries the Door43 (DCS) catalog for sou
+        rce resources (Bibles, translationNotes, translationWords, transl
+     … +68 lines (~6 KB) (ctrl+o to expand)
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ I've created CLAUDE.md at the root of the repo. It covers:
+
+  - Commands: build, lint and fix, the full test run, running one test file or
+    one test by name, and test:showFails. One thing to know: npm test writes its
+    results to jest-results.json instead of printing them to the console.
+  - Architecture:
+    - How the Updater works, step by step: get the catalog, find which resources
+      are out of date, then download them.
+    - The pipeline that downloads, unzips and processes each resource, and how
+      it picks a processor based on the catalog subject.
+    - How processing translationNotes or translationWords Links can trigger
+      downloads of other resources it depends on.
+    - Where resources are stored on disk, with the owner as part of the version
+      folder name, and how pre-release state is tracked.
+  - How the tests work: testSetup/global.js mocks the download and zip helpers
+    for every test. The mock download serves files from
+    __tests__/fixtures/<host>/<path>. fs-extra is replaced with an in-memory
+    version that has helpers for loading fixtures, and HTTP calls are stubbed
+    with nock. The live-network integration tests are skipped by default.
+  - Lint style and release: the ESLint setup, the publish and tagging scripts,
+    and that PRs target develop.
+
+  I also included the useful parts of the README: put logic in the helper files
+  rather than index.js, and how to install a branch into translationCore for
+  testing. There were no Cursor, Copilot, Codex or Gemini config files to bring
+  in.
+
+✻ Worked for 55s · done 7:43 AM
+
+❯ write a test that will search and get a list of languages with aligned bibles 
+
+  Ran 4 shell commands (ctrl+o to expand)
+
+⏺ I'll write a unit test that mocks the Catalog Next search API with nock and
+  returns two pages, so it runs in CI and also covers paging. It then collects
+  the unique languages from the results.
+
+⏺ Write(__tests__/searchAlignedBibles.test.js)
+  ⎿  Wrote 115 lines to __tests__/searchAlignedBibles.test.js
+       1 import nock from 'nock';
+       2 import Updater, {SUBJECT, STAGE} from '../src';
+       3 import {DCS_BASE_URL} from '../src/helpers/apiHelpers';
+       4 
+       5 const SEARCH_PATH = '/api/v1/catalog/search';
+       6 
+       7 /**
+       8  * make a minimal Catalog Next search result entry
+       9  * @param {string} owner
+      10  * @param {string} language
+     … +105 lines (ctrl+o to expand)
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ npx downloaded a newer Jest because the project's dependencies aren't
+  installed. Checking:
+
+  Ran 4 shell commands · 1 failed (ctrl+o to expand)
+
+⏺ Those warnings come from the failure-path test, so they're expected. Checking
+  the pass/fail summary:
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ I added __tests__/searchAlignedBibles.test.js. Both of its tests pass and it
+  lints clean.
+
+  What it tests:
+  1. Gets the list of languages with aligned Bibles. It calls
+     Updater.searchCatalogNext({subject: SUBJECT.ALIGNED_BIBLES, stage: 
+     STAGE.PROD}) and collects the unique languageId values into a sorted list,
+     expecting ['en', 'es-419', 'hi', 'ru']. The mocked results include two
+     English Bibles, so it also checks that languages are not duplicated. It
+     also checks that:
+     - both pages of results were fetched (the API is mocked to return them on
+       two pages);
+     - the request sent subject=Aligned Bible, stage=prod and metadataType=rc;
+     - each result's subject is converted to Aligned_Bible.
+  2. Returns null when the search API errors, here a 500 response.
+
+  The test uses nock to fake the DCS search API, so it needs no network and runs
+  in CI. If you'd rather check what the live server actually returns, I can add
+  a skipped test to __tests__/_apiIntegration.test.js, like the others there.
+
+  Setup notes:
+  - node_modules wasn't installed, so I ran npm ci using Node 16.20.2 from your
+    nvm. On your default Node 20, npx jest downloads a newer Jest that can't
+    read the project's Babel 6 config.
+  - I only ran the new test file, not the full suite.
+
+  Existing bug I found (not fixed): doMultipartQuery in
+  src/helpers/apiHelpers.js (lines 94 and 99) calls doMultipartQueryPage(url, 
+  page, retries = 5). That sets retries to 5 instead of passing the caller's
+  value through, so the retries you give searchCatalogNext is ignored. That's
+  why the failure-path test retries 5 times and takes about 2 seconds. Do you
+  want me to fix it?
+
+✻ Brewed for 1m 44s · done 7:50 AM
+
+❯ yes fix the retries bug                                                       
+
+⏺ Bash(cd /Users/blm0/Development/Electron/tc-source-content-updater; sed -i ''
+      's/doMultipartQueryPage(url, page, retries = 5)/doMultipartQueryPage(url,
+      page, retries…)
+  ⎿  export async function doMultipartQuery(url, retries = 5) {
+       let page = 1;
+       let data = [];
+     … +18 lines (ctrl+o to expand)
+  ⎿  Updated src/helpers/apiHelpers.js +2 -2
+       91  export async function doMultipartQuery(url, retries = 5) {
+       92    let page = 1;
+       93    let data = [];
+       94 -  const {items, totalCount} = await doMultipartQueryPage(url, 
+          -page, retries = 5);                                           
+       94 +  const {items, totalCount} = await doMultipartQueryPage(url, 
+          +page, retries);                                               
+       95    let lastItems = items;
+       96    let totalCount_ = totalCount;
+       97    data = data.concat(items);
+       98    while (lastItems && data.length < totalCount_) {
+       99 -    const {items, totalCount} = await doMultipartQueryPage(url
+          -, ++page, retries = 5);                                       
+       99 +    const {items, totalCount} = await doMultipartQueryPage(url
+          +, ++page, retries);                                           
+      100      lastItems = items;
+      101      totalCount_ = totalCount;
+      102      if (items && items.length) {
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ The full suite passes. Checking the 2 lint errors to see whether they were
+  already there:
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ The retries bug is fixed in src/helpers/apiHelpers.js. doMultipartQuery was
+  setting retries to 5 on every call (lines 94 and 99) instead of passing on the
+  value it was given. Now the retries you give searchCatalogNext actually
+  controls how many times each page request is attempted.
+
+  Checks:
+  - The full suite passes: 79 passed, 11 skipped (the live-network tests that
+    are always skipped), 0 failed.
+  - The failure-path test in __tests__/searchAlignedBibles.test.js went from
+    about 2s to 21ms, because it now tries once instead of five times.
+  - ESLint reports 0 errors. There are some warnings, which were already there
+    before this change.
+
+  Behaviour change: getCatalog and searchCatalogNext both default to 3 retries.
+  Each page request used to get 5 attempts no matter what, so the normal catalog
+  fetch now retries a little less: 3 attempts per page instead of 5. Callers
+  that pass a different retries now get the value they asked for.
+
+  Nothing is committed.
+
+✻ Baked for 43s · done 7:52 AM
+
+❯ show me the list of languages and the URLs of the bibles within them          
+
+⏺ I'll query the live DCS catalog for aligned Bibles. I'm using stage=prod
+  (released versions only), the same as the test.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+⏺ The live DCS catalog lists 65 aligned Bibles in 24 languages. These are
+  released (prod) versions only. All links are under https://git.door43.org/,
+  and the download zip for each one is <url>/archive/<version>.zip.
+
+  Lang: ar
+  Name: العربية
+  Bibles (owner/repo @ version): BSOJ/ar_avd v6.9 · BSOJ/ar_arst v4.9 ·
+    BSOJ/ar_nav v2 · ar_gt/ar_glt v3 · ar_gt/ar_gst v3
+  ────────────────────────────────────────
+  Lang: as
+  Name: অসমীয়া
+  Bibles (owner/repo @ version): Door43-Catalog/as_irv v3
+  ────────────────────────────────────────
+  Lang: bn
+  Name: বাংলা
+  Bibles (owner/repo @ version): Door43-Catalog/bn_irv v5 ·
+    translationCore-Create-BCS/bn_glt v4 · translationCore-Create-BCS/bn_gst
+    v4
+  ────────────────────────────────────────
+  Lang: en
+  Name: English
+  Bibles (owner/repo @ version): unfoldingWord/en_ult v92 ·
+    unfoldingWord/en_ust v92 · ru_gt/en_ult v84 · ru_gt/en_ust v84 ·
+    Worldview/en_bsb v1
+  ────────────────────────────────────────
+  Lang: es-419
+  Name: Español Latin America
+  Bibles (owner/repo @ version): es-419_gl/es-419_glt v42 ·
+    es-419_gl/es-419_gst v40 · es-419_obt/es-419_glt v0.0.5
+  ────────────────────────────────────────
+  Lang: fa
+  Name: فارسی
+  Bibles (owner/repo @ version): fa_gl/fa_glt v11 · fa_gl/fa_gst v11 ·
+    fa_gl/fa_gbt v8.6
+  ────────────────────────────────────────
+  Lang: fr
+  Name: français
+  Bibles (owner/repo @ version): MVHS/fr_lsg v0.0.2 · MVHS/fr_glt v0.0.1
+  ────────────────────────────────────────
+  Lang: gu
+  Name: ગુજરાતી
+  Bibles (owner/repo @ version): translationCore-Create-BCS/gu_glt v4 ·
+    translationCore-Create-BCS/gu_gst v4 · Door43-Catalog/gu_irv v4 ·
+    translationCore-Create-BCS/gu_irv v1
+  ────────────────────────────────────────
+  Lang: hi
+  Name: हिन्दी
+  Bibles (owner/repo @ version): translationCore-Create-BCS/hi_glt v8 ·
+    translationCore-Create-BCS/hi_gst v8 · Door43-Catalog/hi_irv v12 ·
+    Door43-Catalog/hi_iev v6
+  ────────────────────────────────────────
+  Lang: id
+  Name: Bahasa Indonesia
+  Bibles (owner/repo @ version): bahtraku/id_glt v105 · bahtraku/id_gst v16
+  ────────────────────────────────────────
+  Lang: kn
+  Name: ಕನ್ನಡ
+  Bibles (owner/repo @ version): Door43-Catalog/kn_irv v5 ·
+    Door43-Catalog/kn_iev v3 · Door43-Catalog/kn_ust v3 ·
+    translationCore-Create-BCS/kn_glt v4 · translationCore-Create-BCS/kn_gst
+    v4
+  ────────────────────────────────────────
+  Lang: ml
+  Name: മലയാളം
+  Bibles (owner/repo @ version): Door43-Catalog/ml_irv v5
+  ────────────────────────────────────────
+  Lang: mr
+  Name: मराठी
+  Bibles (owner/repo @ version): translationCore-Create-BCS/mr_gst v5 ·
+    translationCore-Create-BCS/mr_glt v4 · Door43-Catalog/mr_irv v4
+  ────────────────────────────────────────
+  Lang: ne
+  Name: नेपाली
+  Bibles (owner/repo @ version): translationCore-Create-BCS/ne_glt v4 ·
+    translationCore-Create-BCS/ne_gst v4
+  ────────────────────────────────────────
+  Lang: or
+  Name: ଓଡ଼ିଆ
+  Bibles (owner/repo @ version): translationCore-Create-BCS/or_glt v4 ·
+    translationCore-Create-BCS/or_gst v4
+  ────────────────────────────────────────
+  Lang: pa
+  Name: ਪੰਜਾਬੀ
+  Bibles (owner/repo @ version): Door43-Catalog/pa_irv v3
+  ────────────────────────────────────────
+  Lang: rml
+  Name: Baltic Romani
+  Bibles (owner/repo @ version): DevleskoDrom/rml_rhb v3.2 · rm_ol/rml_rbs v11
+  ────────────────────────────────────────
+  Lang: rmy
+  Name: Vlax Romani
+  Bibles (owner/repo @ version): DevleskoDrom/rmy_srb v2
+  ────────────────────────────────────────
+  Lang: ru
+  Name: Русский
+  Bibles (owner/repo @ version): Door43-Catalog/ru_ust v9 ·
+    Door43-Catalog/ru_rob v8 · Door43-Catalog/ru_rlb v1.1 · ru_gl/ru_rlob
+    v13.0 · ru_gl/ru_rsob v14.0 · ru_gl/ru_rost v3.1 · BSA/ru_rsb v1.0.0 ·
+    ru_gt/ru_glt v1
+  ────────────────────────────────────────
+  Lang: ta
+  Name: தமிழ்
+  Bibles (owner/repo @ version): Door43-Catalog/ta_irv v3
+  ────────────────────────────────────────
+  Lang: te
+  Name: తెలుగు
+  Bibles (owner/repo @ version): translationCore-Create-BCS/te_glt v4 ·
+    translationCore-Create-BCS/te_gst v4 · Door43-Catalog/te_irv v2
+  ────────────────────────────────────────
+  Lang: tg
+  Name: тоҷикӣ
+  Bibles (owner/repo @ version): Door43-Catalog/tg_ult v1.1
+  ────────────────────────────────────────
+  Lang: ur-deva
+  Name: Urdu Devanagari
+  Bibles (owner/repo @ version): Door43-Catalog/ur-deva_irv v2
+  ────────────────────────────────────────
+  Lang: vi
+  Name: Tiếng Việt
+  Bibles (owner/repo @ version): Door43-Catalog/vi_glt v5.2 · vi_gl/vi_glt v1
+
+  Some languages have Bibles from several owners. For example, en_ult is
+  published by both unfoldingWord (v92) and ru_gt (v84). The catalog also
+  returns Bibles that aren't tagged tc-ready; filtering by that topic would
+  shorten the list.
+
+  The full API response is saved at
+  /private/tmp/claude-509/-Users-blm0-Development-Electron-tc-source-content-upd
+  ater/a7ac3fc6-da44-4d1b-b578-9ff93828083e/scratchpad/aligned.json.
+
+✻ Cooked for 43s · done 7:54 AM
+
+❯ /export                                                                       
+  ⎿  Conversation exported to /Users/blm0/Development/Electron/tc-source-content
+     -updater/sessions/2026-11-22-075532-command-messageinitcommand-message.txt
+
+❯ set the stage level that all bibles are returned and for each bible url       
+  verify that there is actually an aligned book in it (the usfm file will       
+  contain \zaln in the text.  Note book tit.usfm is a good one to check first   
+⏺ I'll compare how many Bibles each stage setting returns, to find the one that
+  returns everything.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ stage=latest returns the most (285), so I'll fetch all of those and check how
+  they're made up.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ The aligned-Bible catalog returned 285 repos (233 at latest, 49 at prod, 3 at
+  preprod), and draft was rejected with HTTP 422. I'll check the actual USFM for
+  \zaln rather than trust the catalog's alignment_count. · summary
+
+  Made 1 scratchpad edit +86, ran 1 shell command (ctrl+o to expand)
+
+⏺ The sample works. The catalog gives ref_type directly, so I'll use it instead
+  of guessing. Then I'll run all 285.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+⏺ 237 of the 285 Bibles have aligned text; I'll recheck the two flagged prod
+  ones by hand and run the same check on the 65 prod releases next. · summary
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ The vi_glt v5.2 Bible has word markers but no alignment data, and its catalog
+  alignment_count is also 0. Next I'll check whether alignment_count matches the
+  download check across all 285 Bibles. · summary
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+⏺ Stage setting: stage=latest is the one that returns every Bible. It gives 285
+  aligned-Bible repos in 25 languages, one entry per repo. By comparison, prod
+  gives 65 and preprod gives 69, and draft is rejected by the API (HTTP 422).
+
+  Result: I downloaded the USFM for every Bible and looked for \zaln. 237 of the
+  285 actually contain aligned text, covering 24 languages. For 210 of them the
+  aligned book was tit.usfm. The other 27 have no aligned Titus but do have
+  another aligned book, such as 3jn, 1ti or oba. No downloads failed.
+
+  ┌─────────┬──────────────────┬─────┬──────┬──────────────────┐
+  │  Lang   │ Aligned / listed │     │ Lang │ Aligned / listed │
+  ├─────────┼──────────────────┼─────┼──────┼──────────────────┤
+  │ ar      │ 9 / 9            │     │ ml   │ 4 / 4            │
+  ├─────────┼──────────────────┼─────┼──────┼──────────────────┤
+  │ as      │ 2 / 2            │     │ mr   │ 8 / 8            │
+  ├─────────┼──────────────────┼─────┼──────┼──────────────────┤
+  │ bn      │ 8 / 8            │     │ ne   │ 6 / 6            │
+  ├─────────┼──────────────────┼─────┼──────┼──────────────────┤
+  │ en      │ 50 / 59          │     │ or   │ 8 / 9            │
+  ├─────────┼──────────────────┼─────┼──────┼──────────────────┤
+  │ es-419  │ 14 / 16          │     │ pa   │ 2 / 2            │
+  ├─────────┼──────────────────┼─────┼──────┼──────────────────┤
+  │ fa      │ 6 / 7            │     │ rml  │ 6 / 7            │
+  ├─────────┼──────────────────┼─────┼──────┼──────────────────┤
+  │ fr      │ 10 / 10          │     │ rmy  │ 0 / 1            │
+  ├─────────┼──────────────────┼─────┼──────┼──────────────────┤
+  │ gu      │ 8 / 9            │     │ ru   │ 33 / 46          │
+  ├─────────┼──────────────────┼─────┼──────┼──────────────────┤
+  │ hi      │ 20 / 20          │     │ ta   │ 3 / 3            │
+  ├─────────┼──────────────────┼─────┼──────┼──────────────────┤
+  │ id      │ 7 / 8            │     │ te   │ 9 / 9            │
+  ├─────────┼──────────────────┼─────┼──────┼──────────────────┤
+  │ kn      │ 12 / 12          │     │ tg   │ 4 / 4            │
+  ├─────────┼──────────────────┼─────┼──────┼──────────────────┤
+  │ ur-deva │ 4 / 4            │     │ uk   │ 3 / 16           │
+  ├─────────┼──────────────────┼─────┼──────┼──────────────────┤
+  │         │                  │     │ vi   │ 1 / 6            │
+  └─────────┴──────────────────┴─────┴──────┴──────────────────┘
+
+  The 48 that aren't aligned fall into two groups:
+  - 13 have no USFM books at all. These are mostly empty test repos, such as
+    test_org/en_glt and MyOrg/en_gst.
+  - 35 have books but no alignment anywhere. These are mostly plain-text Bibles
+    tagged as "Aligned Bible", for example 13 IvanFedorovPress/uk_* repos, 5
+    Scriptorium/ru_* repos and several other ru_gl/* repos.
+
+  Three released (prod) Bibles from the earlier list aren't aligned:
+  - Door43-Catalog/vi_glt v5.2: it has \w word markers but no \zaln. I checked
+    this one by hand.
+  - DevleskoDrom/rmy_srb v2: this was the only Bible for rmy, so that language
+    has no aligned Bible.
+  - translationCore-Create-BCS/gu_irv v1.
+
+  The catalog already reports this. Each book listed in a catalog entry has an
+  alignment_count, and "total count > 0" matched the download check for all 285
+  Bibles. So code here could filter out unaligned Bibles without downloading
+  anything.
+
+  The full results, one row per Bible with its URL and the USFM file that proved
+  alignment, are in /private/tmp/claude-509/-Users-blm0-Development-Electron-tc
+  -source-content-updater/a7ac3fc6-da44-4d1b-b578-9ff93828083e/scratchpad/aligne
+  d_bibles_verified.tsv. The checking script is
+  /private/tmp/claude-509/-Users-blm0-Development-Electron-tc-source-content-upd
+  ater/a7ac3fc6-da44-4d1b-b578-9ff93828083e/scratchpad/verifyAligned.mjs.
+
+✻ Cooked for 2m 46s · done 8:04 AM
+
+❯ move those files to the temp folder                                           
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ I moved both files into the repo's temp folder:
+
+  - temp/aligned_bibles_verified.tsv: the results report.
+  - temp/verifyAligned.mjs: the script that does the check.
+
+  temp/ is gitignored, so git won't pick these files up. To run the script
+  again: node temp/verifyAligned.mjs <catalog.json> <out.json>. The input is a
+  saved catalog search response. The script needs Node 18 or later because it
+  uses the built-in fetch.
+
+✻ Crunched for 10s · done 8:08 AM
+
+❯ explain the STAGE levels                                                      
+  ⎿  ⧉ Selected 1 lines from src/index.js in IntelliJ IDEA
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+⏺ The STAGE values (src/index.js:35) are passed as the stage parameter to the
+  DCS Catalog Next search API. Each level returns one entry per repo: the most
+  bleeding-edge version available, but no less stable than the level you asked
+  for. Each level includes everything the levels above it would return.
+
+  Constant: STAGE.PROD
+  Value: prod
+  What DCS returns for each repo: Only full (non-pre-release) releases. Repos
+    with no full release are left out.
+  Aligned Bibles today: 65
+  ────────────────────────────────────────
+  Constant: STAGE.PRE_PROD
+  Value: preprod
+  What DCS returns for each repo: The newest pre-release if there is one,
+    otherwise the prod release.
+  Aligned Bibles today: 69
+  ────────────────────────────────────────
+  Constant: STAGE.DRAFT
+  Value: draft
+  What DCS returns for each repo: Meant to be: a draft release if there is
+    one, otherwise preprod or prod.
+  Aligned Bibles today: HTTP 422 (the API rejects it)
+  ────────────────────────────────────────
+  Constant: STAGE.LATEST
+  Value: latest
+  What DCS returns for each repo: The default branch (e.g. master) if it is a
+    valid resource container, otherwise the newest release. This also picks up
+    repos that have never been released.
+  Aligned Bibles today: 285
+
+  You can see the fallback in the latest results I fetched earlier. Each entry's
+  stage field shows what was actually returned: 233 came from latest (the
+  default branch), 49 from prod and 3 from preprod. Also, ref_type is branch for
+  default-branch entries and tag for releases, which decides whether the raw
+  file URLs use /raw/branch/... or /raw/tag/....
+
+  How this library uses them:
+  - Defaults differ by entry point:
+    - Updater.searchCatalogNext() / apiHelpers.searchCatalogNext default to
+      LATEST (apiHelpers.js:421).
+    - updateCatalog() / getCatalog() default to PROD for the main search
+      (apiHelpers.js:293), which is what translationCore normally uses. The
+      extra query for the legacy Door43-Catalog owner always uses LATEST
+      (apiHelpers.js:283).
+  - Only PRE_PROD turns on "pre-release mode" (resourcesDownloadHelpers.js:145
+    isStagePreRelease). In that mode a flag is stored in the resources manifest,
+    and old resource versions are not deleted after a download. That way a user
+    who tries preprod content keeps their production versions. LATEST and DRAFT
+    don't set this flag, even though they can return content that isn't in
+    production.
+  - After a download, the stage of the version that came back is written into
+    that resource's manifest.json (resourcesHelpers.js:401-409).
+
+  Two things that look off:
+  1. STAGE.DRAFT doesn't work against the current DCS server (422), even though
+     it's documented and exported. It should be removed, or the API docs should
+     be checked for the current name.
+  2. LATEST isn't treated as pre-release, even though it can return unreleased
+     master branches. If translationCore ever passes LATEST to updateCatalog,
+     old versions would be deleted the same way as for prod. That may be fine if
+     it's only used for searching, but it's worth knowing.
+
+✻ Cooked for 22s · done 8:13 AM
+
+❯ add comments to the selection                                                 
+  ⎿  ⧉ Selected 6 lines from src/index.js in IntelliJ IDEA
+
+⏺ Update(src/index.js)
+  ⎿  Added 14 lines
+      32  // ============================
+      33  // defines useful for searching
+      34 
+      35 +/**                                                            
+      36 + * Release stages for the Catalog Next search API (`stage` para
+         +meter).                                                        
+      37 + * Each level returns one entry per repo - the most recent vers
+         +ion at that stability level or higher,                         
+      38 + * so each level is a superset of the ones above it. The `stage
+         +` field of each returned item tells                            
+      39 + * which was actually found (e.g. a LATEST search can return it
+         +ems with stage 'prod').                                        
+      40 + */                                                            
+      41  export const STAGE = {
+      42 +  // only production (non-pre-release) releases; repos without 
+         +a production release are excluded.                             
+      43 +  //   Default for updateCatalog()/getCatalog().               
+      44    PROD: 'prod',
+      45 +  // newest pre-release if one exists, otherwise the production
+         + release. Only this stage enables                              
+      46 +  //   pre-release mode, in which older resource versions are k
+         +ept rather than deleted after downloading.                     
+      47    PRE_PROD: 'preprod',
+      48 +  // draft release if one exists, otherwise pre-release or prod
+         +uction release.                                                
+      49 +  //   Note: currently rejected by DCS search API (HTTP 422).  
+      50    DRAFT: 'draft',
+      51 +  // default branch (e.g. master) if it is a valid resource con
+         +tainer, otherwise the newest release.                          
+      52 +  //   Includes repos that were never released. Default for sea
+         +rchCatalogNext().                                              
+      53    LATEST: 'latest',
+      54  };
+      55 
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ I added comments to STAGE in src/index.js:
+
+  - A block comment above it explains that each level returns one entry per repo
+    and falls back to more stable versions. It also points out that each
+    result's stage field shows which version was actually returned.
+  - Each value has its own comment saying what it returns and where it's used as
+    the default. The PRE_PROD comment notes it's the only stage that turns on
+    pre-release mode, and the DRAFT comment notes that DCS currently rejects it
+    with HTTP 422.
+
+  ESLint reports nothing for the file.
+
+✻ Cooked for 13s · done 8:15 AM
+
+❯ update claude.md                                                              
+
+⏺ Update(CLAUDE.md)
+  ⎿  Added 2 lines
+      19 
+      20  Jest is v23 and tests live in both `src/` and `__tests__/` (`*.
+          test.js`).
+      21 
+      22 +Use Node 16 for every npm/npx command, including `npm ci`. If t
+         +he default `node` is newer, put Node 16 first on the PATH, e.g.
+         + `export PATH=~/.nvm/versions/node/v16.20.2/bin:$PATH`. If `nod
+         +e_modules` isn't installed, `npx jest` downloads a modern Jest,
+         + which fails with `.plugins[0] may only be a two-tuple or three
+         +-tuple` because it can't read the Babel 6 `.babelrc`.          
+      23 +                                                               
+      24  To try changes in translationCore without publishing, install t
+          he branch there: `npm i translationCoreApps/tc-source-content-u
+          pdater#<branch>`.
+      25 
+      26  ## Architecture
+
+⏺ Update(CLAUDE.md)
+  ⎿  Added 13 lines, removed 1 line
+      32  2. `getLatestResources(localResourceList, config)` → `parseHelp
+          ers.getLatestResources`, which compares the remote catalog agai
+          nst local manifests and returns only the resources that need up
+          dating.
+      33  3. `downloadResources(languageList, resourcesPath)`, `downloadA
+          llResources(...)` or `downloadAndProcessResource(resourceDetail
+          s, ...)` → `resourcesDownloadHelpers`.
+      34 
+      35 -`STAGE`, `SUBJECT` and `SORT` constants, plus some helper re-ex
+         -ports, are also exported from `index.js`. The `src/index.js` me
+         -thods are thin wrappers. The README asks that logic go into the
+         - helper files rather than the main index.                      
+      35 +`STAGE`, `SUBJECT` and `SORT` constants, plus some helper re-ex
+         +ports, are also exported from `index.js`.                      
+      36 
+      37 +### Catalog search and stages                                  
+      38 +`apiHelpers.searchCatalogNext` builds a query to `<DCS_BASE_URL
+         +>/api/v1/catalog/search` and pages through the results with `do
+         +MultipartQuery`, using the `X-Total-Count` header to know when 
+         +it has everything. It then normalises each item with `getCompat
+         +ibleResourceList`, which adds `languageId`, `resourceId` and `v
+         +ersion` and turns spaces in the subject into `_`.              
+      39 +                                                               
+      40 +- **Stages:** `STAGE` (documented in `src/index.js`) is a fallb
+         +ack hierarchy that returns one entry per repo: `prod` ⊂ `prepro
+         +d` ⊂ `latest`. Each item's own `stage` field says which version
+         + was actually returned.                                        
+      41 +  - `latest` returns default branches, including repos that wer
+         +e never released, and is the only way to get *all* repos.      
+      42 +  - `draft` is currently rejected by DCS with HTTP 422.        
+      43 +  - `searchCatalogNext` defaults to `latest`. `getCatalog` defa
+         +ults to `prod`, but always queries the legacy `Door43-Catalog` 
+         +owner with `latest`.                                           
+      44 +  - Only `preprod` turns on pre-release mode, in which old vers
+         +ions are not deleted after a download.                         
+      45 +- **Fields on each catalog item:**                             
+      46 +  - `ref_type` (`branch`/`tag`) and `branch_or_tag_name` give t
+         +he raw file URL: `https://git.door43.org/<owner>/<repo>/raw/<br
+         +anch|tag>/<ref>/<path>`.                                       
+      47 +  - `ingredients[]` lists the books, each with its `path` and a
+         +n `alignment_count`. A total `alignment_count` of 0 reliably me
+         +ans the Bible has no `\zaln` alignment, even if its subject is 
+         +"Aligned Bible". Many repos with that subject contain only plai
+         +n text. The `src/index.js` methods are thin wrappers. The READM
+         +E asks that logic go into the helper files rather than the main
+         + index.                                                        
+      48 +                                                               
+      49  ### Download/process pipeline
+      50  `resourcesDownloadHelpers.downloadAndProcessResource` handles o
+          ne resource:
+      51  - If the version is missing or `master`, it resolves the real r
+          elease tag from DCS.
+
+⏺ Update(CLAUDE.md)
+  ⎿  Added 2 lines
+      78  - `fs-extra` is mocked with an in-memory file system (`__tests_
+          _/__mocks__/fs-extra.js`). Fixtures are loaded into it with hel
+          pers such as `fs.__loadFilesIntoMockFs` / `__setMockDirectories
+          `, and real fs is reached via `fs.__actual`. Tests that need th
+          e real filesystem call `jest.unmock('fs-extra')`.
+      79  - HTTP calls are stubbed with `nock` (`__tests__/__nocks__`). `
+          __tests__/fixtures/catalog.json` is example DCS catalog metadat
+          a.
+      80  - `__tests__/_apiIntegration.test.js` holds live-network integr
+          ation tests used during development. They are `describe.skip` b
+          y default and write to `./temp`.
+      81 +- To mock the search API for a test, stub `DCS_BASE_URL` + `/ap
+         +i/v1/catalog/search` with nock and include an `X-Total-Count` r
+         +eply header. `__tests__/searchAlignedBibles.test.js` is an exam
+         +ple that covers paging.                                        
+      82 +- `temp/` is gitignored. Use it for scratch output and one-off 
+         +scripts, such as `temp/verifyAligned.mjs`, which checks catalog
+         + Bibles for `\zaln`.                                           
+      83 
+      84  ## Lint style
+      85 
+
+⏺ I updated CLAUDE.md with what we learned in this session:
+
+  - Commands: use Node 16 for every npm/npx command (with the nvm PATH line). If
+    dependencies aren't installed, npx jest downloads a newer Jest, and I
+    included the .babelrc error that gives so it's easy to recognise.
+  - New "Catalog search and stages" section:
+    - How searchCatalogNext pages through results using X-Total-Count, and what
+      getCompatibleResourceList adds to each item.
+    - How the STAGE levels fall back from one to the next, including that latest
+      is the only way to get every repo and draft returns HTTP 422.
+    - The default stage for each entry point, and that only preprod turns on
+      pre-release mode.
+    - How to build raw file URLs from ref_type and branch_or_tag_name.
+    - alignment_count as a reliable signal for aligned text, and the fact that
+      many repos with the "Aligned Bible" subject are plain text.
+  - Testing: how to mock the search API with nock, pointing to
+    searchAlignedBibles.test.js as the example, and that temp/ (gitignored) is
+    where scratch output and one-off scripts go, such as verifyAligned.mjs.
+
+✻ Sautéed for 22s · done 8:16 AM
+
+❯ now search the stage latest for subject 'Bible'  that has at least one bible  
+  usfm file that hast the alignment marker in it                                  ⎿  ⧉ Selected 1 lines from src/index.js in IntelliJ IDEA
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+⏺ None of the 322 Bible entries shows a non-zero alignment_count, so DCS may not
+  track alignment for this subject and I can't rely on that field. I'm running
+  the download check on all 322 next, roughly 9,100 USFM files. · summary
+
+  Ran 3 shell commands (ctrl+o to expand)
+
+⏺ verifyAligned.mjs and the TSV are no longer in temp/, and git status shows
+  nothing. Checking whether the earlier changes were committed:
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+⏺ You've committed the earlier work and moved the script and report to
+  searching/. I'll run the script from there.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+⏺ Only 4 matched, so I'll spot-check one by hand to confirm the alignment is
+  real.
+
+⏺ Bash(cd /Users/blm0/Development/Electron/tc-source-content-updater; for u in
+      Door43-Catalog/nag_irv/raw/tag/v1 STR/or_irv/raw/branch/master; do echo
+      "$u: zaln=$(curl…)
+  ⎿  Door43-Catalog/nag_irv/raw/tag/v1: zaln=     529
+     STR/or_irv/raw/branch/master: zaln=     471
+     \v 1 \zaln-s | x-strong="G39720" x-lemma="Παῦλος" x-morph="Gr,N,,,,,NM
+     … +6 lines (ctrl+o to expand)
+  ⎿  Created searching/bibles_subject_verified.tsv +323
+        1 +language        full_name       stage   ref     aligned checke
+          +d_book    url     checked_usfm_url                            
+        2 +aaa     mXaln/aaa_1jn_text_ulb  latest  master  false         
+          +  https://git.door43.org/mXaln/aaa_1jn_text_ulb               
+        3 +aeb     poestreich/aeb_practice latest  master  false         
+          +  https://git.door43.org/poestreich/aeb_practice              
+        4 +aeb     poestreich/practice_aeb_psa     latest  master  false 
+          +          https://git.door43.org/poestreich/practice_aeb_psa  
+          +                                                              
+        5 +am      Door43-Catalog/am_ulb   prod    v7.2    false         
+          +  https://git.door43.org/Door43-Catalog/am_ulb                
+        6 +am      iog-creator/am_ulb      latest  master  false         
+          +  https://git.door43.org/iog-creator/am_ulb                   
+        7 +am      STR/am_ulb      latest  master  false           https:
+          +//git.door43.org/STR/am_ulb                                   
+        8 +ar      ar_gt/ar_avd_2024       latest  master  false         
+          +  https://git.door43.org/ar_gt/ar_avd_2024                    
+        9 +ar      Biblica/ar_nav  latest  master  false           https:
+          +//git.door43.org/Biblica/ar_nav                               
+       10 +ar      Door43-Catalog/ar_avd   latest  master  false         
+          +  https://git.door43.org/Door43-Catalog/ar_avd                
+       11 +ar      Door43-Catalog/ar_nav   latest  master  false         
+          +  https://git.door43.org/Door43-Catalog/ar_nav                
+       12 +ar      elman/ar_avd    latest  master  false           https:
+          +//git.door43.org/elman/ar_avd                                 
+       13 +ar      shadow-light/ar_nav     latest  master  false         
+          +  https://git.door43.org/shadow-light/ar_nav                  
+       14 +ar      STR/ar_avd      latest  master  false           https:
+          +//git.door43.org/STR/ar_avd                                   
+       15 +ar      STR/ar_nav      latest  master  false           https:
+          +//git.door43.org/STR/ar_nav                                   
+       16 +as      Door43-Catalog/as_ulb   prod    v4      false         
+          +  https://git.door43.org/Door43-Catalog/as_ulb                
+       17 +as      STR/as_ulb      latest  master  false           https:
+          +//git.door43.org/STR/as_ulb                                   
+       18 +bho     DokuWiki/bho_udb        latest  master  false         
+          +  https://git.door43.org/DokuWiki/bho_udb                     
+       19 +bn      Door43-Catalog/bn_ulb   prod    v5      false         
+          +  https://git.door43.org/Door43-Catalog/bn_ulb                
+       20 +bn      STR/bn_iev      latest  master  false           https:
+          +//git.door43.org/STR/bn_iev                                   
+       21 +bn      STR/bn_ulb      latest  master  false           https:
+          +//git.door43.org/STR/bn_ulb                                   
+       22 +bsj     lversaw/bsj_mrk_reg     latest  master  false         
+          +  https://git.door43.org/lversaw/bsj_mrk_reg                  
+       23 +ceb     Door43-Catalog/ceb_udb  prod    v4.1    false         
+          +  https://git.door43.org/Door43-Catalog/ceb_udb               
+       24 +ceb     Door43-Catalog/ceb_ulb  prod    v4.7    false         
+          +  https://git.door43.org/Door43-Catalog/ceb_ulb               
+       25 +ceb     STR/ceb_udb     latest  master  false           https:
+          +//git.door43.org/STR/ceb_udb                                  
+       26 +ceb     STR/ceb_ulb     latest  master  false           https:
+          +//git.door43.org/STR/ceb_ulb                                  
+       27 +ckb     lversaw/ckbOKS20        latest  master  false         
+          +  https://git.door43.org/lversaw/ckbOKS20                     
+       28 +ee      Door43-Catalog/ee_ulb   prod    v3.1    false         
+          +  https://git.door43.org/Door43-Catalog/ee_ulb                
+       29 +ee      STR/ee_ulb      latest  master  false           https:
+          +//git.door43.org/STR/ee_ulb                                   
+       30 +el-x-koine      Door43-Catalog/el-x-koine_stv   prod    v1    
+          +  false           https://git.door43.org/Door43-Catalog/el-x-k
+          +oine_stv                                                      
+       31 +el-x-koine      Door43-Catalog/el-x-koine_trs   prod    v1    
+          +  false           https://git.door43.org/Door43-Catalog/el-x-k
+          +oine_trs                                                      
+       32 +el-x-koine      STR/el-x-koine_stv      latest  master  false 
+          +          https://git.door43.org/STR/el-x-koine_stv           
+       33 +el-x-koine      STR/el-x-koine_trs      latest  master  false 
+          +          https://git.door43.org/STR/el-x-koine_trs           
+       34 +en      destatez/en_udb latest  master  false           https:
+          +//git.door43.org/destatez/en_udb                              
+       35 +en      destatez/en_ulb latest  master  false           https:
+          +//git.door43.org/destatez/en_ulb                              
+       36 +en      destatez/t_en_ulb       latest  master  false         
+          +  https://git.door43.org/destatez/t_en_ulb                    
+       37 +en      Door43-Catalog/en_udb   latest  master  false         
+          +  https://git.door43.org/Door43-Catalog/en_udb                
+       38 +en      Door43-Catalog/en_ulb   latest  master  false         
+          +  https://git.door43.org/Door43-Catalog/en_ulb                
+       39 +en      mikey/en_deb    latest  master  false           https:
+          +//git.door43.org/mikey/en_deb                                 
+       40 +en      rbnswartz/en_udb        latest  master  false         
+          +  https://git.door43.org/rbnswartz/en_udb                     
+     … +283 lines (ctrl+o to expand)
+
+⏺ Now I'll update CLAUDE.md: fix the script's path and correct the
+  alignment_count note, since Bible-subject entries don't have that field.
+
+  Read 1 file, ran 1 shell command (ctrl+o to expand)
+
+⏺ Update(CLAUDE.md)
+  ⎿  Added 1 line, removed 1 line
+      32  2. `getLatestResources(localResourceList, config)` → `parseHelp
+          ers.getLatestResources`, which compares the remote catalog agai
+          nst local manifests and returns only the resources that need up
+          dating.
+      33  3. `downloadResources(languageList, resourcesPath)`, `downloadA
+          llResources(...)` or `downloadAndProcessResource(resourceDetail
+          s, ...)` → `resourcesDownloadHelpers`.
+      34 
+      35 -`STAGE`, `SUBJECT` and `SORT` constants, plus some helper re-ex
+         -ports, are also exported from `index.js`.                      
+      35 +`STAGE`, `SUBJECT` and `SORT` constants, plus some helper re-ex
+         +ports, are also exported from `index.js`. The `src/index.js` me
+         +thods are thin wrappers. The README asks that logic go into the
+         + helper files rather than the main index.                      
+      36 
+      37  ### Catalog search and stages
+      38  `apiHelpers.searchCatalogNext` builds a query to `<DCS_BASE_URL
+          >/api/v1/catalog/search` and pages through the results with `do
+          MultipartQuery`, using the `X-Total-Count` header to know when
+          it has everything. It then normalises each item with `getCompat
+          ibleResourceList`, which adds `languageId`, `resourceId` and `v
+          ersion` and turns spaces in the subject into `_`.
+
+⏺ Update(CLAUDE.md)
+  ⎿  Added 4 lines, removed 1 line
+      44    - Only `preprod` turns on pre-release mode, in which old vers
+          ions are not deleted after a download.
+      45  - **Fields on each catalog item:**
+      46    - `ref_type` (`branch`/`tag`) and `branch_or_tag_name` give t
+          he raw file URL: `https://git.door43.org/<owner>/<repo>/raw/<br
+          anch|tag>/<ref>/<path>`.
+      47 -  - `ingredients[]` lists the books, each with its `path` and a
+         -n `alignment_count`. A total `alignment_count` of 0 reliably me
+         -ans the Bible has no `\zaln` alignment, even if its subject is 
+         -"Aligned Bible". Many repos with that subject contain only plai
+         -n text. The `src/index.js` methods are thin wrappers. The READM
+         -E asks that logic go into the helper files rather than the main
+         - index.                                                        
+      47 +  - `ingredients[]` lists the books, each with its `path`.     
+      48 +- **Alignment data:**                                          
+      49 +  - For "Aligned Bible" entries, each book also has an `alignme
+         +nt_count`. A total of 0 reliably means the Bible has no `\zaln`
+         + alignment, and many repos with that subject contain only plain
+         + text.                                                         
+      50 +  - "Bible" entries don't have `alignment_count` at all, yet a 
+         +few of them are aligned (e.g. `Door43-Catalog/nag_irv`, `or_irv
+         +`). For those, the only way to tell is to check the USFM itself
+         +.                                                              
+      51 
+      52  ### Download/process pipeline
+      53  `resourcesDownloadHelpers.downloadAndProcessResource` handles o
+          ne resource:
+
+⏺ Update(CLAUDE.md)
+  ⎿  Added 4 lines, removed 1 line
+      82  - HTTP calls are stubbed with `nock` (`__tests__/__nocks__`). `
+          __tests__/fixtures/catalog.json` is example DCS catalog metadat
+          a.
+      83  - `__tests__/_apiIntegration.test.js` holds live-network integr
+          ation tests used during development. They are `describe.skip` b
+          y default and write to `./temp`.
+      84  - To mock the search API for a test, stub `DCS_BASE_URL` + `/ap
+          i/v1/catalog/search` with nock and include an `X-Total-Count` r
+          eply header. `__tests__/searchAlignedBibles.test.js` is an exam
+          ple that covers paging.
+      85 -- `temp/` is gitignored. Use it for scratch output and one-off 
+         -scripts, such as `temp/verifyAligned.mjs`, which checks catalog
+         - Bibles for `\zaln`.                                           
+      85 +- `temp/` is gitignored. Use it for scratch output and download
+         +ed catalog data.                                               
+      86 +- `searching/` holds committed one-off catalog analysis.       
+      87 +  - `searching/verifyAligned.mjs <catalog.json> <out.json>` (No
+         +de 18+) streams each entry's USFM books, trying `tit` first, an
+         +d records the first book that contains `\zaln`.                
+      88 +  - The verified results are saved as TSV reports alongside it.
+      89 
+      90  ## Lint style
+      91 
+
+⏺ Only 4 of the 322 repos with subject Bible (at stage=latest) contain aligned 
+  USFM. They are two Bibles, each published both by Door43-Catalog and by STR:
+
+  ┌──────┬────────────────────────┬─────────────────┬──────────────┐
+  │ Lang │          Repo          │   Stage / ref   │ Aligned book │
+  ├──────┼────────────────────────┼─────────────────┼──────────────┤
+  │ nag  │ Door43-Catalog/nag_irv │ prod / v1       │ tit          │
+  ├──────┼────────────────────────┼─────────────────┼──────────────┤
+  │ nag  │ STR/nag_irv            │ latest / master │ tit          │
+  ├──────┼────────────────────────┼─────────────────┼──────────────┤
+  │ or   │ Door43-Catalog/or_irv  │ prod / v1       │ tit          │
+  ├──────┼────────────────────────┼─────────────────┼──────────────┤
+  │ or   │ STR/or_irv             │ latest / master │ tit          │
+  └──────┴────────────────────────┴─────────────────┴──────────────┘
+
+  I spot-checked two by hand and the alignment is real. Titus has 529 \zaln-s
+  markers in nag_irv and 471 in or_irv, aligned to Greek with Strong's numbers
+  and lemmas.
+
+  How I checked:
+  - I couldn't use alignment_count here. DCS doesn't include that field at all
+    for Bible entries, so I downloaded the books themselves.
+  - That meant checking all 9,096 USFM books across 63 languages, which took
+    about 3 minutes. No downloads failed, and every repo had USFM books.
+  - The other 318 repos have no \zaln in any book.
+
+  Both of these are mislabelled. They're aligned but tagged Bible, so a search
+  on SUBJECT.ALIGNED_BIBLES misses them. The other way round is much more
+  common: earlier, 48 of the 285 repos tagged "Aligned Bible" turned out to have
+  no alignment.
+
+  Files:
+  - The report is at searching/bibles_subject_verified.tsv, with one row for
+    each of the 322 repos. The raw data is in temp/ (bible_latest.json,
+    bible_verified.json).
+  - I ran the script from searching/verifyAligned.mjs, since you'd moved it
+    there in your commit.
+
+  I also updated CLAUDE.md:
+  - It now points to searching/ instead of temp/verifyAligned.mjs.
+  - It now says alignment_count is only present for "Aligned Bible" entries.
+  - It fixes a sentence that my earlier edit had accidentally moved into the
+    stages section.
+
+  None of this is committed yet.
+
+✻ Sautéed for 4m 50s · done 9:01 AM
