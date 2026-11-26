@@ -1,0 +1,244 @@
+ ▐▛███▛█   Claude Code v2.1.332
+▝▜██████▀  Opus 5.5 · Claude Team
+ ▝▝   ▝▝   ~/Development/Electron/tc-source-content-updater
+
+
+❯ regenerate searching/aligned_bibles_verified.tsv replace checked_book column  
+  with checked_books which will list all the books aligned in the repo that are 
+  verified by checking                                                          
+
+  Ran 5 shell commands (ctrl+o to expand)
+
+⏺ I'm re-fetching the live "Aligned Bible" catalog at stage=latest, then
+  checking every USFM book in each repo rather than stopping at the first
+  aligned one. · summary
+
+  Listed 1 directory, ran 1 shell command (ctrl+o to expand)
+
+⏺ Same 285 repos as before (233 latest, 49 prod, 3 preprod). Now I'll add an
+  --all-books option to the script so it keeps checking after the first aligned
+  book.
+
+⏺ Bash(cd /Users/blm0/Development/Electron/tc-source-content-updater; python3 -
+      <<'EOF'
+      p='searching/verifyAligned.mjs'…)
+  ⎿   searching/verifyAligned.mjs | 18 +++++++++++++-----
+      1 file changed, 13 insertions(+), 5 deletions(-)
+     v20.11.1
+  ⎿  Updated searching/verifyAligned.mjs +13 -5
+       1 -// usage: node verifyAligned.mjs <catalog.json> <out.json>     
+       1 +// usage: node verifyAligned.mjs <catalog.json> <out.json> [--a
+         +ll-books]                                                      
+       2 +//   default: stop at the first book (tit first) that contains 
+         +\zaln                                                          
+       3 +//   --all-books: check every USFM book and list all aligned bo
+         +oks in alignedBooks                                            
+       4  import fs from 'fs';
+       5 
+       4 -const [, , inFile, outFile] = process.argv;                    
+       6 +const args = process.argv.slice(2);                            
+       7 +const ALL_BOOKS = args.includes('--all-books');                
+       8 +const [inFile, outFile] = args.filter((a) => !a.startsWith('--'
+         +));                                                            
+       9  const entries = JSON.parse(fs.readFileSync(inFile, 'utf8'));
+      10  const BASE = 'https://git.door43.org';
+      11  const CONCURRENCY = 8;
+     ...
+      57      url: `${BASE}/${entry.full_name}`,
+      58      usfmBooks: books.length,
+      59      alignedBook: null,
+      60 +    alignedBooks: [],                                          
+      61      booksChecked: 0,
+      62      errors: [],
+      63    };
+     ...
+      67      result.booksChecked++;
+      68      if (r.status !== 200) result.errors.push(`${book.identifier
+          }: ${r.status}`);
+      69      if (r.found) {
+      65 -      result.alignedBook = book.identifier;                    
+      66 -      result.alignedUrl = url;                                 
+      67 -      break;                                                   
+      70 +      if (!result.alignedBook) {                               
+      71 +        result.alignedBook = book.identifier;                  
+      72 +        result.alignedUrl = url;                               
+      73 +      }                                                        
+      74 +      result.alignedBooks.push(book.identifier);               
+      75 +      if (!ALL_BOOKS) break;                                   
+      76      }
+      77    }
+      78    return result;
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ The check is running in the background. It fetches every USFM book in all 285
+  repos (several thousand files), so it will take a while. Once it finishes I'll
+  write the new TSV.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ The converter now matches the old format, with the same columns, a trailing
+  newline, and blank fields for unaligned repos. I'm waiting on the check to
+  finish. · summary
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ Only 3 of 285 repos are done so far, because each repo now means fetching up
+  to 66 books. I'll wait for the completion notice.
+
+✻ Cooked for 1m 2s · done 6:24 AM
+
+❯ /recap                                                                        
+  ⎿  I'm regenerating searching/aligned_bibles_verified.tsv so a new checked_books column lists every aligned book, and the all-books check over the 285 repos is still running in the background. Once it finishes, I'll convert the results into the new TSV and check them.
+
+⏺ Background command "Run all-books alignment check over 285 repos" completed
+  (exit code 0)
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ All 285 repos were checked (9,737 book files) with no download errors. Writing
+  the TSV and comparing it with the old one:
+
+⏺ Bash(S=/private/tmp/claude-509/-Users-blm0-Development-Electron-tc-source-cont
+      ent-updater/7af1242a-e363-4164-87a8-78faaad32135/scratchpad; cd
+      /Users/blm0/Development…)
+  ⎿  rows:      286
+     language        full_name       stage   ref     aligned checked_books
+      url     checked_usfm_url
+     ar      ar_gt/ar_glt    prod    v3      true
+     gen,exo,lev,num,deu,jos,jdg,rut,1sa,2sa,1ki,2k
+     … +53 lines (ctrl+o to expand)
+  ⎿  1 file changed (binary, mode only or too large to show)
+     searching/aligned_bibles_verified.tsv
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ I've regenerated searching/aligned_bibles_verified.tsv. The checked_book
+  column is now checked_books, which lists every book in the repo that actually
+  contains \zaln. Books are in canonical order and separated by commas, for
+  example jon,tit,3jn.
+
+  How I checked: I fetched the live "Aligned Bible" catalog again at
+  stage=latest. It returned the same 285 repos as last time (233 latest, 49
+  prod, 3 preprod). Then I downloaded every USFM book in each repo, 9,737 files
+  in all, and every download succeeded.
+
+  Compared with the old report:
+  - The same 285 repos are listed.
+  - Each repo's aligned value is unchanged: 237 true, 48 false.
+  - In every row, the book in the old checked_book column is in the new list.
+
+  What the new column shows: most "aligned" Bibles are only partly aligned.
+  - Nearly complete: 47 repos have 62 to 66 aligned books, 26 of them all 66.
+  - Partly aligned: many have only a few books. For example, ar_gt/ar_gst has 3
+    (jon, tit, 3jn), and Door43-Catalog/es-419_glt has only tit.
+  - A book counts as aligned if it contains \zaln anywhere, so a book that is
+    only partly aligned still makes the list.
+
+  Other details:
+  - checked_usfm_url still points to one file only: the first aligned book
+    found, with Titus checked first. It no longer covers every book in
+    checked_books.
+  - searching/verifyAligned.mjs has a new --all-books option, which I used for
+    this run. Without it, the script still stops at the first aligned book, so
+    it can still be used the old way for bibles_subject_verified.tsv.
+  - The helper script that builds the TSV from the results is in the scratchpad,
+    not the repo:
+    /private/tmp/claude-509/-Users-blm0-Development-Electron-tc-source-content-u
+    pdater/7af1242a-e363-4164-87a8-78faaad32135/scratchpad/toTsv.mjs.
+
+  Both changes are uncommitted. Do you want me to commit them, and should
+  toTsv.mjs go into searching/ too?
+
+✻ Cogitated for 21s · done 6:31 AM
+
+❯ yes commit both and move toTsv.mjs into searching                             
+
+⏺ Bash(cd /Users/blm0/Development/Electron/tc-source-content-updater; mv
+      /private/tmp/claude-509/-Users-blm0-Development-Electron-tc-source-content
+      -updater/7af1242a-e3…)
+  ⎿  87:  - `searching/verifyAligned.mjs <catalog.json> <out.json>` (Node 1
+     8+) streams each entry's USFM books, trying `tit` first, and records t
+     he first book that contains `\zaln`.
+     88:  - The verified results are saved as TSV reports alongside it.
+  ⎿  Created searching/toTsv.mjs +18
+       1 +// usage: node toTsv.mjs <catalog.json> <results.json> <out.tsv
+         +>                                                              
+       2 +import fs from 'fs';                                           
+       3 +const [, , catFile, resFile, outFile] = process.argv;          
+       4 +const cat = JSON.parse(fs.readFileSync(catFile, 'utf8'));      
+       5 +const res = JSON.parse(fs.readFileSync(resFile, 'utf8'));      
+       6 +const order = {};                                              
+       7 +for (const e of cat) {                                         
+       8 +  const m = {};                                                
+       9 +  (e.ingredients || []).forEach((i, n) => { m[i.identifier] = (
+         +typeof i.sort === 'number' ? i.sort : n); });                  
+      10 +  order[e.full_name] = m;                                      
+      11 +}                                                              
+      12 +const lines = [['language', 'full_name', 'stage', 'ref', 'align
+         +ed', 'checked_books', 'url', 'checked_usfm_url'].join('\t')];  
+      13 +for (const r of res) {                                         
+      14 +  const o = order[r.full_name] || {};                          
+      15 +  const books = [...r.alignedBooks].sort((a, b) => (o[a] ?? 999
+         +) - (o[b] ?? 999));                                            
+      16 +  lines.push([r.language, r.full_name, r.stage, r.ref, books.le
+         +ngth > 0, books.join(','), r.url, r.alignedUrl || ''].join('\t'
+         +));                                                            
+      17 +}                                                              
+      18 +fs.writeFileSync(outFile, lines.join('\n') + '\n');            
+
+⏺ I'll also update the CLAUDE.md note so it describes the new option and script:
+
+⏺ Bash(cd /Users/blm0/Development/Electron/tc-source-content-updater; python3 -
+      <<'EOF'
+      p='CLAUDE.md'…)
+  ⎿   CLAUDE.md                             |   3 +-
+      searching/aligned_bibles_verified.tsv | 432 +++++++++++++++++--------
+     ---------
+     … +3 lines (ctrl+o to expand)
+  ⎿  Updated CLAUDE.md +2 -1
+      84  - To mock the search API for a test, stub `DCS_BASE_URL` + `/ap
+          i/v1/catalog/search` with nock and include an `X-Total-Count` r
+          eply header. `__tests__/searchAlignedBibles.test.js` is an exam
+          ple that covers paging.
+      85  - `temp/` is gitignored. Use it for scratch output and download
+          ed catalog data.
+      86  - `searching/` holds committed one-off catalog analysis.
+      87 -  - `searching/verifyAligned.mjs <catalog.json> <out.json>` (No
+         -de 18+) streams each entry's USFM books, trying `tit` first, an
+         -d records the first book that contains `\zaln`.                
+      87 +  - `searching/verifyAligned.mjs <catalog.json> <out.json> [--a
+         +ll-books]` (Node 18+) streams each entry's USFM books, trying `
+         +tit` first, and records the first book that contains `\zaln`. W
+         +ith `--all-books` it checks every book and lists all aligned on
+         +es in `alignedBooks`.                                          
+      88 +  - `searching/toTsv.mjs <catalog.json> <results.json> <out.tsv
+         +>` turns `--all-books` results into a TSV whose `checked_books`
+         + column lists the aligned books in canonical order.            
+      89    - The verified results are saved as TSV reports alongside it.
+      90 
+      91  ## Lint style
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ I committed both changes as 2ac9c71 on
+  feature-mcleanb-add-suggestions-support, and I haven't pushed. The working
+  tree is clean.
+
+  The commit has:
+  - searching/aligned_bibles_verified.tsv: the regenerated report with the new
+    checked_books column.
+  - searching/verifyAligned.mjs: the new --all-books option.
+  - searching/toTsv.mjs: moved here from the scratchpad. It builds the TSV from
+    the --all-books results.
+  - CLAUDE.md: you didn't ask for this one. I added a line for toTsv.mjs and
+    mentioned --all-books in the searching/ notes.
+
+  To rebuild the report later:
+  node searching/verifyAligned.mjs <catalog.json> <results.json> --all-books
+  node searching/toTsv.mjs <catalog.json> <results.json> 
+  searching/aligned_bibles_verified.tsv
+  <catalog.json> is the saved list of entries from the stage=latest "Aligned
+  Bible" catalog search. Both scripts need Node 18 or later.
+
+✻ Cogitated for 14s · done 6:39 AM
