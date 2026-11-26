@@ -1,0 +1,325 @@
+ ▐▛███▛█   Claude Code v2.1.327
+▝▜██████▀  Opus 5.5 · Claude Pro
+ ▝▝   ▝▝   ~/Development/Electron/tc-source-content-updater
+
+
+❯ /init                                                                         
+
+  Ran 3 shell commands (ctrl+o to expand)
+
+⏺ Let me look at the core download/process flow to describe it accurately.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+⏺ I have enough to write it.
+
+⏺ Write(CLAUDE.md)
+  ⎿  Wrote 74 lines to CLAUDE.md
+      1 # CLAUDE.md
+      2 
+      3 This file provides guidance to Claude Code (claude.ai/code) when
+        working with code in this repository.
+      4 
+      5 ## Overview
+      6 
+      7 `tc-source-content-updater` is an npm library used by the transla
+        tionCore desktop app. It queries the Door43 (DCS) catalog for sou
+        rce resources (Bibles, translationNotes, translationWords, transl
+     … +68 lines (~6 KB) (ctrl+o to expand)
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ I've created CLAUDE.md at the root of the repo. It covers:
+
+  - Commands: build, lint and fix, the full test run, running one test file or
+    one test by name, and test:showFails. One thing to know: npm test writes its
+    results to jest-results.json instead of printing them to the console.
+  - Architecture:
+    - How the Updater works, step by step: get the catalog, find which resources
+      are out of date, then download them.
+    - The pipeline that downloads, unzips and processes each resource, and how
+      it picks a processor based on the catalog subject.
+    - How processing translationNotes or translationWords Links can trigger
+      downloads of other resources it depends on.
+    - Where resources are stored on disk, with the owner as part of the version
+      folder name, and how pre-release state is tracked.
+  - How the tests work: testSetup/global.js mocks the download and zip helpers
+    for every test. The mock download serves files from
+    __tests__/fixtures/<host>/<path>. fs-extra is replaced with an in-memory
+    version that has helpers for loading fixtures, and HTTP calls are stubbed
+    with nock. The live-network integration tests are skipped by default.
+  - Lint style and release: the ESLint setup, the publish and tagging scripts,
+    and that PRs target develop.
+
+  I also included the useful parts of the README: put logic in the helper files
+  rather than index.js, and how to install a branch into translationCore for
+  testing. There were no Cursor, Copilot, Codex or Gemini config files to bring
+  in.
+
+✻ Worked for 55s · done 7:43 AM
+
+❯ write a test that will search and get a list of languages with aligned bibles 
+
+  Ran 4 shell commands (ctrl+o to expand)
+
+⏺ I'll write a unit test that mocks the Catalog Next search API with nock and
+  returns two pages, so it runs in CI and also covers paging. It then collects
+  the unique languages from the results.
+
+⏺ Write(__tests__/searchAlignedBibles.test.js)
+  ⎿  Wrote 115 lines to __tests__/searchAlignedBibles.test.js
+       1 import nock from 'nock';
+       2 import Updater, {SUBJECT, STAGE} from '../src';
+       3 import {DCS_BASE_URL} from '../src/helpers/apiHelpers';
+       4 
+       5 const SEARCH_PATH = '/api/v1/catalog/search';
+       6 
+       7 /**
+       8  * make a minimal Catalog Next search result entry
+       9  * @param {string} owner
+      10  * @param {string} language
+     … +105 lines (ctrl+o to expand)
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ npx downloaded a newer Jest because the project's dependencies aren't
+  installed. Checking:
+
+  Ran 4 shell commands · 1 failed (ctrl+o to expand)
+
+⏺ Those warnings come from the failure-path test, so they're expected. Checking
+  the pass/fail summary:
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ I added __tests__/searchAlignedBibles.test.js. Both of its tests pass and it
+  lints clean.
+
+  What it tests:
+  1. Gets the list of languages with aligned Bibles. It calls
+     Updater.searchCatalogNext({subject: SUBJECT.ALIGNED_BIBLES, stage: 
+     STAGE.PROD}) and collects the unique languageId values into a sorted list,
+     expecting ['en', 'es-419', 'hi', 'ru']. The mocked results include two
+     English Bibles, so it also checks that languages are not duplicated. It
+     also checks that:
+     - both pages of results were fetched (the API is mocked to return them on
+       two pages);
+     - the request sent subject=Aligned Bible, stage=prod and metadataType=rc;
+     - each result's subject is converted to Aligned_Bible.
+  2. Returns null when the search API errors, here a 500 response.
+
+  The test uses nock to fake the DCS search API, so it needs no network and runs
+  in CI. If you'd rather check what the live server actually returns, I can add
+  a skipped test to __tests__/_apiIntegration.test.js, like the others there.
+
+  Setup notes:
+  - node_modules wasn't installed, so I ran npm ci using Node 16.20.2 from your
+    nvm. On your default Node 20, npx jest downloads a newer Jest that can't
+    read the project's Babel 6 config.
+  - I only ran the new test file, not the full suite.
+
+  Existing bug I found (not fixed): doMultipartQuery in
+  src/helpers/apiHelpers.js (lines 94 and 99) calls doMultipartQueryPage(url, 
+  page, retries = 5). That sets retries to 5 instead of passing the caller's
+  value through, so the retries you give searchCatalogNext is ignored. That's
+  why the failure-path test retries 5 times and takes about 2 seconds. Do you
+  want me to fix it?
+
+✻ Brewed for 1m 44s · done 7:50 AM
+
+❯ yes fix the retries bug                                                       
+
+⏺ Bash(cd /Users/blm0/Development/Electron/tc-source-content-updater; sed -i ''
+      's/doMultipartQueryPage(url, page, retries = 5)/doMultipartQueryPage(url,
+      page, retries…)
+  ⎿  export async function doMultipartQuery(url, retries = 5) {
+       let page = 1;
+       let data = [];
+     … +18 lines (ctrl+o to expand)
+  ⎿  Updated src/helpers/apiHelpers.js +2 -2
+       91  export async function doMultipartQuery(url, retries = 5) {
+       92    let page = 1;
+       93    let data = [];
+       94 -  const {items, totalCount} = await doMultipartQueryPage(url, 
+          -page, retries = 5);                                           
+       94 +  const {items, totalCount} = await doMultipartQueryPage(url, 
+          +page, retries);                                               
+       95    let lastItems = items;
+       96    let totalCount_ = totalCount;
+       97    data = data.concat(items);
+       98    while (lastItems && data.length < totalCount_) {
+       99 -    const {items, totalCount} = await doMultipartQueryPage(url
+          -, ++page, retries = 5);                                       
+       99 +    const {items, totalCount} = await doMultipartQueryPage(url
+          +, ++page, retries);                                           
+      100      lastItems = items;
+      101      totalCount_ = totalCount;
+      102      if (items && items.length) {
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ The full suite passes. Checking the 2 lint errors to see whether they were
+  already there:
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ The retries bug is fixed in src/helpers/apiHelpers.js. doMultipartQuery was
+  setting retries to 5 on every call (lines 94 and 99) instead of passing on the
+  value it was given. Now the retries you give searchCatalogNext actually
+  controls how many times each page request is attempted.
+
+  Checks:
+  - The full suite passes: 79 passed, 11 skipped (the live-network tests that
+    are always skipped), 0 failed.
+  - The failure-path test in __tests__/searchAlignedBibles.test.js went from
+    about 2s to 21ms, because it now tries once instead of five times.
+  - ESLint reports 0 errors. There are some warnings, which were already there
+    before this change.
+
+  Behaviour change: getCatalog and searchCatalogNext both default to 3 retries.
+  Each page request used to get 5 attempts no matter what, so the normal catalog
+  fetch now retries a little less: 3 attempts per page instead of 5. Callers
+  that pass a different retries now get the value they asked for.
+
+  Nothing is committed.
+
+✻ Baked for 43s · done 7:52 AM
+
+❯ show me the list of languages and the URLs of the bibles within them          
+
+⏺ I'll query the live DCS catalog for aligned Bibles. I'm using stage=prod
+  (released versions only), the same as the test.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+⏺ The live DCS catalog lists 65 aligned Bibles in 24 languages. These are
+  released (prod) versions only. All links are under https://git.door43.org/,
+  and the download zip for each one is <url>/archive/<version>.zip.
+
+  Lang: ar
+  Name: العربية
+  Bibles (owner/repo @ version): BSOJ/ar_avd v6.9 · BSOJ/ar_arst v4.9 ·
+    BSOJ/ar_nav v2 · ar_gt/ar_glt v3 · ar_gt/ar_gst v3
+  ────────────────────────────────────────
+  Lang: as
+  Name: অসমীয়া
+  Bibles (owner/repo @ version): Door43-Catalog/as_irv v3
+  ────────────────────────────────────────
+  Lang: bn
+  Name: বাংলা
+  Bibles (owner/repo @ version): Door43-Catalog/bn_irv v5 ·
+    translationCore-Create-BCS/bn_glt v4 · translationCore-Create-BCS/bn_gst
+    v4
+  ────────────────────────────────────────
+  Lang: en
+  Name: English
+  Bibles (owner/repo @ version): unfoldingWord/en_ult v92 ·
+    unfoldingWord/en_ust v92 · ru_gt/en_ult v84 · ru_gt/en_ust v84 ·
+    Worldview/en_bsb v1
+  ────────────────────────────────────────
+  Lang: es-419
+  Name: Español Latin America
+  Bibles (owner/repo @ version): es-419_gl/es-419_glt v42 ·
+    es-419_gl/es-419_gst v40 · es-419_obt/es-419_glt v0.0.5
+  ────────────────────────────────────────
+  Lang: fa
+  Name: فارسی
+  Bibles (owner/repo @ version): fa_gl/fa_glt v11 · fa_gl/fa_gst v11 ·
+    fa_gl/fa_gbt v8.6
+  ────────────────────────────────────────
+  Lang: fr
+  Name: français
+  Bibles (owner/repo @ version): MVHS/fr_lsg v0.0.2 · MVHS/fr_glt v0.0.1
+  ────────────────────────────────────────
+  Lang: gu
+  Name: ગુજરાતી
+  Bibles (owner/repo @ version): translationCore-Create-BCS/gu_glt v4 ·
+    translationCore-Create-BCS/gu_gst v4 · Door43-Catalog/gu_irv v4 ·
+    translationCore-Create-BCS/gu_irv v1
+  ────────────────────────────────────────
+  Lang: hi
+  Name: हिन्दी
+  Bibles (owner/repo @ version): translationCore-Create-BCS/hi_glt v8 ·
+    translationCore-Create-BCS/hi_gst v8 · Door43-Catalog/hi_irv v12 ·
+    Door43-Catalog/hi_iev v6
+  ────────────────────────────────────────
+  Lang: id
+  Name: Bahasa Indonesia
+  Bibles (owner/repo @ version): bahtraku/id_glt v105 · bahtraku/id_gst v16
+  ────────────────────────────────────────
+  Lang: kn
+  Name: ಕನ್ನಡ
+  Bibles (owner/repo @ version): Door43-Catalog/kn_irv v5 ·
+    Door43-Catalog/kn_iev v3 · Door43-Catalog/kn_ust v3 ·
+    translationCore-Create-BCS/kn_glt v4 · translationCore-Create-BCS/kn_gst
+    v4
+  ────────────────────────────────────────
+  Lang: ml
+  Name: മലയാളം
+  Bibles (owner/repo @ version): Door43-Catalog/ml_irv v5
+  ────────────────────────────────────────
+  Lang: mr
+  Name: मराठी
+  Bibles (owner/repo @ version): translationCore-Create-BCS/mr_gst v5 ·
+    translationCore-Create-BCS/mr_glt v4 · Door43-Catalog/mr_irv v4
+  ────────────────────────────────────────
+  Lang: ne
+  Name: नेपाली
+  Bibles (owner/repo @ version): translationCore-Create-BCS/ne_glt v4 ·
+    translationCore-Create-BCS/ne_gst v4
+  ────────────────────────────────────────
+  Lang: or
+  Name: ଓଡ଼ିଆ
+  Bibles (owner/repo @ version): translationCore-Create-BCS/or_glt v4 ·
+    translationCore-Create-BCS/or_gst v4
+  ────────────────────────────────────────
+  Lang: pa
+  Name: ਪੰਜਾਬੀ
+  Bibles (owner/repo @ version): Door43-Catalog/pa_irv v3
+  ────────────────────────────────────────
+  Lang: rml
+  Name: Baltic Romani
+  Bibles (owner/repo @ version): DevleskoDrom/rml_rhb v3.2 · rm_ol/rml_rbs v11
+  ────────────────────────────────────────
+  Lang: rmy
+  Name: Vlax Romani
+  Bibles (owner/repo @ version): DevleskoDrom/rmy_srb v2
+  ────────────────────────────────────────
+  Lang: ru
+  Name: Русский
+  Bibles (owner/repo @ version): Door43-Catalog/ru_ust v9 ·
+    Door43-Catalog/ru_rob v8 · Door43-Catalog/ru_rlb v1.1 · ru_gl/ru_rlob
+    v13.0 · ru_gl/ru_rsob v14.0 · ru_gl/ru_rost v3.1 · BSA/ru_rsb v1.0.0 ·
+    ru_gt/ru_glt v1
+  ────────────────────────────────────────
+  Lang: ta
+  Name: தமிழ்
+  Bibles (owner/repo @ version): Door43-Catalog/ta_irv v3
+  ────────────────────────────────────────
+  Lang: te
+  Name: తెలుగు
+  Bibles (owner/repo @ version): translationCore-Create-BCS/te_glt v4 ·
+    translationCore-Create-BCS/te_gst v4 · Door43-Catalog/te_irv v2
+  ────────────────────────────────────────
+  Lang: tg
+  Name: тоҷикӣ
+  Bibles (owner/repo @ version): Door43-Catalog/tg_ult v1.1
+  ────────────────────────────────────────
+  Lang: ur-deva
+  Name: Urdu Devanagari
+  Bibles (owner/repo @ version): Door43-Catalog/ur-deva_irv v2
+  ────────────────────────────────────────
+  Lang: vi
+  Name: Tiếng Việt
+  Bibles (owner/repo @ version): Door43-Catalog/vi_glt v5.2 · vi_gl/vi_glt v1
+
+  Some languages have Bibles from several owners. For example, en_ult is
+  published by both unfoldingWord (v92) and ru_gt (v84). The catalog also
+  returns Bibles that aren't tagged tc-ready; filtering by that topic would
+  shorten the list.
+
+  The full API response is saved at
+  /private/tmp/claude-509/-Users-blm0-Development-Electron-tc-source-content-upd
+  ater/a7ac3fc6-da44-4d1b-b578-9ff93828083e/scratchpad/aligned.json.
+
+✻ Cooked for 43s · done 7:54 AM

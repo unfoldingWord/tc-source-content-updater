@@ -91,12 +91,12 @@ export async function doMultipartQueryPage(url, page = 1, retries = 5) {
 export async function doMultipartQuery(url, retries = 5) {
   let page = 1;
   let data = [];
-  const {items, totalCount} = await doMultipartQueryPage(url, page, retries = 5);
+  const {items, totalCount} = await doMultipartQueryPage(url, page, retries);
   let lastItems = items;
   let totalCount_ = totalCount;
   data = data.concat(items);
   while (lastItems && data.length < totalCount_) {
-    const {items, totalCount} = await doMultipartQueryPage(url, ++page, retries = 5);
+    const {items, totalCount} = await doMultipartQueryPage(url, ++page, retries);
     lastItems = items;
     totalCount_ = totalCount;
     if (items && items.length) {
