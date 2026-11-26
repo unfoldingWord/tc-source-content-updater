@@ -84,7 +84,8 @@ Error message strings are in `src/resources/errors.js`. Bible book and original-
 - To mock the search API for a test, stub `DCS_BASE_URL` + `/api/v1/catalog/search` with nock and include an `X-Total-Count` reply header. `__tests__/searchAlignedBibles.test.js` is an example that covers paging.
 - `temp/` is gitignored. Use it for scratch output and downloaded catalog data.
 - `searching/` holds committed one-off catalog analysis.
-  - `searching/verifyAligned.mjs <catalog.json> <out.json>` (Node 18+) streams each entry's USFM books, trying `tit` first, and records the first book that contains `\zaln`.
+  - `searching/verifyAligned.mjs <catalog.json> <out.json> [--all-books]` (Node 18+) streams each entry's USFM books, trying `tit` first, and records the first book that contains `\zaln`. With `--all-books` it checks every book and lists all aligned ones in `alignedBooks`.
+  - `searching/toTsv.mjs <catalog.json> <results.json> <out.tsv>` turns `--all-books` results into a TSV whose `checked_books` column lists the aligned books in canonical order.
   - The verified results are saved as TSV reports alongside it.
 
 ## Lint style

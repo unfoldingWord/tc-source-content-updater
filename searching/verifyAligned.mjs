@@ -1,7 +1,11 @@
-// usage: node verifyAligned.mjs <catalog.json> <out.json>
+// usage: node verifyAligned.mjs <catalog.json> <out.json> [--all-books]
+//   default: stop at the first book (tit first) that contains \zaln
+//   --all-books: check every USFM book and list all aligned books in alignedBooks
 import fs from 'fs';
 
-const [, , inFile, outFile] = process.argv;
+const args = process.argv.slice(2);
+const ALL_BOOKS = args.includes('--all-books');
+const [inFile, outFile] = args.filter((a) => !a.startsWith('--'));
 const entries = JSON.parse(fs.readFileSync(inFile, 'utf8'));
 const BASE = 'https://git.door43.org';
 const CONCURRENCY = 8;
@@ -53,6 +57,7 @@ async function check(entry) {
     url: `${BASE}/${entry.full_name}`,
     usfmBooks: books.length,
     alignedBook: null,
+    alignedBooks: [],
     booksChecked: 0,
     errors: [],
   };
@@ -62,9 +67,12 @@ async function check(entry) {
     result.booksChecked++;
     if (r.status !== 200) result.errors.push(`${book.identifier}: ${r.status}`);
     if (r.found) {
-      result.alignedBook = book.identifier;
-      result.alignedUrl = url;
-      break;
+      if (!result.alignedBook) {
+        result.alignedBook = book.identifier;
+        result.alignedUrl = url;
+      }
+      result.alignedBooks.push(book.identifier);
+      if (!ALL_BOOKS) break;
     }
   }
   return result;
