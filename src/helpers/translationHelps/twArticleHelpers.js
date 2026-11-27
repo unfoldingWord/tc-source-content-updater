@@ -1,7 +1,6 @@
 /* eslint-disable curly */
 import fs from 'fs-extra';
 import path from 'path-extra';
-import {isObject} from 'util';
 import {
   formatAndSaveGroupData,
   generateGroupDataItem,
@@ -34,7 +33,7 @@ import {delay} from '../utils';
  * @return {Boolean} true if success
  */
 export function processTranslationWords(resource, sourcePath, outputPath) {
-  if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId)
+  if (!resource || typeof resource !== 'object' || !resource.languageId || !resource.resourceId)
     throw Error(resourcesHelpers.formatError(resource, errors.RESOURCE_NOT_GIVEN));
   if (!sourcePath)
     throw Error(resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_GIVEN));
@@ -249,7 +248,7 @@ export async function twlTsvToGroupData(tsvPath, project, resourcesPath, origina
  */
 export async function processTranslationWordsTSV(resource, sourcePath, outputPath, resourcesPath, downloadErrors, config = {}) {
   try {
-    if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId)
+    if (!resource || typeof resource !== 'object' || !resource.languageId || !resource.resourceId)
       throw Error(resourcesHelpers.formatError(resource, errors.RESOURCE_NOT_GIVEN));
     if (!sourcePath)
       throw Error(resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_GIVEN));

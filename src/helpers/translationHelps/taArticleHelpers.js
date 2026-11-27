@@ -1,7 +1,6 @@
 /* eslint-disable curly */
 import fs from 'fs-extra';
 import path from 'path-extra';
-import {isObject} from 'util';
 // heleprs
 import * as resourcesHelpers from '../resourcesHelpers';
 // constants
@@ -16,7 +15,7 @@ import * as errors from '../../resources/errors';
  * @return {Boolean} true if success
  */
 export function processTranslationAcademy(resource, sourcePath, outputPath) {
-  if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId)
+  if (!resource || typeof resource !== 'object' || !resource.languageId || !resource.resourceId)
     throw Error(resourcesHelpers.formatError(resource, errors.RESOURCE_NOT_GIVEN));
     if (!sourcePath)
     throw Error(resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_GIVEN));

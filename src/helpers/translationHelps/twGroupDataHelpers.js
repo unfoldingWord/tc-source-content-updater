@@ -2,7 +2,6 @@
 import fs from 'fs-extra';
 import path from 'path-extra';
 import * as bible from '../../resources/bible';
-import {isObject} from 'util';
 // helpers
 import * as resourcesHelpers from '../resourcesHelpers';
 // constants
@@ -16,7 +15,7 @@ import * as errors from '../../resources/errors';
  * @return {Boolean} true if success
  */
 export const generateTwGroupDataFromAlignedBible = (resource, sourcePath, outputPath) => {
-  if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId)
+  if (!resource || typeof resource !== 'object' || !resource.languageId || !resource.resourceId)
     throw Error(resourcesHelpers.formatError(resource, errors.RESOURCE_NOT_GIVEN));
   if (!sourcePath)
     throw Error(resourcesHelpers.formatError(resource, errors.SOURCE_PATH_NOT_GIVEN));
