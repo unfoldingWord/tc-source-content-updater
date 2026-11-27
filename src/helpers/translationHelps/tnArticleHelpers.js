@@ -1,6 +1,5 @@
 import fs from 'fs-extra';
 import path from 'path-extra';
-import {isObject} from 'util';
 import {
   formatAndSaveGroupData,
   generateGroupsIndex,
@@ -148,7 +147,7 @@ export function convertEllipsisToAmpersand(groupData, filepath) {
  */
 export async function processTranslationNotes(resource, sourcePath, outputPath, resourcesPath, downloadErrors, config = {}) {
   try {
-    if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId) {
+    if (!resource || typeof resource !== 'object' || !resource.languageId || !resource.resourceId) {
       throw Error(resourcesHelpers.formatError(resource, errors.RESOURCE_NOT_GIVEN));
     }
     if (!sourcePath) {

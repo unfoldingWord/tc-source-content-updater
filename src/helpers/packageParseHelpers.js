@@ -7,7 +7,6 @@ import fs from 'fs-extra';
 import path from 'path-extra';
 import usfm from 'usfm-js';
 import * as bible from '../resources/bible';
-import {isObject} from 'util';
 // helpers
 import {generateBibleManifest} from './biblesHelpers';
 import * as resourcesHelpers from './resourcesHelpers';
@@ -62,7 +61,7 @@ export function parseManifest(extractedFilePath, outputPath, resource) {
  */
 export function parseBiblePackage(resource, sourcePath, outputPath, config = {}) {
   const index = {};
-  if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId) {
+  if (!resource || typeof resource !== 'object' || !resource.languageId || !resource.resourceId) {
     throw Error(resourcesHelpers.formatError(resource, errors.RESOURCE_NOT_GIVEN));
   }
   if (!sourcePath) {
