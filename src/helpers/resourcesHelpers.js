@@ -2,7 +2,6 @@
 import fs from 'fs-extra';
 import path from 'path-extra';
 import yaml from 'yamljs';
-import {isObject} from 'util';
 import semver from 'semver';
 // helpers
 import * as zipFileHelpers from './zipFileHelpers';
@@ -84,7 +83,7 @@ export function getResourceManifestFromYaml(resourcePath) {
       console.error(`getResourceManifestFromYaml - manifest.yaml invalid ${manifestPath}`, e);
       yamlManifest = yamlManifest.replace('---', '').trimStart();
       try {
-        manifest = YAML.parse(yamlManifest);
+        manifest = yaml.parse(yamlManifest);
         // copy some data for more convenient access
         console.log(`getResourceManifestFromYaml - manifest.yaml cleaned yaml worked`);
       } catch (e) {
@@ -356,7 +355,7 @@ export function getSubdirOfUnzippedResource(extractedFilesPath) {
  */
 export async function processResource(resource, sourcePath, resourcesPath, downloadErrors, config = {}) {
   try {
-    if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId) {
+    if (!resource || typeof resource !== 'object' || !resource.languageId || !resource.resourceId) {
       throw Error(formatError(resource, errors.RESOURCE_NOT_GIVEN));
     }
     if (!sourcePath) {
@@ -528,7 +527,7 @@ export function removeAllButLatestVersion(resourcePath, versionsToNotDelete = []
  * @return {String} The formatted error message
  */
 export function formatError(resource, errMessage) {
-  if (!resource || !isObject(resource) || !resource.languageId || !resource.resourceId) {
+  if (!resource || typeof resource !== 'object' || !resource.languageId || !resource.resourceId) {
     resource = {
       languageId: 'unknown',
       resourceId: 'unknown',

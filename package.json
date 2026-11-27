@@ -1,6 +1,6 @@
 {
   "name": "tc-source-content-updater",
-  "version": "1.4.34",
+  "version": "1.4.36",
   "description": "Module that updates source content for the desktop application translationCore.",
   "main": "lib/index.js",
   "display": "library",
@@ -12,7 +12,8 @@
     "build": "NODE_ENV=production babel ./src -d ./lib",
     "prepare": "npm run build",
     "prepublishOnly": "npm test && npm run build",
-    "postpublish": "git tag v$npm_package_version && git push origin v$npm_package_version"
+    "postpublish": "git tag v$npm_package_version && git push origin v$npm_package_version",
+    "bump:beta": "npm version prerelease --preid=beta --no-git-tag-version"
   },
   "jest": {
     "collectCoverageFrom": [

@@ -9,3 +9,4 @@ src
 temp
 /jest-results.json
 .github
+tc-source-content-updater-*.tgz

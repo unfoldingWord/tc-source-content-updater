@@ -1,0 +1,123 @@
+ ▐▛███▛█   Claude Code v2.1.331
+▝▜██████▀  Opus 5.5 · Claude Pro
+ ▝▝   ▝▝   ~/Development/Electron/tc-source-content-updater
+
+
+❯ What are the Language codes kn, ml, and mr,                                   
+
+⏺ These are ISO 639-1 language codes for three languages of India:
+
+  ┌──────┬───────────┬────────────┬─────────────────────────────┐
+  │ Code │ Language  │   Script   │      Where it's spoken      │
+  ├──────┼───────────┼────────────┼─────────────────────────────┤
+  │ kn   │ Kannada   │ Kannada    │ Karnataka (southwest India) │
+  ├──────┼───────────┼────────────┼─────────────────────────────┤
+  │ ml   │ Malayalam │ Malayalam  │ Kerala (southwest India)    │
+  ├──────┼───────────┼────────────┼─────────────────────────────┤
+  │ mr   │ Marathi   │ Devanagari │ Maharashtra (west India)    │
+  └──────┴───────────┴────────────┴─────────────────────────────┘
+
+  Kannada and Malayalam are Dravidian languages. Marathi is Indo-Aryan. On
+  Door43, Bibles in these languages often belong to the Indian Revised Version
+  (IRV) family, with repo names like kn_irv, ml_irv and mr_irv.
+
+✻ Churned for 5s · done 4:32 AM
+
+❯ so marathi would be the most unique in this group?                            
+
+⏺ Yes, Marathi is the odd one out in this group:
+
+  - Language family: Kannada and Malayalam are both Dravidian. Marathi is
+    Indo-Aryan, closer to Hindi, Gujarati and Konkani.
+  - Script: Marathi is written in Devanagari, the same script as Hindi and
+    Sanskrit. Kannada and Malayalam each have their own script. Kannada's script
+    is close to Telugu's, while Malayalam's looks quite different.
+
+  Kannada and Malayalam aren't interchangeable, though. They are separate
+  languages with separate scripts. All three have also borrowed a lot of
+  Sanskrit vocabulary, especially Malayalam and Marathi, so some religious and
+  formal words look alike across them. Marathi and Kannada also influence each
+  other along the Maharashtra–Karnataka border.
+
+✻ Cooked for 5s · done 4:33 AM
+
+❯ What are the Language codes kn, ml, as, pa, rml, ta, tg, uk, ur-deva, and mr, 
+
+⏺ Code: kn
+  Language: Kannada
+  Script: Kannada
+  Family: Dravidian
+  Where it's spoken: Karnataka, India
+  ────────────────────────────────────────
+  Code: ml
+  Language: Malayalam
+  Script: Malayalam
+  Family: Dravidian
+  Where it's spoken: Kerala, India
+  ────────────────────────────────────────
+  Code: ta
+  Language: Tamil
+  Script: Tamil
+  Family: Dravidian
+  Where it's spoken: Tamil Nadu, India; Sri Lanka; Singapore
+  ────────────────────────────────────────
+  Code: mr
+  Language: Marathi
+  Script: Devanagari
+  Family: Indo-Aryan
+  Where it's spoken: Maharashtra, India
+  ────────────────────────────────────────
+  Code: as
+  Language: Assamese
+  Script: Bengali–Assamese
+  Family: Indo-Aryan
+  Where it's spoken: Assam, India
+  ────────────────────────────────────────
+  Code: pa
+  Language: Punjabi
+  Script: Gurmukhi (India), Shahmukhi (Pakistan)
+  Family: Indo-Aryan
+  Where it's spoken: Punjab, India and Pakistan
+  ────────────────────────────────────────
+  Code: ur-deva
+  Language: Urdu, in Devanagari script
+  Script: Devanagari
+  Family: Indo-Aryan
+  Where it's spoken: India
+  ────────────────────────────────────────
+  Code: rml
+  Language: Baltic Romani
+  Script: Latin, sometimes Cyrillic
+  Family: Indo-Aryan (Romani)
+  Where it's spoken: Poland, the Baltic states, Russia, Belarus
+  ────────────────────────────────────────
+  Code: tg
+  Language: Tajik
+  Script: Cyrillic
+  Family: Iranian (Indo-European)
+  Where it's spoken: Tajikistan
+  ────────────────────────────────────────
+  Code: uk
+  Language: Ukrainian
+  Script: Cyrillic
+  Family: Slavic (Indo-European)
+  Where it's spoken: Ukraine
+
+  About the code formats:
+  - ur-deva is a language code plus a script subtag. Urdu is normally written in
+    Perso-Arabic script (ur), so -deva marks this version as Devanagari. That
+    makes it read much like Hindi.
+  - rml is a three-letter ISO 639-3 code, used because Baltic Romani has no
+    two-letter code. Romani came from northern India, so it is related to Hindi
+    and Punjabi even though it is spoken in Europe.
+
+  Grouping:
+  - Dravidian: kn, ml, ta
+  - Indo-Aryan: mr, as, pa, ur-deva, rml
+  - Other Indo-European: tg (Iranian, related to Persian), uk (Slavic)
+
+  So Marathi is no longer the odd one out. It sits in the largest group. The
+  outliers are now Ukrainian and Tajik, both in Cyrillic script and both outside
+  South Asia.
+
+✻ Crunched for 10s · done 4:45 AM
